@@ -1,0 +1,36 @@
+.sideNavigation {
+  background: #1D2939;
+  text-align: left;
+}
+
+.sideNavigation :global .ant-menu {
+  margin-top: 10px;
+  padding: 0 10px;
+  background: #1D2939;
+}
+
+.sideNavigation :global .ant-menu.ant-menu-dark .ant-menu-item {
+  box-sizing: border-box;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: transparent;
+}
+
+.sideNavigation :global .ant-menu.ant-menu-dark .ant-menu-item-active {
+  background: #151b2a;
+}
+
+.sideNavigation :global .ant-menu.ant-menu-dark .ant-menu-item-selected {
+  border-radius: 2px;
+  background-image: linear-gradient(to right, #19a6b3 0%, #288eb9 100%);
+  font-weight: 500;
+}
+
+.sideNavigation :global .ant-menu.ant-menu-dark.ant-menu-inline-collapsed .ant-menu-item {
+  padding-left: 22px !important;
+}
+
+.sideNavigation :global .ant-menu-dark .ant-menu-inline.ant-menu-sub {
+  background: #1D2939;
+  border: none;
+}

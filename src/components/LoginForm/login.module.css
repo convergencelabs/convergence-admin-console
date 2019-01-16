@@ -1,0 +1,37 @@
+.loginContainer {
+    margin: 60px auto 0 auto;
+    border: 1px solid lightgray;
+    border-radius: 7px;
+    padding: 15px;
+    background: white;
+}
+
+.header {
+    margin-top: 20px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.logo {
+    height: 75px;
+    margin-right: 10px;
+    margin-bottom: 25px;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 28px;
+}
+
+.loginForm {
+    max-width: 300px;
+}
+
+.loginFormForgot {
+    float: right;
+}
+
+.loginFormButton {
+    margin-top: 20px;
+    width: 100%;
+}

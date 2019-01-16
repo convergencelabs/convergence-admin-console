@@ -1,0 +1,13 @@
+.domainCard {
+  padding: 10px;
+  max-width: 500px;
+}
+
+.title {
+  font-size: 24px;
+}
+
+.nsid {
+  font-size: 12px;
+  color: darkgray;
+}

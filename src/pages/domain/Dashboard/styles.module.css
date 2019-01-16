@@ -1,0 +1,10 @@
+.card {
+  margin-bottom: 10px;
+}
+
+.copyButton {
+  border: none;
+  padding: 0 !important;
+  background: transparent;
+  height: inherit;
+}

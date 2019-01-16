@@ -1,0 +1,58 @@
+
+.infoTable {
+  width: 100%;
+  border-bottom: 1px solid rgb(228, 228, 228);
+  border-right: 1px solid rgb(228, 228, 228);
+}
+
+.infoTable th {
+  text-align: center;
+  background: rgb(250, 250, 250);
+}
+
+.infoTable td {
+  text-align: right;
+  cursor: default;
+}
+
+.infoTable td.metric {
+  text-align: right;
+}
+
+.infoTable tr:nth-child(even) td {
+  background: rgb(248, 248, 248);
+}
+
+.infoTable tr:hover td {
+  background: rgb(232, 248, 255);
+}
+
+
+.infoTable td, .infoTable th {
+  border-top: 1px solid rgb(228, 228, 228);
+  border-left: 1px solid rgb(228, 228, 228);
+  padding: 3px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.infoTable td:first-child {
+  text-align: left;
+  font-weight: bold;
+}
+
+.infoTable th:first-child {
+  border: none;
+  background: none;
+}
+
+.delta {
+  font-size: 12px;
+}
+
+.delta svg[data-icon="caret-up"] {
+  color: darkorange;
+}
+
+.delta svg[data-icon="caret-down"] {
+  color: darkblue;
+}

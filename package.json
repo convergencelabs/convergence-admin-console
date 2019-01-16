@@ -29,5 +29,14 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "@types/react-copy-to-clipboard": "^4.2.6",
+    "@types/react-highlight": "^0.12.1",
+    "mobx": "^5.8.0",
+    "mobx-react": "^5.4.3",
+    "mobx-react-devtools": "^6.0.3",
+    "react-copy-to-clipboard": "^5.0.1",
+    "react-highlight": "^0.12.0"
+  }
 }

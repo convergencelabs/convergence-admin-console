@@ -1,75 +1,36 @@
-import React, {Component, ComponentProps, ReactElement} from 'react';
-import './App.css';
+import React, {Component} from 'react';
 import {
   BrowserRouter as Router,
   Route,
   Switch,
-  Redirect,
-  RouteProps,
   RouteComponentProps
 } from "react-router-dom";
-import Login from "./components/Login/Login";
+import {LoginForm} from "./components/LoginForm/index";
+import {PrivateRoute} from "./PrivateRoute";
+import {Root} from "./containers/Root";
+import {Main} from "./containers/Main";
+import {observer} from "mobx-react";
+import {authStore} from "./stores/AuthStore";
 
-const SomeRoute = () => {
-  return <p> Some Route </p>
-};
-
-export interface PrivateRouteProps extends RouteProps  {
-  loggedIn: boolean
-}
-
-
-const PrivateRoute = ({ loggedIn, component, ...rest }: PrivateRouteProps) => (
-      <Route
-          {...rest}
-          render={(props: RouteProps) =>
-              loggedIn ?
-                  <Component {...props} /> : (
-                  <Redirect
-                      to={{
-                        pathname: "/login",
-                        state: {from: props.location}
-                      }}
-                  />
-              )
-          }
-      />
-  );
-
-export interface AppState  {
-  loggedIn: boolean
-}
-
-class App extends Component <{}, AppState> {
-  state = {
-    loggedIn: false
-  };
+export const App = observer(class App extends Component <{}, {}> {
 
   loginSuccess = () => {
-    this.setState({
-      loggedIn: true
-    })
+    authStore.setAuthenticated(true);
   }
 
-
   render() {
-    const { loggedIn } = this.state;
     return (
-      <div className="App">
+      <Root>
         <Router>
           <Switch>
             <Route
-                path="/login"
-                render={(props: RouteComponentProps) => (<Login {...props} loginSuccess={this.loginSuccess} />)}
+              path="/login"
+              render={(props: RouteComponentProps) => (<LoginForm {...props} loginSuccess={this.loginSuccess}/>)}
             />
-            <PrivateRoute loggedIn={loggedIn}  path="/" component={SomeRoute} />
+            <PrivateRoute loggedIn={authStore.authenticated} path="/" component={Main}/>
           </Switch>
         </Router>
-      </div>
+      </Root>
     );
   }
-}
-
-
-
-export default App;
+});

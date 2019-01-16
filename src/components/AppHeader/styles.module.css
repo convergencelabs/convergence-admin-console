@@ -1,0 +1,59 @@
+.header {
+  background: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-shadow: 0 1px 4px 0px rgba(0, 0, 0, 0.16);
+  z-index: 1030;
+  height: 50px;
+}
+
+.logo {
+  height: 32px;
+  margin-right: 15px;
+}
+
+.logoName {
+  color: #3a4554;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.slogan {
+  text-align: center;
+  font-style: italic;
+  font-size: 16px;
+  margin-left: 30px;
+  flex: 1;
+}
+
+.icon {
+  margin-left: 15px;
+  font-size: 18px;
+}
+
+.header :global .ant-dropdown-trigger:hover :local .username {
+  color: black;
+}
+
+.username {
+  display: inline-block;
+  font-size: 13px;
+  margin-right: 15px;
+  margin-left: 30px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+
+.userMenu:global.ant-dropdown-menu {
+  top: -10px;
+  right: -5px;
+}
+
+.userMenu :global .ant-dropdown-menu-item {
+  padding: 5px 40px;
+}
+
+.userMenu :global .ant-dropdown-menu-item i {
+  margin-right: 10px;
+}
