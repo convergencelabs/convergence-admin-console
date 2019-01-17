@@ -21,7 +21,8 @@
 
 .slogan {
   text-align: center;
-  font-style: italic;
+  font-weight: bold;
+  color: #151b2a;
   font-size: 16px;
   margin-left: 30px;
   flex: 1;
