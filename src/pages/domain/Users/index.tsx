@@ -10,36 +10,40 @@ import styles from "./styles.module.css";
 const columns = [{
   title: 'Username',
   dataIndex: 'username',
-  render: (text: string) => <a href="javascript:;">{text}</a>,
+  sorter: (a: any, b: any) => (a.username as string).localeCompare(b.username),
+  render: (text: string) => <a href="javascript:;">{text}</a>
+}, {
+  title: 'Display Name',
+  dataIndex: 'displayName',
+  sorter: (a: any, b: any) => (a.displayName as string).localeCompare(b.displayName)
+}, {
+  title: 'First Name',
+  dataIndex: 'firstName',
+  sorter: (a: any, b: any) => (a.firstName as string).localeCompare(b.firstName)
+}, {
+  title: 'Last Name',
+  dataIndex: 'lastName',
+  sorter: (a: any, b: any) => (a.lastName as string).localeCompare(b.lastName)
 }, {
   title: 'Email',
-  dataIndex: 'age',
-  sorter: (a: any, b: any) => a.age - b.age
-}, {
-  title: 'Address',
-  dataIndex: 'address',
+  dataIndex: 'email',
+  sorter: (a: any, b: any) => (a.email as string).localeCompare(b.email)
 }];
 
 const data = [{
   key: '1',
-  username: 'John Brown',
-  age: 32,
-  address: 'New York No. 1 Lake Park',
+  username: 'john.brown',
+  displayName: "John Brown",
+  firstName: "John",
+  lastName: "Brown",
+  email: "jbrown@example.com"
 }, {
   key: '2',
-  username: 'Jim Green',
-  age: 42,
-  address: 'London No. 1 Lake Park',
-}, {
-  key: '3',
-  username: 'Joe Black',
-  age: 32,
-  address: 'Sidney No. 1 Lake Park',
-}, {
-  key: '4',
-  username: 'Disabled User',
-  age: 99,
-  address: 'Sidney No. 1 Lake Park',
+  username: 'tim.white',
+  displayName: "Tim White",
+  firstName: "Timothy",
+  lastName: "White",
+  email: "white.tim@example.com"
 }];
 
 
