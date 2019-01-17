@@ -1,3 +1,24 @@
 .userTable {
   background: white;
 }
+
+.tableActions button {
+  margin-right: 5px;
+}
+
+.toolbar {
+  padding: 5px;
+  border-radius: 4px;
+  background: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.toolbar input {
+  flex: 1;
+}
+
+.toolbar button {
+  margin-left: 10px;
+}

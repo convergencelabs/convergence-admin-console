@@ -4,7 +4,7 @@ import {IBreadcrumbSegment} from "../../../stores/BreacrumStore";
 import {DomainBreadcrumbProducer} from "../DomainBreadcrumProducer";
 import {match, RouteComponentProps} from "react-router";
 import {Page} from "../../../components/Page";
-import {Row, Col, Card, Tabs, Input, Button} from 'antd';
+import {Row, Col, Card, Tabs, Input, Button, Icon} from 'antd';
 import CopyToClipboard from "react-copy-to-clipboard";
 
 const TabPane = Tabs.TabPane;
@@ -43,7 +43,7 @@ export class DomainDashboard extends Component<RouteComponentProps, {}> {
       <Page breadcrumbs={this.breadcrumbsProvider.breadcrumbs(this.props.match)}>
         <Row gutter={16}>
           <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-            <Card className={styles.card} title="Overview">
+            <Card className={styles.card} title={<span><Icon type="profile"/> Overview</span>}>
               <InfoTable>
                 <InfoTableRow label="Namespace">My Namespace</InfoTableRow>
                 <InfoTableRow label="Id">My Domain</InfoTableRow>
@@ -53,7 +53,7 @@ export class DomainDashboard extends Component<RouteComponentProps, {}> {
             </Card>
           </Col>
           <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-            <Card className={styles.card} title="Statistics">
+            <Card className={styles.card} title={<span><Icon type="bar-chart"/> Statistics</span>}>
               <InfoTable>
                 <InfoTableRow label="Active Sessions">7</InfoTableRow>
                 <InfoTableRow label="Total Users">53</InfoTableRow>
@@ -65,7 +65,7 @@ export class DomainDashboard extends Component<RouteComponentProps, {}> {
         </Row>
         <Row gutter={16}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-            <Card title="Connection URL" className={styles.card}>
+            <Card title={<span><Icon type="cloud"/> Connection URL</span>} className={styles.card}>
               <Input placeholder="Basic usage"
                      value={domainUrl}
                      readOnly={true}
@@ -76,9 +76,9 @@ export class DomainDashboard extends Component<RouteComponentProps, {}> {
         </Row>
         <Row gutter={16}>
           <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-            <Card className={styles.card} title="Code Snippets">
+            <Card className={styles.card} title={<span><Icon type="code"/> Code Snippets</span>}>
               <Tabs
-                defaultActiveKey="1"
+                defaultActiveKey="connection"
                 tabPosition="left"
                 type="card"
               >

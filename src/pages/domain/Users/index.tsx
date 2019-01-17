@@ -4,7 +4,7 @@ import {IBreadcrumbSegment} from "../../../stores/BreacrumStore";
 import {DomainBreadcrumbProducer} from "../DomainBreadcrumProducer";
 import {match, RouteComponentProps} from "react-router";
 import {Page} from "../../../components/Page";
-import {Table} from 'antd';
+import {Table, Icon, Button, Input} from 'antd';
 import styles from "./styles.module.css";
 
 const columns = [{
@@ -28,6 +28,18 @@ const columns = [{
   title: 'Email',
   dataIndex: 'email',
   sorter: (a: any, b: any) => (a.email as string).localeCompare(b.email)
+}, {
+  title: 'Actions',
+  dataIndex: 'operation',
+  key: 'operation',
+  align: 'right',
+  render: () => (
+    <span className={styles.tableActions}>
+      <Button shape="circle" size="small" htmlType="button"><Icon type="edit"/></Button>
+      <Button shape="circle" size="small" htmlType="button"><Icon type="lock"/></Button>
+      <Button shape="circle" size="small" htmlType="button"><Icon type="delete"/></Button>
+    </span>
+  ),
 }];
 
 const data = [{
@@ -68,10 +80,19 @@ export class DomainUsers extends Component<RouteComponentProps, {}> {
       <Page title="Users"
             icon="user"
             breadcrumbs={this.breadcrumbsProvider.breadcrumbs(this.props.match)}>
+        <div className={styles.toolbar}>
+          <Input placeholder="Search"
+                 defaultValue=""
+                 addonAfter={<Icon type="search"/>}
+          />
+          <Button shape="circle" size="small" htmlType="button"><Icon type="plus-circle"/></Button>
+          <Button shape="circle" size="small" htmlType="button"><Icon type="delete"/></Button>
+        </div>
         <Table className={styles.userTable} rowSelection={rowSelection}
+               size="middle"
                columns={columns as any}
                dataSource={data}
-               pagination={false}/>
+        />
       </Page>
     );
   }
