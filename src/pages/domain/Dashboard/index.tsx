@@ -10,15 +10,18 @@ import CopyToClipboard from "react-copy-to-clipboard";
 const TabPane = Tabs.TabPane;
 import styles from "./styles.module.css";
 import Highlight from "react-highlight";
-import {ConnectionPasswordSnippet} from "./snippet_connection_password";
 import {domainStore} from "../../../stores/DomainStore";
-import {connectionAnonymousSnippet} from "./snippet_connection_anonymous";
-import {connectionJwtSnippet} from "./snippet_connection_jwt";
+import {ConnectionPasswordSnippet} from "./snippet_connection_password";
+import {ConnectionAnonymousSnippet} from "./snippet_connection_anonymous";
+import {ConnectionJwtSnippet} from "./snippet_connection_jwt";
+import {ConnectionReconnectSnippet} from "./snippet_connection_reconnect";
+
 import {modelOpenSnippet} from "./snippet_model_open";
 import {modelOpenAutoCreateSnippet} from "./snippet_model_open_auto_create";
 import {ModelCreateSnippet} from "./snippet_model_create";
 import {modelDataSnippet} from "./snippet_model_data";
 import {InfoTable, InfoTableRow} from "../../../components/InfoTable";
+
 
 export class DomainDashboard extends Component<RouteComponentProps, {}> {
 
@@ -85,13 +88,13 @@ export class DomainDashboard extends Component<RouteComponentProps, {}> {
                       <ConnectionPasswordSnippet connectionUrl={domainUrl}/>
                     </TabPane>
                     <TabPane tab="Anonymous" key="anonymous">
-                      <Highlight className={"JavaScript"}>{connectionAnonymousSnippet(domainUrl)}</Highlight>
+                      <ConnectionAnonymousSnippet connectionUrl={domainUrl}/>
                     </TabPane>
                     <TabPane tab="JWT" key="jwt">
-                      <Highlight className={"JavaScript"}>{connectionJwtSnippet(domainUrl)}</Highlight>
+                      <ConnectionJwtSnippet connectionUrl={domainUrl} />
                     </TabPane>
                     <TabPane tab="Reconnect" key="reconnect">
-                      <Highlight className={"JavaScript"}>{connectionAnonymousSnippet(domainUrl)}</Highlight>
+                      <ConnectionReconnectSnippet connectionUrl={domainUrl}/>
                     </TabPane>
                   </Tabs>
                 </TabPane>

@@ -5,10 +5,11 @@ export const ConnectionPasswordSnippet: React.FunctionComponent<{ connectionUrl:
   return (
     <CodeSnippet>
       <CodeSnippetDescription>
-        This example demonstrates creating a Realtime Model in a specific collection, with some initial data.
+        This snippet demonstrates connecting to a domain and authenticating with a the username and password of
+        an existing domain user.
       </CodeSnippetDescription>
       <Code>{`
-var url = "${props.connectionUrl}";
+const url = "${props.connectionUrl}";
 Convergence.connect(url, "username", "password")
   .then(function (domain) {
     console.log("authentication success");

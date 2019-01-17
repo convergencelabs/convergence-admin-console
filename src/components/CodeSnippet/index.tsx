@@ -6,7 +6,7 @@ import styles from "./styles.module.css";
 export class CodeSnippet extends Component<{},{}> {
   public render(): ReactNode {
     return (
-      <div>
+      <div className={styles.codeSnippet}>
         {this.props.children}
       </div>
     )

@@ -1,4 +1,8 @@
-.description {
+.codeSnippet {
+
+}
+
+.codeSnippet .description {
   border: 1px solid #e8e8e8;
   background: #fafafa;
   padding: 10px;
@@ -6,6 +10,6 @@
   border-radius: 4px;
 }
 
-.code {
-
+.codeSnippet pre {
+  border-radius: 4px;
 }
