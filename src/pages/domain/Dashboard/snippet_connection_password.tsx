@@ -11,11 +11,11 @@ export const ConnectionPasswordSnippet: React.FunctionComponent<{ connectionUrl:
       <Code>{`
 const url = "${props.connectionUrl}";
 Convergence.connect(url, "username", "password")
-  .then(function (domain) {
-    console.log("authentication success");
+  .then((domain) => {
+    console.log("Connection success");
   })
-  .catch(function (cause) {
-    console.log("authentication failure:", cause);
+  .catch((error) => {
+    console.log("Connection failure", error);
   });`.trim()
       }</Code>
     </CodeSnippet>

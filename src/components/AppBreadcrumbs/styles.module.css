@@ -1,4 +1,4 @@
-.breadcrumbs {
+.breadcrumbs:global.ant-breadcrumb {
   background: #d7dadc;
   color: #1D2939;
   padding: 10px 15px;

@@ -1,17 +1,30 @@
 import {BreadcrumbsProducer, IBreadcrumbSegment} from "../../stores/BreacrumStore";
-import {match} from "react-router";
+import {match, matchPath} from "react-router";
+import {DomainDescriptor} from "../../models/DomainDescriptor";
 
 export class DomainBreadcrumbProducer extends BreadcrumbsProducer {
-  breadcrumbs(match: match): IBreadcrumbSegment[] {
-    const segmenets = super.breadcrumbs(match);
-    segmenets.push({
-      title: "My Namespace"
+  private domain: DomainDescriptor | null = null;
+
+  public setDomain(domain: DomainDescriptor): void {
+    this.domain = domain;
+  }
+
+  public breadcrumbs(): IBreadcrumbSegment[] {
+    const segments = super.breadcrumbs();
+
+    segments.push({
+      title: "Domains",
+      link: "/domains"
     });
 
-    segmenets.push({
-      title: "My Domain"
+    segments.push({
+      title: this.domain!.namespace
     });
 
-    return segmenets;
+    segments.push({
+      title: this.domain!.displayName
+    });
+
+    return segments;
   }
 }

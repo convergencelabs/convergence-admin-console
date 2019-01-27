@@ -1,10 +1,10 @@
-.header {
+.header:global.ant-layout-header {
   background: white;
   display: flex;
   flex-direction: row;
   align-items: center;
   box-shadow: 0 1px 4px 0px rgba(0, 0, 0, 0.16);
-  z-index: 1030;
+  z-index: 1;
   height: 50px;
 }
 
@@ -22,7 +22,7 @@
 .slogan {
   text-align: center;
   font-weight: bold;
-  color: #151b2a;
+  color: #676f82;
   font-size: 16px;
   margin-left: 30px;
   flex: 1;
@@ -33,16 +33,24 @@
   font-size: 18px;
 }
 
-.header :global .ant-dropdown-trigger:hover :local .username {
+.header :global .ant-dropdown-trigger:hover :local .username,
+.header :global .ant-dropdown-trigger:hover :local .down {
   color: black;
 }
 
-.username {
+.username, .down {
   display: inline-block;
   font-size: 13px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.username {
   margin-right: 15px;
   margin-left: 30px;
-  color: rgba(0, 0, 0, 0.65);
+}
+
+.down {
+  margin-left: 5px;
 }
 
 

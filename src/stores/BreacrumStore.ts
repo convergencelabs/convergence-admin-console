@@ -23,12 +23,19 @@ export interface IBreadcrumbSegment {
 }
 
 export class BreadcrumbsProducer {
-  constructor() {
+  public breadcrumbs(): IBreadcrumbSegment[] {
+    return [];
+  }
+}
 
+export class BasicBreadcrumbsProducer {
+  private readonly _segments: IBreadcrumbSegment[];
+  constructor(segments: IBreadcrumbSegment[] = []) {
+    this._segments = segments;
   }
 
-  breadcrumbs(match: match): IBreadcrumbSegment[] {
-    return []
+  public breadcrumbs(): IBreadcrumbSegment[] {
+    return this._segments;
   }
 }
 

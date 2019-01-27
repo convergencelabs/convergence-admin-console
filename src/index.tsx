@@ -1,17 +1,41 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import {App} from './App';
-import {configure} from "mobx"
+import {AdminConsole} from './AdminConsole';
+import {Provider} from "mobx-react";
+import {authStore} from "./stores/AuthStore";
 import {domainStore} from "./stores/DomainStore";
-import {DomainDescriptor} from "./models/DomainDescriptor";
-import {DomainStatus} from "./models/DomainStatus";
+import {localStorageService} from "./services/LocalStorageService";
+import {domainService} from "./services/DomainService";
 
+import {message} from "antd";
+import {configure} from "mobx"
+
+import './index.css';
 
 configure({enforceActions: "always"});
 
-domainStore.setDomains([
-  new DomainDescriptor("my-namespace", "my-id", "My Domain", "michael", DomainStatus.ONLINE)
-]);
+message.config({
+  top: 55,
+  duration: 2,
+  maxCount: 3,
+});
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const stores = {
+  authStore,
+  domainStore
+};
+
+const services = {
+  domainService
+};
+
+const authToken = localStorageService.getAuthToken();
+if (authToken) {
+  authStore.setAuthenticated(authToken.token);
+}
+
+ReactDOM.render((
+  <Provider { ...stores } {...services}>
+    <AdminConsole />
+  </Provider>
+), document.getElementById('root'));

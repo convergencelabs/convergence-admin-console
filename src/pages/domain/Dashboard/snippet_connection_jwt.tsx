@@ -5,8 +5,9 @@ export const ConnectionJwtSnippet: React.FunctionComponent<{ connectionUrl: stri
   return (
     <CodeSnippet>
       <CodeSnippetDescription>
-        This snippet demonstrates connecting to a domain using a reconnect token from a previous session. It makes use of the
-        Convergence Jwt Utility.
+        This snippet demonstrates connecting to a domain using a trusted JSON Web Token (JWT). It makes use of the
+         <a href="https://www.npmjs.com/package/@convergence/jwt-util" target="_blank"> Convergence Jwt Utility</a> to
+        simplify the creation of appropriate JTWs.
       </CodeSnippetDescription>
       <Code>
         {`

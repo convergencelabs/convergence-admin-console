@@ -35,3 +35,12 @@
     margin-top: 20px;
     width: 100%;
 }
+
+.error {
+    color: red;
+    text-align: right;
+}
+
+.error i {
+    margin-right: 10px;
+}

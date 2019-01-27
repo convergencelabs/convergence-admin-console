@@ -11,5 +11,12 @@
 }
 
 .codeSnippet pre {
+  border: 1px solid #a9a2a2;
+  background: #fafafa;
+  border-radius: 4px;
+  padding: 2px;
+}
+
+.codeSnippet code {
   border-radius: 4px;
 }

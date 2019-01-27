@@ -1,0 +1,8 @@
+.scroller {
+  flex: 1;
+  overflow: auto;
+}
+
+.content {
+  padding: 0 0px;
+}

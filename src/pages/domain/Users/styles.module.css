@@ -8,6 +8,7 @@
 
 .toolbar {
   padding: 5px;
+  padding-right: 10px;
   border-radius: 4px;
   background: white;
   display: flex;

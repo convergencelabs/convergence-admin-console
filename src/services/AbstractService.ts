@@ -1,68 +1,66 @@
 import superagent, {Response, SuperAgentRequest} from 'superagent';
+import {CONFIG} from "../constants";
+import {RestError} from "./RestError";
 
 export abstract class AbstractService {
-  private readonly _baseUrl: string;
 
-  protected constructor(baseUrl: string) {
-    this._baseUrl = baseUrl;
-  }
-
-  protected async _get(relPath: string): Promise<any> {
+  protected async _get<T>(relPath: string): Promise<T> {
     const path = this._computePath(relPath);
-    await superagent
+    return await superagent
       .get(path)
-      .use(this._authPlugin)
-      .end(this._handleErrors)
-      .then(this._responseBody);
+      .use(this._preProcessRequest)
+      .catch(this._processErrors)
+      .then(this._processResponse);
   }
 
-  protected async _put(relPath: string, params: { [key: string]: any }): Promise<any> {
+  protected async _put<T>(relPath: string, params: { [key: string]: any }): Promise<T> {
     const path = this._computePath(relPath);
-    await superagent
+    return await superagent
       .put(path)
       .send(params)
-      .use(this._authPlugin)
-      .end(this._handleErrors)
-      .then(this._responseBody);
+      .use(this._preProcessRequest)
+      .catch(this._processErrors)
+      .then(this._processResponse);
   }
 
-  protected async _post(relPath: string, params: { [key: string]: any }): Promise<any> {
+  protected async _post<T>(relPath: string, params: { [key: string]: any }): Promise<T> {
     const path = this._computePath(relPath);
-    await superagent
+    return await superagent
       .post(path)
       .send(params)
-      .use(this._authPlugin)
-      .end(this._handleErrors)
-      .then(this._responseBody);
+      .use(this._preProcessRequest)
+      .catch(this._processErrors)
+      .then(this._processResponse);
   }
 
-  protected async _delete(relPath: string): Promise<any> {
+  protected async _delete<T>(relPath: string): Promise<T> {
     const path = this._computePath(relPath);
-    await superagent
+    return await superagent
       .delete(path)
-      .use(this._authPlugin)
-      .end(this._handleErrors)
-      .then(this._responseBody);
+      .use(this._preProcessRequest)
+      .catch(this._processErrors)
+      .then(this._processResponse);
   }
 
   private _computePath(relPath: string): string {
-    return `${this._baseUrl}/${relPath}`;
+    return `${CONFIG.convergenceRestApiUrl}/${relPath}`;
   }
 
-  private _responseBody = (res: Response) => res.body;
-
-  private _authPlugin = (req: SuperAgentRequest) => {
-    const token = '';
-    if (token) {
-      req.set('authorization', `Token ${token}`);
+  private _processResponse = (res: Response) => {
+    const body = res.body;
+    if (body.ok) {
+      return Promise.resolve(body.body)
+    } else {
+      const {error_message, error_code, error_details} = body.body;
+      return Promise.reject(new RestError(error_message, error_code, error_details));
     }
-  };
+  }
 
-  private _handleErrors = (err: any) => {
-    return this._processErrors(err);
-  };
-
-  protected _processErrors(err: any) {
-    return err;
+  protected _processErrors(err: any): any {
+    return Promise.reject(err);
+  }
+  
+  protected _preProcessRequest(req: SuperAgentRequest): void {
+    
   }
 }

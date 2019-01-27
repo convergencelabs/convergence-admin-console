@@ -2,7 +2,11 @@
   margin-bottom: 10px;
 }
 
-.copyButton {
+.domainDashboard :global .ant-row {
+  margin-bottom: 10px;
+}
+
+.copyButton:global.ant-btn {
   border: none;
   padding: 0 !important;
   background: transparent;

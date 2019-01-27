@@ -1,0 +1,9 @@
+.toolbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.toolbar .spacer {
+  flex: 1;
+}

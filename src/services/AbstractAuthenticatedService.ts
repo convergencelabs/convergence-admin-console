@@ -1,21 +1,20 @@
-import { AuthStore } from '../stores/AuthStore';
-import { AbstractService } from './AbstractService';
+import {authStore} from '../stores/AuthStore';
+import {AbstractService} from './AbstractService';
+import {SuperAgentRequest} from "superagent";
 
 export abstract class AbstractAuthenticatedService extends AbstractService {
 
-  private readonly _authStore: AuthStore | undefined;
-
-  protected constructor(baseUrl: string, authStore: AuthStore) {
-    super(baseUrl);
-    this._authStore = authStore;
-  }
-
   protected _processErrors(err: any) {
     if (err && err.response && err.response.status === 401) {
-      if (this._authStore) {
-        // this._authStore.logout();
-      }
+      authStore.logout();
     }
     return super._processErrors(err);
+  };
+
+  protected _preProcessRequest = (req: SuperAgentRequest) => {
+    super._preProcessRequest(req);
+    if (authStore.authToken) {
+      req.set('authorization', `SessionToken ${authStore.authToken}`);
+    }
   };
 }

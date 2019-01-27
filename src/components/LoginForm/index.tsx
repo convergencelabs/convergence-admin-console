@@ -4,39 +4,55 @@ import {
   Form, Icon, Input, Button, Checkbox,
 } from 'antd';
 import {FormComponentProps} from 'antd/lib/form/Form';
-import styles from "./login.module.css";
+import styles from "./styles.module.css";
 import logo from "../../assets/images/logo.png";
-
-export interface LoginFormProps extends RouteComponentProps {
-  loginSuccess: () => void;
-}
+import {authService} from "../../services/AuthService";
+import {authStore} from "../../stores/AuthStore";
+import {localStorageService} from "../../services/LocalStorageService";
 
 export interface LoginFormState {
   redirectToReferrer: boolean;
+  errorMessage: string | null;
 }
 
-class NormalLoginForm extends Component<LoginFormProps & FormComponentProps, LoginFormState> {
+class NormalLoginForm extends Component<RouteComponentProps & FormComponentProps, LoginFormState> {
   state = {
-    redirectToReferrer: false
+    redirectToReferrer: false,
+    errorMessage: null
   };
 
   handleSubmit = (e: FormEvent<HTMLInputElement>) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        const {username, password} = values;
+        authService.login(username, password)
+          .then(resp => {
+            const {token, expiration} = resp;
+            authStore.setAuthenticated(resp.token);
 
-        this.setState({
-          redirectToReferrer: true
-        });
+            this.setState({
+              redirectToReferrer: true,
+              errorMessage: null
+            });
 
-        this.props.loginSuccess();
+            localStorageService.setAuthToken({token, expires: expiration});
+          })
+          .catch(err => {
+            console.log(err);
+            this.setState({
+              errorMessage: "Invalid credentials"
+            })
+          });
       }
     });
   }
 
   render(): ReactNode {
-    const {from} = this.props.location.state || {from: {pathname: "/"}};
+    let {from} = this.props.location.state || {from: {pathname: "/"}};
+    if (from.pathname === "/login") {
+      from = {pathname: "/"};
+    }
     const {redirectToReferrer} = this.state;
 
     if (redirectToReferrer) {
@@ -44,6 +60,11 @@ class NormalLoginForm extends Component<LoginFormProps & FormComponentProps, Log
     }
 
     const {getFieldDecorator} = this.props.form;
+
+    const error = this.state.errorMessage ?
+      <div className={styles.error}><Icon type="warning"/>{this.state.errorMessage}</div> :
+      null;
+
     return (
       <div className={styles.loginContainer}>
         <div className={styles.header}>
@@ -52,7 +73,7 @@ class NormalLoginForm extends Component<LoginFormProps & FormComponentProps, Log
         </div>
         <Form onSubmit={this.handleSubmit} className={styles.loginForm}>
           <Form.Item>
-            {getFieldDecorator('userName', {
+            {getFieldDecorator('username', {
               rules: [{required: true, message: 'Please input your username!'}],
             })(
               <Input prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>} placeholder="Username"/>
@@ -66,6 +87,7 @@ class NormalLoginForm extends Component<LoginFormProps & FormComponentProps, Log
                      placeholder="Password"/>
             )}
           </Form.Item>
+          {error}
           <Form.Item>
             {getFieldDecorator('remember', {
               valuePropName: 'checked',
@@ -84,4 +106,4 @@ class NormalLoginForm extends Component<LoginFormProps & FormComponentProps, Log
   }
 }
 
-export const LoginForm = Form.create<LoginFormProps>()(NormalLoginForm);
+export const LoginForm = Form.create<{}>()(NormalLoginForm);

@@ -1,89 +1,20 @@
 import * as React from 'react';
-import {Link} from 'react-router-dom';
-import {Icon, Layout, Menu} from 'antd';
-import styles from './styles.module.css';
-const {Sider} = Layout;
+import {SideNavigation, SideNavigationMenuItem} from "../SideNavigation";
+import {ReactNode} from "react";
 
-export interface SideNavigationProps {
-  // empty
-}
+export class DomainSideNavigation extends React.Component<{}, {}> {
 
-export interface SideNavigationState {
-  collapsed: boolean;
-}
+  private readonly _menus: SideNavigationMenuItem[] = [
+    {key: "dashboard", icon: "home", title: "Home", link: "/", routeMatch: {path: "/", exact: true}},
+    {key: "users", icon: "user", title: "Users", link: "users", routeMatch: {path: "/users"}},
+    {key: "groups", icon: "contacts", title: "Groups", link: "groups", routeMatch: {path: "/groups"}},
+    {key: "sessions", icon: "cloud", title: "Sessions", link: "sessions", routeMatch: {path: "/sessions"}},
+    {key: "collections", icon: "folder", title: "Collections", link: "collections",routeMatch: {path: "/collections"}},
+    {key: "models", icon: "file", title: "Models", link: "models", routeMatch: {path: "/models"}},
+    {key: "settings", icon: "setting", title: "Setting", link: "settings", routeMatch: {path: "/settings"}}
+  ];
 
-export class DomainSideNavigation extends React.Component<SideNavigationProps, SideNavigationState> {
-  state = {
-    collapsed: false
-  };
-
-  onCollapse = (collapsed: boolean) => {
-    // console.log(collapsed);
-    this.setState({collapsed});
-  };
-
-  onSelect = ({item, key, selectedKeys}: any) => {
-    // console.log(key);
-  };
-
-  render() {
-    return (
-      <Sider className={styles.sideNavigation}
-             collapsible
-             collapsed={this.state.collapsed}
-             onCollapse={this.onCollapse}
-             width={230}
-      >
-        <Menu theme="dark"
-              defaultSelectedKeys={['1']}
-              mode="inline"
-              inlineIndent={10}
-              onSelect={this.onSelect}
-              className={styles.navMenu}>
-          <Menu.Item key="1">
-            <Link to={{pathname: 'dashboard'}}>
-              <Icon type="dashboard"/>
-              <span>Dashboard</span>
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="2">
-            <Link to={{pathname: 'users'}}>
-              <Icon type="user"/>
-              <span>Users</span>
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="3">
-            <Link to={{pathname: 'groups'}}>
-              <Icon type="contacts"/>
-              <span>Groups</span>
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="4">
-            <Link to={{pathname: 'sessions'}}>
-              <Icon type="cloud"/>
-              <span>Sessions</span>
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="5">
-            <Link to={{pathname: 'collections'}}>
-              <Icon type="folder"/>
-              <span>Collections</span>
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="6">
-            <Link to={{pathname: 'models'}}>
-              <Icon type="file"/>
-              <span>Models</span>
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="8">
-            <Link to={{pathname: 'settings'}}>
-              <Icon type="setting"/>
-              <span>Settings</span>
-            </Link>
-          </Menu.Item>
-        </Menu>
-      </Sider>
-    );
+  public render(): ReactNode {
+    return (<SideNavigation menus={this._menus}/>);
   }
 }

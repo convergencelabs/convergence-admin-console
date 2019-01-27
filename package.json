@@ -3,17 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@types/jest": "^23.3.10",
-    "@types/node": "^10.12.18",
-    "@types/react": "^16.7.18",
-    "@types/react-dom": "^16.0.11",
-    "@types/react-router-dom": "^4.3.1",
-    "antd": "^3.11.6",
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0",
-    "react-router-dom": "^4.3.1",
-    "react-scripts": "2.1.2",
-    "typescript": "^3.2.2"
+    "@types/jest": "23.3.10",
+    "@types/node": "10.12.18",
+    "@types/react": "16.7.18",
+    "@types/react-dom": "16.0.11",
+    "@types/react-router-dom": "4.3.1",
+    "antd": "3.13.0",
+    "react": "16.7.0",
+    "react-dom": "16.7.0",
+    "react-router-dom": "4.3.1",
+    "react-scripts": "2.1.3",
+    "typescript": "3.2.4"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -31,13 +31,16 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@types/react-copy-to-clipboard": "^4.2.6",
-    "@types/react-highlight": "^0.12.1",
-    "@types/superagent": "^3.8.6",
-    "mobx": "^5.8.0",
-    "mobx-react": "^5.4.3",
-    "mobx-react-devtools": "^6.0.3",
-    "react-copy-to-clipboard": "^5.0.1",
-    "react-highlight": "^0.12.0"
+    "@types/react-copy-to-clipboard": "4.2.6",
+    "@types/react-highlight": "0.12.1",
+    "@types/superagent": "3.8.6",
+    "mobx": "5.8.0",
+    "mobx-react": "5.4.3",
+    "mobx-react-devtools": "6.0.3",
+    "moment": "^2.24.0",
+    "node-mock-server": "0.23.6",
+    "react-copy-to-clipboard": "5.0.1",
+    "react-highlight": "0.12.0",
+    "superagent": "4.1.0"
   }
 }

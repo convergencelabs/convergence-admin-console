@@ -1,23 +1,22 @@
 import * as React from 'react';
 import {Route, RouteComponentProps, Switch} from 'react-router';
-import { Layout } from 'antd';
+import {Layout} from 'antd';
 import styles from './style.module.css';
 import {AppHeader} from "../../components/AppHeader";
-import {Domains} from "../../pages/Domains";
-import {Domain} from "../Domain";
+import {DomainContainer} from "../Domain";
 import {AppBreadcrumbs} from "../../components/AppBreadcrumbs";
+import {ServerContainer} from "../Server";
 
-export class Main extends React.Component<RouteComponentProps, {}> {
+export class MainLayout extends React.Component<RouteComponentProps, {}> {
   render() {
     return (
-      <div className={styles.app}>
+      <div className={styles.mainLayout}>
         <Layout>
           <AppHeader/>
           <AppBreadcrumbs/>
           <Switch>
-            <Route exact path='/' component={Domains}/>
-            <Route exact path='/domains' component={Domains}/>
-            <Route path='/domain/:namespace/:id/' component={Domain}/>
+            <Route path='/domain/:namespace/:domainId/' component={DomainContainer}/>
+            <Route path='/' component={ServerContainer}/>
           </Switch>
         </Layout>
       </div>
