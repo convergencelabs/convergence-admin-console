@@ -80,9 +80,9 @@ export class ServerAlerts extends Component<{}, {}> {
       case "warning":
         return (<Icon type="warning" style={{color: "orange"}}/>);
       case "error":
-        return (<Icon type="exclamation-circle" style={{color: "red"}}/>);
+        return (<Icon type="close-square" style={{color: "red"}}/>);
       case "info":
-        return (<Icon type="mail" style={{color: "blue"}}/>);
+        return (<Icon type="info-circle" style={{color: "#2388a9"}}/>);
     }
   }
 }

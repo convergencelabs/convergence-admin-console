@@ -9,6 +9,7 @@ import {FormEvent} from "react";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../components/FormButtonBar";
+import {FormFieldWithHelp} from "../../../components/FormFieldWithHelp";
 
 const {Option} = Select;
 
@@ -16,10 +17,10 @@ interface CreateUserComponentState {
   confirmDirty: boolean;
 }
 
-class CreateUserComponent extends React.Component<RouteComponentProps & FormComponentProps, CreateUserComponentState> {
+class CreateDomainComponent extends React.Component<RouteComponentProps & FormComponentProps, CreateUserComponentState> {
   private readonly breadcrumbs = new BasicBreadcrumbsProducer([
-    {title: "Users", link: "/users"},
-    {title: "New User"}
+    {title: "Domains", link: "/domains"},
+    {title: "New Domain"}
   ]);
 
   state = {
@@ -30,110 +31,59 @@ class CreateUserComponent extends React.Component<RouteComponentProps & FormComp
     const {getFieldDecorator} = this.props.form;
     return (
       <Page breadcrumbs={this.breadcrumbs.breadcrumbs()}>
-        <Card title={<span><Icon type="user"/> New User</span>} className={styles.formCard}>
+        <Card title={<span><Icon type="database"/> New Domain</span>} className={styles.formCard}>
           <Form onSubmit={this.handleSubmit}>
             <Row gutter={16}>
-              <Col span={12}>
-                <Form.Item label="Username">
+              <Col span={24}>
+                <Form.Item label="Namespace">
                   {getFieldDecorator('username', {
                     rules: [{
                       required: true, whitespace: true, message: 'Please input a Username!',
                     }],
                   })(
-                    <Input/>
+                    <Select
+                      showSearch
+                      placeholder="Select a namespace"
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        (option!.props!.children as any as string).toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                    >
+                      <Option value="jack">Jack</Option>
+                      <Option value="lucy">Lucy</Option>
+                      <Option value="tom">Tom</Option>
+                    </Select>,
                   )}
                 </Form.Item>
               </Col>
-              <Col span={12}>
+              <Col span={24}>
                 <Form.Item label={(
-                  <span>Display Name&nbsp;
-                    <Tooltip title="What do you want others to call you?">
-                  <Icon type="question-circle-o"/>
-                </Tooltip>
-                </span>
+                  <FormFieldWithHelp
+                    label="Domain Id"
+                    tooltip="The url friendly id that will be used to connect to the domain."
+                  />
                 )}>
                   {getFieldDecorator('displayName', {
                     rules: [{required: true, message: 'Please input a Display Name!', whitespace: true}],
                   })(
-                    <Input/>
+                    <Input placeholder="Enter a unique id"/>
                   )}
                 </Form.Item>
               </Col>
             </Row>
             <Row gutter={16}>
-              <Col span={12}>
-                <Form.Item label="First Name">
+              <Col span={24}>
+                <Form.Item label={(
+                  <FormFieldWithHelp
+                    label="Display Name"
+                    tooltip="A nickname that will be displayed in the admin console."
+                  />
+                )}>
                   {getFieldDecorator('firstName', {
                     rules: [{
                       required: false, whitespace: true, message: 'Please input a First Name!',
                     }],
                   })(
-                    <Input/>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item label="Last Name">
-                  {getFieldDecorator('lastName', {
-                    rules: [{
-                      required: false, whitespace: true, message: 'Please input a Last Name!',
-                    }],
-                  })(
-                    <Input/>
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={24}>
-                <Form.Item label="E-mail">
-                  {getFieldDecorator('email', {
-                    rules: [{
-                      type: 'email', message: 'The input is not valid E-mail!',
-                    }, {
-                      required: true, message: 'Please input an E-mail!',
-                    }],
-                  })(
-                    <Input/>
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Form.Item label="Role">
-              {getFieldDecorator('role', {
-                initialValue: "developer",
-                rules: [{type: 'string', required: true, message: 'Please select a role!'}],
-              })(
-                <Select>
-                  <Option value="admin">Admin</Option>
-                  <Option value="developer">Developer</Option>
-                </Select>
-              )}
-            </Form.Item>
-            <Row gutter={16}>
-              <Col span={12}>
-                <Form.Item label="Password">
-                  {getFieldDecorator('password', {
-                    rules: [{
-                      required: true, message: 'Please input a password!',
-                    }, {
-                      validator: this.validateToNextPassword,
-                    }],
-                  })(
-                    <Input type="password"/>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item label="Confirm Password">
-                  {getFieldDecorator('confirm', {
-                    rules: [{
-                      required: true, message: 'Please confirm the password!',
-                    }, {
-                      validator: this.compareToFirstPassword,
-                    }],
-                  })(
-                    <Input type="password" onBlur={this.handleConfirmBlur}/>
+                    <Input placeholder="Enter an optional display name"/>
                   )}
                 </Form.Item>
               </Col>
@@ -153,7 +103,7 @@ class CreateUserComponent extends React.Component<RouteComponentProps & FormComp
   }
 
   private _handleCancel = () => {
-    this.props.history.push("/users/");
+    this.props.history.push("/domains/");
   }
 
   private handleSubmit = (e: FormEvent<HTMLInputElement>) => {
@@ -188,4 +138,4 @@ class CreateUserComponent extends React.Component<RouteComponentProps & FormComp
   }
 }
 
-export const CreateUser = Form.create<{}>()(CreateUserComponent);
+export const CreateDomain = Form.create<{}>()(CreateDomainComponent);

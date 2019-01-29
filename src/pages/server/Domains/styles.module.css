@@ -1,15 +1,7 @@
-.app {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+.search {
+  width: 400px;
 }
 
-
-.scroller {
-  flex: 1;
-  overflow: auto;
-}
-
-.content {
-  padding: 0 0px;
+.iconButton {
+  margin-left: 10px;
 }

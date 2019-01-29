@@ -1,0 +1,6 @@
+.iconButton :global .ant-btn {
+  border: none;
+  padding: 0 !important;
+  background: transparent;
+  height: inherit;
+}

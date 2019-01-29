@@ -8,7 +8,6 @@ import styles from "./styles.module.css";
 import {CartTitleToolbar} from "../../../components/CardTitleToolbar";
 import {RouteComponentProps} from "react-router";
 
-
 const data = [{
   key: '1',
   username: 'john.brown',

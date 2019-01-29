@@ -11,7 +11,7 @@ export class DomainSideNavigation extends React.Component<{}, {}> {
     {key: "sessions", icon: "cloud", title: "Sessions", link: "sessions", routeMatch: {path: "/sessions"}},
     {key: "collections", icon: "folder", title: "Collections", link: "collections",routeMatch: {path: "/collections"}},
     {key: "models", icon: "file", title: "Models", link: "models", routeMatch: {path: "/models"}},
-    {key: "settings", icon: "setting", title: "Setting", link: "settings", routeMatch: {path: "/settings"}}
+    {key: "settings", icon: "setting", title: "Settings", link: "settings", routeMatch: {path: "/settings"}}
   ];
 
   public render(): ReactNode {

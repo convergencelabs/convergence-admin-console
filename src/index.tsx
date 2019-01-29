@@ -6,6 +6,7 @@ import {authStore} from "./stores/AuthStore";
 import {domainStore} from "./stores/DomainStore";
 import {localStorageService} from "./services/LocalStorageService";
 import {domainService} from "./services/DomainService";
+import {configService} from "./services/ConfigService";
 
 import {message} from "antd";
 import {configure} from "mobx"
@@ -26,7 +27,8 @@ const stores = {
 };
 
 const services = {
-  domainService
+  domainService,
+  configService
 };
 
 const authToken = localStorageService.getAuthToken();
