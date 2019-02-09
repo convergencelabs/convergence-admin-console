@@ -6,6 +6,7 @@ import {Card, Form, Icon, Tabs} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import {NamespaceSettings} from "./NamespaceSettings";
 import {DomainSettings} from "./DomainSettings";
+import {ApiKeysSettings} from "./ApiKeysSettings";
 
 const {TabPane} = Tabs;
 
@@ -19,6 +20,7 @@ export class SettingsComponent extends React.Component<FormComponentProps, {}> {
           <Tabs>
             <TabPane tab="Namespaces" key="namespaces"><NamespaceSettings/></TabPane>
             <TabPane tab="Domains" key="domains"><DomainSettings/></TabPane>
+            <TabPane tab="API Keys" key="api-keys"><ApiKeysSettings/></TabPane>
           </Tabs>
         </Card>
       </Page>

@@ -3,7 +3,7 @@ import {Page} from "../../../components/Page/";
 import {ReactNode} from "react";
 import {BasicBreadcrumbsProducer} from "../../../stores/BreacrumStore";
 import Tooltip from "antd/es/tooltip";
-import {Button, Card, Icon, Input, message, notification, Popconfirm, Table, Tag} from "antd";
+import {Button, Card, Icon, Input, message, Popconfirm, Table, Tag} from "antd";
 import styles from "./styles.module.css";
 import {CartTitleToolbar} from "../../../components/CardTitleToolbar";
 import {RouteComponentProps} from "react-router";
@@ -51,7 +51,7 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
       dataIndex: 'lastLogin',
       key: 'lastLogin',
       align: 'left',
-      render: (value: any, record: any) => record.lastLogin ? moment(record.lastLogin).format("MM/DD @ hh:mm:a") : "Never"
+      render: (value: any) => moment(value).format("MM/DD @ hh:mm:a")
     }, {
       title: 'Role',
       dataIndex: 'globalRole',
@@ -133,7 +133,7 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
         </Tooltip>
         <Popconfirm title="Are you sure delete this user?"
                     placement="topRight"
-                    onConfirm={() => this._onDeleteUser(record.user.username)}
+                    onConfirm={() => this._onDeleteUser(record.username)}
                     okText="Yes"
                     cancelText="No"
                     icon={<Icon type="question-circle-o" style={{color: 'red'}}/>}>
@@ -146,16 +146,7 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
   }
 
   private _onDeleteUser = (username: string) => {
-    this.props.userService.deleteUser(username).then(() => {
-      this._loadUsers();
-      message.success(`User '${username}' deleted.`);
-    }).catch(err => {
-      notification["error"]({
-        message: 'Could Not Delete User',
-        description: `The user could not be deleted.`,
-        placement: "bottomRight"
-      });
-    });
+    message.success(`User '${username}' deleted.`);
   }
 
   private onUserSelectionChanged = (selectedRowKeys: string[] | number[], selectedRows: any[]) => {

@@ -2,7 +2,7 @@ import {AbstractAuthenticatedService} from "./AbstractAuthenticatedService";
 import {DomainDescriptor} from "../models/DomainDescriptor";
 import {DomainStatus} from "../models/DomainStatus";
 
-interface DomainDescriptorData {
+export interface DomainDescriptorData {
   namespace: string;
   domainId: string;
   displayName: string;
@@ -23,7 +23,7 @@ export class DomainService extends AbstractAuthenticatedService {
       .then(DomainService._toDomainDescriptor);
   }
 
-  private static _toDomainDescriptor(data: DomainDescriptorData): DomainDescriptor {
+  public static _toDomainDescriptor(data: DomainDescriptorData): DomainDescriptor {
     // FIXME status
     return new DomainDescriptor(
       data.namespace,

@@ -2,21 +2,29 @@ import * as React from 'react';
 import {Page} from "../../../components/Page/";
 import {ReactNode} from "react";
 import {BasicBreadcrumbsProducer} from "../../../stores/BreacrumStore";
-import {Card, Col, Row} from "antd";
+import {Card, Col, notification, Row} from "antd";
 import {Form, Input, Tooltip, Icon, Button, Select} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
 import {FormEvent} from "react";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../components/FormButtonBar";
+import {CreateUserData, UserService} from "../../../services/UserService";
+import {injectAs} from "../../../utils/mobx-utils";
+import {SERVICES} from "../../../services/ServiceConstants";
+import {RestError} from "../../../services/RestError";
 
 const {Option} = Select;
+
+interface InjectedProps extends RouteComponentProps, FormComponentProps {
+  userService: UserService;
+}
 
 interface CreateUserComponentState {
   confirmDirty: boolean;
 }
 
-class CreateUserComponent extends React.Component<RouteComponentProps & FormComponentProps, CreateUserComponentState> {
+class CreateUserComponent extends React.Component<InjectedProps, CreateUserComponentState> {
   private readonly breadcrumbs = new BasicBreadcrumbsProducer([
     {title: "Users", link: "/users"},
     {title: "New User"}
@@ -100,13 +108,14 @@ class CreateUserComponent extends React.Component<RouteComponentProps & FormComp
               </Col>
             </Row>
             <Form.Item label="Role">
-              {getFieldDecorator('role', {
-                initialValue: "developer",
+              {getFieldDecorator('serverRole', {
+                initialValue: "Developer",
                 rules: [{type: 'string', required: true, message: 'Please select a role!'}],
               })(
                 <Select>
-                  <Option value="admin">Admin</Option>
-                  <Option value="developer">Developer</Option>
+                  <Option value="Developer">Developer</Option>
+                  <Option value="Domain Admin">Domain Admin</Option>
+                  <Option value="Server Admin">Server Admin</Option>
                 </Select>
               )}
             </Form.Item>
@@ -158,9 +167,40 @@ class CreateUserComponent extends React.Component<RouteComponentProps & FormComp
 
   private handleSubmit = (e: FormEvent<HTMLInputElement>) => {
     e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
+    this.props.form.validateFieldsAndScroll((err, values: any) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        const {username, displayName, firstName, lastName, email, password, serverRole} = values;
+        const userData: CreateUserData = {
+          user: {
+            username,
+            displayName,
+            firstName,
+            lastName,
+            email
+          },
+          password,
+          serverRole
+        };
+        this.props.userService.createUser(userData)
+          .then(() => {
+            notification["success"]({
+              message: 'User Created',
+              description: `User '${username}' successfully created`,
+              placement: "bottomRight"
+            });
+            this.props.history.push("./");
+          }).catch((err) => {
+          if (err instanceof RestError) {
+            console.log(JSON.stringify(err));
+            if (err.code === "duplicate") {
+              notification["error"]({
+                message: 'Could Not Create User',
+                description: `A user with the specified ${err.details["field"]} already exists.`,
+                placement: "bottomRight"
+              });
+            }
+          }
+        });
       }
     });
   }
@@ -188,4 +228,4 @@ class CreateUserComponent extends React.Component<RouteComponentProps & FormComp
   }
 }
 
-export const CreateUser = Form.create<{}>()(CreateUserComponent);
+export const CreateUser = injectAs<RouteComponentProps>([SERVICES.USER_SERVICE], Form.create<{}>()(CreateUserComponent));

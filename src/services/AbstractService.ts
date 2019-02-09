@@ -1,6 +1,7 @@
 import superagent, {Response, SuperAgentRequest} from 'superagent';
 import {CONFIG} from "../constants";
 import {RestError} from "./RestError";
+import {authStore} from "../stores/AuthStore";
 
 export abstract class AbstractService {
 
@@ -9,7 +10,7 @@ export abstract class AbstractService {
     return await superagent
       .get(path)
       .use(this._preProcessRequest)
-      .catch(this._processErrors)
+      .ok(res => res.status < 500)
       .then(this._processResponse);
   }
 
@@ -19,7 +20,7 @@ export abstract class AbstractService {
       .put(path)
       .send(params)
       .use(this._preProcessRequest)
-      .catch(this._processErrors)
+      .ok(res => res.status < 500)
       .then(this._processResponse);
   }
 
@@ -29,7 +30,7 @@ export abstract class AbstractService {
       .post(path)
       .send(params)
       .use(this._preProcessRequest)
-      .catch(this._processErrors)
+      .ok(res => res.status < 500)
       .then(this._processResponse);
   }
 
@@ -38,7 +39,7 @@ export abstract class AbstractService {
     return await superagent
       .delete(path)
       .use(this._preProcessRequest)
-      .catch(this._processErrors)
+      .ok(res => res.status < 500)
       .then(this._processResponse);
   }
 
@@ -46,21 +47,21 @@ export abstract class AbstractService {
     return `${CONFIG.convergenceRestApiUrl}/${relPath}`;
   }
 
-  private _processResponse = (res: Response) => {
-    const body = res.body;
+  protected _processResponse(httpResponse: Response) {
+    const body = httpResponse.body;
     if (body.ok) {
       return Promise.resolve(body.body)
     } else {
-      const {error_message, error_code, error_details} = body.body;
-      return Promise.reject(new RestError(error_message, error_code, error_details));
+      if (body.body) {
+        const {error_message, error_code, error_details} = body.body;
+        return Promise.reject(new RestError(error_message, error_code, error_details));
+      } else {
+        return Promise.reject(httpResponse);
+      }
     }
   }
 
-  protected _processErrors(err: any): any {
-    return Promise.reject(err);
-  }
-  
   protected _preProcessRequest(req: SuperAgentRequest): void {
-    
+
   }
 }

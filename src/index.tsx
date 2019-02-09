@@ -7,6 +7,8 @@ import {domainStore} from "./stores/DomainStore";
 import {localStorageService} from "./services/LocalStorageService";
 import {domainService} from "./services/DomainService";
 import {configService} from "./services/ConfigService";
+import {namespaceService} from "./services/NamespaceService";
+import {userService} from "./services/UserService";
 
 import {message} from "antd";
 import {configure} from "mobx"
@@ -28,7 +30,9 @@ const stores = {
 
 const services = {
   domainService,
-  configService
+  configService,
+  namespaceService,
+  userService
 };
 
 const authToken = localStorageService.getAuthToken();

@@ -9,6 +9,7 @@ import {Settings} from "../../pages/server/Settings";
 import {ServerUsers} from "../../pages/server/Users";
 import {CreateUser} from "../../pages/server/CreateUser";
 import {CreateDomain} from "../../pages/server/CreateDomain";
+import {Namespaces} from "../../pages/server/Namespaces";
 
 export class ServerContainer extends React.Component<RouteComponentProps, {}> {
   public render(): ReactNode {
@@ -19,6 +20,7 @@ export class ServerContainer extends React.Component<RouteComponentProps, {}> {
           <Route exact path={`${match.url}users`} render={(props) => <ServerUsers {...props}/>}/>
           <Route path={`${match.url}users/create`} render={(props) => <CreateUser {...props}/>}/>
           <Route exact path={`${match.url}domains`} render={(props) => <Domains {...props}/>}/>
+          <Route exact path={`${match.url}namespaces`} render={(props) => <Namespaces {...props}/>}/>
           <Route path={`${match.url}domains/create`} render={(props) => <CreateDomain {...props}/>}/>
           <Route path={`${match.url}settings`} render={(props) => <Settings />}/>
           <Route path={`${match.url}`} render={(props) => <ServerDashboard {...props} />}/>
