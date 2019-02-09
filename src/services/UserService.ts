@@ -29,6 +29,12 @@ export class UserService extends AbstractAuthenticatedService {
       .then(domains => domains.map(UserService._toConvergenceUser));
   }
 
+  public searchUsers(filter: String, offset: number = 0, limit: number = 10): Promise<ConvergenceUser[]> {
+    return this
+      ._get<ConvergenceUserData[]>("users", {filter, offset, limit})
+      .then(domains => domains.map(UserService._toConvergenceUser));
+  }
+
   public getUserInfo(): Promise<ConvergenceUserInfo[]> {
     return this
       ._get<ConvergenceUserInfoData[]>("userInfo")

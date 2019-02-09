@@ -5,10 +5,11 @@ import {authStore} from "../stores/AuthStore";
 
 export abstract class AbstractService {
 
-  protected async _get<T>(relPath: string): Promise<T> {
+  protected async _get<T>(relPath: string, params: any = {}): Promise<T> {
     const path = this._computePath(relPath);
     return await superagent
       .get(path)
+      .query(params)
       .use(this._preProcessRequest)
       .ok(res => res.status < 500)
       .then(this._processResponse);

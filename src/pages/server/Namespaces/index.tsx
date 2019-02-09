@@ -12,6 +12,7 @@ import {CartTitleToolbar} from "../../../components/CardTitleToolbar";
 import Tooltip from "antd/es/tooltip";
 import {NamespaceAndDomains} from "../../../models/Namespace";
 import {NamespaceService} from "../../../services/NamespaceService";
+import {Link} from "react-router-dom";
 
 interface InjectedProps extends RouteComponentProps {
   namespaceService: NamespaceService;
@@ -30,15 +31,14 @@ export class NamespacesComponent extends React.Component<InjectedProps, Namespac
     super(props);
 
     this._domainTableColumns = [{
-      title: 'Display Name',
-      dataIndex: 'displayName',
-      sorter: (a: any, b: any) => (a.displayName as string).localeCompare(b.displayName),
-      render: (text: string) => <a href="javascript:;">{text}</a>
-    }, {
       title: 'Id',
       dataIndex: 'id',
       sorter: (a: any, b: any) => (a.id as string).localeCompare(b.id),
-      render: (text: string) => <a href="javascript:;">{text}</a>
+      render: (text: string) => <Link to={`/namespace/${text}`}>{text}</Link>
+    }, {
+      title: 'Display Name',
+      dataIndex: 'displayName',
+      sorter: (a: any, b: any) => (a.displayName as string).localeCompare(b.displayName),
     }, {
       title: 'Domains',
       dataIndex: 'domains',
@@ -93,7 +93,7 @@ export class NamespacesComponent extends React.Component<InjectedProps, Namespac
   }
 
   private _goToCreate = () => {
-    this.props.history.push("/namesoac/create");
+    this.props.history.push("/namespaces/create");
   }
 
   private _loadNamespaces(): void {

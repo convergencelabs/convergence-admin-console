@@ -15,6 +15,10 @@ export class NamespaceService extends AbstractAuthenticatedService {
       .then(domains => domains.map(NamespaceService._toNamespaceAndDomains));
   }
 
+  public createNamespace(id: string, displayName: string): Promise<void> {
+    return this._post<void>("namespaces", {id, displayName});
+  }
+
   private static _toNamespaceAndDomains(data: NamespaceDescriptorData): NamespaceAndDomains {
     return new NamespaceAndDomains(
       data.id,
