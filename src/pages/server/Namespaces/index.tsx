@@ -10,7 +10,7 @@ import {makeCancelable, PromiseSubscription} from "../../../utils/make-cancelabl
 import {RouteComponentProps} from "react-router";
 import {CartTitleToolbar} from "../../../components/CardTitleToolbar";
 import Tooltip from "antd/es/tooltip";
-import {NamespaceAndDomains} from "../../../models/Namespace";
+import {NamespaceAndDomains} from "../../../models/NamespaceAndDomains";
 import {NamespaceService} from "../../../services/NamespaceService";
 import {Link} from "react-router-dom";
 
@@ -24,13 +24,13 @@ interface NamespacesState {
 
 export class NamespacesComponent extends React.Component<InjectedProps, NamespacesState> {
   private readonly breadcrumbs = new BasicBreadcrumbsProducer([{title: "Namespaces"}]);
-  private readonly _domainTableColumns: any[];
+  private readonly _namespaceTableColumns: any[];
   private _namepsacesSubscription: PromiseSubscription | null;
 
   constructor(props: InjectedProps) {
     super(props);
 
-    this._domainTableColumns = [{
+    this._namespaceTableColumns = [{
       title: 'Id',
       dataIndex: 'id',
       sorter: (a: any, b: any) => (a.id as string).localeCompare(b.id),
@@ -68,7 +68,7 @@ export class NamespacesComponent extends React.Component<InjectedProps, Namespac
           <Table className={styles.userTable}
                  rowKey="id"
                  size="middle"
-                 columns={this._domainTableColumns}
+                 columns={this._namespaceTableColumns}
                  dataSource={this.state.namespaces || []}
           />
         </Card>

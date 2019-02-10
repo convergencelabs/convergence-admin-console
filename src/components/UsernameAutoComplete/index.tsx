@@ -9,21 +9,33 @@ import {ConvergenceUser} from "../../models/ConvergenceUser";
 
 const {Option} = Select;
 
-export interface InjectedProps {
+export interface UserAutoCompleteProps {
+  className: string;
+  onChange: (username: string) => void;
+  placeholder?: string;
+  value?: string;
+}
+
+export interface InjectedProps extends UserAutoCompleteProps{
   userService: UserService;
 }
 
 export interface UsernameAutoCompleteState {
   users: ConvergenceUser[];
+  selectedValue: string;
 }
 
 export class UsernameAutoCompleteComponent extends Component<InjectedProps, UsernameAutoCompleteState> {
   state = {
-    users: []
+    users: [],
+    selectedValue: ""
   };
 
   public render(): ReactNode {
     const {users} = this.state;
+    const {className, placeholder, value} = this.props;
+    const inputValue = value !== undefined ? value: this.state.selectedValue;
+
     const children = users.map((user: ConvergenceUser) =>
       <Option
         key={user.username}
@@ -32,17 +44,24 @@ export class UsernameAutoCompleteComponent extends Component<InjectedProps, User
       </Option>);
     return (
       <AutoComplete
-        style={{width: 400}}
-        onSearch={this._handleSearch}
+        className={className}
+        onSearch={this._onSearch}
+        onChange={this._onChange}
+        value={inputValue}
         optionLabelProp="value"
-        placeholder="Select User"
+        placeholder={placeholder || "Select User"}
       >
         {children}
       </AutoComplete>
     );
   }
 
-  private _handleSearch = (value: string) => {
+  private _onChange = (value: any) => {
+    this.setState({selectedValue: value});
+    this.props.onChange(value);
+  }
+
+  private _onSearch = (value: string) => {
     this.props.userService.searchUsers(value, 0, 10).then(users => {
       this.setState({users});
 
@@ -50,4 +69,4 @@ export class UsernameAutoCompleteComponent extends Component<InjectedProps, User
   }
 }
 
-export const UsernameAutoComplete = injectAs<{}>([SERVICES.USER_SERVICE], UsernameAutoCompleteComponent);
+export const UsernameAutoComplete = injectAs<UserAutoCompleteProps>([SERVICES.USER_SERVICE], UsernameAutoCompleteComponent);

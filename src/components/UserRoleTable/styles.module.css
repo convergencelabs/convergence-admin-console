@@ -1,0 +1,22 @@
+.codeSnippet {
+
+}
+
+.codeSnippet .description {
+  border: 1px solid #e8e8e8;
+  background: #fafafa;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+
+.codeSnippet pre {
+  border: 1px solid #a9a2a2;
+  background: #fafafa;
+  border-radius: 4px;
+  padding: 2px;
+}
+
+.codeSnippet code {
+  border-radius: 4px;
+}

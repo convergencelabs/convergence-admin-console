@@ -28,7 +28,8 @@ class NormalLoginForm extends Component<RouteComponentProps & FormComponentProps
         const {username, password} = values;
         authService.login(username, password)
           .then(resp => {
-            const {token, expiration} = resp;
+            const {token, expiresIn} = resp;
+            const expiresAt = new Date(Date.now() + expiresIn).getTime();
             authStore.setAuthenticated(resp.token);
 
             this.setState({
@@ -36,7 +37,7 @@ class NormalLoginForm extends Component<RouteComponentProps & FormComponentProps
               errorMessage: null
             });
 
-            localStorageService.setAuthToken({token, expires: expiration});
+            localStorageService.setAuthToken({token, expiresAt});
           })
           .catch(err => {
             console.log(err);

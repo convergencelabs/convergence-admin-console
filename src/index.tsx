@@ -9,6 +9,7 @@ import {domainService} from "./services/DomainService";
 import {configService} from "./services/ConfigService";
 import {namespaceService} from "./services/NamespaceService";
 import {userService} from "./services/UserService";
+import {authService} from "./services/AuthService";
 
 import {message} from "antd";
 import {configure} from "mobx"
@@ -29,6 +30,7 @@ const stores = {
 };
 
 const services = {
+  authService,
   domainService,
   configService,
   namespaceService,
@@ -37,11 +39,22 @@ const services = {
 
 const authToken = localStorageService.getAuthToken();
 if (authToken) {
-  authStore.setAuthenticated(authToken.token);
+  authService.validateToken(authToken.token)
+    .then(resp => {
+      if (resp.valid) {
+        authStore.setAuthenticated(authToken.token);
+      }
+
+      boostrap();
+    });
+} else {
+  boostrap();
 }
 
-ReactDOM.render((
-  <Provider { ...stores } {...services}>
-    <AdminConsole />
-  </Provider>
-), document.getElementById('root'));
+function boostrap() {
+  ReactDOM.render((
+    <Provider {...stores} {...services}>
+      <AdminConsole/>
+    </Provider>
+  ), document.getElementById('root'));
+}

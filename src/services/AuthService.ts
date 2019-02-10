@@ -2,12 +2,37 @@ import {AbstractService} from "./AbstractService";
 
 export interface AuthResponse {
   token: string;
-  expiration: number;
+  expiresIn: number;
+}
+
+export interface ValidateRestResponse {
+  valid: boolean;
+  username?: string;
+  expiresIn?: number;
+}
+
+export interface ValidateResponse {
+  valid: boolean;
+  username?: string;
+  expiresAt?: Date;
 }
 
 export class AuthService extends AbstractService {
   public login(username: string, password: string): Promise<AuthResponse> {
     return this._post<AuthResponse>("auth/login", {username, password});
+  }
+
+  public validateToken(token: string): Promise<ValidateRestResponse> {
+    return this
+      ._post<ValidateRestResponse>("auth/validate", {token})
+      .then(resp => {
+        const {valid, username, expiresIn} = resp;
+        return {
+          valid,
+          username,
+          expiresAt: expiresIn !== undefined ? new Date(Date.now() + expiresIn) : undefined
+        }
+      });
   }
 }
 

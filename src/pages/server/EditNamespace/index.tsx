@@ -13,7 +13,10 @@ import {injectAs} from "../../../utils/mobx-utils";
 import {SERVICES} from "../../../services/ServiceConstants";
 import {RestError} from "../../../services/RestError";
 import {NamespaceService} from "../../../services/NamespaceService";
-import {UsernameAutoComplete} from "../../../components/UsernameAutoComplete";
+import {Namespace} from "../../../models/Namespace";
+import {UserRoleAdder} from "../../../components/UserRoleAdder";
+import {UserRole, UserRoleTable} from "../../../components/UserRoleTable";
+
 
 interface EditNamespaceProps extends RouteComponentProps {
 
@@ -24,7 +27,8 @@ interface InjectedProps extends EditNamespaceProps, FormComponentProps {
 }
 
 interface EditNamespaceState {
-  namespaceId: string;
+  namespace: Namespace | null;
+  userRoles: UserRole[];
 }
 
 class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespaceState> {
@@ -34,69 +38,80 @@ class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespac
     super(props);
 
     this.state = {
-      namespaceId: (props.match.params as any).id
+      namespace: null,
+      userRoles: []
     };
+
+    const namespaceId = (props.match.params as any).id;
 
     this._breadcrumbs = new BasicBreadcrumbsProducer([
       {title: "Namespaces", link: "/namespaces"},
-      {title: this.state.namespaceId}
+      {title: namespaceId}
     ]);
+
+    this.props.namespaceService.getNamespace(namespaceId).then(namespace => {
+      this.setState({namespace});
+    })
   }
 
   public render(): ReactNode {
     const {getFieldDecorator} = this.props.form;
-    return (
-      <Page breadcrumbs={this._breadcrumbs.breadcrumbs()}>
-        <Card title={<span><Icon type="folder"/> Edit Namespace</span>} className={styles.formCard}>
-          <Form onSubmit={this.handleSubmit}>
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item label="Namespace Id">
-                  {getFieldDecorator('id', {
-                    initialValue: this.state.namespaceId,
-                    rules: [{
-                      required: false, whitespace: true, message: 'Please input a Username!',
-                    }],
-                  })(
-                    <Input disabled={true}/>
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item label="Display Name">
-                  {getFieldDecorator('displayName', {
-                    rules: [{required: true, message: 'Please input a Display Name!', whitespace: true}],
-                  })(
-                    <Input/>
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item label="User">
-                  {getFieldDecorator('displayName', {
-                    rules: [{required: true, message: 'Please input a Display Name!', whitespace: true}],
-                  })(
-                    <UsernameAutoComplete/>
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={24}>
-                <FormButtonBar>
-                  <Button htmlType="button" onClick={this._handleCancel}>Cancel</Button>
-                  <Button type="primary" htmlType="submit">Create</Button>
-                </FormButtonBar>
-              </Col>
-            </Row>
-          </Form>
-        </Card>
-      </Page>
-    );
+    const {namespace} = this.state;
+    if (namespace === null) {
+      return <div/>;
+    } else {
+      return (
+        <Page breadcrumbs={this._breadcrumbs.breadcrumbs()}>
+          <Card title={<span><Icon type="folder"/> Edit Namespace</span>} className={styles.formCard}>
+            <Form onSubmit={this.handleSubmit}>
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Form.Item label="Namespace Id">
+                    {getFieldDecorator('id', {
+                      initialValue: this.state.namespace!.id
+                    })(
+                      <Input disabled={true}/>
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item label="Display Name">
+                    {getFieldDecorator('displayName', {
+                      rules: [{required: true, message: 'Please input a Display Name!', whitespace: true}],
+                      initialValue: this.state.namespace!.displayName
+                    })(
+                      <Input/>
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row>
+                <Col span={24}>
+                  <FormButtonBar>
+                    <Button htmlType="button" onClick={this._handleCancel}>Cancel</Button>
+                    <Button type="primary" htmlType="submit">Update</Button>
+                  </FormButtonBar>
+                </Col>
+              </Row>
+            </Form>
+          </Card>
+          <Card className={styles.formCard}>
+            <UserRoleAdder
+              roles={["Developer", "Domain Admin", "Owner"]}
+              defaultRole="Developer"
+              selectWidth={200}
+              onAdd={this._onAddUserRole}/>
+            <UserRoleTable userRoles={this.state.userRoles}/>
+          </Card>
+        </Page>
+      );
+    }
+  }
+
+
+  private _onAddUserRole = (userRole: UserRole) => {
+    const userRoles = [...this.state.userRoles, userRole];
+    this.setState({userRoles})
   }
 
   private _handleCancel = () => {

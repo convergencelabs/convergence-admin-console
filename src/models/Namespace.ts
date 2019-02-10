@@ -1,9 +1,6 @@
-import {DomainDescriptor} from "./DomainDescriptor";
-
-export class NamespaceAndDomains {
+export class Namespace{
   constructor(public id: string,
-              public displayName: string,
-              public domains: DomainDescriptor[]
+              public displayName: string
   ) {
     Object.freeze(this);
   }

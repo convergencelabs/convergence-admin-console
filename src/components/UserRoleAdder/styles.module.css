@@ -1,0 +1,12 @@
+.userRoleAdder {
+  display: flex;
+}
+
+.userRoleAdder .username {
+  flex: 1;
+  margin-right: 16px;
+}
+
+.userRoleAdder button {
+  margin-left: 16px;
+}

@@ -1,6 +1,6 @@
 export interface IAuthToken {
   token: string;
-  expires: number;
+  expiresAt: number;
 }
 
 const AUTH_TOKEN = "auth_token";
