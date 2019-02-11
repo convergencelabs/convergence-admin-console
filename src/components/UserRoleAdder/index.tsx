@@ -3,7 +3,6 @@ import {Component, ReactNode} from "react";
 import styles from "./styles.module.css";
 import {UsernameAutoComplete} from "../UsernameAutoComplete";
 import {Button, Select} from "antd";
-import {UserRole} from "../UserRoleTable";
 import {MouseEvent} from "react";
 const {Option} = Select;
 
@@ -11,7 +10,7 @@ export interface UserRoleAdderProps {
   roles: string[];
   defaultRole: string;
   selectWidth: number;
-  onAdd: (userRole: UserRole) => void;
+  onAdd(username: string, role: string): void;
 }
 
 export interface UserRoleAdderState {
@@ -55,7 +54,6 @@ export class UserRoleAdder extends Component<UserRoleAdderProps,UserRoleAdderSta
     )
   }
 
-
   private _onSelectRole = (role: string) => {
     this.setState({selectedRole: role});
   }
@@ -69,6 +67,6 @@ export class UserRoleAdder extends Component<UserRoleAdderProps,UserRoleAdderSta
     e.stopPropagation();
     this.setState({selectedUsername: "", selectedRole: this.props.defaultRole});
 
-    this.props.onAdd({username: this.state.selectedUsername, role: this.state.selectedRole})
+    this.props.onAdd(this.state.selectedUsername, this.state.selectedRole);
   }
 }

@@ -15,7 +15,8 @@ import {RestError} from "../../../services/RestError";
 import {NamespaceService} from "../../../services/NamespaceService";
 import {Namespace} from "../../../models/Namespace";
 import {UserRoleAdder} from "../../../components/UserRoleAdder";
-import {UserRole, UserRoleTable} from "../../../components/UserRoleTable";
+import {UserRoleTable} from "../../../components/UserRoleTable";
+import {RoleService, RoleTarget} from "../../../services/RoleService";
 
 
 interface EditNamespaceProps extends RouteComponentProps {
@@ -24,22 +25,25 @@ interface EditNamespaceProps extends RouteComponentProps {
 
 interface InjectedProps extends EditNamespaceProps, FormComponentProps {
   namespaceService: NamespaceService;
+  roleService: RoleService;
 }
 
 interface EditNamespaceState {
   namespace: Namespace | null;
-  userRoles: UserRole[];
+  userRoles: Map<string, string>;
 }
 
 class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespaceState> {
   private readonly _breadcrumbs: BasicBreadcrumbsProducer;
+
+  private readonly _roles = ["Developer", "Domain Admin", "Owner"];
 
   constructor(props: InjectedProps) {
     super(props);
 
     this.state = {
       namespace: null,
-      userRoles: []
+      userRoles: new Map()
     };
 
     const namespaceId = (props.match.params as any).id;
@@ -51,7 +55,8 @@ class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespac
 
     this.props.namespaceService.getNamespace(namespaceId).then(namespace => {
       this.setState({namespace});
-    })
+      this._loadUserRoles();
+    });
   }
 
   public render(): ReactNode {
@@ -97,21 +102,67 @@ class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespac
           </Card>
           <Card className={styles.formCard}>
             <UserRoleAdder
-              roles={["Developer", "Domain Admin", "Owner"]}
+              roles={this._roles}
               defaultRole="Developer"
               selectWidth={200}
-              onAdd={this._onAddUserRole}/>
-            <UserRoleTable userRoles={this.state.userRoles}/>
+              onAdd={this._setUserRole}/>
+            <UserRoleTable
+              roles={this._roles}
+              userRoles={this.state.userRoles}
+              onRemoveUser={this._onRemoveUserRole}
+              onChangeRole={this._setUserRole}
+            />
           </Card>
         </Page>
       );
     }
   }
 
+  private _loadUserRoles(): void {
+    this.props.roleService
+      .getUserRoles(RoleTarget.namespace(this.state.namespace!.id))
+      .then(userRoles => {
+        this.setState({userRoles});
+      });
+  }
 
-  private _onAddUserRole = (userRole: UserRole) => {
-    const userRoles = [...this.state.userRoles, userRole];
-    this.setState({userRoles})
+  private _onRemoveUserRole = (username: string) => {
+    this.props.roleService
+      .deleteUserRoles(RoleTarget.namespace(this.state.namespace!.id), username)
+      .then(() => {
+        const userRoles = new Map(this.state.userRoles);
+        userRoles.delete(username);
+        this.setState({userRoles});
+        this._loadUserRoles();
+      })
+      .catch(err => {
+        console.error(err);
+        notification["error"]({
+          message: 'Could Not Delete User Role',
+          description: `Could not delete role for the user.`,
+          placement: "bottomRight"
+        });
+      });
+  }
+
+  private _setUserRole = (username: string, role: string) => {
+    this.props.roleService
+      .setUserRole(RoleTarget.namespace(this.state.namespace!.id), username, role)
+      .then(() => {
+        const userRoles = new Map(this.state.userRoles);
+        userRoles.set(username, role);
+        this.setState({userRoles});
+        this._loadUserRoles();
+      })
+      .catch(err => {
+        console.error(err);
+        notification["error"]({
+          message: 'Could Not Set User Role',
+          description: `Could not set role for the user.`,
+          placement: "bottomRight"
+        });
+      });
+
   }
 
   private _handleCancel = () => {
@@ -131,21 +182,22 @@ class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespac
               placement: "bottomRight"
             });
             this.props.history.push("./");
-          }).catch((err) => {
-          if (err instanceof RestError) {
-            console.log(JSON.stringify(err));
-            if (err.code === "duplicate") {
-              notification["error"]({
-                message: 'Could Not Create Namespace',
-                description: `A user with the specified ${err.details["field"]} already exists.`,
-                placement: "bottomRight"
-              });
+          })
+          .catch((err) => {
+            if (err instanceof RestError) {
+              console.log(JSON.stringify(err));
+              if (err.code === "duplicate") {
+                notification["error"]({
+                  message: 'Could Not Create Namespace',
+                  description: `A user with the specified ${err.details["field"]} already exists.`,
+                  placement: "bottomRight"
+                });
+              }
             }
-          }
-        });
+          });
       }
     });
   }
 }
 
-export const EditNamespace = injectAs<EditNamespaceProps>([SERVICES.NAMESPACE_SERVICE], Form.create<{}>()(EditNamespaceComponent));
+export const EditNamespace = injectAs<EditNamespaceProps>([SERVICES.NAMESPACE_SERVICE, SERVICES.ROLE_SERVICE], Form.create<{}>()(EditNamespaceComponent));

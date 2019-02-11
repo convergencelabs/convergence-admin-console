@@ -9,6 +9,7 @@ import {domainService} from "./services/DomainService";
 import {configService} from "./services/ConfigService";
 import {namespaceService} from "./services/NamespaceService";
 import {userService} from "./services/UserService";
+import {roleService} from "./services/RoleService";
 import {authService} from "./services/AuthService";
 
 import {message} from "antd";
@@ -34,7 +35,8 @@ const services = {
   domainService,
   configService,
   namespaceService,
-  userService
+  userService,
+  roleService
 };
 
 const authToken = localStorageService.getAuthToken();

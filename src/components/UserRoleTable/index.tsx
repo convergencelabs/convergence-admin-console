@@ -12,7 +12,10 @@ export interface UserRole {
 }
 
 interface UserRoleTableProps {
-  userRoles: UserRole[]
+  userRoles: Map<string, string>;
+  roles: string[];
+  onChangeRole(username: string, role: string): void;
+  onRemoveUser(username: string): void;
 }
 
 export class UserRoleTable extends Component<UserRoleTableProps,{}> {
@@ -25,11 +28,12 @@ export class UserRoleTable extends Component<UserRoleTableProps,{}> {
     this._userRoleTableColumns = [{
       title: 'Username',
       dataIndex: 'username',
-      sorter: (a: any, b: any) => (a.id as string).localeCompare(b.id),
+      sorter: (a: any, b: any) => (a.username as string).localeCompare(b.username),
     }, {
       title: 'Role',
       dataIndex: 'role',
       width: "200px",
+      sorter: (a: any, b: any) => (a.role as string).localeCompare(b.role),
       render: this._renderRole
     }, {
       title: '',
@@ -42,23 +46,26 @@ export class UserRoleTable extends Component<UserRoleTableProps,{}> {
   }
 
   public render(): ReactNode {
+    const userRoles: UserRole[] = [];
+    this.props.userRoles.forEach((role, username) => userRoles.push({username, role}));
     return (
       <Table className={styles.userTable}
              rowKey="username"
              size="middle"
              columns={this._userRoleTableColumns}
-             dataSource={this.props.userRoles || []}
+             dataSource={userRoles || []}
       />
     )
   }
 
 
   private _renderActions = (text: any, record: any) => {
+    const {username} = record;
     return (
       <span className={styles.actions}>
         <Popconfirm title="Are you sure delete this user?"
                     placement="topRight"
-                    onConfirm={() => {}}
+                    onConfirm={() => {this.props.onRemoveUser(username)}}
                     okText="Yes"
                     cancelText="No"
                     icon={<Icon type="question-circle-o" style={{color: 'red'}}/>}>
@@ -68,15 +75,15 @@ export class UserRoleTable extends Component<UserRoleTableProps,{}> {
       </Popconfirm>
     </span>
     );
-  }
-
+  };
 
   private _renderRole = (text: any, record: any) => {
+    const {username} = record;
     return (
-      <Select style={{width: "100%"}}>
-        <Option key="Developer">Developer</Option>
-        <Option key="Domain Admin">Domain Admin</Option>
-        <Option key="Server Admin">Server Admin</Option>
+      <Select style={{width: "100%"}}
+              defaultValue={text}
+              onChange={(role, option) => this.props.onChangeRole(username, role)}>
+        {this.props.roles.map(role => <Option key={role}>{role}</Option>)}
       </Select>
     );
   }

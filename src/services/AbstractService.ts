@@ -15,21 +15,21 @@ export abstract class AbstractService {
       .then(this._processResponse);
   }
 
-  protected async _put<T>(relPath: string, params: { [key: string]: any }): Promise<T> {
+  protected async _put<T>(relPath: string, entity: { [key: string]: any }): Promise<T> {
     const path = this._computePath(relPath);
     return await superagent
       .put(path)
-      .send(params)
+      .send(entity)
       .use(this._preProcessRequest)
       .ok(res => res.status < 500)
       .then(this._processResponse);
   }
 
-  protected async _post<T>(relPath: string, params: { [key: string]: any }): Promise<T> {
+  protected async _post<T>(relPath: string, entity: { [key: string]: any }): Promise<T> {
     const path = this._computePath(relPath);
     return await superagent
       .post(path)
-      .send(params)
+      .send(entity)
       .use(this._preProcessRequest)
       .ok(res => res.status < 500)
       .then(this._processResponse);
