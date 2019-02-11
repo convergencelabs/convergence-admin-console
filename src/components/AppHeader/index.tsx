@@ -4,10 +4,17 @@ import styles from './styles.module.css';
 import logo from '../../assets/images/logo.png';
 import {authStore} from "../../stores/AuthStore";
 import {localStorageService} from "../../services/LocalStorageService";
+import {injectAs} from "../../utils/mobx-utils";
+import {STORES} from "../../stores/StoreConstants";
+import {ProfileStore} from "../../stores/ProfileStore";
 
 const { Header } = Layout;
 
-export class AppHeader extends React.Component<{}, {}> {
+interface InjectedProps {
+  profileStore: ProfileStore;
+}
+
+class AppHeaderComponent extends React.Component<InjectedProps, {}> {
 
   private _logout = () => {
     authStore.logout();
@@ -38,7 +45,7 @@ export class AppHeader extends React.Component<{}, {}> {
         </Badge>
         <Dropdown overlay={this._menu} trigger={['click']}>
           <a className="ant-dropdown-link" href="#">
-            <span className={styles.username}>Michael</span>
+            <span className={styles.username}>{this.props.profileStore.profile!.displayName}</span>
             <Avatar src="https://www.gravatar.com/avatar/e03ba1fbfb88cd40c52f4dac2ac9054c" />
             <Icon className={styles.down} type="down"/>
           </a>
@@ -47,3 +54,5 @@ export class AppHeader extends React.Component<{}, {}> {
     );
   }
 }
+
+export const AppHeader = injectAs<{}>([STORES.PROFILE_STORE], AppHeaderComponent);

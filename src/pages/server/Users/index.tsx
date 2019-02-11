@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Page} from "../../../components/Page/";
-import {ReactNode} from "react";
+import {KeyboardEvent, ReactNode} from "react";
 import {BasicBreadcrumbsProducer} from "../../../stores/BreacrumStore";
 import Tooltip from "antd/es/tooltip";
 import {Button, Card, Icon, Input, message, notification, Popconfirm, Table, Tag} from "antd";
@@ -13,14 +13,18 @@ import {makeCancelable, PromiseSubscription} from "../../../utils/make-cancelabl
 import {injectAs} from "../../../utils/mobx-utils";
 import {SERVICES} from "../../../services/ServiceConstants";
 import moment from "moment";
+import {STORES} from "../../../stores/StoreConstants";
+import {ProfileStore} from "../../../stores/ProfileStore";
 
 
 interface InjectedProps extends RouteComponentProps {
   userService: UserService;
+  profileStore: ProfileStore;
 }
 
 interface ServerUsersState {
   users: ConvergenceUserInfo[] | null;
+  userFilter: string;
 }
 
 export class ServerUsersComponent extends React.Component<InjectedProps, ServerUsersState> {
@@ -68,7 +72,8 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
     this._usersSubscription = null;
 
     this.state = {
-      users: null
+      users: null,
+      userFilter: ""
     };
 
     this._loadUsers();
@@ -85,7 +90,7 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
     return (
       <CartTitleToolbar title="Users" icon="user">
         <span className={styles.search}>
-          <Input placeholder="Search Users" addonAfter={<Icon type="search"/>}/>
+          <Input placeholder="Search Users" addonAfter={<Icon type="search"/>} onKeyUp={this._onFilterChange}/>
         </span>
         <Tooltip placement="topRight" title="Create User" mouseEnterDelay={1}>
           <Button className={styles.iconButton} shape="circle" size="small" htmlType="button"
@@ -100,6 +105,10 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
         </Tooltip>
       </CartTitleToolbar>
     )
+  }
+
+  private _onFilterChange = (event: KeyboardEvent<HTMLInputElement>) => {
+    this.setState({userFilter: (event.target as HTMLInputElement).value}, this._loadUsers);
   }
 
   private _goToCreate = () => {
@@ -123,6 +132,27 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
   }
 
   private _renderActions = (text: any, record: any) => {
+    const profile = this.props.profileStore.profile;
+    const deleteDisabled = profile!.username === record.user.username;
+    const deleteButton = <Button shape="circle" size="small" htmlType="button" disabled={deleteDisabled}><Icon
+      type="delete"/></Button>;
+
+    const deleteComponent = deleteDisabled ?
+      <Tooltip placement="topRight" title="You can not delete yourself!" mouseEnterDelay={1}>
+        {deleteButton}
+      </Tooltip> :
+      <Popconfirm title="Are you sure delete this user?"
+                  placement="topRight"
+                  onConfirm={() => this._onDeleteUser(record.user.username)}
+                  okText="Yes"
+                  cancelText="No"
+                  icon={<Icon type="question-circle-o" style={{color: 'red'}}/>}
+      >
+        <Tooltip placement="topRight" title="Delete User" mouseEnterDelay={2}>
+          {deleteButton}
+        </Tooltip>
+      </Popconfirm>
+
     return (
       <span className={styles.actions}>
         <Tooltip placement="topRight" title="Edit User" mouseEnterDelay={1}>
@@ -131,31 +161,24 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
         <Tooltip placement="topRight" title="Set Password" mouseEnterDelay={1}>
           <Button shape="circle" size="small" htmlType="button"><Icon type="lock"/></Button>
         </Tooltip>
-        <Popconfirm title="Are you sure delete this user?"
-                    placement="topRight"
-                    onConfirm={() => this._onDeleteUser(record.user.username)}
-                    okText="Yes"
-                    cancelText="No"
-                    icon={<Icon type="question-circle-o" style={{color: 'red'}}/>}>
-        <Tooltip placement="topRight" title="Delete User" mouseEnterDelay={1}>
-          <Button shape="circle" size="small" htmlType="button"><Icon type="delete"/></Button>
-        </Tooltip>
-      </Popconfirm>
+        {deleteComponent}
     </span>
     );
   }
 
   private _onDeleteUser = (username: string) => {
-    this.props.userService.deleteUser(username).then(() => {
-      this._loadUsers();
-      message.success(`User '${username}' deleted.`);
-    }).catch(err => {
-      notification["error"]({
-        message: 'Could Not Delete User',
-        description: `The user could not be deleted.`,
-        placement: "bottomRight"
+    this.props.userService.deleteUser(username)
+      .then(() => {
+        this._loadUsers();
+        message.success(`User '${username}' deleted.`);
+      })
+      .catch(err => {
+        notification["error"]({
+          message: 'Could Not Delete User',
+          description: `The user could not be deleted.`,
+          placement: "bottomRight"
+        });
       });
-    });
   }
 
   private onUserSelectionChanged = (selectedRowKeys: string[] | number[], selectedRows: any[]) => {
@@ -167,9 +190,9 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
     name: record.name,
   })
 
-
   private _loadUsers(): void {
-    const {promise, subscription} = makeCancelable(this.props.userService.getUserInfo());
+    const filter = this.state.userFilter !== "" ? this.state.userFilter : undefined;
+    const {promise, subscription} = makeCancelable(this.props.userService.getUserInfo(filter));
     this._usersSubscription = subscription;
     promise.then(users => {
       this._usersSubscription = null;
@@ -182,5 +205,5 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
 }
 
 
-export const ServerUsers = injectAs<RouteComponentProps>([SERVICES.USER_SERVICE], ServerUsersComponent);
+export const ServerUsers = injectAs<RouteComponentProps>([SERVICES.USER_SERVICE, STORES.PROFILE_STORE], ServerUsersComponent);
 

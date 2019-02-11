@@ -31,6 +31,10 @@ export class NamespaceService extends AbstractAuthenticatedService {
     return this._post<void>("namespaces", {id, displayName});
   }
 
+  public deleteNamespace(id: string): Promise<void> {
+    return this._delete<void>(`namespaces/${id}`);
+  }
+
   private static _toNamespaceAndDomains(data: NamespaceAndDomainsData): NamespaceAndDomains {
     return new NamespaceAndDomains(
       data.id,

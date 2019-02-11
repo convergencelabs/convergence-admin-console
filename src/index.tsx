@@ -11,6 +11,8 @@ import {namespaceService} from "./services/NamespaceService";
 import {userService} from "./services/UserService";
 import {roleService} from "./services/RoleService";
 import {authService} from "./services/AuthService";
+import {profileService} from "./services/ProfileService";
+import {profileStore} from "./stores/ProfileStore";
 
 import {message} from "antd";
 import {configure} from "mobx"
@@ -27,11 +29,13 @@ message.config({
 
 const stores = {
   authStore,
+  profileStore,
   domainStore
 };
 
 const services = {
   authService,
+  profileService,
   domainService,
   configService,
   namespaceService,
@@ -45,9 +49,14 @@ if (authToken) {
     .then(resp => {
       if (resp.valid) {
         authStore.setAuthenticated(authToken.token);
+        profileService.getProfile()
+          .then((profile) => {
+            profileStore.setProfile(profile);
+            boostrap();
+          })
+      } else {
+        boostrap();
       }
-
-      boostrap();
     });
 } else {
   boostrap();

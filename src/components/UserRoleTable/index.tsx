@@ -58,7 +58,6 @@ export class UserRoleTable extends Component<UserRoleTableProps,{}> {
     )
   }
 
-
   private _renderActions = (text: any, record: any) => {
     const {username} = record;
     return (

@@ -88,10 +88,11 @@ class CreateNamespaceComponent extends React.Component<InjectedProps, {}> {
         const {id, displayName} = values;
         this.props.namespaceService.createNamespace(id, displayName)
           .then(() => {
-            notification["success"]({
+            notification.success({
               message: 'Namespace Created',
               description: `Namespace '${id}' successfully created`,
-              placement: "bottomRight"
+              placement: "bottomRight",
+              duration: 3
             });
             this.props.history.push("./");
           }).catch((err) => {

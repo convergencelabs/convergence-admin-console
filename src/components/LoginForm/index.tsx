@@ -6,16 +6,29 @@ import {
 import {FormComponentProps} from 'antd/lib/form/Form';
 import styles from "./styles.module.css";
 import logo from "../../assets/images/logo.png";
-import {authService} from "../../services/AuthService";
-import {authStore} from "../../stores/AuthStore";
+import {AuthService} from "../../services/AuthService";
+import {AuthStore} from "../../stores/AuthStore";
 import {localStorageService} from "../../services/LocalStorageService";
+import {injectAs} from "../../utils/mobx-utils";
+import {STORES} from "../../stores/StoreConstants";
+import {SERVICES} from "../../services/ServiceConstants";
+import {ProfileService} from "../../services/ProfileService";
+import {ProfileStore} from "../../stores/ProfileStore";
+
+export interface InjectedProps extends RouteComponentProps, FormComponentProps {
+  authStore: AuthStore;
+  authService: AuthService;
+  profileService: ProfileService;
+  profileStore: ProfileStore;
+}
 
 export interface LoginFormState {
   redirectToReferrer: boolean;
   errorMessage: string | null;
+
 }
 
-class NormalLoginForm extends Component<RouteComponentProps & FormComponentProps, LoginFormState> {
+class NormalLoginForm extends Component<InjectedProps, LoginFormState> {
   state = {
     redirectToReferrer: false,
     errorMessage: null
@@ -26,18 +39,20 @@ class NormalLoginForm extends Component<RouteComponentProps & FormComponentProps
     this.props.form.validateFields((err, values) => {
       if (!err) {
         const {username, password} = values;
-        authService.login(username, password)
+        this.props.authService.login(username, password)
           .then(resp => {
             const {token, expiresIn} = resp;
             const expiresAt = new Date(Date.now() + expiresIn).getTime();
-            authStore.setAuthenticated(resp.token);
-
+            this.props.authStore.setAuthenticated(resp.token);
+            localStorageService.setAuthToken({token, expiresAt});
+            return this.props.profileService.getProfile();
+          })
+          .then((profile) => {
+            this.props.profileStore.setProfile(profile);
             this.setState({
               redirectToReferrer: true,
               errorMessage: null
             });
-
-            localStorageService.setAuthToken({token, expiresAt});
           })
           .catch(err => {
             console.log(err);
@@ -107,4 +122,5 @@ class NormalLoginForm extends Component<RouteComponentProps & FormComponentProps
   }
 }
 
-export const LoginForm = Form.create<{}>()(NormalLoginForm);
+const injections = [STORES.AUTH_STORE, STORES.PROFILE_STORE, SERVICES.AUTH_SERVICE, SERVICES.PROFILE_SERVICE];
+export const LoginForm = injectAs<RouteComponentProps>(injections, Form.create<{}>()(NormalLoginForm));

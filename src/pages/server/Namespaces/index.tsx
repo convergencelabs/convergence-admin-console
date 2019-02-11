@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Page} from "../../../components/Page/";
 import {ReactNode} from "react";
 import {BasicBreadcrumbsProducer} from "../../../stores/BreacrumStore";
-import {Button, Card, Icon, Input, Table} from "antd";
+import {Button, Card, Icon, Input, message, notification, Popconfirm, Table} from "antd";
 import styles from "./styles.module.css";
 import {injectAs} from "../../../utils/mobx-utils";
 import {SERVICES} from "../../../services/ServiceConstants";
@@ -44,6 +44,11 @@ export class NamespacesComponent extends React.Component<InjectedProps, Namespac
       dataIndex: 'domains',
       sorter: (a: any, b: any) => (a.id as string).localeCompare(b.id),
       render: (text: string, record: any) => record.domains.length
+    }, {
+      title: '',
+      dataIndex: '',
+      width: '50px',
+      render: this._renderActions
     }];
 
     this._namepsacesSubscription = null;
@@ -80,9 +85,9 @@ export class NamespacesComponent extends React.Component<InjectedProps, Namespac
     return (
       <CartTitleToolbar title="Namespaces" icon="folder">
         <span className={styles.search}>
-          <Input placeholder="Search Domains" addonAfter={<Icon type="search"/>}/>
+          <Input placeholder="Search Namespaces" addonAfter={<Icon type="search"/>}/>
         </span>
-        <Tooltip placement="topRight" title="Create Domain" mouseEnterDelay={1}>
+        <Tooltip placement="topRight" title="Create Namespace" mouseEnterDelay={1}>
           <Button className={styles.iconButton} shape="circle" size="small" htmlType="button"
                   onClick={this._goToCreate}>
             <Icon type="plus-circle"/>
@@ -90,6 +95,51 @@ export class NamespacesComponent extends React.Component<InjectedProps, Namespac
         </Tooltip>
       </CartTitleToolbar>
     )
+  }
+
+  private _renderActions = (text: any, record: any) => {
+    const deleteDisabled = false;
+    const deleteButton = <Button shape="circle" size="small" htmlType="button" disabled={deleteDisabled}><Icon
+      type="delete"/></Button>;
+
+    const deleteComponent = deleteDisabled ?
+      <Tooltip placement="topRight" title="You can not delete yourself!" mouseEnterDelay={1}>
+        {deleteButton}
+      </Tooltip> :
+      <Popconfirm title={`Are you sure delete namespace '${record.id}'?`}
+                  placement="topRight"
+                  onConfirm={() => this._onDeleteNamespace(record.id)}
+                  okText="Yes"
+                  cancelText="No"
+                  icon={<Icon type="question-circle-o" style={{color: 'red'}}/>}
+      >
+        <Tooltip placement="topRight" title="Delete Namespace" mouseEnterDelay={2}>
+          {deleteButton}
+        </Tooltip>
+      </Popconfirm>
+
+    return (<span className={styles.actions}>{deleteComponent}</span>);
+  }
+
+
+  private _onDeleteNamespace = (namespaceId: string) => {
+    this.props.namespaceService.deleteNamespace(namespaceId)
+      .then(() => {
+        this._loadNamespaces();
+        notification.success({
+          message: 'Success',
+          description: `Namespace '${namespaceId}' deleted.`,
+          placement: "bottomRight",
+          duration: 3
+        });
+      })
+      .catch(err => {
+        notification["error"]({
+          message: 'Could Not Delete Namespace',
+          description: `The namespace could not be deleted.`,
+          placement: "bottomRight"
+        });
+      });
   }
 
   private _goToCreate = () => {
