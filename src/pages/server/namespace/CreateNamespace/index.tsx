@@ -1,18 +1,18 @@
 import * as React from 'react';
-import {Page} from "../../../components/Page/";
+import {Page} from "../../../../components/Page/index";
 import {ReactNode} from "react";
-import {BasicBreadcrumbsProducer} from "../../../stores/BreacrumStore";
+import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
 import {Card, Col, notification, Row} from "antd";
 import {Form, Input, Tooltip, Icon, Button, Select} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
 import {FormEvent} from "react";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
-import {FormButtonBar} from "../../../components/FormButtonBar";
-import {injectAs} from "../../../utils/mobx-utils";
-import {SERVICES} from "../../../services/ServiceConstants";
-import {RestError} from "../../../services/RestError";
-import {NamespaceService} from "../../../services/NamespaceService";
+import {FormButtonBar} from "../../../../components/FormButtonBar/index";
+import {injectAs} from "../../../../utils/mobx-utils";
+import {SERVICES} from "../../../../services/ServiceConstants";
+import {RestError} from "../../../../services/RestError";
+import {NamespaceService} from "../../../../services/NamespaceService";
 
 const {Option} = Select;
 

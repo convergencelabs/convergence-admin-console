@@ -14,7 +14,7 @@ import {authService} from "./services/AuthService";
 import {profileService} from "./services/ProfileService";
 import {profileStore} from "./stores/ProfileStore";
 
-import {message} from "antd";
+import {message, notification} from "antd";
 import {configure} from "mobx"
 
 import './index.css';
@@ -25,6 +25,11 @@ message.config({
   top: 55,
   duration: 2,
   maxCount: 3,
+});
+
+notification.config({
+  placement: 'bottomRight',
+  duration: 3,
 });
 
 const stores = {

@@ -1,18 +1,18 @@
 import * as React from 'react';
-import {Page} from "../../../components/Page/";
+import {Page} from "../../../../components/Page/";
 import {ReactNode} from "react";
-import {BasicBreadcrumbsProducer} from "../../../stores/BreacrumStore";
+import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
 import {Card, Col, notification, Row} from "antd";
 import {Form, Input, Tooltip, Icon, Button, Select} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
 import {FormEvent} from "react";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
-import {FormButtonBar} from "../../../components/FormButtonBar";
-import {CreateUserData, UserService} from "../../../services/UserService";
-import {injectAs} from "../../../utils/mobx-utils";
-import {SERVICES} from "../../../services/ServiceConstants";
-import {RestError} from "../../../services/RestError";
+import {FormButtonBar} from "../../../../components/FormButtonBar/";
+import {CreateUserData, UserService} from "../../../../services/UserService";
+import {injectAs} from "../../../../utils/mobx-utils";
+import {SERVICES} from "../../../../services/ServiceConstants";
+import {RestError} from "../../../../services/RestError";
 
 const {Option} = Select;
 
@@ -27,7 +27,7 @@ interface CreateUserComponentState {
 class CreateUserComponent extends React.Component<InjectedProps, CreateUserComponentState> {
   private readonly breadcrumbs = new BasicBreadcrumbsProducer([
     {title: "Users", link: "/users"},
-    {title: "New User"}
+    {title: "New user"}
   ]);
 
   state = {
@@ -171,32 +171,28 @@ class CreateUserComponent extends React.Component<InjectedProps, CreateUserCompo
       if (!err) {
         const {username, displayName, firstName, lastName, email, password, serverRole} = values;
         const userData: CreateUserData = {
-          user: {
-            username,
-            displayName,
-            firstName,
-            lastName,
-            email
-          },
+          username,
+          displayName,
+          firstName,
+          lastName,
+          email,
           password,
           serverRole
         };
         this.props.userService.createUser(userData)
           .then(() => {
-            notification["success"]({
-              message: 'User Created',
-              description: `User '${username}' successfully created`,
-              placement: "bottomRight"
+            notification.success({
+              message: 'user Created',
+              description: `User '${username}' successfully created`
             });
             this.props.history.push("./");
           }).catch((err) => {
           if (err instanceof RestError) {
             console.log(JSON.stringify(err));
             if (err.code === "duplicate") {
-              notification["error"]({
-                message: 'Could Not Create User',
-                description: `A user with the specified ${err.details["field"]} already exists.`,
-                placement: "bottomRight"
+              notification.error({
+                message: 'Could Not Create user',
+                description: `A user with the specified ${err.details["field"]} already exists.`
               });
             }
           }

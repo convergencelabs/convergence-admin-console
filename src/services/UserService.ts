@@ -1,6 +1,5 @@
 import {AbstractAuthenticatedService} from "./AbstractAuthenticatedService";
 import {ConvergenceUser} from "../models/ConvergenceUser";
-import {ConvergenceUserInfo} from "../models/ConvergenceUserInfo";
 
 export interface ConvergenceUserData {
   username: string;
@@ -8,37 +7,26 @@ export interface ConvergenceUserData {
   lastName: string;
   displayName: string;
   email: string;
-}
-
-export interface ConvergenceUserInfoData {
-  user: ConvergenceUserData;
   lastLogin: number;
   serverRole: string;
 }
 
 export interface CreateUserData {
-  user: ConvergenceUserData;
+  username: string;
+  firstName: string;
+  lastName: string;
+  displayName: string;
+  email: string;
   password: number;
   serverRole: string;
 }
 
 export class UserService extends AbstractAuthenticatedService {
-  public getUsers(): Promise<ConvergenceUser[]> {
-    return this
-      ._get<ConvergenceUserData[]>("users")
-      .then(domains => domains.map(UserService._toConvergenceUser));
-  }
 
-  public searchUsers(filter: String, offset: number = 0, limit: number = 10): Promise<ConvergenceUser[]> {
+  public getUsers(filter?: String, offset: number = 0, limit: number = 10): Promise<ConvergenceUser[]> {
     return this
       ._get<ConvergenceUserData[]>("users", {filter, offset, limit})
       .then(domains => domains.map(UserService._toConvergenceUser));
-  }
-
-  public getUserInfo(filter?: string): Promise<ConvergenceUserInfo[]> {
-    return this
-      ._get<ConvergenceUserInfoData[]>("userInfo", {filter})
-      .then(domains => domains.map(UserService._toConvergenceUserInfo));
   }
 
   public getUser(username: string): Promise<ConvergenceUser> {
@@ -60,18 +48,15 @@ export class UserService extends AbstractAuthenticatedService {
   }
 
   public static _toConvergenceUser(data: ConvergenceUserData): ConvergenceUser {
+    const lastLogin = data.lastLogin ? new Date(data.lastLogin) : null;
     return new ConvergenceUser(
       data.username,
       data.displayName,
       data.firstName,
       data.lastName,
-      data.email);
-  }
-
-  public static _toConvergenceUserInfo(data: ConvergenceUserInfoData): ConvergenceUserInfo {
-    const user = UserService._toConvergenceUser(data.user);
-    const lastLogin = data.lastLogin ? new Date(data.lastLogin) : null;
-    return new ConvergenceUserInfo(user, lastLogin, data.serverRole);
+      data.email,
+      lastLogin,
+      data.serverRole);
   }
 }
 

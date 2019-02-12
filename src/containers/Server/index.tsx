@@ -6,12 +6,13 @@ import {Domains} from "../../pages/server/Domains";
 import {NavLayout} from "../../components/NavLayout";
 import {ServerSideNavigation} from "../../components/ServerSideNavigation";
 import {Settings} from "../../pages/server/Settings";
-import {ServerUsers} from "../../pages/server/Users";
-import {CreateUser} from "../../pages/server/CreateUser";
+import {ServerUsers} from "../../pages/server/user/Users";
+import {CreateUser} from "../../pages/server/user/CreateUser";
 import {CreateDomain} from "../../pages/server/CreateDomain";
-import {Namespaces} from "../../pages/server/Namespaces";
-import {CreateNamespace} from "../../pages/server/CreateNamespace";
-import {EditNamespace} from "../../pages/server/EditNamespace";
+import {Namespaces} from "../../pages/server/namespace/Namespaces";
+import {CreateNamespace} from "../../pages/server/namespace/CreateNamespace";
+import {EditNamespace} from "../../pages/server/namespace/EditNamespace";
+import {EditUser} from "../../pages/server/user/EditUser";
 
 export class ServerContainer extends React.Component<RouteComponentProps, {}> {
   public render(): ReactNode {
@@ -20,7 +21,8 @@ export class ServerContainer extends React.Component<RouteComponentProps, {}> {
       <NavLayout sideNav={<ServerSideNavigation/>}>
         <Switch>
           <Route exact path={`${match.url}users`} render={(props) => <ServerUsers {...props}/>}/>
-          <Route path={`${match.url}users/create`} render={(props) => <CreateUser {...props}/>}/>
+          <Route exact path={`${match.url}create-user`} render={(props) => <CreateUser {...props}/>}/>
+          <Route exact path={`${match.url}users/:username`} render={(props) => <EditUser {...props}/>}/>
           <Route exact path={`${match.url}domains`} render={(props) => <Domains {...props}/>}/>
           <Route exact path={`${match.url}namespaces`} render={(props) => <Namespaces {...props}/>}/>
           <Route exact path={`${match.url}namespaces/create`} render={(props) => <CreateNamespace {...props}/>}/>

@@ -62,7 +62,7 @@ export class UsernameAutoCompleteComponent extends Component<InjectedProps, User
   }
 
   private _onSearch = (value: string) => {
-    this.props.userService.searchUsers(value, 0, 10).then(users => {
+    this.props.userService.getUsers(value, 0, 10).then(users => {
       this.setState({users});
 
     });

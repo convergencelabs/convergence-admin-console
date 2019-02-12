@@ -1,17 +1,17 @@
 import * as React from 'react';
-import {Page} from "../../../components/Page/";
+import {Page} from "../../../../components/Page/index";
 import {ReactNode} from "react";
-import {BasicBreadcrumbsProducer} from "../../../stores/BreacrumStore";
+import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
 import {Button, Card, Icon, Input, message, notification, Popconfirm, Table} from "antd";
 import styles from "./styles.module.css";
-import {injectAs} from "../../../utils/mobx-utils";
-import {SERVICES} from "../../../services/ServiceConstants";
-import {makeCancelable, PromiseSubscription} from "../../../utils/make-cancelable";
+import {injectAs} from "../../../../utils/mobx-utils";
+import {SERVICES} from "../../../../services/ServiceConstants";
+import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
 import {RouteComponentProps} from "react-router";
-import {CartTitleToolbar} from "../../../components/CardTitleToolbar";
+import {CartTitleToolbar} from "../../../../components/CardTitleToolbar/index";
 import Tooltip from "antd/es/tooltip";
-import {NamespaceAndDomains} from "../../../models/NamespaceAndDomains";
-import {NamespaceService} from "../../../services/NamespaceService";
+import {NamespaceAndDomains} from "../../../../models/NamespaceAndDomains";
+import {NamespaceService} from "../../../../services/NamespaceService";
 import {Link} from "react-router-dom";
 
 interface InjectedProps extends RouteComponentProps {

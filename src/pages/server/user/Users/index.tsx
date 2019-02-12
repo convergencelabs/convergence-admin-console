@@ -1,20 +1,21 @@
 import * as React from 'react';
-import {Page} from "../../../components/Page/";
+import {Page} from "../../../../components/Page/";
 import {KeyboardEvent, ReactNode} from "react";
-import {BasicBreadcrumbsProducer} from "../../../stores/BreacrumStore";
+import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
 import Tooltip from "antd/es/tooltip";
 import {Button, Card, Icon, Input, message, notification, Popconfirm, Table, Tag} from "antd";
 import styles from "./styles.module.css";
-import {CartTitleToolbar} from "../../../components/CardTitleToolbar";
+import {CartTitleToolbar} from "../../../../components/CardTitleToolbar/";
 import {RouteComponentProps} from "react-router";
-import {UserService} from "../../../services/UserService";
-import {ConvergenceUserInfo} from "../../../models/ConvergenceUserInfo";
-import {makeCancelable, PromiseSubscription} from "../../../utils/make-cancelable";
-import {injectAs} from "../../../utils/mobx-utils";
-import {SERVICES} from "../../../services/ServiceConstants";
+import {UserService} from "../../../../services/UserService";
+import {ConvergenceUser} from "../../../../models/ConvergenceUser";
+import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
+import {injectAs} from "../../../../utils/mobx-utils";
+import {SERVICES} from "../../../../services/ServiceConstants";
 import moment from "moment";
-import {STORES} from "../../../stores/StoreConstants";
-import {ProfileStore} from "../../../stores/ProfileStore";
+import {STORES} from "../../../../stores/StoreConstants";
+import {ProfileStore} from "../../../../stores/ProfileStore";
+import {Link} from "react-router-dom";
 
 
 interface InjectedProps extends RouteComponentProps {
@@ -23,7 +24,7 @@ interface InjectedProps extends RouteComponentProps {
 }
 
 interface ServerUsersState {
-  users: ConvergenceUserInfo[] | null;
+  users: ConvergenceUser[] | null;
   userFilter: string;
 }
 
@@ -36,18 +37,18 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
     super(props);
     this._userTableColumns = [{
       title: 'Username',
-      dataIndex: 'user.username',
+      dataIndex: 'username',
       key: 'username',
       sorter: (a: any, b: any) => (a.username as string).localeCompare(b.username),
-      render: (text: string) => <a href="javascript:;">{text}</a>
+      render: (text: string) => <Link to={`/users/${text}`}>{text}</Link>
     }, {
       title: 'Display Name',
-      dataIndex: 'user.displayName',
+      dataIndex: 'displayName',
       key: "displayName",
       sorter: (a: any, b: any) => (a.displayName as string).localeCompare(b.displayName)
     }, {
       title: 'Email',
-      dataIndex: 'user.email',
+      dataIndex: 'email',
       key: 'email',
       sorter: (a: any, b: any) => (a.email as string).localeCompare(b.email)
     }, {
@@ -58,8 +59,8 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
       render: (value: any, record: any) => record.lastLogin ? moment(record.lastLogin).format("MM/DD @ hh:mm:a") : "Never"
     }, {
       title: 'Role',
-      dataIndex: 'globalRole',
-      key: 'globalRole',
+      dataIndex: 'serverRole',
+      key: 'serverRole',
       align: 'left',
       render: (value: any, record: any) => <Tag color="blue">{value}</Tag>
     }, {
@@ -83,6 +84,7 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
   public componentWillUnmount(): void {
     if (this._usersSubscription) {
       this._usersSubscription.unsubscribe();
+      this._usersSubscription = null;
     }
   }
 
@@ -112,7 +114,7 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
   }
 
   private _goToCreate = () => {
-    this.props.history.push("/users/create");
+    this.props.history.push("/create-user");
   }
 
   public render(): ReactNode {
@@ -122,7 +124,7 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
           <Table className={styles.userTable}
                  rowSelection={{onChange: this.onUserSelectionChanged, getCheckboxProps: this.getCheckboxProps}}
                  size="middle"
-                 rowKey="user.username"
+                 rowKey="username"
                  columns={this._userTableColumns}
                  dataSource={this.state.users || []}
           />
@@ -133,7 +135,7 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
 
   private _renderActions = (text: any, record: any) => {
     const profile = this.props.profileStore.profile;
-    const deleteDisabled = profile!.username === record.user.username;
+    const deleteDisabled = profile!.username === record.username;
     const deleteButton = <Button shape="circle" size="small" htmlType="button" disabled={deleteDisabled}><Icon
       type="delete"/></Button>;
 
@@ -143,7 +145,7 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
       </Tooltip> :
       <Popconfirm title="Are you sure delete this user?"
                   placement="topRight"
-                  onConfirm={() => this._onDeleteUser(record.user.username)}
+                  onConfirm={() => this._onDeleteUser(record.username)}
                   okText="Yes"
                   cancelText="No"
                   icon={<Icon type="question-circle-o" style={{color: 'red'}}/>}
@@ -174,7 +176,7 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
       })
       .catch(err => {
         notification["error"]({
-          message: 'Could Not Delete User',
+          message: 'Could Not Delete user',
           description: `The user could not be deleted.`,
           placement: "bottomRight"
         });
@@ -186,13 +188,13 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
   }
 
   private getCheckboxProps = (record: any) => ({
-    disabled: record.name === 'Disabled User', // Column configuration not to be checked
+    disabled: record.name === 'Disabled user', // Column configuration not to be checked
     name: record.name,
   })
 
   private _loadUsers(): void {
     const filter = this.state.userFilter !== "" ? this.state.userFilter : undefined;
-    const {promise, subscription} = makeCancelable(this.props.userService.getUserInfo(filter));
+    const {promise, subscription} = makeCancelable(this.props.userService.getUsers(filter));
     this._usersSubscription = subscription;
     promise.then(users => {
       this._usersSubscription = null;

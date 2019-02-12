@@ -1,22 +1,22 @@
 import * as React from 'react';
-import {Page} from "../../../components/Page/";
+import {Page} from "../../../../components/Page/index";
 import {ReactNode} from "react";
-import {BasicBreadcrumbsProducer} from "../../../stores/BreacrumStore";
+import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
 import {Card, Col, notification, Row} from "antd";
 import {Form, Input, Icon, Button, Select} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
 import {FormEvent} from "react";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
-import {FormButtonBar} from "../../../components/FormButtonBar";
-import {injectAs} from "../../../utils/mobx-utils";
-import {SERVICES} from "../../../services/ServiceConstants";
-import {RestError} from "../../../services/RestError";
-import {NamespaceService} from "../../../services/NamespaceService";
-import {Namespace} from "../../../models/Namespace";
-import {UserRoleAdder} from "../../../components/UserRoleAdder";
-import {UserRoleTable} from "../../../components/UserRoleTable";
-import {RoleService, RoleTarget} from "../../../services/RoleService";
+import {FormButtonBar} from "../../../../components/FormButtonBar/index";
+import {injectAs} from "../../../../utils/mobx-utils";
+import {SERVICES} from "../../../../services/ServiceConstants";
+import {RestError} from "../../../../services/RestError";
+import {NamespaceService} from "../../../../services/NamespaceService";
+import {Namespace} from "../../../../models/Namespace";
+import {UserRoleAdder} from "../../../../components/UserRoleAdder/index";
+import {UserRoleTable} from "../../../../components/UserRoleTable/index";
+import {RoleService, RoleTarget} from "../../../../services/RoleService";
 
 
 interface EditNamespaceProps extends RouteComponentProps {
@@ -138,7 +138,7 @@ class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespac
       .catch(err => {
         console.error(err);
         notification["error"]({
-          message: 'Could Not Delete User Role',
+          message: 'Could Not Delete user Role',
           description: `Could not delete role for the user.`,
           placement: "bottomRight"
         });
@@ -157,7 +157,7 @@ class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespac
       .catch(err => {
         console.error(err);
         notification["error"]({
-          message: 'Could Not Set User Role',
+          message: 'Could Not Set user Role',
           description: `Could not set role for the user.`,
           placement: "bottomRight"
         });
