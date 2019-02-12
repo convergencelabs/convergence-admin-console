@@ -140,7 +140,6 @@ class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespac
         notification["error"]({
           message: 'Could Not Delete user Role',
           description: `Could not delete role for the user.`,
-          placement: "bottomRight"
         });
       });
   }
@@ -159,7 +158,6 @@ class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespac
         notification["error"]({
           message: 'Could Not Set user Role',
           description: `Could not set role for the user.`,
-          placement: "bottomRight"
         });
       });
 
@@ -179,18 +177,15 @@ class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespac
             notification["success"]({
               message: 'Namespace Created',
               description: `Namespace '${id}' successfully created`,
-              placement: "bottomRight"
             });
             this.props.history.push("./");
           })
           .catch((err) => {
             if (err instanceof RestError) {
-              console.log(JSON.stringify(err));
               if (err.code === "duplicate") {
                 notification["error"]({
-                  message: 'Could Not Create Namespace',
-                  description: `A user with the specified ${err.details["field"]} already exists.`,
-                  placement: "bottomRight"
+                  message: 'Could Not Update Namespace',
+                  description: `A namespace with the specified ${err.details["field"]} already exists.`,
                 });
               }
             }
