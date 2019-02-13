@@ -5,8 +5,8 @@ import {ReactNode} from "react";
 export class DomainSideNavigation extends React.Component<{}, {}> {
 
   private readonly _menus: SideNavigationMenuItem[] = [
-    {key: "dashboard", icon: "home", title: "Home", link: "/", routeMatch: {path: "/", exact: true}},
-    {key: "users", icon: "user", title: "Users", link: "users", routeMatch: {path: "/users"}},
+    {key: "dashboard", icon: "dashboard", title: "Dashboard", link: "/", routeMatch: {path: "/", exact: true}},
+    {key: "namespaces", icon: "user", title: "Users", link: "users", routeMatch: {path: "/users"}},
     {key: "groups", icon: "team", title: "Groups", link: "groups", routeMatch: {path: "/groups"}},
     {key: "sessions", icon: "cloud", title: "Sessions", link: "sessions", routeMatch: {path: "/sessions"}},
     {key: "collections", icon: "folder", title: "Collections", link: "collections",routeMatch: {path: "/collections"}},

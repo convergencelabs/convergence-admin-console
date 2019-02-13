@@ -48,8 +48,7 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
       this._loadDomain(domainInfo);
     }
   }
-
-
+  
   public render(): ReactNode {
     const {match} = this.props;
     const domain = this.state.domain;

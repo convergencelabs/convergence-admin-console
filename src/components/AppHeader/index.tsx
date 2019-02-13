@@ -7,6 +7,9 @@ import {localStorageService} from "../../services/LocalStorageService";
 import {injectAs} from "../../utils/mobx-utils";
 import {STORES} from "../../stores/StoreConstants";
 import {ProfileStore} from "../../stores/ProfileStore";
+import {Link} from "react-router-dom";
+import md5 from "md5";
+import {ReactNode} from "react";
 
 const { Header } = Layout;
 
@@ -24,7 +27,7 @@ class AppHeaderComponent extends React.Component<InjectedProps, {}> {
   private _menu = (
     <Menu className={styles.userMenu}>
       <Menu.Item key="0">
-        <a><Icon type="profile"/> Profile</a>
+        <Link to={"/profile"}><Icon type="profile"/>Profile</Link>
       </Menu.Item>
       <Menu.Item key="1">
         <a><Icon type="setting"/> Settings</a>
@@ -34,7 +37,9 @@ class AppHeaderComponent extends React.Component<InjectedProps, {}> {
     </Menu>
   );
 
-  render() {
+  public render(): ReactNode {
+    const {username, displayName, email} = this.props.profileStore.profile!;
+    const emailHash = md5(email);
     return (
       <Header className={styles.header}>
         <img src={logo} className={styles.logo}/>
@@ -45,8 +50,8 @@ class AppHeaderComponent extends React.Component<InjectedProps, {}> {
         </Badge>
         <Dropdown overlay={this._menu} trigger={['click']}>
           <a className="ant-dropdown-link" href="#">
-            <span className={styles.username}>{this.props.profileStore.profile!.displayName}</span>
-            <Avatar src="https://www.gravatar.com/avatar/e03ba1fbfb88cd40c52f4dac2ac9054c" />
+            <span className={styles.username}>{displayName}</span>
+            <Avatar src={`https://www.gravatar.com/avatar/${emailHash}?d=mp`}/>
             <Icon className={styles.down} type="down"/>
           </a>
         </Dropdown>

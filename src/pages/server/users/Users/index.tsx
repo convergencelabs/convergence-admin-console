@@ -17,7 +17,6 @@ import {STORES} from "../../../../stores/StoreConstants";
 import {ProfileStore} from "../../../../stores/ProfileStore";
 import {Link} from "react-router-dom";
 
-
 interface InjectedProps extends RouteComponentProps {
   userService: UserService;
   profileStore: ProfileStore;
@@ -100,11 +99,6 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
             <Icon type="plus-circle"/>
           </Button>
         </Tooltip>
-        <Tooltip placement="topRight" title="Delete Users" mouseEnterDelay={1}>
-          <Button className={styles.iconButton} shape="circle" size="small" htmlType="button">
-            <Icon type="delete"/>
-          </Button>
-        </Tooltip>
       </CartTitleToolbar>
     )
   }
@@ -114,7 +108,7 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
   }
 
   private _goToCreate = () => {
-    this.props.history.push("/create-user");
+    this.props.history.push("/create-namespaces");
   }
 
   public render(): ReactNode {
@@ -122,7 +116,6 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
       <Page breadcrumbs={this.breadcrumbs.breadcrumbs()}>
         <Card title={this._renderToolbar()}>
           <Table className={styles.userTable}
-                 rowSelection={{onChange: this.onUserSelectionChanged, getCheckboxProps: this.getCheckboxProps}}
                  size="middle"
                  rowKey="username"
                  columns={this._userTableColumns}
@@ -133,7 +126,7 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
     );
   }
 
-  private _renderActions = (text: any, record: any) => {
+  private _renderActions = (value: ConvergenceUser, record: any) => {
     const profile = this.props.profileStore.profile;
     const deleteDisabled = profile!.username === record.username;
     const deleteButton = <Button shape="circle" size="small" htmlType="button" disabled={deleteDisabled}><Icon
@@ -158,7 +151,7 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
     return (
       <span className={styles.actions}>
         <Tooltip placement="topRight" title="Edit User" mouseEnterDelay={1}>
-          <Button shape="circle" size="small" htmlType="button"><Icon type="edit"/></Button>
+          <Button shape="circle" size="small" htmlType="button"><Link to={`/users/${value.username}`}><Icon type="edit"/></Link></Button>
         </Tooltip>
         <Tooltip placement="topRight" title="Set Password" mouseEnterDelay={1}>
           <Button shape="circle" size="small" htmlType="button"><Icon type="lock"/></Button>
@@ -176,21 +169,12 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
       })
       .catch(err => {
         notification["error"]({
-          message: 'Could Not Delete user',
+          message: 'Could Not Delete namespaces',
           description: `The user could not be deleted.`,
           placement: "bottomRight"
         });
       });
   }
-
-  private onUserSelectionChanged = (selectedRowKeys: string[] | number[], selectedRows: any[]) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-  }
-
-  private getCheckboxProps = (record: any) => ({
-    disabled: record.name === 'Disabled user', // Column configuration not to be checked
-    name: record.name,
-  })
 
   private _loadUsers(): void {
     const filter = this.state.userFilter !== "" ? this.state.userFilter : undefined;

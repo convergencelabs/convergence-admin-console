@@ -21,6 +21,7 @@ export class SettingsComponent extends React.Component<FormComponentProps, {}> {
             <TabPane tab="Namespaces" key="namespaces"><NamespaceSettings/></TabPane>
             <TabPane tab="Domains" key="domains"><DomainSettings/></TabPane>
             <TabPane tab="API Keys" key="api-keys"><ApiKeysSettings/></TabPane>
+            <TabPane tab="Security" key="security"><ApiKeysSettings/></TabPane>
           </Tabs>
         </Card>
       </Page>

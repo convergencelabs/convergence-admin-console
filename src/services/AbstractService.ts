@@ -65,4 +65,15 @@ export abstract class AbstractService {
   protected _preProcessRequest(req: SuperAgentRequest): void {
 
   }
+
+  protected _filterParams(params: {[key: string]: any}, exludedValues: any[]): any {
+    const result: {[key: string]: any} = {};
+    Object.keys(params).forEach((key: string) => {
+      const value = params[key];
+      if (value !== undefined && !exludedValues.includes(value)) {
+        result[key] = value;
+      }
+    });
+    return result;
+  }
 }

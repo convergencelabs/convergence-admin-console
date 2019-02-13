@@ -31,9 +31,11 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@types/md5": "^2.1.33",
     "@types/react-copy-to-clipboard": "4.2.6",
     "@types/react-highlight": "0.12.1",
     "@types/superagent": "3.8.6",
+    "md5": "^2.2.1",
     "mobx": "5.8.0",
     "mobx-react": "5.4.3",
     "mobx-react-devtools": "6.0.3",

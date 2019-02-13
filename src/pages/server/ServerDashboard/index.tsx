@@ -18,8 +18,8 @@ export class ServerDashboard extends React.Component<{}, {}> {
               <Card className={styles.card} title={<span><Icon type="profile"/> Server Status</span>}>
                 <InfoTable>
                   <InfoTableRow label="Version">1.0.0-rc.1</InfoTableRow>
-                  <InfoTableRow label="Hostname">localhost</InfoTableRow>
-                  <InfoTableRow label="IP Address">127.0.0.1</InfoTableRow>
+                  <InfoTableRow label="Uptime">3 Hours</InfoTableRow>
+                  <InfoTableRow label="Total Connections">23</InfoTableRow>
                   <InfoTableRow label="Status">Healthy <Icon type="check-circle" style={{color: "green"}}/></InfoTableRow>
                 </InfoTable>
               </Card>

@@ -1,21 +1,21 @@
 import * as React from 'react';
-import {Page} from "../../../../components/Page/index";
+import {Page} from "../../../../components/Page/";
 import {ReactNode} from "react";
 import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
 import {Card, Col, notification, Row} from "antd";
-import {Form, Input, Icon, Button, Select} from 'antd';
+import {Form, Input, Icon, Button} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
 import {FormEvent} from "react";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
-import {FormButtonBar} from "../../../../components/FormButtonBar/index";
+import {FormButtonBar} from "../../../../components/FormButtonBar/";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {RestError} from "../../../../services/RestError";
 import {NamespaceService} from "../../../../services/NamespaceService";
 import {Namespace} from "../../../../models/Namespace";
-import {UserRoleAdder} from "../../../../components/UserRoleAdder/index";
-import {UserRoleTable} from "../../../../components/UserRoleTable/index";
+import {UserRoleAdder} from "../../../../components/UserRoleAdder/";
+import {UserRoleTable} from "../../../../components/UserRoleTable/";
 import {RoleService, RoleTarget} from "../../../../services/RoleService";
 
 
@@ -137,8 +137,8 @@ class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespac
       })
       .catch(err => {
         console.error(err);
-        notification["error"]({
-          message: 'Could Not Delete user Role',
+        notification.error({
+          message: 'Could Not Delete namespaces Role',
           description: `Could not delete role for the user.`,
         });
       });
@@ -155,8 +155,8 @@ class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespac
       })
       .catch(err => {
         console.error(err);
-        notification["error"]({
-          message: 'Could Not Set user Role',
+        notification.error({
+          message: 'Could Not Set namespaces Role',
           description: `Could not set role for the user.`,
         });
       });
@@ -174,7 +174,7 @@ class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespac
         const {id, displayName} = values;
         this.props.namespaceService.createNamespace(id, displayName)
           .then(() => {
-            notification["success"]({
+            notification.success({
               message: 'Namespace Created',
               description: `Namespace '${id}' successfully created`,
             });
@@ -183,7 +183,7 @@ class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespac
           .catch((err) => {
             if (err instanceof RestError) {
               if (err.code === "duplicate") {
-                notification["error"]({
+                notification.error({
                   message: 'Could Not Update Namespace',
                   description: `A namespace with the specified ${err.details["field"]} already exists.`,
                 });

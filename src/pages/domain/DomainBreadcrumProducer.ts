@@ -1,5 +1,4 @@
 import {BreadcrumbsProducer, IBreadcrumbSegment} from "../../stores/BreacrumStore";
-import {match, matchPath} from "react-router";
 import {DomainDescriptor} from "../../models/DomainDescriptor";
 
 export class DomainBreadcrumbProducer extends BreadcrumbsProducer {
@@ -22,7 +21,7 @@ export class DomainBreadcrumbProducer extends BreadcrumbsProducer {
     });
 
     segments.push({
-      title: this.domain!.displayName
+      title: this.domain!.id
     });
 
     return segments;

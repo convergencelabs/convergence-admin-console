@@ -26,8 +26,8 @@ interface CreateUserComponentState {
 
 class CreateUserComponent extends React.Component<InjectedProps, CreateUserComponentState> {
   private readonly breadcrumbs = new BasicBreadcrumbsProducer([
-    {title: "Users", link: "/users"},
-    {title: "New user"}
+    {title: "Users", link: "/namespaces"},
+    {title: "New namespaces"}
   ]);
 
   state = {
@@ -162,7 +162,7 @@ class CreateUserComponent extends React.Component<InjectedProps, CreateUserCompo
   }
 
   private _handleCancel = () => {
-    this.props.history.push("/users/");
+    this.props.history.push("/namespaces/");
   }
 
   private handleSubmit = (e: FormEvent<HTMLInputElement>) => {
@@ -182,7 +182,7 @@ class CreateUserComponent extends React.Component<InjectedProps, CreateUserCompo
         this.props.userService.createUser(userData)
           .then(() => {
             notification.success({
-              message: 'user Created',
+              message: 'namespaces Created',
               description: `User '${username}' successfully created`
             });
             this.props.history.push("./");
@@ -191,7 +191,7 @@ class CreateUserComponent extends React.Component<InjectedProps, CreateUserCompo
             console.log(JSON.stringify(err));
             if (err.code === "duplicate") {
               notification.error({
-                message: 'Could Not Create user',
+                message: 'Could Not Create namespaces',
                 description: `A user with the specified ${err.details["field"]} already exists.`
               });
             }

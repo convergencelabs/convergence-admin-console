@@ -97,13 +97,13 @@ export class NamespacesComponent extends React.Component<InjectedProps, Namespac
     )
   }
 
-  private _renderActions = (text: any, record: any) => {
-    const deleteDisabled = false;
+  private _renderActions = (text: any, record: NamespaceAndDomains) => {
+    const deleteDisabled = record.domains.length > 0;
     const deleteButton = <Button shape="circle" size="small" htmlType="button" disabled={deleteDisabled}><Icon
       type="delete"/></Button>;
 
     const deleteComponent = deleteDisabled ?
-      <Tooltip placement="topRight" title="You can not delete yourself!" mouseEnterDelay={1}>
+      <Tooltip placement="topRight" title="Can not delete a namespace with domains!" mouseEnterDelay={1}>
         {deleteButton}
       </Tooltip> :
       <Popconfirm title={`Are you sure delete namespace '${record.id}'?`}
@@ -129,21 +129,18 @@ export class NamespacesComponent extends React.Component<InjectedProps, Namespac
         notification.success({
           message: 'Success',
           description: `Namespace '${namespaceId}' deleted.`,
-          placement: "bottomRight",
-          duration: 3
         });
       })
       .catch(err => {
-        notification["error"]({
+        notification.error({
           message: 'Could Not Delete Namespace',
           description: `The namespace could not be deleted.`,
-          placement: "bottomRight"
         });
       });
   }
 
   private _goToCreate = () => {
-    this.props.history.push("/namespaces/create");
+    this.props.history.push("/create-namespace");
   }
 
   private _loadNamespaces(): void {

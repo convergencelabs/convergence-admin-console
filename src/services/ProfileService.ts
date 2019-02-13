@@ -23,6 +23,16 @@ export class ProfileService extends AbstractAuthenticatedService {
         );
       });
   }
+
+  public updateProfile(profile: UserProfile): Promise<void> {
+    const body = {
+      displayName: profile.displayName,
+      firstName: profile.firstName,
+      lastName: profile.lastName,
+      email: profile.email
+    };
+    return this._put<void>("user/profile", body)
+  }
 }
 
 export const profileService = new ProfileService();

@@ -49,9 +49,9 @@ export class DomainDashboard extends Component<IDomainDashboard, {}> {
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Card className={styles.card} title={<span><Icon type="profile"/> Overview</span>}>
                 <InfoTable>
+                  <InfoTableRow label="Display Name">{domain.displayName}</InfoTableRow>
                   <InfoTableRow label="Namespace">{domain.namespace}</InfoTableRow>
                   <InfoTableRow label="Id">{domain.id}</InfoTableRow>
-                  <InfoTableRow label="Owner">{domain.owner}</InfoTableRow>
                   <InfoTableRow label="Status">{domain.status}</InfoTableRow>
                 </InfoTable>
               </Card>

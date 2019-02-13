@@ -1,20 +1,18 @@
 import * as React from 'react';
-import {Page} from "../../../../components/Page/index";
+import {Page} from "../../../../components/Page/";
 import {ReactNode} from "react";
 import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
 import {Card, Col, notification, Row} from "antd";
-import {Form, Input, Tooltip, Icon, Button, Select} from 'antd';
+import {Form, Input, Tooltip, Icon, Button} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
 import {FormEvent} from "react";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
-import {FormButtonBar} from "../../../../components/FormButtonBar/index";
+import {FormButtonBar} from "../../../../components/FormButtonBar/";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {RestError} from "../../../../services/RestError";
 import {NamespaceService} from "../../../../services/NamespaceService";
-
-const {Option} = Select;
 
 interface InjectedProps extends RouteComponentProps, FormComponentProps {
   namespaceService: NamespaceService;
@@ -94,7 +92,7 @@ class CreateNamespaceComponent extends React.Component<InjectedProps, {}> {
               placement: "bottomRight",
               duration: 3
             });
-            this.props.history.push("./");
+            this.props.history.push("/namespaces");
           }).catch((err) => {
           if (err instanceof RestError) {
             console.log(JSON.stringify(err));

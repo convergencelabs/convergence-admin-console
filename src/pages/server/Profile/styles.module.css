@@ -1,0 +1,8 @@
+.formCard {
+  width: 600px;
+}
+
+.setPassword:global.ant-card {
+  margin-top: 15px;
+  width: 600px;
+}

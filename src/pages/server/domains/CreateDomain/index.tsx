@@ -1,23 +1,29 @@
 import * as React from 'react';
-import {Page} from "../../../components/Page/";
+import {Page} from "../../../../components/Page/index";
 import {ReactNode} from "react";
-import {BasicBreadcrumbsProducer} from "../../../stores/BreacrumStore";
-import {Card, Col, Row} from "antd";
-import {Form, Input, Tooltip, Icon, Button, Select} from 'antd';
+import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
+import {Card, Col, notification, Row} from "antd";
+import {Form, Input, Tooltip, Icon, Button} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
 import {FormEvent} from "react";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
-import {FormButtonBar} from "../../../components/FormButtonBar";
-import {FormFieldWithHelp} from "../../../components/FormFieldWithHelp";
-
-const {Option} = Select;
+import {FormButtonBar} from "../../../../components/FormButtonBar/";
+import {FormFieldWithHelp} from "../../../../components/FormFieldWithHelp/";
+import {NamespaceAutoComplete} from "../../../../components/NamespaceAutoComplete";
+import {injectAs} from "../../../../utils/mobx-utils";
+import {SERVICES} from "../../../../services/ServiceConstants";
+import {DomainService} from "../../../../services/DomainService";
 
 interface CreateUserComponentState {
   confirmDirty: boolean;
 }
 
-class CreateDomainComponent extends React.Component<RouteComponentProps & FormComponentProps, CreateUserComponentState> {
+interface InjectedProps extends RouteComponentProps, FormComponentProps {
+  domainService: DomainService;
+}
+
+class CreateDomainComponent extends React.Component<InjectedProps, CreateUserComponentState> {
   private readonly breadcrumbs = new BasicBreadcrumbsProducer([
     {title: "Domains", link: "/domains"},
     {title: "New Domain"}
@@ -36,22 +42,14 @@ class CreateDomainComponent extends React.Component<RouteComponentProps & FormCo
             <Row gutter={16}>
               <Col span={24}>
                 <Form.Item label="Namespace">
-                  {getFieldDecorator('username', {
+                  {getFieldDecorator('namespace', {
                     rules: [{
-                      required: true, whitespace: true, message: 'Please input a Username!',
+                      required: true, whitespace: true, message: 'Please input a namespace id!',
                     }],
                   })(
-                    <Select
-                      showSearch
-                      placeholder="Select a namespace"
-                      optionFilterProp="children"
-                      filterOption={(input, option) =>
-                        (option!.props!.children as any as string).toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                    >
-                      <Option value="jack">Jack</Option>
-                      <Option value="lucy">Lucy</Option>
-                      <Option value="tom">Tom</Option>
-                    </Select>,
+                    <NamespaceAutoComplete
+                      className="foo"
+                      onChange={() => {}}/>
                   )}
                 </Form.Item>
               </Col>
@@ -62,8 +60,8 @@ class CreateDomainComponent extends React.Component<RouteComponentProps & FormCo
                     tooltip="The url friendly id that will be used to connect to the domain."
                   />
                 )}>
-                  {getFieldDecorator('displayName', {
-                    rules: [{required: true, message: 'Please input a Display Name!', whitespace: true}],
+                  {getFieldDecorator('id', {
+                    rules: [{required: true, message: 'Please input a domain id!', whitespace: true}],
                   })(
                     <Input placeholder="Enter a unique id"/>
                   )}
@@ -78,9 +76,9 @@ class CreateDomainComponent extends React.Component<RouteComponentProps & FormCo
                     tooltip="A nickname that will be displayed in the admin console."
                   />
                 )}>
-                  {getFieldDecorator('firstName', {
+                  {getFieldDecorator('displayName', {
                     rules: [{
-                      required: false, whitespace: true, message: 'Please input a First Name!',
+                      required: false, whitespace: true, message: 'Please input a display name!',
                     }],
                   })(
                     <Input placeholder="Enter an optional display name"/>
@@ -110,32 +108,26 @@ class CreateDomainComponent extends React.Component<RouteComponentProps & FormCo
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
+        const {namespace, id, displayName} = values;
+        this.props.domainService
+          .createDomain(namespace, id, displayName)
+          .then(() => {
+            notification.success({
+              message: "Domain Created",
+              description: `The domain '${namespace}/${id}' was successfully created.`
+            });
+            this.props.history.push("/domains/");
+          })
+          .catch(err => {
+            notification.error({
+              message: "Namespace Not Created",
+              description: "The namespace could not be created."
+            })
+          });
         console.log('Received values of form: ', values);
       }
     });
   }
-
-  private handleConfirmBlur = (e: any) => {
-    const value = e.target.value;
-    this.setState({confirmDirty: this.state.confirmDirty || !!value});
-  }
-
-  private compareToFirstPassword = (rule: any, value: any, callback: (error?: string) => void) => {
-    const form = this.props.form;
-    if (value && value !== form.getFieldValue('password')) {
-      callback('Two passwords that you enter is inconsistent!');
-    } else {
-      callback();
-    }
-  }
-
-  private validateToNextPassword = (rule: any, value: any, callback: (error?: string) => void) => {
-    const form = this.props.form;
-    if (value && this.state.confirmDirty) {
-      form.validateFields(['confirm'], {force: true});
-    }
-    callback();
-  }
 }
 
-export const CreateDomain = Form.create<{}>()(CreateDomainComponent);
+export const CreateDomain = injectAs<RouteComponentProps>([SERVICES.DOMAIN_SERVICE], Form.create<{}>()(CreateDomainComponent));

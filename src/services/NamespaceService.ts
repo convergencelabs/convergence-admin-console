@@ -15,9 +15,9 @@ interface NamespaceData {
 }
 
 export class NamespaceService extends AbstractAuthenticatedService {
-  public getNamespaces(): Promise<NamespaceAndDomains[]> {
+  public getNamespaces(filter?: string, offset?: number, limit?: number): Promise<NamespaceAndDomains[]> {
     return this
-      ._get<NamespaceAndDomainsData[]>("namespaces")
+      ._get<NamespaceAndDomainsData[]>("namespaces", {filter, offset, limit})
       .then(domains => domains.map(NamespaceService._toNamespaceAndDomains));
   }
 
