@@ -106,6 +106,12 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
             <Icon type="plus-circle"/>
           </Button>
         </Tooltip>
+        <Tooltip placement="topRight" title="Reload Domains" mouseEnterDelay={1}>
+          <Button className={styles.iconButton} shape="circle" size="small" htmlType="button"
+                  onClick={this._loadDomains}>
+            <Icon type="reload"/>
+          </Button>
+        </Tooltip>
       </CartTitleToolbar>
     )
   }
@@ -159,7 +165,7 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
       });
   }
 
-  private _loadDomains(): void {
+  private _loadDomains = () => {
     const {promise, subscription} =
       makeCancelable(this.props.domainService.getDomains(this.state.domainsFilter, 0, 10));
     this._domainSubscription = subscription;

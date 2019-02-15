@@ -99,6 +99,12 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
             <Icon type="plus-circle"/>
           </Button>
         </Tooltip>
+        <Tooltip placement="topRight" title="Reload Users" mouseEnterDelay={1}>
+          <Button className={styles.iconButton} shape="circle" size="small" htmlType="button"
+                  onClick={this._loadUsers}>
+            <Icon type="reload"/>
+          </Button>
+        </Tooltip>
       </CartTitleToolbar>
     )
   }
@@ -176,7 +182,7 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
       });
   }
 
-  private _loadUsers(): void {
+  private _loadUsers = () => {
     const filter = this.state.userFilter !== "" ? this.state.userFilter : undefined;
     const {promise, subscription} = makeCancelable(this.props.userService.getUsers(filter));
     this._usersSubscription = subscription;

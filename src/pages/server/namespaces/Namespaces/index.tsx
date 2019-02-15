@@ -93,6 +93,12 @@ export class NamespacesComponent extends React.Component<InjectedProps, Namespac
             <Icon type="plus-circle"/>
           </Button>
         </Tooltip>
+        <Tooltip placement="topRight" title="Reload Namespaces" mouseEnterDelay={1}>
+          <Button className={styles.iconButton} shape="circle" size="small" htmlType="button"
+                  onClick={this._loadNamespaces}>
+            <Icon type="reload"/>
+          </Button>
+        </Tooltip>
       </CartTitleToolbar>
     )
   }
@@ -143,7 +149,7 @@ export class NamespacesComponent extends React.Component<InjectedProps, Namespac
     this.props.history.push("/create-namespace");
   }
 
-  private _loadNamespaces(): void {
+  private _loadNamespaces = () => {
     const {promise, subscription} = makeCancelable(this.props.namespaceService.getNamespaces());
     this._namepsacesSubscription = subscription;
     promise.then(namespaces => {
