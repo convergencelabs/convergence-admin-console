@@ -10,6 +10,7 @@ import {NamespaceAndDomains} from "../../models/NamespaceAndDomains";
 const {Option} = Select;
 
 export interface UserAutoCompleteProps {
+  disabled?: boolean;
   className?: string;
   onChange?: (username: string) => void;
   placeholder?: string;
@@ -45,6 +46,7 @@ export class NamespaceAutoCompleteComponent extends Component<InjectedProps, Use
     return (
       <AutoComplete
         className={className}
+        disabled={this.props.disabled}
         onSearch={this._onSearch}
         onChange={this._onChange}
         value={inputValue}

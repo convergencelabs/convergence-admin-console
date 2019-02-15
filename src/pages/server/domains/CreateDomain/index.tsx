@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Page} from "../../../../components/Page/index";
 import {ReactNode} from "react";
 import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
-import {Card, Col, notification, Row} from "antd";
+import {Card, Col, notification, Radio, Row} from "antd";
 import {Form, Input, Tooltip, Icon, Button} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
 import {FormEvent} from "react";
@@ -14,45 +14,66 @@ import {NamespaceAutoComplete} from "../../../../components/NamespaceAutoComplet
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {DomainService} from "../../../../services/DomainService";
+import RadioGroup from "antd/es/radio/group";
+import {ProfileStore} from "../../../../stores/ProfileStore";
+import {STORES} from "../../../../stores/StoreConstants";
 
 interface CreateUserComponentState {
   confirmDirty: boolean;
+  namespaceType: string;
 }
 
 interface InjectedProps extends RouteComponentProps, FormComponentProps {
+  profileStore: ProfileStore;
   domainService: DomainService;
 }
 
 class CreateDomainComponent extends React.Component<InjectedProps, CreateUserComponentState> {
-  private readonly breadcrumbs = new BasicBreadcrumbsProducer([
+  private readonly _breadcrumbs = new BasicBreadcrumbsProducer([
     {title: "Domains", link: "/domains"},
     {title: "New Domain"}
   ]);
 
   state = {
-    confirmDirty: false
+    confirmDirty: false,
+    namespaceType: "user"
   };
 
   public render(): ReactNode {
     const {getFieldDecorator} = this.props.form;
     return (
-      <Page breadcrumbs={this.breadcrumbs.breadcrumbs()}>
+      <Page breadcrumbs={this._breadcrumbs.breadcrumbs()}>
         <Card title={<span><Icon type="database"/> New Domain</span>} className={styles.formCard}>
-          <Form onSubmit={this.handleSubmit}>
+          <Form onSubmit={this._handleSubmit}>
             <Row gutter={16}>
               <Col span={24}>
-                <Form.Item label="Namespace">
-                  {getFieldDecorator('namespace', {
-                    rules: [{
-                      required: true, whitespace: true, message: 'Please input a namespace id!',
-                    }],
+                <Form.Item label="Create In">
+                  {getFieldDecorator('namespaceType', {
+                    rules: [{required: true, message: 'Please input a domain id!', whitespace: true}],
+                    initialValue: this.state.namespaceType
                   })(
-                    <NamespaceAutoComplete
-                      className="foo"
-                      onChange={() => {}}/>
+                    <RadioGroup onChange={val => {this.setState({namespaceType: val.target.value})}}>
+                      <Radio value="user">User Namespace</Radio>
+                      <Radio value="shared">Shared Namespace</Radio>
+                    </RadioGroup>
                   )}
                 </Form.Item>
               </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col span={24}>
+                <Form.Item label="Shared Namespace">
+                  {getFieldDecorator('namespace', {
+                    rules: [{
+                      required: true, whitespace: true, message: 'Please select a namespace!',
+                    }],
+                  })(
+                    <NamespaceAutoComplete disabled={this.state.namespaceType === "user"}/>
+                  )}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={16}>
               <Col span={24}>
                 <Form.Item label={(
                   <FormFieldWithHelp
@@ -104,13 +125,17 @@ class CreateDomainComponent extends React.Component<InjectedProps, CreateUserCom
     this.props.history.push("/domains/");
   }
 
-  private handleSubmit = (e: FormEvent<HTMLInputElement>) => {
+  private _handleSubmit = (e: FormEvent<HTMLInputElement>) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        const {namespace, id, displayName} = values;
+        const {namespace, id, displayName, namespaceType} = values;
+        let ns = namespaceType === "user" ?
+          "~" + this.props.profileStore.profile!.username :
+          namespace;
+
         this.props.domainService
-          .createDomain(namespace, id, displayName)
+          .createDomain(ns, id, displayName)
           .then(() => {
             notification.success({
               message: "Domain Created",
@@ -130,4 +155,4 @@ class CreateDomainComponent extends React.Component<InjectedProps, CreateUserCom
   }
 }
 
-export const CreateDomain = injectAs<RouteComponentProps>([SERVICES.DOMAIN_SERVICE], Form.create<{}>()(CreateDomainComponent));
+export const CreateDomain = injectAs<RouteComponentProps>([SERVICES.DOMAIN_SERVICE, STORES.PROFILE_STORE], Form.create<{}>()(CreateDomainComponent));

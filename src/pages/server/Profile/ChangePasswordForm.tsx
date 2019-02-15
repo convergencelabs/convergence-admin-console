@@ -27,7 +27,7 @@ class ChangePasswordFormComponent extends React.Component<InjectedProps, ChangeP
     const {getFieldDecorator} = this.props.form;
     return (
       <Card title={<span><Icon type="lock"/> Change Password</span>} className={styles.setPassword}>
-        <Form onSubmit={this.handleSubmit}>
+        <Form onSubmit={this._handleSubmit}>
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item label="Password">
@@ -68,7 +68,7 @@ class ChangePasswordFormComponent extends React.Component<InjectedProps, ChangeP
     );
   }
 
-  private handleSubmit = (e: FormEvent<HTMLInputElement>) => {
+  private _handleSubmit = (e: FormEvent<HTMLInputElement>) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values: any) => {
       if (!err) {
@@ -80,7 +80,6 @@ class ChangePasswordFormComponent extends React.Component<InjectedProps, ChangeP
                 message: "Success",
                 description: "Your password was successfuly updated."
               });
-
               this.props.form.setFieldsValue({
                 password: "",
                 confirm: ""
@@ -92,7 +91,7 @@ class ChangePasswordFormComponent extends React.Component<InjectedProps, ChangeP
               message: "Error",
               description: "Your password could not be set."
             })
-          )
+          );
       }
     });
   }
