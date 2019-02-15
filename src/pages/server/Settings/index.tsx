@@ -4,9 +4,9 @@ import {ReactNode} from "react";
 import {BasicBreadcrumbsProducer} from "../../../stores/BreacrumStore";
 import {Card, Form, Icon, Tabs} from "antd";
 import {FormComponentProps} from "antd/lib/form";
-import {NamespaceSettings} from "./NamespaceSettings";
-import {DomainSettings} from "./DomainSettings";
+import {NamespaceAndDomainSettings} from "./NamespaceAndDomainSettings";
 import {ApiKeysSettings} from "./ApiKeysSettings";
+import {PasswordPolicy} from "./PasswordPolicy";
 
 const {TabPane} = Tabs;
 
@@ -18,10 +18,9 @@ export class SettingsComponent extends React.Component<FormComponentProps, {}> {
       <Page breadcrumbs={this.breadcrumbs.breadcrumbs()}>
         <Card title={<span><Icon type="setting"/> Settings</span>}>
           <Tabs>
-            <TabPane tab="Namespaces" key="namespaces"><NamespaceSettings/></TabPane>
-            <TabPane tab="Domains" key="domains"><DomainSettings/></TabPane>
+            <TabPane tab="Namespaces and Domains" key="namespaces and domains"><NamespaceAndDomainSettings/></TabPane>
             <TabPane tab="API Keys" key="api-keys"><ApiKeysSettings/></TabPane>
-            <TabPane tab="Security" key="security"><ApiKeysSettings/></TabPane>
+            <TabPane tab="Password Policy" key="passwords"><PasswordPolicy/></TabPane>
           </Tabs>
         </Card>
       </Page>
