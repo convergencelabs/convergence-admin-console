@@ -19,7 +19,7 @@ export class SettingsComponent extends React.Component<FormComponentProps, {}> {
         <Card title={<span><Icon type="setting"/> Settings</span>}>
           <Tabs>
             <TabPane tab="Namespaces and Domains" key="namespaces and domains"><NamespaceAndDomainSettings/></TabPane>
-            <TabPane tab="API Keys" key="api-keys"><ApiKeysSettings/></TabPane>
+            {/*<TabPane tab="API Keys" key="api-keys"><ApiKeysSettings/></TabPane>*/}
             <TabPane tab="Password Policy" key="passwords"><PasswordPolicy/></TabPane>
           </Tabs>
         </Card>
