@@ -17,6 +17,7 @@ import {DomainService} from "../../../../services/DomainService";
 import RadioGroup from "antd/es/radio/group";
 import {ProfileStore} from "../../../../stores/ProfileStore";
 import {STORES} from "../../../../stores/StoreConstants";
+import {RestError} from "../../../../services/RestError";
 
 interface CreateUserComponentState {
   confirmDirty: boolean;
@@ -60,12 +61,12 @@ class CreateDomainComponent extends React.Component<InjectedProps, CreateUserCom
                 </Form.Item>
               </Col>
             </Row>
-            <Row gutter={16}>
+            <Row gutter={16} style={{display: this.state.namespaceType === "user" ? "none" : "block"}}>
               <Col span={24}>
                 <Form.Item label="Shared Namespace">
                   {getFieldDecorator('namespace', {
                     rules: [{
-                      required: true, whitespace: true, message: 'Please select a namespace!',
+                      required: this.state.namespaceType !== "user", whitespace: true, message: 'Please select a namespace!',
                     }],
                   })(
                     <NamespaceAutoComplete disabled={this.state.namespaceType === "user"}/>
@@ -139,17 +140,22 @@ class CreateDomainComponent extends React.Component<InjectedProps, CreateUserCom
           .then(() => {
             notification.success({
               message: "Domain Created",
-              description: `The domain '${namespace}/${id}' was successfully created.`
+              description: `The domain '${ns}/${id}' was successfully created.`
             });
             this.props.history.push("/domains/");
           })
           .catch(err => {
+            let message;
+            if (err instanceof RestError && err.code === "namespace_not_found") {
+              message = `The domain could not be created because the namespace '${err.details['namespace']}' does not exist`;
+            } else {
+              message = "The domain could not be created."
+            }
             notification.error({
-              message: "Namespace Not Created",
-              description: "The namespace could not be created."
-            })
+              message: "Domain Not Created",
+              description: message
+            });
           });
-        console.log('Received values of form: ', values);
       }
     });
   }
