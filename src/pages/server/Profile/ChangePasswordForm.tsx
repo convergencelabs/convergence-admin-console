@@ -1,17 +1,17 @@
 import * as React from 'react';
 import {ReactNode} from "react";
 import {Card, Col, notification, Row} from "antd";
-import {Form, Input, Tooltip, Icon, Button} from 'antd';
+import {Form, Input, Icon, Button} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
 import {FormEvent} from "react";
 import styles from "./styles.module.css";
 import {FormButtonBar} from "../../../components/FormButtonBar/";
-import {UserService} from "../../../services/UserService";
 import {injectAs} from "../../../utils/mobx-utils";
 import {SERVICES} from "../../../services/ServiceConstants";
+import {ProfileService} from "../../../services/ProfileService";
 
 interface InjectedProps extends FormComponentProps {
-  userService: UserService;
+  profileService: ProfileService;
 }
 
 interface ChangePasswordFormState {
@@ -73,7 +73,26 @@ class ChangePasswordFormComponent extends React.Component<InjectedProps, ChangeP
     this.props.form.validateFieldsAndScroll((err, values: any) => {
       if (!err) {
         const {password} = values;
+        this.props.profileService
+          .setPassword(password)
+          .then(() => {
+              notification.success({
+                message: "Success",
+                description: "Your password was successfuly updated."
+              });
 
+              this.props.form.setFieldsValue({
+                password: "",
+                confirm: ""
+              });
+            }
+          )
+          .catch(() =>
+            notification.success({
+              message: "Error",
+              description: "Your password could not be set."
+            })
+          )
       }
     });
   }
@@ -101,4 +120,4 @@ class ChangePasswordFormComponent extends React.Component<InjectedProps, ChangeP
   }
 }
 
-export const ChangePasswordForm = injectAs<{}>([SERVICES.USER_SERVICE], Form.create<{}>()(ChangePasswordFormComponent));
+export const ChangePasswordForm = injectAs<{}>([SERVICES.PROFILE_SERVICE], Form.create<{}>()(ChangePasswordFormComponent));

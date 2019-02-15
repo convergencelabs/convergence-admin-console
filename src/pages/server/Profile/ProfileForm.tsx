@@ -1,12 +1,10 @@
 import * as React from 'react';
 import {ReactNode} from "react";
-import {BasicBreadcrumbsProducer} from "../../../stores/BreacrumStore";
 import {Card, Col, notification, Row} from "antd";
 import {Form, Input, Tooltip, Icon, Button} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
 import {FormEvent} from "react";
 import styles from "./styles.module.css";
-import {RouteComponentProps} from "react-router";
 import {makeCancelable, PromiseSubscription} from "../../../utils/make-cancelable";
 import {ProfileService} from "../../../services/ProfileService";
 import {UserProfile} from "../../../models/UserProfile";

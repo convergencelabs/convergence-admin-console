@@ -33,6 +33,11 @@ export class ProfileService extends AbstractAuthenticatedService {
     };
     return this._put<void>("user/profile", body)
   }
+
+  public setPassword(password: string): Promise<void> {
+    const body = {password};
+    return this._put<void>("user/password", body)
+  }
 }
 
 export const profileService = new ProfileService();
