@@ -1,5 +1,8 @@
 import {AbstractAuthenticatedService} from "./AbstractAuthenticatedService";
 import {UserProfile} from "../models/UserProfile";
+import {DomainDescriptorData, DomainService} from "./DomainService";
+import {DomainDescriptor} from "../models/DomainDescriptor";
+import {DomainId} from "../models/DomainId";
 
 interface UserProfileData {
   username: string;
@@ -9,7 +12,7 @@ interface UserProfileData {
   email: string;
 }
 
-export class ProfileService extends AbstractAuthenticatedService {
+export class LoggedInUserService extends AbstractAuthenticatedService {
   public getProfile(): Promise<UserProfile> {
     return this
       ._get<UserProfileData>("user/profile")
@@ -38,6 +41,20 @@ export class ProfileService extends AbstractAuthenticatedService {
     const body = {password};
     return this._put<void>("user/password", body)
   }
+
+  public getFavoriteDomains(): Promise<DomainDescriptor[]> {
+    return this
+      ._get<DomainDescriptorData[]>("user/favoriteDomains")
+      .then(resp => resp.map(DomainService._toDomainDescriptor));
+  }
+
+  public addFavoriteDomain(domainId: DomainId): Promise<void> {
+    return this._put<void>(`user/favoriteDomains/${domainId.namespace}/${domainId.id}`);
+  }
+
+  public removeFavoriteDomain(domainId: DomainId): Promise<void> {
+    return this._delete<void>(`user/favoriteDomains/${domainId.namespace}/${domainId.id}`);
+  }
 }
 
-export const profileService = new ProfileService();
+export const loggedInUserService = new LoggedInUserService();

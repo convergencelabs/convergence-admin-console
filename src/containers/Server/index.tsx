@@ -13,6 +13,7 @@ import {Namespaces} from "../../pages/server/namespaces/Namespaces";
 import {CreateNamespace} from "../../pages/server/namespaces/CreateNamespace";
 import {EditNamespace} from "../../pages/server/namespaces/EditNamespace";
 import {EditUser} from "../../pages/server/users/EditUser";
+import {SetUserPassword} from "../../pages/server/users/SetUserPassword";
 import {ProfilePage} from "../../pages/server/Profile";
 
 export class ServerContainer extends React.Component<RouteComponentProps, {}> {
@@ -24,6 +25,7 @@ export class ServerContainer extends React.Component<RouteComponentProps, {}> {
           <Route exact path={`${match.url}users`} render={(props) => <ServerUsers {...props}/>}/>
           <Route exact path={`${match.url}create-user`} render={(props) => <CreateUser {...props}/>}/>
           <Route exact path={`${match.url}users/:username`} render={(props) => <EditUser {...props}/>}/>
+          <Route exact path={`${match.url}users/:username/set-password`} render={(props) => <SetUserPassword {...props}/>}/>
           <Route exact path={`${match.url}namespaces`} render={(props) => <Namespaces {...props}/>}/>
           <Route exact path={`${match.url}create-namespace`} render={(props) => <CreateNamespace {...props}/>}/>
           <Route exact path={`${match.url}namespaces/:id`} render={(props) => <EditNamespace {...props}/>}/>

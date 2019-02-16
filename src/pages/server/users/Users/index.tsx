@@ -79,7 +79,6 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
     this._loadUsers();
   }
 
-
   public componentWillUnmount(): void {
     if (this._usersSubscription) {
       this._usersSubscription.unsubscribe();
@@ -114,7 +113,7 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
   }
 
   private _goToCreate = () => {
-    this.props.history.push("/create-namespaces");
+    this.props.history.push("/create-user");
   }
 
   public render(): ReactNode {
@@ -157,10 +156,14 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
     return (
       <span className={styles.actions}>
         <Tooltip placement="topRight" title="Edit User" mouseEnterDelay={1}>
-          <Button shape="circle" size="small" htmlType="button"><Link to={`/users/${value.username}`}><Icon type="edit"/></Link></Button>
+          <Link to={`/users/${value.username}`}>
+            <Button shape="circle" size="small" htmlType="button" icon="edit"/>
+          </Link>
         </Tooltip>
         <Tooltip placement="topRight" title="Set Password" mouseEnterDelay={1}>
-          <Button shape="circle" size="small" htmlType="button"><Icon type="lock"/></Button>
+          <Link to={`/users/${value.username}/set-password`}>
+            <Button shape="circle" size="small" htmlType="button" icon="lock"/>
+          </Link>
         </Tooltip>
         {deleteComponent}
     </span>

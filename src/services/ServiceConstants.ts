@@ -1,7 +1,7 @@
 export const SERVICES = {
   CONFIG_SERVICE: "configService",
   AUTH_SERVICE: "authService",
-  PROFILE_SERVICE: "profileService",
+  LOGGED_IN_USER_SERVICE: "loggedInUserService",
   NAMESPACE_SERVICE: "namespaceService",
   USER_SERVICE: "userService",
   ROLE_SERVICE: "roleService",

@@ -6,7 +6,7 @@ import {FormComponentProps} from "antd/lib/form";
 import {FormEvent} from "react";
 import styles from "./styles.module.css";
 import {makeCancelable, PromiseSubscription} from "../../../utils/make-cancelable";
-import {ProfileService} from "../../../services/ProfileService";
+import {LoggedInUserService} from "../../../services/LoggedInUserService";
 import {UserProfile} from "../../../models/UserProfile";
 import {FormButtonBar} from "../../../components/FormButtonBar";
 import {injectAs} from "../../../utils/mobx-utils";
@@ -17,7 +17,7 @@ interface ProfileFormProps {
 }
 
 interface InjectedProps extends ProfileFormProps, FormComponentProps {
-  profileService: ProfileService;
+  loggedInUserService: LoggedInUserService;
 }
 
 interface EditUserState {
@@ -142,7 +142,7 @@ class ProfileFormComponent extends React.Component<InjectedProps, EditUserState>
   }
 
   private _loadProfile(): void {
-    const {promise, subscription} = makeCancelable(this.props.profileService.getProfile());
+    const {promise, subscription} = makeCancelable(this.props.loggedInUserService.getProfile());
     this._profileSubscription = subscription;
     promise.then(profile => {
       this._profileSubscription = null;
@@ -165,7 +165,7 @@ class ProfileFormComponent extends React.Component<InjectedProps, EditUserState>
           lastName,
           email
         );
-        this.props.profileService.updateProfile(profile)
+        this.props.loggedInUserService.updateProfile(profile)
           .then(() => {
             notification["success"]({
               message: 'Success',
@@ -185,4 +185,4 @@ class ProfileFormComponent extends React.Component<InjectedProps, EditUserState>
   }
 }
 
-export const ProfileForm = injectAs<ProfileFormProps>([SERVICES.PROFILE_SERVICE], Form.create<{}>()(ProfileFormComponent));
+export const ProfileForm = injectAs<ProfileFormProps>([SERVICES.LOGGED_IN_USER_SERVICE], Form.create<{}>()(ProfileFormComponent));

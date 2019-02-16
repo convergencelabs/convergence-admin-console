@@ -12,13 +12,13 @@ import {localStorageService} from "../../services/LocalStorageService";
 import {injectAs} from "../../utils/mobx-utils";
 import {STORES} from "../../stores/StoreConstants";
 import {SERVICES} from "../../services/ServiceConstants";
-import {ProfileService} from "../../services/ProfileService";
+import {LoggedInUserService} from "../../services/LoggedInUserService";
 import {ProfileStore} from "../../stores/ProfileStore";
 
 export interface InjectedProps extends RouteComponentProps, FormComponentProps {
   authStore: AuthStore;
   authService: AuthService;
-  profileService: ProfileService;
+  loggedInUserService: LoggedInUserService;
   profileStore: ProfileStore;
 }
 
@@ -45,7 +45,7 @@ class NormalLoginForm extends Component<InjectedProps, LoginFormState> {
             const expiresAt = new Date(Date.now() + expiresIn).getTime();
             this.props.authStore.setAuthenticated(resp.token);
             localStorageService.setAuthToken({token, expiresAt});
-            return this.props.profileService.getProfile();
+            return this.props.loggedInUserService.getProfile();
           })
           .then((profile) => {
             this.props.profileStore.setProfile(profile);
@@ -122,5 +122,5 @@ class NormalLoginForm extends Component<InjectedProps, LoginFormState> {
   }
 }
 
-const injections = [STORES.AUTH_STORE, STORES.PROFILE_STORE, SERVICES.AUTH_SERVICE, SERVICES.PROFILE_SERVICE];
+const injections = [STORES.AUTH_STORE, STORES.PROFILE_STORE, SERVICES.AUTH_SERVICE, SERVICES.LOGGED_IN_USER_SERVICE];
 export const LoginForm = injectAs<RouteComponentProps>(injections, Form.create<{}>()(NormalLoginForm));

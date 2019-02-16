@@ -47,6 +47,12 @@ export class UserService extends AbstractAuthenticatedService {
       .then(() => undefined);
   }
 
+  public setPassword(username: string, password: string): Promise<void> {
+    return this
+      ._post<void>(`users/${username}/password`, {password})
+      .then(() => undefined);
+  }
+
   public static _toConvergenceUser(data: ConvergenceUserData): ConvergenceUser {
     const lastLogin = data.lastLogin ? new Date(data.lastLogin) : null;
     return new ConvergenceUser(

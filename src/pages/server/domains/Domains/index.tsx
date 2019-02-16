@@ -13,22 +13,28 @@ import {RouteComponentProps} from "react-router";
 import {CartTitleToolbar} from "../../../../components/CardTitleToolbar/";
 import Tooltip from "antd/es/tooltip";
 import {KeyboardEvent} from "react";
-import {NamespaceAndDomains} from "../../../../models/NamespaceAndDomains";
 import {Link} from "react-router-dom";
+import {NamespaceAutoComplete} from "../../../../components/NamespaceAutoComplete";
+import {LoggedInUserService} from "../../../../services/LoggedInUserService";
+import {DomainId} from "../../../../models/DomainId";
 
 interface InjectedProps extends RouteComponentProps {
   domainService: DomainService;
+  loggedInUserService: LoggedInUserService;
 }
 
 interface DomainsState {
   domains: DomainDescriptor[] | null;
+  favorites: DomainId[];
   domainsFilter: string;
+  namespace: string;
 }
 
 export class DomainsComponent extends React.Component<InjectedProps, DomainsState> {
-  private readonly breadcrumbs = new BasicBreadcrumbsProducer([{title: "Domains"}]);
+  private readonly _breadcrumbs = new BasicBreadcrumbsProducer([{title: "Domains"}]);
   private readonly _domainTableColumns: any[];
   private _domainSubscription: PromiseSubscription | null;
+  private _favoritesSubscription: PromiseSubscription | null;
 
   constructor(props: InjectedProps) {
     super(props);
@@ -37,7 +43,7 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
       title: 'Display Name',
       dataIndex: 'displayName',
       sorter: (a: any, b: any) => (a.displayName as string).localeCompare(b.displayName),
-      render: (text: string, record: any) => <Link to={`domains/${record.id}`}>{text}</Link>
+      render: (text: string, domain: DomainDescriptor) => <Link to={`domain/${domain.namespace}/${domain.id}`}>{text}</Link>
     }, {
       title: 'Namespace',
       dataIndex: 'namespace',
@@ -47,28 +53,25 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
       dataIndex: 'id',
       sorter: (a: any, b: any) => (a.id as string).localeCompare(b.id)
     }, {
-      title: 'Owner',
-      dataIndex: 'owner',
-      key: 'owner',
-      align: 'left'
-    }, {
       title: 'Status',
       dataIndex: 'status',
-      key: 'status',
       align: 'left'
-    },
-      {
-        title: '',
-        dataIndex: '',
-        width: '50px',
-        render: this._renderActions
-      }];
+    }, {
+      title: '',
+      dataIndex: '',
+      width: '100px',
+      align: 'right',
+      render: this._renderActions
+    }];
 
     this._domainSubscription = null;
+    this._favoritesSubscription = null;
 
     this.state = {
       domains: null,
-      domainsFilter: ""
+      favorites: [],
+      domainsFilter: "",
+      namespace: ""
     };
 
     this._loadDomains();
@@ -78,14 +81,19 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
     if (this._domainSubscription) {
       this._domainSubscription.unsubscribe();
     }
+
+    if (this._favoritesSubscription) {
+      this._favoritesSubscription.unsubscribe();
+    }
   }
 
   public render(): ReactNode {
     return (
-      <Page breadcrumbs={this.breadcrumbs.breadcrumbs()}>
+      <Page breadcrumbs={this._breadcrumbs.breadcrumbs()}>
         <Card title={this._renderToolbar()}>
           <Table className={styles.userTable}
                  size="middle"
+                 rowKey={record => record.namespace + "/" + record.id}
                  columns={this._domainTableColumns}
                  dataSource={this.state.domains || []}
           />
@@ -97,6 +105,8 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
   private _renderToolbar(): ReactNode {
     return (
       <CartTitleToolbar title="Domains" icon="database">
+        <NamespaceAutoComplete placeholder={"Filter Namespace"}
+                               onChange={this._onNamespaceChange}/>
         <span className={styles.search}>
           <Input placeholder="Search Domains" addonAfter={<Icon type="search"/>} onKeyUp={this._onFilterChange}/>
         </span>
@@ -117,8 +127,17 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
   }
 
   private _renderActions = (text: any, record: DomainDescriptor) => {
+    const fav = this._isFav(record);
+    const favType = fav ? undefined : "dashed";
+    const twoToneColor = fav ? "#eb2f96" : undefined;
+    const theme = fav ? "twoTone" : undefined;
+
     const deleteDisabled = false;
-    const deleteButton = <Button shape="circle" size="small" htmlType="button" disabled={deleteDisabled}><Icon
+    const deleteButton = <Button className={styles.iconButton}
+                                 shape="circle"
+                                 size="small"
+                                 htmlType="button"
+                                 disabled={deleteDisabled}><Icon
       type="delete"/></Button>;
 
     const deleteComponent = deleteDisabled ?
@@ -137,7 +156,44 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
         </Tooltip>
       </Popconfirm>
 
-    return (<span className={styles.actions}>{deleteComponent}</span>);
+    return (
+      <span className={styles.actions}>
+        <Button className={styles.iconButton}
+                shape="circle"
+                size="small"
+                htmlType="button"
+                type={favType}
+                onClick={() => this._onFavClick(record)}
+        >
+          <Icon type="heart"
+                theme={theme}
+                twoToneColor={twoToneColor}/>
+        </Button>
+        {deleteComponent}
+      </span>
+    );
+  }
+
+  private _isFav(domain: DomainDescriptor): boolean {
+    return this.state.favorites.find(fav => fav.equals(domain.toDomainId())) !== undefined;
+  }
+
+  private _onFavClick(domain: DomainDescriptor): void {
+    const fav = this._isFav(domain);
+    const promise = fav ?
+      this.props.loggedInUserService.removeFavoriteDomain(domain.toDomainId()) :
+      this.props.loggedInUserService.addFavoriteDomain(domain.toDomainId());
+
+    promise
+      .then(() => this.props.loggedInUserService.getFavoriteDomains())
+      .then(favs => {
+        const favorites = favs.map(f => f.toDomainId())
+        this.setState({favorites});
+      });
+  }
+
+  private _onNamespaceChange = (namespace: string) => {
+    this.setState({namespace}, this._loadDomains);
   }
 
   private _goToCreate = () => {
@@ -159,19 +215,27 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
       })
       .catch(err => {
         notification.error({
-          message: 'Could Not Delete Namespace',
+          message: 'Could Not Delete Domain',
           description: `The domain could not be deleted.`,
         });
       });
   }
 
   private _loadDomains = () => {
+    const domainsFilter = this.state.domainsFilter !== "" ? this.state.domainsFilter : undefined;
+    const namespace = this.state.namespace !== null ? this.state.namespace : undefined;
     const {promise, subscription} =
-      makeCancelable(this.props.domainService.getDomains(this.state.domainsFilter, 0, 10));
+      makeCancelable(this.props.domainService.getDomains(namespace, domainsFilter, 0, 10));
     this._domainSubscription = subscription;
-    promise.then(domains => {
+
+    const cp = makeCancelable(this.props.loggedInUserService.getFavoriteDomains());
+
+    this._favoritesSubscription = cp.subscription;
+
+    Promise.all([promise, cp.promise]).then(([domains, favs]) => {
       this._domainSubscription = null;
-      this.setState({domains});
+      const favorites = favs.map(f => f.toDomainId());
+      this.setState({domains, favorites});
     }).catch(err => {
       this._domainSubscription = null;
       this.setState({domains: null});
@@ -179,4 +243,4 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
   }
 }
 
-export const Domains = injectAs<RouteComponentProps>([SERVICES.DOMAIN_SERVICE], DomainsComponent);
+export const Domains = injectAs<RouteComponentProps>([SERVICES.DOMAIN_SERVICE, SERVICES.LOGGED_IN_USER_SERVICE], DomainsComponent);

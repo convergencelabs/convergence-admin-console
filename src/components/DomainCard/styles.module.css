@@ -35,3 +35,12 @@
     background: transparent;
     height: inherit;
 }
+
+.buttons {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.buttons :global .ant-btn {
+    margin-left: 5px;
+}

@@ -11,7 +11,7 @@ import {namespaceService} from "./services/NamespaceService";
 import {userService} from "./services/UserService";
 import {roleService} from "./services/RoleService";
 import {authService} from "./services/AuthService";
-import {profileService} from "./services/ProfileService";
+import {loggedInUserService} from "./services/LoggedInUserService";
 import {profileStore} from "./stores/ProfileStore";
 
 import {message, notification} from "antd";
@@ -40,7 +40,7 @@ const stores = {
 
 const services = {
   authService,
-  profileService,
+  loggedInUserService,
   domainService,
   configService,
   namespaceService,
@@ -54,7 +54,7 @@ if (authToken) {
     .then(resp => {
       if (resp.valid) {
         authStore.setAuthenticated(authToken.token);
-        profileService.getProfile()
+        loggedInUserService.getProfile()
           .then((profile) => {
             profileStore.setProfile(profile);
             boostrap();

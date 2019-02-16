@@ -19,7 +19,6 @@ export class LocalStorageService {
     return this.remove(AUTH_TOKEN);
   }
 
-
   public getJson(key: string): any {
     const raw = window.localStorage.getItem(key);
     if (typeof raw === "string") {

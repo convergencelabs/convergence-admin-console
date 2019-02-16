@@ -35,7 +35,7 @@ class EditUserComponent extends React.Component<InjectedProps, EditUserState> {
 
     const username = this.props.match.params.username;
     this._breadcrumbs = new BasicBreadcrumbsProducer([
-      {title: "Users", link: "/namespaces"},
+      {title: "Users", link: "/users"},
       {title: username}
     ]);
 
@@ -177,7 +177,7 @@ class EditUserComponent extends React.Component<InjectedProps, EditUserState> {
   }
 
   private _handleCancel = () => {
-    this.props.history.push("/namespaces/");
+    this.props.history.push("/users/");
   }
 
   private handleSubmit = (e: FormEvent<HTMLInputElement>) => {
@@ -196,17 +196,17 @@ class EditUserComponent extends React.Component<InjectedProps, EditUserState> {
         };
         this.props.userService.createUser(userData)
           .then(() => {
-            notification["success"]({
-              message: 'namespaces Created',
-              description: `User '${username}' successfully created`
+            notification.success({
+              message: 'User Updated',
+              description: `User '${username}' successfully updated`
             });
             this.props.history.push("./");
           }).catch((err) => {
           if (err instanceof RestError) {
             console.log(JSON.stringify(err));
             if (err.code === "duplicate") {
-              notification["error"]({
-                message: 'Could Not Create namespaces',
+              notification.error({
+                message: 'Could Not Create User',
                 description: `A user with the specified ${err.details["field"]} already exists.`
               });
             }

@@ -1,17 +1,16 @@
 import * as React from 'react';
 import {ReactNode} from "react";
-import {Card, Col, notification, Row} from "antd";
-import {Form, Input, Icon, Button} from 'antd';
+import {Card, notification} from "antd";
+import {Form, Icon} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
-import {FormEvent} from "react";
 import styles from "./styles.module.css";
-import {FormButtonBar} from "../../../components/FormButtonBar/";
 import {injectAs} from "../../../utils/mobx-utils";
 import {SERVICES} from "../../../services/ServiceConstants";
-import {ProfileService} from "../../../services/ProfileService";
+import {LoggedInUserService} from "../../../services/LoggedInUserService";
+import {SetPasswordForm} from "../../../components/SetPasswordForm";
 
 interface InjectedProps extends FormComponentProps {
-  profileService: ProfileService;
+  loggedInUserService: LoggedInUserService;
 }
 
 interface ChangePasswordFormState {
@@ -27,96 +26,35 @@ class ChangePasswordFormComponent extends React.Component<InjectedProps, ChangeP
     const {getFieldDecorator} = this.props.form;
     return (
       <Card title={<span><Icon type="lock"/> Change Password</span>} className={styles.setPassword}>
-        <Form onSubmit={this._handleSubmit}>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item label="Password">
-                {getFieldDecorator('password', {
-                  rules: [{
-                    required: true, message: 'Please input a password!',
-                  }, {
-                    validator: this.validateToNextPassword,
-                  }],
-                })(
-                  <Input type="password"/>
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="Confirm Password">
-                {getFieldDecorator('confirm', {
-                  rules: [{
-                    required: true, message: 'Please confirm the password!',
-                  }, {
-                    validator: this.compareToFirstPassword,
-                  }],
-                })(
-                  <Input type="password" onBlur={this.handleConfirmBlur}/>
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={24}>
-              <FormButtonBar>
-                <Button type="primary" htmlType="submit">Set Password</Button>
-              </FormButtonBar>
-            </Col>
-          </Row>
-        </Form>
+        <SetPasswordForm
+          onSetPassword={this._handleSetPassword}
+          showCancel={false}
+        />
       </Card>
     );
   }
 
-  private _handleSubmit = (e: FormEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values: any) => {
-      if (!err) {
-        const {password} = values;
-        this.props.profileService
-          .setPassword(password)
-          .then(() => {
-              notification.success({
-                message: "Success",
-                description: "Your password was successfuly updated."
-              });
-              this.props.form.setFieldsValue({
-                password: "",
-                confirm: ""
-              });
-            }
-          )
-          .catch(() =>
-            notification.success({
-              message: "Error",
-              description: "Your password could not be set."
-            })
-          );
-      }
-    });
-  }
-
-  private handleConfirmBlur = (e: any) => {
-    const value = e.target.value;
-    this.setState({confirmDirty: this.state.confirmDirty || !!value});
-  }
-
-  private compareToFirstPassword = (rule: any, value: any, callback: (error?: string) => void) => {
-    const form = this.props.form;
-    if (value && value !== form.getFieldValue('password')) {
-      callback('Two passwords that you enter is inconsistent!');
-    } else {
-      callback();
-    }
-  }
-
-  private validateToNextPassword = (rule: any, value: any, callback: (error?: string) => void) => {
-    const form = this.props.form;
-    if (value && this.state.confirmDirty) {
-      form.validateFields(['confirm'], {force: true});
-    }
-    callback();
+  private _handleSetPassword = (password: string) => {
+    this.props.loggedInUserService
+      .setPassword(password)
+      .then(() => {
+          notification.success({
+            message: "Success",
+            description: "Your password was successfully updated."
+          });
+          this.props.form.setFieldsValue({
+            password: "",
+            confirm: ""
+          });
+        }
+      )
+      .catch(() =>
+        notification.success({
+          message: "Error",
+          description: "Your password could not be set."
+        })
+      );
   }
 }
 
-export const ChangePasswordForm = injectAs<{}>([SERVICES.PROFILE_SERVICE], Form.create<{}>()(ChangePasswordFormComponent));
+export const ChangePasswordForm = injectAs<{}>([SERVICES.LOGGED_IN_USER_SERVICE], Form.create<{}>()(ChangePasswordFormComponent));

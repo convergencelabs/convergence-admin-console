@@ -1,15 +1,16 @@
 import * as React from 'react';
 import {Component, ReactNode} from "react";
 import styles from "./styles.module.css";
-import {DomainService} from "../../services/DomainService";
 import {DomainDescriptor} from "../../models/DomainDescriptor";
 import {Card, Col, Icon} from "antd";
 import {injectAs} from "../../utils/mobx-utils";
 import {DomainCard} from "../DomainCard";
 import {makeCancelable, PromiseSubscription} from "../../utils/make-cancelable";
+import {SERVICES} from "../../services/ServiceConstants";
+import {LoggedInUserService} from "../../services/LoggedInUserService";
 
 export interface RecentDomainInjectedProps {
-  domainService: DomainService
+  loggedInUserService: LoggedInUserService
 }
 
 export interface RecentDomainState {
@@ -28,7 +29,7 @@ export class FavoriteDomainsComponent extends Component<RecentDomainInjectedProp
       error: false
     };
 
-    const {promise, subscription} = makeCancelable(this.props.domainService.getDomains());
+    const {promise, subscription} = makeCancelable(this.props.loggedInUserService.getFavoriteDomains());
     promise.then(domains => {
         this.setState({domains});
       })
@@ -59,4 +60,4 @@ export class FavoriteDomainsComponent extends Component<RecentDomainInjectedProp
   }
 }
 
-export const RecentDomains = injectAs<{}>(["domainService"], FavoriteDomainsComponent);
+export const RecentDomains = injectAs<{}>([SERVICES.LOGGED_IN_USER_SERVICE], FavoriteDomainsComponent);
