@@ -1,15 +1,16 @@
 import * as React from 'react';
 import {ReactNode} from "react";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Select, Form, InputNumber} from "antd";
+import {Button, Select, Form, InputNumber, notification} from "antd";
 import {FormButtonBar} from "../../../components/FormButtonBar";
 import {FormEvent} from "react";
 import styles from "./styles.module.css";
 import {injectAs} from "../../../utils/mobx-utils";
 import {SERVICES} from "../../../services/ServiceConstants";
-import {ConfigService} from "../../../services/ConfigService";
+import {configService, ConfigService} from "../../../services/ConfigService";
 import {makeCancelable, PromiseSubscription} from "../../../utils/make-cancelable";
 import {CONFIG} from "../../../constants/config";
+import {PasswordConfig} from "../../../models/PasswordConfig";
 
 const {Option} = Select;
 
@@ -18,8 +19,11 @@ interface InjectedProps extends FormComponentProps {
 }
 
 interface PasswordPolicyState {
-  configs: Map<string, any> | null;
+  configs: PasswordConfig | null;
 }
+
+const TRUE = "true";
+const FALSE = "false";
 
 class PasswordPolicyComponent extends React.Component<InjectedProps, PasswordPolicyState> {
   private _configSubscription: PromiseSubscription | null;
@@ -39,29 +43,30 @@ class PasswordPolicyComponent extends React.Component<InjectedProps, PasswordPol
   public render(): ReactNode {
     const {getFieldDecorator} = this.props.form;
     if (this.state.configs !== null) {
-      const minLen = this.state.configs.get(CONFIG.Passwords.MinimumLength);
-      const lower = this.state.configs.get(CONFIG.Passwords.RequireLowerCase) ? "true" : "false";
-      const upper = this.state.configs.get(CONFIG.Passwords.RequireUpperCase) ? "true" : "false";
-      const digits = this.state.configs.get(CONFIG.Passwords.RequireNumeric) ? "true" : "false";
-      const special = this.state.configs.get(CONFIG.Passwords.RequireSpecialCharacters) ? "true" : "false";
+      const minLen = this.state.configs.minLength;
+      const lower = this.state.configs.requireLower ? TRUE : FALSE;
+      const upper = this.state.configs.requireUpper ? TRUE : FALSE;
+      const digits = this.state.configs.requireDigit ? TRUE : FALSE;
+      const special = this.state.configs.requireSpecial ? TRUE : FALSE;
+
       return (
         <Form onSubmit={this._handleSubmit} layout="horizontal">
           <Form.Item label="Minimum Length">
-            {getFieldDecorator('min-length', {initialValue: minLen})(
+            {getFieldDecorator('minLength', {initialValue: minLen})(
               <InputNumber min={4}/>
             )}
           </Form.Item>
           <Form.Item label="Require Digits">
-            {getFieldDecorator('require-digit', {initialValue: digits})(this._renderYesNo())}
+            {getFieldDecorator('requireDigit', {initialValue: digits})(this._renderYesNo())}
           </Form.Item>
           <Form.Item label="Require Upper Case Character">
-            {getFieldDecorator('require-upper-case', {initialValue: upper})(this._renderYesNo())}
+            {getFieldDecorator('requireUpperCase', {initialValue: upper})(this._renderYesNo())}
           </Form.Item>
           <Form.Item label="Require Lower Case Letters">
-            {getFieldDecorator('require-lower-case', {initialValue: lower})(this._renderYesNo())}
+            {getFieldDecorator('requireLowerCase', {initialValue: lower})(this._renderYesNo())}
           </Form.Item>
           <Form.Item label="Require Special Characters">
-            {getFieldDecorator('require-special-character', {initialValue: special})(this._renderYesNo())}
+            {getFieldDecorator('requireSpecialCharacter', {initialValue: special})(this._renderYesNo())}
           </Form.Item>
           <FormButtonBar>
             <Button type="primary" htmlType="submit">Save</Button>
@@ -82,8 +87,8 @@ class PasswordPolicyComponent extends React.Component<InjectedProps, PasswordPol
   private _renderYesNo(): ReactNode {
     return (
       <Select className={styles.yesNo}>
-        <Option key="yes" value="true">Yes</Option>
-        <Option key="No" value="false">No</Option>
+        <Option key="yes" value={TRUE}>Yes</Option>
+        <Option key="No" value={FALSE}>No</Option>
       </Select>
     );
   }
@@ -92,13 +97,34 @@ class PasswordPolicyComponent extends React.Component<InjectedProps, PasswordPol
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        const {minLength, requireDigit, requireUpperCase, requireLowerCase, requireSpecialCharacter} = values;
+        const config = new PasswordConfig(
+          minLength,
+          requireUpperCase === TRUE,
+          requireLowerCase === TRUE,
+          requireDigit === TRUE,
+          requireSpecialCharacter === TRUE);
+        this.props.configService
+          .setPasswordConfig(config)
+          .then(() =>
+            notification.success({
+              message: "Configuration Saved",
+              description: "Password policy configuration successfully saved."
+            })
+          )
+          .catch(err => {
+            console.error(err);
+            notification.error({
+              message: "Configuration Not Saved",
+              description: "Password policy configuration could not be saved."
+            })
+          });
       }
     });
   }
 
   private _loadConfig(): void {
-    const {promise, subscription} = makeCancelable(this.props.configService.getConfig());
+    const {promise, subscription} = makeCancelable(this.props.configService.getPasswordConfig());
     this._configSubscription = subscription;
     promise.then(configs => {
       this._configSubscription = null;

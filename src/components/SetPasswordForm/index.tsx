@@ -13,7 +13,8 @@ import {FormButtonBar} from "../FormButtonBar";
 import {SERVICES} from "../../services/ServiceConstants";
 
 interface SetPasswordProps {
-  onSetPassword(password: string): void;
+  onSetPassword(password: string): Promise<boolean>;
+
   onCancel?: () => void;
   showCancel?: boolean;
   okButtonText?: string;
@@ -109,7 +110,14 @@ class SetPasswordFormComponent extends React.Component<InjectedProps, ChangePass
     this.props.form.validateFieldsAndScroll((err: any, values: any) => {
       if (!err) {
         const {password} = values;
-        this.props.onSetPassword(password);
+        this.props.onSetPassword(password).then(clear => {
+          if (clear) {
+            this.props.form.setFieldsValue({
+              password: "",
+              confirm: ""
+            });
+          }
+        })
       }
     });
   }

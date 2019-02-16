@@ -56,13 +56,14 @@ class SetUserPasswordComponent extends React.Component<InjectedProps, SetUserPas
 
   private _handleSetPassword = (password: string) => {
     const username = this.props.match.params.username;
-    this.props.userService.setPassword(username, password)
+    return this.props.userService.setPassword(username, password)
       .then(() => {
         notification["success"]({
           message: 'namespaces Created',
           description: `Password for '${username}' successfully set.`
         });
         this.props.history.push("/users/");
+        return true;
       }).catch((err) => {
       console.error(err);
       if (err instanceof RestError) {
@@ -71,8 +72,9 @@ class SetUserPasswordComponent extends React.Component<InjectedProps, SetUserPas
           description: `The password for ${username} could not be set.`
         });
       }
-    });
 
+      return false;
+    });
   }
 }
 

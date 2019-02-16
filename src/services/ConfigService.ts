@@ -37,6 +37,18 @@ export class ConfigService extends AbstractAuthenticatedService {
         return new PasswordConfig(minLen, upperRequired, lowerRequired, digitRequired, specialRequired);
       })
   }
+
+  public setPasswordConfig(config: PasswordConfig): Promise<void> {
+    const body: any = {};
+    body[CONFIG.Passwords.MinimumLength] = config.minLength;
+    body[CONFIG.Passwords.RequireUpperCase] = config.requireUpper;
+    body[CONFIG.Passwords.RequireLowerCase] = config.requireLower;
+    body[CONFIG.Passwords.RequireNumeric] = config.requireDigit;
+    body[CONFIG.Passwords.RequireSpecialCharacters] = config.requireSpecial;
+    return this
+      ._post("config", body)
+      .then(() => undefined);
+  }
 }
 
 export const configService = new ConfigService();
