@@ -38,6 +38,13 @@ export class DomainCollectionService extends AbstractDomainService {
       ._get<CollectionSummaryData[]>(url, {filter, offset, limit})
       .then(summaries => summaries.map(toCollectionSummary));
   }
+
+  public getCollections(domain: DomainId, filter?: String, offset: number = 0, limit: number = 10): Promise<Collection[]> {
+    const url = this._getDomainUrl(domain, "collections");
+    return this
+      ._get<CollectionData[]>(url, {filter, offset, limit})
+      .then(summaries => summaries.map(toCollection));
+  }
 }
 
 export const domainCollectionService = new DomainCollectionService();

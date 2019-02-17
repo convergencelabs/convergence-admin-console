@@ -6,12 +6,19 @@ import {DomainUsers} from "../../pages/domain/Users";
 import {DomainDescriptor} from "../../models/DomainDescriptor";
 import {ReactNode} from "react";
 import {DomainService} from "../../services/DomainService";
-import {injectAs} from "../../utils/mobx-utils";
 import {NavLayout} from "../../components/NavLayout";
 import {DomainCollections} from "../../pages/domain/collections/DomainCollections";
 import {CreateDomainCollection} from "../../pages/domain/collections/CreateDomainCollection";
+import {DomainModels} from "../../pages/domain/models/DomainModels";
+import {injectAs} from "../../utils/mobx-utils";
 
-interface DomainContainerProps extends RouteComponentProps {
+
+export interface DomainRouteParams {
+  namespace: string;
+  domainId: string;
+}
+
+interface DomainContainerProps extends RouteComponentProps<DomainRouteParams> {
   domainService: DomainService;
 }
 
@@ -62,7 +69,7 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
             <Route path={`${match.url}/sessions`} render={(props) => <div>sessions</div>}/>
             <Route path={`${match.url}/collections`} render={(props) => <DomainCollections {...props} domain={domain}/>}/>
             <Route path={`${match.url}/create-collection`} render={(props) => <CreateDomainCollection {...props} domain={domain}/>}/>
-            <Route path={`${match.url}/models`} render={(props) => <div>Models</div>}/>
+            <Route path={`${match.url}/models`} render={(props) => <DomainModels {...props} domain={domain}/>} />
             <Route path={`${match.url}/settings`} render={(props) => <div>Settings</div>}/>
           </Switch>
         </NavLayout>
@@ -83,7 +90,7 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
   }
 
   private _extractNamespaceAndDomain(): { namespace: string, domainId: string } {
-    const {namespace, domainId} = (this.props.match.params as any);
+    const {namespace, domainId} = this.props.match.params;
     return {namespace, domainId};
   }
 }

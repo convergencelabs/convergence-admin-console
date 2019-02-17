@@ -2,11 +2,10 @@ import * as React from 'react';
 import {Page} from "../../../../components/Page/";
 import {KeyboardEvent, ReactNode} from "react";
 import Tooltip from "antd/es/tooltip";
-import {Button, Card, Icon, Input, notification, Popconfirm, Table} from "antd";
+import {Button, Card, Icon, Input, InputNumber, notification, Popconfirm, Select} from "antd";
 import styles from "./styles.module.css";
 import {CartTitleToolbar} from "../../../../components/CardTitleToolbar/";
 import {RouteComponentProps} from "react-router";
-import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {Link} from "react-router-dom";
@@ -17,81 +16,52 @@ import {DomainDescriptor} from "../../../../models/DomainDescriptor";
 import {ToolbarButton} from "../../../../components/ToolbarButton";
 import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
 import {toDomainUrl} from "../../../../utils/domain-url";
+import {CollectionAutoComplete} from "../../../../components/CollectionAutoComplete";
 
-interface DomainCollectionsProps extends RouteComponentProps {
+const {Option} = Select;
+
+interface DomainModelsProps extends RouteComponentProps {
   domain: DomainDescriptor;
 }
 
-interface InjectedProps extends DomainCollectionsProps {
+interface InjectedProps extends DomainModelsProps {
   domainCollectionService: DomainCollectionService;
 }
 
 interface ServerCollectionsState {
   collections: CollectionSummary[] | null;
   collectionFilter: string;
+  mode: SearchMode
 }
 
-class DomainCollectionsComponent extends React.Component<InjectedProps, ServerCollectionsState> {
+type SearchMode = "browse" | "query" | "id"
+
+class DomainModelsComponent extends React.Component<InjectedProps, ServerCollectionsState> {
   private readonly _breadcrumbs: DomainBreadcrumbProducer;
-  private readonly _collectionTableColumns: any[];
-  private _collectionsSubscription: PromiseSubscription | null;
 
   constructor(props: InjectedProps) {
     super(props);
-    this._breadcrumbs = new DomainBreadcrumbProducer([{title: "Collections"}]);
-    this._collectionTableColumns = [{
-      title: 'Id',
-      dataIndex: 'id',
-      sorter: (a: CollectionSummary, b: CollectionSummary) => (a.id as string).localeCompare(b.id),
-      render: (text: string) => <Link to={`/users/${text}`}>{text}</Link>
-    }, {
-      title: 'Models',
-      dataIndex: 'modelCount',
-      align: 'right',
-      width: 100,
-      sorter: (a: CollectionSummary, b: CollectionSummary) => a.modelCount - b.modelCount
-    }, {
-      title: 'Description',
-      dataIndex: 'description',
-      sorter: (a: CollectionSummary, b: CollectionSummary) => (a.description as string).localeCompare(b.description)
-    }, {
-      title: '',
-      align: 'right',
-      width: 80,
-      render: this._renderActions
-    }];
-
-    this._collectionsSubscription = null;
-
+    this._breadcrumbs = new DomainBreadcrumbProducer([{title: "Models"}]);
     this.state = {
       collections: null,
-      collectionFilter: ""
+      collectionFilter: "",
+      mode: "browse"
     };
-
-    this._loadCollections();
-  }
-
-  public componentWillUnmount(): void {
-    if (this._collectionsSubscription) {
-      this._collectionsSubscription.unsubscribe();
-      this._collectionsSubscription = null;
-    }
   }
 
   private _renderToolbar(): ReactNode {
     return (
-      <CartTitleToolbar title="Collections" icon="folder">
-        <span className={styles.search}>
-          <Input placeholder="Search Collections" addonAfter={<Icon type="search"/>} onKeyUp={this._onFilterChange}/>
-        </span>
+      <CartTitleToolbar title="Models" icon="file">
+        <span className={styles.search}></span>
         <ToolbarButton icon="plus-circle" tooltip="Create Collection" onClick={this._goToCreate}/>
-        <ToolbarButton icon="reload" tooltip="Reload Collections" onClick={this._loadCollections}/>
+        <ToolbarButton icon="reload" tooltip="Reload Collections" onClick={() => {
+        }}/>
       </CartTitleToolbar>
     )
   }
 
   private _onFilterChange = (event: KeyboardEvent<HTMLInputElement>) => {
-    this.setState({collectionFilter: (event.target as HTMLInputElement).value}, this._loadCollections);
+    this.setState({collectionFilter: (event.target as HTMLInputElement).value});
   }
 
   private _goToCreate = () => {
@@ -104,15 +74,71 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, ServerCo
     return (
       <Page breadcrumbs={this._breadcrumbs.breadcrumbs()}>
         <Card title={this._renderToolbar()}>
-          <Table className={styles.userTable}
-                 size="middle"
-                 rowKey="id"
-                 columns={this._collectionTableColumns}
-                 dataSource={this.state.collections || []}
-          />
+          <div className={styles.toolbar}>
+            <div className={styles.modeSelector}>
+              <span>Mode: </span>
+              <Select style={{width: 150}}
+                      value={this.state.mode}
+                      onChange={this._changeMode}>
+                <Option key="browse">Browse</Option>
+                <Option key="query">Query</Option>
+                <Option key="id">Id Lookup</Option>
+              </Select>
+            </div>
+            <div className={styles.controls}>
+              {this._renderControls()}
+            </div>
+          </div>
         </Card>
       </Page>
     );
+  }
+
+  private _changeMode = (val: SearchMode, option: any) => {
+    this.setState({mode: val});
+  }
+
+  private _renderControls(): ReactNode {
+    switch (this.state.mode) {
+      case "browse":
+        return this._browse();
+      case "query":
+        return this._query();
+      case "id":
+        return this._byId();
+    }
+  }
+
+  private _browse(): ReactNode {
+    return (
+      <React.Fragment>
+        <span>Collection: </span>
+        <CollectionAutoComplete className={styles.collection} domainId={this.props.domain.toDomainId()}/>
+        <span>Results Per Page: </span>
+        <InputNumber/>
+        <Button htmlType="button" type="primary">Browse</Button>
+      </React.Fragment>
+    )
+  }
+
+  private _query(): ReactNode {
+    return (
+      <React.Fragment>
+        <span>Query: </span>
+        <Input placeholder="Enter Query"/>
+        <Button htmlType="button" type="primary">Search</Button>
+      </React.Fragment>
+    )
+  }
+
+  private _byId(): ReactNode {
+    return (
+      <React.Fragment>
+        <span>Model Id: </span>
+        <Input placeholder="Enter Model Id"/>
+        <Button htmlType="button" type="primary">Lookup</Button>
+      </React.Fragment>
+    )
   }
 
   private _renderActions = (value: CollectionSummary, record: CollectionSummary) => {
@@ -143,7 +169,7 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, ServerCo
     const domainId = new DomainId(this.props.domain.namespace, this.props.domain.id);
     this.props.domainCollectionService.deleteCollection(domainId, collectionId)
       .then(() => {
-        this._loadCollections();
+        //this._loadCollections();
         notification.success({
           message: 'Collection Deleted',
           description: `The collection '${collectionId}' was deleted.`,
@@ -157,22 +183,8 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, ServerCo
       });
   }
 
-  private _loadCollections = () => {
-    const domainId = new DomainId(this.props.domain.namespace, this.props.domain.id);
-    const filter = this.state.collectionFilter !== "" ? this.state.collectionFilter : undefined;
-    const {promise, subscription} = makeCancelable(this.props.domainCollectionService.getCollectionSummaries(domainId, filter));
-    this._collectionsSubscription = subscription;
-    promise.then(collections => {
-      this._collectionsSubscription = null;
-      this.setState({collections});
-    }).catch(err => {
-      console.error(err);
-      this._collectionsSubscription = null;
-      this.setState({collections: null});
-    });
-  }
 }
 
 const injections = [SERVICES.DOMAIN_COLLECTION_SERVICE];
-export const DomainCollections = injectAs<DomainCollectionsProps>(injections, DomainCollectionsComponent);
+export const DomainModels = injectAs<DomainModelsProps>(injections, DomainModelsComponent);
 

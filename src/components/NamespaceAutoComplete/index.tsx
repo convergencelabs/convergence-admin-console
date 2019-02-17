@@ -9,7 +9,7 @@ import {NamespaceAndDomains} from "../../models/NamespaceAndDomains";
 
 const {Option} = Select;
 
-export interface UserAutoCompleteProps {
+export interface NamespaceAutoCompleteProps {
   disabled?: boolean;
   className?: string;
   onChange?: (username: string) => void;
@@ -17,16 +17,16 @@ export interface UserAutoCompleteProps {
   value?: string;
 }
 
-export interface InjectedProps extends UserAutoCompleteProps{
+export interface InjectedProps extends NamespaceAutoCompleteProps{
   namespaceService: NamespaceService;
 }
 
-export interface UsernameAutoCompleteState {
+export interface NamespaceAutoCompleteState {
   namespaces: NamespaceAndDomains[];
   selectedValue: string;
 }
 
-export class NamespaceAutoCompleteComponent extends Component<InjectedProps, UsernameAutoCompleteState> {
+export class NamespaceAutoCompleteComponent extends Component<InjectedProps, NamespaceAutoCompleteState> {
   state = {
     namespaces: [],
     selectedValue: ""
@@ -72,4 +72,4 @@ export class NamespaceAutoCompleteComponent extends Component<InjectedProps, Use
   }
 }
 
-export const NamespaceAutoComplete = injectAs<UserAutoCompleteProps>([SERVICES.NAMESPACE_SERVICE], NamespaceAutoCompleteComponent);
+export const NamespaceAutoComplete = injectAs<NamespaceAutoCompleteProps>([SERVICES.NAMESPACE_SERVICE], NamespaceAutoCompleteComponent);
