@@ -7,7 +7,6 @@ import {Page} from "../../../components/Page";
 import {Row, Col, Card, Tabs, Input, Button, Icon} from 'antd';
 import CopyToClipboard from "react-copy-to-clipboard";
 import styles from "./styles.module.css";
-import Highlight from "react-highlight";
 import {ConnectionPasswordSnippet} from "./snippet_connection_password";
 import {ConnectionAnonymousSnippet} from "./snippet_connection_anonymous";
 import {ConnectionJwtSnippet} from "./snippet_connection_jwt";

@@ -66,7 +66,7 @@ class CreateDomainCollectionComponent extends React.Component<InjectedProps, {}>
               <Col span={24}>
                 <Form.Item label="Description">
                   {getFieldDecorator('description', {
-                    rules: [{required: true, message: 'Please input a Display Name!', whitespace: true}],
+                    rules: [{required: true, message: 'Please input a Description!', whitespace: true}],
                   })(
                     <TextArea autosize={{minRows: 2, maxRows: 6}}/>
                   )}

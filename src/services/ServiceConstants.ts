@@ -9,6 +9,7 @@ export const SERVICES = {
   LOCAL_STORAGE_SERVICE: "localStorageService",
 
   DOMAIN_COLLECTION_SERVICE: "domainCollectionService",
+  DOMAIN_MODEL_SERVICE: "domainModelService",
 }
 
 Object.freeze(SERVICES);

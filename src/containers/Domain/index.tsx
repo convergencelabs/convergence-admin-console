@@ -10,6 +10,7 @@ import {NavLayout} from "../../components/NavLayout";
 import {DomainCollections} from "../../pages/domain/collections/DomainCollections";
 import {CreateDomainCollection} from "../../pages/domain/collections/CreateDomainCollection";
 import {DomainModels} from "../../pages/domain/models/DomainModels";
+import {CreateDomainModel} from "../../pages/domain/models/CreateDomainModel";
 import {injectAs} from "../../utils/mobx-utils";
 
 
@@ -70,6 +71,7 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
             <Route path={`${match.url}/collections`} render={(props) => <DomainCollections {...props} domain={domain}/>}/>
             <Route path={`${match.url}/create-collection`} render={(props) => <CreateDomainCollection {...props} domain={domain}/>}/>
             <Route path={`${match.url}/models`} render={(props) => <DomainModels {...props} domain={domain}/>} />
+            <Route path={`${match.url}/create-model`} render={(props) => <CreateDomainModel {...props} domain={domain}/>} />
             <Route path={`${match.url}/settings`} render={(props) => <div>Settings</div>}/>
           </Switch>
         </NavLayout>

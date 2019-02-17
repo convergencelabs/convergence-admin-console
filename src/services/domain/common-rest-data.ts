@@ -38,3 +38,14 @@ export interface ModelSnapshotPolicyData {
   limitByTime: boolean;
   minimumTimeInterval: number;
 }
+
+export interface ModelData {
+  metaData: {
+    id: string;
+    collection: string;
+    version: number
+    createdTime: number,
+    modifiedTime: number
+  },
+  data: any
+}

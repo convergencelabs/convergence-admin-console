@@ -56,7 +56,6 @@ export class CollectionAutoCompleteComponent extends Component<InjectedProps, Co
       <AutoComplete
         className={className}
         disabled={this.props.disabled}
-        defaultValue={initial}
         onSearch={this._onSearch}
         onChange={this._onChange}
         value={inputValue}

@@ -2,12 +2,13 @@ import {Collection} from "../../models/domain/Collection";
 import {
   CollectionData,
   CollectionPermissionsData,
-  CollectionSummaryData,
+  CollectionSummaryData, ModelData,
   ModelSnapshotPolicyData
 } from "./common-rest-data";
 import {CollectionPermissions} from "../../models/domain/CollectionPermissions";
 import {ModelSnapshotPolicy} from "../../models/domain/ModelSnapshotPolicy";
 import {CollectionSummary} from "../../models/domain/CollectionSummary";
+import {Model} from "../../models/domain/Model";
 
 export function toCollection(data: CollectionData): Collection {
   return new Collection(
@@ -47,4 +48,15 @@ export function toCollectionSummary(data: CollectionSummaryData): CollectionSumm
     data.id,
     data.description,
     data.modelCount);
+}
+
+export function toModel(data: ModelData): Model {
+  return new Model(
+    data.metaData.id,
+    data.metaData.collection,
+    data.metaData.version,
+    new Date(data.metaData.createdTime),
+    new Date(data.metaData.modifiedTime),
+    data.data
+  );
 }

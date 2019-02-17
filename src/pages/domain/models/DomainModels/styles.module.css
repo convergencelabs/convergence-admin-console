@@ -4,6 +4,8 @@
   margin-bottom: 15px;
   border-bottom: 1px solid lightgray;
   padding-bottom: 15px;
+  align-items: center;
+  white-space: nowrap;
 }
 
 .modeSelector {
@@ -13,7 +15,6 @@
 }
 
 .controls {
-  white-space: nowrap;
   flex: 1;
   display: flex;
   align-items: center;
@@ -24,11 +25,31 @@
   margin-right: 10px;
 }
 
-.collection:global.ant-select-auto-complete {
+.collection:global.ant-select-auto-complete, .query:global.ant-input, .id:global.ant-input {
   flex: 1;
   margin-right: 15px;
 }
 
 .button {
   margin-left: 15px;
+}
+
+.modelExpander {
+  margin-left: 20px;
+}
+
+.modelExpander tr {
+  border-bottom: 1px solid lightgray;
+}
+
+.modelExpander td:first-child {
+  width: 1%;
+  white-space: nowrap;
+  padding-right: 15px;
+  font-weight: bold;
+}
+
+.modelExpander pre {
+  margin-top: 1em;
+  border-radius: 2px;
 }
