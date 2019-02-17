@@ -1,12 +1,15 @@
 .toolbar {
   display: flex;
   flex-direction: row;
+  margin-bottom: 15px;
+  border-bottom: 1px solid lightgray;
+  padding-bottom: 15px;
 }
 
 .modeSelector {
-  padding-right: 10px;
+  padding-right: 15px;
   border-right: 1px solid darkgray;
-  margin-right: 10px;
+  margin-right: 15px;
 }
 
 .controls {
@@ -17,6 +20,15 @@
   flex-direction: row;
 }
 
-.collection {
+.label {
+  margin-right: 10px;
+}
+
+.collection:global.ant-select-auto-complete {
   flex: 1;
+  margin-right: 15px;
+}
+
+.button {
+  margin-left: 15px;
 }

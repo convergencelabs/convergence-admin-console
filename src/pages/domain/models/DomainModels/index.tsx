@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Page} from "../../../../components/Page/";
 import {KeyboardEvent, ReactNode} from "react";
 import Tooltip from "antd/es/tooltip";
-import {Button, Card, Icon, Input, InputNumber, notification, Popconfirm, Select} from "antd";
+import {Button, Card, Icon, Input, InputNumber, notification, Popconfirm, Select, Table} from "antd";
 import styles from "./styles.module.css";
 import {CartTitleToolbar} from "../../../../components/CardTitleToolbar/";
 import {RouteComponentProps} from "react-router";
@@ -38,6 +38,7 @@ type SearchMode = "browse" | "query" | "id"
 
 class DomainModelsComponent extends React.Component<InjectedProps, ServerCollectionsState> {
   private readonly _breadcrumbs: DomainBreadcrumbProducer;
+  private readonly _metaColumns: any[];
 
   constructor(props: InjectedProps) {
     super(props);
@@ -47,6 +48,17 @@ class DomainModelsComponent extends React.Component<InjectedProps, ServerCollect
       collectionFilter: "",
       mode: "browse"
     };
+
+    this._metaColumns = [{
+      title: 'Id',
+      dataIndex: 'id',
+    }, {
+      title: 'Version',
+      dataIndex: 'version',
+    }, {
+      title: 'Modified',
+      dataIndex: 'modified',
+    }];
   }
 
   private _renderToolbar(): ReactNode {
@@ -76,7 +88,7 @@ class DomainModelsComponent extends React.Component<InjectedProps, ServerCollect
         <Card title={this._renderToolbar()}>
           <div className={styles.toolbar}>
             <div className={styles.modeSelector}>
-              <span>Mode: </span>
+              <span className={styles.label}>Mode: </span>
               <Select style={{width: 150}}
                       value={this.state.mode}
                       onChange={this._changeMode}>
@@ -89,6 +101,10 @@ class DomainModelsComponent extends React.Component<InjectedProps, ServerCollect
               {this._renderControls()}
             </div>
           </div>
+          <Table columns={this._metaColumns}
+                 size="middle"
+                 dataSource={[]}
+          />
         </Card>
       </Page>
     );
@@ -112,11 +128,11 @@ class DomainModelsComponent extends React.Component<InjectedProps, ServerCollect
   private _browse(): ReactNode {
     return (
       <React.Fragment>
-        <span>Collection: </span>
+        <span className={styles.label}>Collection:</span>
         <CollectionAutoComplete className={styles.collection} domainId={this.props.domain.toDomainId()}/>
-        <span>Results Per Page: </span>
+        <span className={styles.label}>Results Per Page:</span>
         <InputNumber/>
-        <Button htmlType="button" type="primary">Browse</Button>
+        <Button htmlType="button" type="primary" className={styles.button}>Browse</Button>
       </React.Fragment>
     )
   }
@@ -124,9 +140,9 @@ class DomainModelsComponent extends React.Component<InjectedProps, ServerCollect
   private _query(): ReactNode {
     return (
       <React.Fragment>
-        <span>Query: </span>
+        <span className={styles.label}>Query:</span>
         <Input placeholder="Enter Query"/>
-        <Button htmlType="button" type="primary">Search</Button>
+        <Button className={styles.button} htmlType="button" type="primary">Search</Button>
       </React.Fragment>
     )
   }
@@ -134,9 +150,9 @@ class DomainModelsComponent extends React.Component<InjectedProps, ServerCollect
   private _byId(): ReactNode {
     return (
       <React.Fragment>
-        <span>Model Id: </span>
+        <span className={styles.label}>Model Id: </span>
         <Input placeholder="Enter Model Id"/>
-        <Button htmlType="button" type="primary">Lookup</Button>
+        <Button className={styles.button} htmlType="button" type="primary">Lookup</Button>
       </React.Fragment>
     )
   }
@@ -182,7 +198,6 @@ class DomainModelsComponent extends React.Component<InjectedProps, ServerCollect
         });
       });
   }
-
 }
 
 const injections = [SERVICES.DOMAIN_COLLECTION_SERVICE];
