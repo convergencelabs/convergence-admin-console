@@ -9,7 +9,6 @@ import styles from "./styles.module.css";
 import Tooltip from "antd/es/tooltip";
 import {DomainDescriptor} from "../../../models/DomainDescriptor";
 
-
 const data = [{
   key: '1',
   username: 'john.brown',
@@ -49,7 +48,8 @@ export interface IDomainUsersState {
 
 export class DomainUsers extends Component<IDomainUsersProps, IDomainUsersState> {
 
-  private breadcrumbsProvider = new DomainUsersBreadcrumbs();
+  private _breadcrumbs = new DomainBreadcrumbProducer([{title: "Users"}]);
+
   private _renderActions = (text: any, record: any) => {
     return (
       <span className={styles.tableActions}>
@@ -107,13 +107,12 @@ export class DomainUsers extends Component<IDomainUsersProps, IDomainUsersState>
   };
 
   public render(): ReactNode {
-
-    this.breadcrumbsProvider.setDomain(this.props.domain);
+    this._breadcrumbs.setDomain(this.props.domain);
 
     return (
       <Page title="Users"
             icon="user"
-            breadcrumbs={this.breadcrumbsProvider.breadcrumbs()}>
+            breadcrumbs={this._breadcrumbs.breadcrumbs()}>
         <div className={styles.toolbar}>
           <Input placeholder="Search"
                  defaultValue=""
@@ -161,14 +160,3 @@ export class DomainUsers extends Component<IDomainUsersProps, IDomainUsersState>
     this.setState({deleteModalVisible: false});
   }
 }
-
-class DomainUsersBreadcrumbs extends DomainBreadcrumbProducer {
-  public breadcrumbs(): IBreadcrumbSegment[] {
-    const segments = super.breadcrumbs();
-    segments.push({title: "Users"});
-    return segments;
-  }
-}
-
-
-

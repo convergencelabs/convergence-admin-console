@@ -7,6 +7,8 @@ export const SERVICES = {
   ROLE_SERVICE: "roleService",
   DOMAIN_SERVICE: "domainService",
   LOCAL_STORAGE_SERVICE: "localStorageService",
+
+  DOMAIN_COLLECTION_SERVICE: "domainCollectionService",
 }
 
 Object.freeze(SERVICES);

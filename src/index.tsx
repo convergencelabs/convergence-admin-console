@@ -13,6 +13,7 @@ import {roleService} from "./services/RoleService";
 import {authService} from "./services/AuthService";
 import {loggedInUserService} from "./services/LoggedInUserService";
 import {profileStore} from "./stores/ProfileStore";
+import {domainCollectionService} from "./services/domain/DomainCollectionService";
 
 import {message, notification} from "antd";
 import {configure} from "mobx"
@@ -45,7 +46,9 @@ const services = {
   configService,
   namespaceService,
   userService,
-  roleService
+  roleService,
+
+  domainCollectionService
 };
 
 const authToken = localStorageService.getAuthToken();

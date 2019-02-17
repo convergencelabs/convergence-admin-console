@@ -177,10 +177,9 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
         message.success(`User '${username}' deleted.`);
       })
       .catch(err => {
-        notification["error"]({
-          message: 'Could Not Delete namespaces',
+        notification.error({
+          message: 'Could Not Delete User',
           description: `The user could not be deleted.`,
-          placement: "bottomRight"
         });
       });
   }

@@ -100,40 +100,6 @@ class NamespaceSettingsComponent extends React.Component<InjectedProps, Namespac
               <Input/>
             )}
           </Form.Item>
-          <Form.Item label={(
-            <FormFieldWithHelp
-              label="Domain Mode"
-              tooltip="Determines if the server will allow multiple domains or only a single domain."
-            />
-          )}>
-            {getFieldDecorator('domainMode', {
-              rules: [],
-              initialValue: domainMode
-            })(
-              <Select>
-                <Option key="single" value="single-domain">Single Domain</Option>
-                <Option key="multi" value="multi-domain">Multi Domain</Option>
-              </Select>
-            )}
-          </Form.Item>
-          <Form.Item label={(
-            <FormFieldWithHelp
-              label="Default Domain Id"
-              tooltip={
-                `The id of the domain to use when in Single Domain mode.
-               This domain will automatically be created and can not be deleted.`
-              }
-            />
-          )}>
-            {getFieldDecorator('defaultDomain', {
-              rules: [{
-                required: true, whitespace: true, message: 'Enter a default domain id',
-              }],
-              initialValue: defaultDomain
-            })(
-              <Input/>
-            )}
-          </Form.Item>
           <FormButtonBar>
             <Button type="primary" htmlType="submit">Save</Button>
           </FormButtonBar>

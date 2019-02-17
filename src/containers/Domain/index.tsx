@@ -1,17 +1,15 @@
 import * as React from 'react';
 import {Route, RouteComponentProps, Switch} from 'react-router';
-import styles from './style.module.css';
 import {DomainSideNavigation} from "../../components/";
 import {DomainDashboard} from "../../pages/domain/Dashboard/";
-import {Layout} from 'antd';
 import {DomainUsers} from "../../pages/domain/Users";
 import {DomainDescriptor} from "../../models/DomainDescriptor";
 import {ReactNode} from "react";
 import {DomainService} from "../../services/DomainService";
 import {injectAs} from "../../utils/mobx-utils";
 import {NavLayout} from "../../components/NavLayout";
-
-const {Content} = Layout;
+import {DomainCollections} from "../../pages/domain/collections/DomainCollections";
+import {CreateDomainCollection} from "../../pages/domain/collections/CreateDomainCollection";
 
 interface DomainContainerProps extends RouteComponentProps {
   domainService: DomainService;
@@ -48,7 +46,7 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
       this._loadDomain(domainInfo);
     }
   }
-  
+
   public render(): ReactNode {
     const {match} = this.props;
     const domain = this.state.domain;
@@ -62,7 +60,8 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
             <Route path={`${match.url}/users`} render={(props) => <DomainUsers {...props} domain={domain}/>}/>
             <Route path={`${match.url}/groups`} render={(props) => <div>Groups</div>}/>
             <Route path={`${match.url}/sessions`} render={(props) => <div>sessions</div>}/>
-            <Route path={`${match.url}/collections`} render={(props) => <div>Collections</div>}/>
+            <Route path={`${match.url}/collections`} render={(props) => <DomainCollections {...props} domain={domain}/>}/>
+            <Route path={`${match.url}/create-collection`} render={(props) => <CreateDomainCollection {...props} domain={domain}/>}/>
             <Route path={`${match.url}/models`} render={(props) => <div>Models</div>}/>
             <Route path={`${match.url}/settings`} render={(props) => <div>Settings</div>}/>
           </Switch>
