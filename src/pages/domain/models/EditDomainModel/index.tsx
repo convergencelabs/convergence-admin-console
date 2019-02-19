@@ -11,6 +11,8 @@ import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
 import {DomainDescriptor} from "../../../../models/DomainDescriptor";
 import {DomainModelService} from "../../../../services/domain/DomainModelService";
 import {ModelEditorTab} from "./ModelEditorTab/";
+import {ModelPermissions} from "./ModelPermissions";
+import {ToolbarButton} from "../../../../components/ToolbarButton";
 
 interface EditDomainModelRouteProps {
   modelId: string;
@@ -47,7 +49,9 @@ class EditDomainModelComponent extends React.Component<InjectedProps, {}> {
             <Tabs.TabPane tab="Data" key="data">
               <ModelEditorTab modelId={this.props.match.params.modelId}/>
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Permissions" key="permissions"/>
+            <Tabs.TabPane tab="Permissions" key="permissions">
+              <ModelPermissions />
+            </Tabs.TabPane>
           </Tabs>
         </Card>
       </Page>
@@ -65,6 +69,8 @@ class EditDomainModelComponent extends React.Component<InjectedProps, {}> {
           <span className={styles.modelId}>{this.props.match.params.modelId}</span>
           <span className={styles.collectionId}>{"collection"}</span>
         </span>
+        <span className={styles.spacer}/>
+        <ToolbarButton icon="delete" tooltip="Delete Model" onClick={() => {}}/>
       </span>
     );
   }
