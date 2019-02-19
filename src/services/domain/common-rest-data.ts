@@ -49,3 +49,22 @@ export interface ModelData {
   },
   data: any
 }
+
+
+export interface ModelPermissionSummaryData {
+  overrideWorld: boolean;
+  worldPermissions: ModelPermissionsData;
+  userPermissions: ModelUserPermissionsData[];
+}
+
+export interface ModelPermissionsData {
+  read: boolean;
+  write: boolean;
+  remove: boolean;
+  manage: boolean;
+}
+
+export interface ModelUserPermissionsData {
+  username: string;
+  permissions: ModelPermissionsData;
+}

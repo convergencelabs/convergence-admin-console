@@ -1,19 +1,18 @@
-import React, {ReactFragment, ReactNode} from 'react';
+import React, {ReactNode} from 'react';
 import {injectAs} from "../../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../../services/ServiceConstants";
 import {DomainModelService} from "../../../../../services/domain/DomainModelService";
-import {SapphireEditor} from "../../../../../components/ModelEditor/index";
-import {STORES} from "../../../../../stores/StoreConstants";
-import {ConvergenceDomainStore} from "../../../../../stores/ConvergenceDomainStore";
-import {RealTimeModel} from "@convergence/convergence";
-import {Button, Card, Dropdown, Icon, Input, List, Menu, Popover, Table} from "antd";
+import {Button, Card, Input, Table} from "antd";
 import styles from "./styles.module.css";
-import {filter} from "rxjs/operators";
-import {longDateTime} from "../../../../../utils/format-utils";
 import Checkbox from "antd/es/checkbox/Checkbox";
 import {ColumnProps} from "antd/lib/table";
+import {ModelPermissions} from "../../../../../models/domain/ModelPermissions";
+import {ModelUserPermissionsEditor} from "../ModelUserPermissionsEditor"
+import {DomainId} from "../../../../../models/DomainId";
+import {Model} from "../../../../../models/domain/Model";
 
 interface ModelPermissionsProps {
+  domainId: DomainId;
   modelId: string;
 }
 
@@ -21,50 +20,43 @@ interface InjectedProps extends ModelPermissionsProps {
   domainModelService: DomainModelService;
 }
 
+const dataSource = [{
+  username: 'michael',
+  permissions: new ModelPermissions(true, true, false, false),
+}, {
+  username: 'tim',
+  permissions: new ModelPermissions(true, true, true, true),
+}];
+
 export interface ModelPermissionsState {
 }
 
-const dataSource = [{
-  username: 'michael',
-  permissions: {read: true, write: true, remove: false, manage: false},
-}, {
-  username: 'tim',
-  permissions: {read: true, write: true, remove: true, manage: true},
-}];
-
-const columns: ColumnProps<any>[] = [{
-  title: 'Username',
-  dataIndex: 'username',
-  align: "left",
-  sorter: (a: any, b: any) => a.username.toLocaleLowerCase().localeCompare(b.username.toLocaleLowerCase())
-}, {
-  title: 'Permissions',
-  dataIndex: 'permissions',
-  align: "center",
-  width: 400,
-  render: renderPermissions
-}, {
-  title: '',
-  dataIndex: '',
-  align: "right",
-  width: 50,
-  render: () => (<Button shape="circle" size="small" icon="delete"/>)
-}];
-
-function renderPermissions(val: { read: boolean, write: boolean, remove: boolean, manage: boolean }) {
-  return (
-    <React.Fragment>
-      <Checkbox checked={val.read}>Read</Checkbox>
-      <Checkbox checked={val.write}>Write</Checkbox>
-      <Checkbox checked={val.remove}>Remove</Checkbox>
-      <Checkbox checked={val.manage}>Manage</Checkbox>
-    </React.Fragment>
-  )
-}
-
-class ModelEditorTabComponent extends React.Component<InjectedProps, ModelPermissionsState> {
+class ModelPermissionsTabComponent extends React.Component<InjectedProps, ModelPermissionsState> {
+  private readonly _columns: ColumnProps<any>[];
   constructor(props: InjectedProps) {
     super(props);
+
+
+
+
+    this._columns = [{
+      title: 'Username',
+      dataIndex: 'username',
+      align: "left",
+      sorter: (a: any, b: any) => a.username.toLocaleLowerCase().localeCompare(b.username.toLocaleLowerCase())
+    }, {
+      title: 'Permissions',
+      dataIndex: 'permissions',
+      align: "center",
+      width: 400,
+      render: this._renderPermissions
+    }, {
+      title: '',
+      dataIndex: '',
+      align: "right",
+      width: 50,
+      render: () => (<Button shape="circle" size="small" icon="delete"/>)
+    }];
 
     this.state = {};
   }
@@ -101,7 +93,8 @@ class ModelEditorTabComponent extends React.Component<InjectedProps, ModelPermis
             </div>
             <div>
               <Table dataSource={dataSource}
-                     columns={columns}
+                     columns={this._columns}
+                     rowKey="username"
                      pagination={false}
                      size="middle"/>
             </div>
@@ -110,7 +103,19 @@ class ModelEditorTabComponent extends React.Component<InjectedProps, ModelPermis
       </div>
     );
   }
+
+  private _renderPermissions = (permissions: ModelPermissions, record: any) =>{
+    return (
+      <ModelUserPermissionsEditor
+        domainId={this.props.domainId}
+        modelId={this.props.modelId}
+        username={record.username}
+        initialValue={permissions}
+        domainModelService={this.props.domainModelService}
+      />
+    )
+  }
 }
 
 const injections = [SERVICES.DOMAIN_MODEL_SERVICE];
-export const ModelPermissions = injectAs<ModelPermissionsState>(injections, ModelEditorTabComponent);
+export const ModelPermissionsTab = injectAs<ModelPermissionsState>(injections, ModelPermissionsTabComponent);

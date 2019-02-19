@@ -11,7 +11,7 @@ import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
 import {DomainDescriptor} from "../../../../models/DomainDescriptor";
 import {DomainModelService} from "../../../../services/domain/DomainModelService";
 import {ModelEditorTab} from "./ModelEditorTab/";
-import {ModelPermissions} from "./ModelPermissions";
+import {ModelPermissionsTab} from "./ModelPermissions";
 import {ToolbarButton} from "../../../../components/ToolbarButton";
 
 interface EditDomainModelRouteProps {
@@ -50,7 +50,7 @@ class EditDomainModelComponent extends React.Component<InjectedProps, {}> {
               <ModelEditorTab modelId={this.props.match.params.modelId}/>
             </Tabs.TabPane>
             <Tabs.TabPane tab="Permissions" key="permissions">
-              <ModelPermissions />
+              <ModelPermissionsTab />
             </Tabs.TabPane>
           </Tabs>
         </Card>
