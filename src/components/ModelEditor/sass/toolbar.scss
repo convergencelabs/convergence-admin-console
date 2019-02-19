@@ -1,0 +1,147 @@
+.sapphire-toolbar {
+  border: 1px solid black;
+  padding: 2px;
+  display: flex;
+  background: aliceblue;
+  align-items: center;
+
+  div.menu-button {
+    display: inline-block;
+    float: left;
+
+    i.drop-down {
+      margin-left: 2px;
+      position: relative;
+      top: -3px;
+      font-size: 8px;
+    }
+
+    div.menu-container {
+      position: relative;
+      top: 20px;
+      left: 0;
+    }
+  }
+
+  i.button.disabled,
+  i.radio-button.disabled,
+  div.menu-button span.disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+
+  i.button, div.menu-button span {
+    float: left;
+    padding: 2px 4px;
+    cursor: pointer;
+    border: 1px solid transparent;
+
+    &.enabled {
+      &:hover {
+        background: lightgray;
+        border: 1px solid black;
+      }
+
+      &:active {
+        background: darkgray;
+        border: 1px solid black;
+        color: white;
+      }
+    }
+  }
+
+  i.toggle-button {
+    float: left;
+    padding: 2px 4px;
+    cursor: pointer;
+    border: 1px solid transparent;
+
+    &.selected {
+      background: darkslategray;
+      color: white;
+    }
+  }
+
+  i.radio-button {
+    float: left;
+    padding: 2px 4px;
+    cursor: pointer;
+    border: 1px solid transparent;
+
+    &.selected {
+      background: darkslategray;
+      color: white;
+    }
+
+    &:not(.selected).enabled:hover {
+      background: lightgray;
+      border: 1px solid black;
+    }
+  }
+
+  div.spacer {
+    display: inline-block;
+    float: left;
+    div.spacer-divider {
+      margin: 3px 10px;
+      width: 2px;
+      background: darkslategray;
+      height: 14px;
+    }
+  }
+
+  .button-group {
+    margin: 0;
+
+    flex: 1;
+  }
+
+  .search-control {
+    display: flex;
+    flex-direction: row;
+    width: 260px;
+
+    input {
+      flex: 1;
+      border: 1px solid lightgray;
+      border-right: none;
+      margin-right: 0;
+      font-size: 13px;
+      padding: 2px;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .search-meta {
+      font-size: 12px;
+      float: left;
+      border: 1px solid lightgray;
+      border-left: none;
+      margin-left: 0;
+      padding: 3px;
+      padding-right: 4px;
+      color: darkgray;
+      background: white;
+      white-space: nowrap;
+    }
+
+    i {
+      cursor: pointer;
+      padding: 4px;
+      font-size: 12px;
+      border-top: 1px solid lightgray;
+      border-bottom: 1px solid lightgray;
+      border-right: 1px solid lightgray;
+
+      &:hover {
+        background: lightgray;
+      }
+
+      &:active {
+        color: white;
+      }
+    }
+  }
+}

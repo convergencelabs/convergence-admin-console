@@ -11,8 +11,13 @@ import {DomainCollections} from "../../pages/domain/collections/DomainCollection
 import {CreateDomainCollection} from "../../pages/domain/collections/CreateDomainCollection";
 import {DomainModels} from "../../pages/domain/models/DomainModels";
 import {CreateDomainModel} from "../../pages/domain/models/CreateDomainModel";
+import {EditDomainModel} from "../../pages/domain/models/EditDomainModel";
 import {injectAs} from "../../utils/mobx-utils";
-
+import {ConvergenceDomainStore} from "../../stores/ConvergenceDomainStore";
+import {DomainId} from "../../models/DomainId";
+import {SERVICES} from "../../services/ServiceConstants";
+import {STORES} from "../../stores/StoreConstants";
+import {ConvergenceDomain} from "@convergence/convergence";
 
 export interface DomainRouteParams {
   namespace: string;
@@ -21,11 +26,12 @@ export interface DomainRouteParams {
 
 interface DomainContainerProps extends RouteComponentProps<DomainRouteParams> {
   domainService: DomainService;
+  convergenceDomainStore: ConvergenceDomainStore;
 }
 
 interface DomainContainerState {
-  domain: DomainDescriptor | null;
-  loading: boolean;
+  domainData: DomainDescriptor | null;
+  convergenceDomain: ConvergenceDomain | null;
 }
 
 export class DomainContainerComponent extends React.Component<DomainContainerProps, DomainContainerState> {
@@ -33,8 +39,8 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
     super(props);
 
     this.state = {
-      domain: null,
-      loading: true
+      domainData: null,
+      convergenceDomain: null
     };
   }
 
@@ -43,35 +49,40 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
     this._loadDomain(domainInfo);
   }
 
+  public componentWillUnmount() {
+    this.props.convergenceDomainStore.disconnect();
+  }
+
   public componentDidUpdate(prevProps: Readonly<DomainContainerProps>, prevState: Readonly<DomainContainerState>): void {
-    if (this.state.domain === null) {
+    if (this.state.domainData === null) {
       return;
     }
 
     const domainInfo = this._extractNamespaceAndDomain();
-    if (this.state.domain!.namespace !== domainInfo.namespace ||
-      this.state.domain!.id !== domainInfo.domainId) {
+    if (this.state.domainData!.namespace !== domainInfo.namespace ||
+      this.state.domainData!.id !== domainInfo.domainId) {
       this._loadDomain(domainInfo);
     }
   }
 
   public render(): ReactNode {
     const {match} = this.props;
-    const domain = this.state.domain;
+    const {domainData, convergenceDomain} = this.state;
 
-    if (domain !== null && domain !== undefined) {
+    if (domainData !== null && convergenceDomain !== null) {
       return (
         <NavLayout sideNav={<DomainSideNavigation/>}>
           <Switch>
-            <Route exact path={`${match.url}/`} render={(props) => <DomainDashboard {...props} domain={domain}/>}/>
-            <Route path={`${match.url}/dashboard`} render={(props) => <DomainDashboard {...props} domain={domain}/>}/>
-            <Route path={`${match.url}/users`} render={(props) => <DomainUsers {...props} domain={domain}/>}/>
+            <Route exact path={`${match.url}/`} render={(props) => <DomainDashboard {...props} domain={domainData}/>}/>
+            <Route path={`${match.url}/dashboard`} render={(props) => <DomainDashboard {...props} domain={domainData}/>}/>
+            <Route path={`${match.url}/users`} render={(props) => <DomainUsers {...props} domain={domainData}/>}/>
             <Route path={`${match.url}/groups`} render={(props) => <div>Groups</div>}/>
             <Route path={`${match.url}/sessions`} render={(props) => <div>sessions</div>}/>
-            <Route path={`${match.url}/collections`} render={(props) => <DomainCollections {...props} domain={domain}/>}/>
-            <Route path={`${match.url}/create-collection`} render={(props) => <CreateDomainCollection {...props} domain={domain}/>}/>
-            <Route path={`${match.url}/models`} render={(props) => <DomainModels {...props} domain={domain}/>} />
-            <Route path={`${match.url}/create-model`} render={(props) => <CreateDomainModel {...props} domain={domain}/>} />
+            <Route path={`${match.url}/collections`} render={(props) => <DomainCollections {...props} domain={domainData}/>}/>
+            <Route path={`${match.url}/create-collection`} render={(props) => <CreateDomainCollection {...props} domain={domainData}/>}/>
+            <Route exact path={`${match.url}/models`} render={(props) => <DomainModels {...props} domain={domainData}/>} />
+            <Route path={`${match.url}/create-model`} render={(props) => <CreateDomainModel {...props} domain={domainData}/>} />
+            <Route path={`${match.url}/models/:modelId`} render={(props) => <EditDomainModel {...props} domain={domainData}/>} />
             <Route path={`${match.url}/settings`} render={(props) => <div>Settings</div>}/>
           </Switch>
         </NavLayout>
@@ -82,12 +93,18 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
   }
 
   private _loadDomain(domain: { namespace: string, domainId: string }): void {
-    this.setState({domain: null, loading: true});
+    this.setState({domainData: null, convergenceDomain: null});
 
     this.props.domainService
       .getDomain(domain.namespace, domain.domainId)
-      .then(domain => {
-        this.setState({loading: false, domain});
+      .then(domainData => {
+        this.setState({ domainData});
+      });
+
+    this.props.convergenceDomainStore.
+    activateDomain(new DomainId(domain.namespace, domain.domainId))
+      .then(() => {
+        this.setState({convergenceDomain: this.props.convergenceDomainStore.domain});
       })
   }
 
@@ -97,4 +114,5 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
   }
 }
 
-export const DomainContainer = injectAs<RouteComponentProps>(["domainService"], DomainContainerComponent);
+const INJECTIONS = [SERVICES.DOMAIN_SERVICE, STORES.CONVERGENCE_DOMAIN_STORE]
+export const DomainContainer = injectAs<RouteComponentProps>(INJECTIONS, DomainContainerComponent);

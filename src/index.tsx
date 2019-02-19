@@ -15,6 +15,7 @@ import {loggedInUserService} from "./services/LoggedInUserService";
 import {profileStore} from "./stores/ProfileStore";
 import {domainCollectionService} from "./services/domain/DomainCollectionService";
 import {domainModelService} from "./services/domain/DomainModelService";
+import {convergenceDomainStore} from "./stores/ConvergenceDomainStore";
 
 import {message, notification} from "antd";
 import {configure} from "mobx"
@@ -37,7 +38,9 @@ notification.config({
 const stores = {
   authStore,
   profileStore,
-  domainStore
+  domainStore,
+
+  convergenceDomainStore
 };
 
 const services = {
@@ -50,7 +53,7 @@ const services = {
   roleService,
 
   domainCollectionService,
-  domainModelService,
+  domainModelService
 };
 
 const authToken = localStorageService.getAuthToken();

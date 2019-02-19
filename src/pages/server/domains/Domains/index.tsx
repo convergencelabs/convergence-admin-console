@@ -43,7 +43,7 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
       title: 'Display Name',
       dataIndex: 'displayName',
       sorter: (a: any, b: any) => (a.displayName as string).localeCompare(b.displayName),
-      render: (text: string, domain: DomainDescriptor) => <Link to={`domain/${domain.namespace}/${domain.id}`}>{text}</Link>
+      render: (text: string, domain: DomainDescriptor) => <Link to={`domain/${domain.namespace}/${domain.id}/`}>{text}</Link>
     }, {
       title: 'Namespace',
       dataIndex: 'namespace',

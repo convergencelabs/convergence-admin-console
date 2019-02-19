@@ -1,0 +1,39 @@
+.path-control {
+  border: 1px solid black;
+  padding: 2px;
+
+  font-size: 13px;
+
+  color: #1A1A1A;
+  font-family: droid sans mono, monospace, courier new, courier, sans-serif;
+
+  .path-root, .path-prop, .path-idx {
+    cursor: pointer;
+  }
+
+  .path-root:hover,
+  .path-prop:hover,
+  .path-idx:hover {
+    text-decoration: underline;
+  }
+
+  .path-root {
+    color: rgb(11, 134, 151);
+  }
+
+  .path-lb, .path-rb {
+    color: black;
+  }
+
+  .path-dot {
+    color: black;
+  }
+
+  .path-prop {
+    color: darkmagenta;
+  }
+
+  .path-idx {
+    color: blue;
+  }
+}

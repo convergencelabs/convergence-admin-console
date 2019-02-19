@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Page} from "../../../../components/Page/";
 import {ReactNode} from "react";
 import Tooltip from "antd/es/tooltip";
-import {Button, Card, Icon, Input, InputNumber, notification, Popconfirm, Select, Table} from "antd";
+import {Card, Dropdown, Menu, Table, Icon, Button} from "antd";
 import styles from "./styles.module.css";
 import {CartTitleToolbar} from "../../../../components/CardTitleToolbar/";
 import {RouteComponentProps} from "react-router";
@@ -17,10 +17,12 @@ import {DomainModelService} from "../../../../services/domain/DomainModelService
 import {Model} from "../../../../models/domain/Model";
 import moment from "moment";
 import AceEditor from "react-ace";
-import Highlight from "react-highlight";
-import {shortDateTime, truncate} from "../../../../utils/format-utils";
+import {longDateTime, shortDateTime, truncate} from "../../../../utils/format-utils";
 import {Link} from "react-router-dom";
 import {TypeChecker} from "../../../../utils/TypeChecker";
+import "brace";
+import 'brace/mode/json';
+import 'brace/theme/solarized_dark';
 
 interface DomainModelsProps extends RouteComponentProps {
   domain: DomainDescriptor;
@@ -56,10 +58,9 @@ class DomainModelsComponent extends React.Component<InjectedProps, ServerCollect
     this._metaColumns = [{
       title: 'Id',
       dataIndex: 'id',
-      width: 100,
-      fixed: 'left',
+      width: 120,
       sorter: (a: Model, b: Model) => (a.id as string).localeCompare(b.id),
-      render: (id: string, record: Model) => <Tooltip title={id}><Link to={""}>{truncate(id, 10)}</Link></Tooltip>
+      render: this._renderMenu
     }, {
       title: 'Version',
       dataIndex: 'version',
@@ -160,8 +161,43 @@ class DomainModelsComponent extends React.Component<InjectedProps, ServerCollect
     this.setState({models, columns, loading: false});
   }
 
+  private _renderMenu = (id: string, record: Model) => {
+    const menu = (
+      <Menu>
+        <Menu.Item key="copy">
+          <a href="#"><Icon type="copy"/> Copy Id</a>
+        </Menu.Item>
+        <Menu.Item key="copy">
+          <a href="#"><Icon type="copy"/> Copy Data</a>
+        </Menu.Item>
+        <Menu.Divider/>
+        <Menu.Item key="edit">
+          <a href="#"><Icon type="edit"/> Edit Model</a>
+        </Menu.Item>
+        <Menu.Item key="edit">
+          <a href="#"><Icon type="team"/> Edit Permissions</a>
+        </Menu.Item>
+        <Menu.Divider/>
+        <Menu.Item key="delete">
+          <a href="#"><Icon type="delete"/> Delete</a>
+        </Menu.Item>
+      </Menu>
+    );
+
+    return (
+      <div style={{display: "flex", alignItems: "center"}}>
+        <Tooltip title={id}>
+          <Link to={id} style={{flex: 1}}>{truncate(id, 10)}</Link>
+        </Tooltip>
+        <Dropdown overlay={menu} trigger={['click']}>
+          <Icon type="down-square"/>
+        </Dropdown>
+      </div>
+    );
+  }
+
   private _renderDataValue = (val: any, record: Model) => {
-    return TypeChecker.switch<string>(val,{
+    return TypeChecker.switch<string>(val, {
       null() {
         return "null";
       },
@@ -191,36 +227,56 @@ class DomainModelsComponent extends React.Component<InjectedProps, ServerCollect
 
   private _expander = (model: Model, index: number, indent: number, expanded: boolean) => {
     return (
-      <table className={styles.modelExpander}>
-        <tbody>
-        <tr>
-          <td>Id:</td>
-          <td>{model.id}</td>
-        </tr>
-        <tr>
-          <td>Collection:</td>
-          <td>{model.collection}</td>
-        </tr>
-        <tr>
-          <td>Version:</td>
-          <td>{model.version}</td>
-        </tr>
-        <tr>
-          <td>Created Time:</td>
-          <td>{moment(model.created).format("MM/DD @ hh:mm")}</td>
-        </tr>
-        <tr>
-          <td>Modified Time:</td>
-          <td>{moment(model.modified).format("MM/DD @ hh:mm")}</td>
-        </tr>
-        <tr>
-          <td>Data:</td>
-          <td>
-            <Highlight className={"JavaScript"}>{JSON.stringify(model.data, null, "  ")}</Highlight>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+      <div className={styles.modelExpander}>
+        <div className={styles.modelExpanderToolbar}>
+          <ToolbarButton icon="edit" tooltip="Edit Model" onClick={() => {}}/>
+          <ToolbarButton icon="team" tooltip="Edit Permissions" onClick={() => {}}/>
+          <ToolbarButton icon="delete" tooltip="Delete Model" onClick={() => {}}/>
+        </div>
+        <table>
+          <tbody>
+          <tr>
+            <td>Id:</td>
+            <td>{model.id}</td>
+          </tr>
+          <tr>
+            <td>Collection:</td>
+            <td>{model.collection}</td>
+          </tr>
+          <tr>
+            <td>Version:</td>
+            <td>{model.version}</td>
+          </tr>
+          <tr>
+            <td>Created Time:</td>
+            <td>{longDateTime(model.created)}</td>
+          </tr>
+          <tr>
+            <td>Modified Time:</td>
+            <td>{longDateTime(model.modified)}</td>
+          </tr>
+          <tr>
+            <td>Data:</td>
+            <td>
+              <div className={styles.editorContainer}>
+                <AceEditor
+                  className={styles.editor}
+                  value={JSON.stringify(model.data, null, "  ")}
+                  readOnly={true}
+                  theme="solarized_dark"
+                  mode="json"
+                  name={"ace_" + model.id}
+                  width="100%"
+                  height="300px"
+                  highlightActiveLine={true}
+                  showPrintMargin={false}
+                />
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     );
 
   }

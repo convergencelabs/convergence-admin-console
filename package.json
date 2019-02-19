@@ -31,10 +31,16 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@convergence/convergence": "^1.0.0-beta.7",
+    "@convergence/string-change-detector": "^0.1.8",
+    "@types/classnames": "^2.2.7",
     "@types/md5": "^2.1.33",
     "@types/react-copy-to-clipboard": "4.2.6",
     "@types/react-highlight": "0.12.1",
+    "@types/react-onclickoutside": "^6.7.0",
+    "@types/react-transition-group": "^2.0.16",
     "@types/superagent": "3.8.6",
+    "classnames": "^2.2.6",
     "install": "^0.12.2",
     "md5": "^2.2.1",
     "mobx": "5.8.0",
@@ -42,10 +48,13 @@
     "mobx-react-devtools": "6.0.3",
     "moment": "^2.24.0",
     "node-mock-server": "0.23.6",
+    "node-sass": "^4.11.0",
     "npm": "^6.8.0",
     "react-ace": "^6.4.0",
     "react-copy-to-clipboard": "5.0.1",
     "react-highlight": "0.12.0",
+    "react-onclickoutside": "^6.7.1",
+    "react-transition-group": "^2.5.3",
     "superagent": "4.1.0"
   }
 }

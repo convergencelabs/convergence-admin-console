@@ -1,0 +1,30 @@
+.editorWrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.metaToolbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 4px;
+  border: 1px solid lightgray;
+  border-radius: 4px;
+  margin-bottom: 5px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.value {
+  margin-right: 15px;
+  padding-right: 15px;
+  border-right: 1px solid lightgray;
+}

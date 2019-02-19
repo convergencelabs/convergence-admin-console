@@ -17,7 +17,7 @@ import {toDomainUrl} from "../../../../utils/domain-url";
 import {CollectionAutoComplete} from "../../../../components/CollectionAutoComplete";
 import 'brace';
 import 'brace/mode/javascript';
-import 'brace/theme/monokai';
+import 'brace/theme/solarized_dark';
 import AceEditor from "react-ace";
 import {DomainModelService} from "../../../../services/domain/DomainModelService";
 
@@ -93,8 +93,8 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
                 className={styles.data}
                 width={"100%"}
                 height="300px"
-                mode="javascript"
-                theme="monokai"
+                mode="json"
+                theme="solarized_dark"
                 value={this.state.data}
                 onChange={this._onDataChange}
                 name="create-model-data-editor"

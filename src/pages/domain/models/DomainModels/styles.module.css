@@ -36,6 +36,7 @@
 
 .modelExpander {
   margin-left: 20px;
+  margin-right: 20px;
 }
 
 .modelExpander tr {
@@ -47,9 +48,29 @@
   white-space: nowrap;
   padding-right: 15px;
   font-weight: bold;
+  vertical-align: top;
 }
 
-.modelExpander pre {
-  margin-top: 1em;
-  border-radius: 2px;
+.modelExpander td:not(:first-child) {
+  width: 99%;
+}
+
+.editorContainer {
+  border-radius: 4px;
+  margin: 10px 0;
+  padding: 2px;
+  border: 1px solid darkgray;
+}
+
+.editor {
+  border-radius: 4px;
+}
+
+.modelExpanderToolbar {
+  text-align: right;
+  margin-bottom: 10px;
+}
+
+.modelExpanderToolbar :global .ant-btn {
+  margin-left: 5px;
 }

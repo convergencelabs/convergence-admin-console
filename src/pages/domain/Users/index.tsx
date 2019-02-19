@@ -110,9 +110,7 @@ export class DomainUsers extends Component<IDomainUsersProps, IDomainUsersState>
     this._breadcrumbs.setDomain(this.props.domain);
 
     return (
-      <Page title="Users"
-            icon="user"
-            breadcrumbs={this._breadcrumbs.breadcrumbs()}>
+      <Page breadcrumbs={this._breadcrumbs.breadcrumbs()}>
         <div className={styles.toolbar}>
           <Input placeholder="Search"
                  defaultValue=""

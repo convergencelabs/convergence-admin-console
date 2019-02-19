@@ -1,0 +1,39 @@
+.sapphire-editor {
+
+  .source-editor {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    .source-editor-ace {
+      border: 1px solid black;
+      flex: 1;
+    }
+
+    .status-bar {
+      font-size: 12px;
+      font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+
+      border: 1px solid black;
+      padding: 2px;
+
+      i {
+        font-size: 12px;
+        margin: 0 5px;
+
+        &.warning {
+          color: orange;
+        }
+
+        &.error {
+          color: red;
+        }
+      }
+
+      span.cursor-info {
+        float: right;
+        margin-right: 5px;
+      }
+    }
+  }
+}

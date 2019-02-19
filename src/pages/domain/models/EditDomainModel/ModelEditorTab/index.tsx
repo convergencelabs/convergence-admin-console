@@ -1,0 +1,141 @@
+import React, {ReactNode} from 'react';
+import {injectAs} from "../../../../../utils/mobx-utils";
+import {SERVICES} from "../../../../../services/ServiceConstants";
+import {DomainModelService} from "../../../../../services/domain/DomainModelService";
+import {SapphireEditor} from "../../../../../components/ModelEditor/index";
+import {STORES} from "../../../../../stores/StoreConstants";
+import {ConvergenceDomainStore} from "../../../../../stores/ConvergenceDomainStore";
+import {RealTimeModel} from "@convergence/convergence";
+import {Button, Card, Dropdown, Icon, List, Menu, Popover} from "antd";
+import styles from "./styles.module.css";
+import {filter} from "rxjs/operators";
+import {longDateTime} from "../../../../../utils/format-utils";
+
+interface ModelEditorTabProps {
+  modelId: string;
+}
+
+interface InjectedProps extends ModelEditorTabProps {
+  domainModelService: DomainModelService;
+  convergenceDomainStore: ConvergenceDomainStore;
+}
+
+export interface ModelEditorTabState {
+  model: RealTimeModel | null;
+  connectedUsers: string[];
+  version: number;
+  lastModified: Date;
+}
+
+class ModelEditorTabComponent extends React.Component<InjectedProps, ModelEditorTabState> {
+  constructor(props: InjectedProps) {
+    super(props);
+
+    this.state = {
+      model: null,
+      lastModified: new Date(),
+      version: 0,
+      connectedUsers: []
+    }
+  }
+
+  public componentDidMount(): void {
+    // TODO if we unmounted before we loaded, we need to close the model after it is opened.
+    this.props.convergenceDomainStore.domain!
+      .models()
+      .open(this.props.modelId)
+      .then(model => {
+        const version = model.version();
+        const lastModified = model.maxTime();
+        const connectedUsers = this._buildConnectedUsers(model);
+        this.setState({model, version, lastModified, connectedUsers});
+        // FIXME unsubscribe
+        model.root().events().subscribe(this._onVersionChanged);
+        model
+          .events()
+          .pipe(filter(event =>
+            event.name === RealTimeModel.Events.COLLABORATOR_CLOSED ||
+            event.name === RealTimeModel.Events.COLLABORATOR_OPENED
+          ))
+          .subscribe(this._onUsersChangeed);
+        model.emitLocalEvents(true);
+      });
+  }
+
+  public componentWillUnmount(): void {
+    if (this.state.model !== null) {
+      this.state.model.close();
+    }
+  }
+
+  public render(): ReactNode {
+    if (this.state.model !== null) {
+      return (
+        <div className={styles.editorWrapper}>
+          <div className={styles.metaToolbar}>
+            <span className={styles.label}>Version:</span>
+            <span className={styles.value}>{this.state.version}</span>
+            <span className={styles.label}>Last Modified:</span>
+            <span className={styles.value}>{longDateTime(this.state.lastModified)}</span>
+            <span className={styles.label}>Created:</span>
+            <span className={styles.value}>{longDateTime(this.state.model.minTime())}</span>
+            <span className={styles.spacer}/>
+            {this._renderConnectedUsers()}
+          </div>
+          <SapphireEditor
+            confirmDelete={this._confirmDelete}
+            data={this.state.model.root()}
+            defaultMode="view"
+            rootLabel="$"
+          />
+        </div>
+      );
+    } else {
+      return null;
+    }
+  }
+
+  private _renderConnectedUsers(): ReactNode {
+    console.log(this.state.connectedUsers);
+    const content =
+      this.state.connectedUsers.map(user => (<div key={user}>{user}</div>))
+
+    return (
+      <Popover placement="bottomRight" title="Connected Users" content={content} trigger="click">
+        <Button icon="team" size="small">{this.state.connectedUsers.length}</Button>
+      </Popover>
+    )
+  }
+
+  private _onUsersChangeed = () => {
+    const connectedUsers = this._buildConnectedUsers(this.state.model!);
+    this.setState({connectedUsers});
+  }
+
+  private _buildConnectedUsers(model: RealTimeModel): string[] {
+    const collaborators = model.collaborators().map(collaborator => {
+      return collaborator.user.convergence ?
+        `${collaborator.user.displayName} (Convergence User)` :
+        collaborator.user.displayName;
+    });
+
+    return Array.from(new Set(collaborators));
+  }
+
+  private _onVersionChanged = () => {
+    console.log("version changed");
+    const model = this.state.model!;
+    const version = model.version();
+    const lastModified = model.maxTime();
+
+    this.setState({version, lastModified});
+  }
+
+  private _confirmDelete = () => {
+    console.log("foo");
+    return Promise.resolve(false);
+  }
+}
+
+const injections = [SERVICES.DOMAIN_MODEL_SERVICE, STORES.CONVERGENCE_DOMAIN_STORE];
+export const ModelEditorTab = injectAs<ModelEditorTabProps>(injections, ModelEditorTabComponent);

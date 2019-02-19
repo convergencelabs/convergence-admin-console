@@ -2,13 +2,10 @@ import * as React from 'react';
 import {ReactNode} from "react";
 import styles from './styles.module.css';
 import {breadcrumbStore, IBreadcrumbSegment} from "../../stores/BreacrumStore";
-import {Icon} from "antd";
-
 
 export interface PageProps {
-  title?: string;
-  icon?: string;
   breadcrumbs: IBreadcrumbSegment[];
+  full?: boolean;
 }
 
 export class Page extends React.Component<PageProps,{}> {
@@ -18,15 +15,10 @@ export class Page extends React.Component<PageProps,{}> {
   }
 
   public render(): ReactNode {
-    const icon = this.props.icon ? <Icon className={styles.icon} type={this.props.icon} /> : null;
-    const title = this.props.title ? <span className={styles.title}>{this.props.title}</span> : null;
-    const header = icon || title ? <div className={styles.header}>{icon}{title}</div> : null;
+    const className = this.props.full ? styles.pageFull : styles.page;
      return (
-       <div className={styles.page}>
-         {header}
-         <div className={styles.pageContent}>
+       <div className={className}>
            {this.props.children}
-         </div>
        </div>
      )
   }

@@ -4,3 +4,7 @@
   padding: 6px 15px;
   border-bottom: 2px solid lightgray;
 }
+
+.breadcrumbs:global.ant-breadcrumb a {
+  color: #1D2939;
+}

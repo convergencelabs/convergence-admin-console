@@ -1,0 +1,20 @@
+.insert-index {
+  padding: 2px 5px; 
+  input { width: 35px; font-size: 10px; }
+  input[type=number]::-webkit-inner-spin-button, 
+  input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+  }
+  .fa { padding-left: 8px; color: green; cursor: pointer; }
+  .caption { font-size: 9px; }
+  .error { font-size: 10px; }
+}
+
+.select-type {
+  ul { list-style: none; padding: 0; margin: 0; font-family: droid sans mono, monospace, courier new, courier, sans-serif;}
+  li { border-bottom: 1px solid #ddd; padding: 1px 5px; cursor: pointer; background-color: #fafafa; }
+  li.selected, li.selected:hover { background-color: #DCF5DE; }
+  li:hover { background-color: #eee; }
+  li:first-child { border-top-left-radius: 4px; border-top-right-radius: 4px; }
+}

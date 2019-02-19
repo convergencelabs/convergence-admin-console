@@ -1,0 +1,459 @@
+// Colors
+$editor-hover: #fcffdc;
+$date-color: #9c3602;
+$null-color: red;
+$number-color: blue;
+$boolean-color: orange;
+$string-color: green;
+$property-color: darkmagenta;
+
+// Fonts
+$tree-font-family: droid sans mono, monospace, courier new, courier, sans-serif;
+$tree-font-size: 13px;
+
+div.tree-editor {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+div.sapphire-tree {
+  overflow: auto;
+  border: 1px solid black;
+  font-size: $tree-font-size;
+  font-family: $tree-font-family;
+  cursor: default;
+  white-space: nowrap;
+  flex: 1;
+
+  div.sapphire-tree-content {
+    padding: 4px;
+
+    div.node {
+      display: block;
+    }
+
+    .expander {
+      position: relative;
+      top: 2px;
+      cursor: pointer;
+    }
+
+    .expander-nochildren {
+      visibility: hidden;
+    }
+
+    .label-wrapper {
+      display: inline-block;
+    }
+
+    .property, .index, .value, .colon, .comma, .expander {
+      display: inline-block;
+      text-align: left;
+    }
+
+    .property {
+      position: relative;
+      cursor: pointer;
+      white-space: pre;
+      min-width: 15px;
+      color: $property-color;
+      padding: 2px 2px;
+      border: 1px solid transparent;
+      border-radius: 2px;
+
+      z-index: 0;
+
+      .propertyLabel {
+        z-index: 2;
+      }
+
+      .highlighters {
+        z-index: -1;
+      }
+    }
+
+    .property.root {
+      color: rgb(11, 134, 151);
+    }
+
+    .colon {
+      margin-right: 5px;
+    }
+
+    .value {
+      z-index: 2;
+      position: relative;
+      padding: 2px 2px;
+    }
+
+    .string-value {
+      flex: 1;
+      border: 1px solid transparent;
+      white-space: pre;
+      color: $string-color;
+      margin-top: 0;
+      margin-bottom: 0;
+      vertical-align: top;
+    }
+
+    .number-value {
+      color: $number-color;
+      border: 1px solid transparent;
+      margin-right: 15px;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    .boolean-value {
+      color: $boolean-color;
+      display: inline-block;
+      position: relative;
+      margin-top: 0;
+      margin-bottom: 0;
+
+      &.active-search {
+        color: black;
+      }
+    }
+
+    .date-value {
+      color: $date-color;
+      display: inline-block;
+      border: 1px solid transparent;
+      position: relative;
+      min-width: 200px;
+      margin-right: 15px;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    .null-value {
+      display: inline-block;
+      position: relative;
+      color: $null-color;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    .children {
+      padding-left: 20px;
+      & > .status-updated {
+        display: block;
+      }
+    }
+
+    .container-value {
+      display: inline;
+      flex: 1;
+    }
+
+    .child-count-increase {
+      animation: highlight-green-fade 0.5s ease-out;
+    }
+
+    .child-count-decrease {
+      animation: highlight-fade-remove 0.5s ease-out;
+    }
+
+    div.node.value-node {
+      display: flex;
+
+      &.remote-change .value {
+        animation: highlight-orange-fade 0.5s;
+      }
+    }
+
+    @keyframes highlight-orange-fade {
+      0% {
+        background: #ffdc81;
+      }
+      100% {
+        background: transparent;
+      }
+    }
+
+    @keyframes highlight-green-fade {
+      0% {
+        background: #15F700;
+      }
+      100% {
+        background: transparent;
+      }
+    }
+
+    @keyframes highlight-fade-remove {
+      0% {
+        background: #ff0000;
+      }
+      100% {
+        background: transparent;
+        color: #000000;
+      }
+    }
+
+    .child-node-enter {
+      animation: highlight-green-fade 0.5s ease-out;
+    }
+
+    .child-node-leave {
+      animation: highlight-fade-remove 0.5s ease-out;
+    }
+
+    .status-updated {
+      background: transparent;
+      transition: 0.25s ease-out all;
+    }
+
+    .status-updated-leave {
+      background: #FFBF00;
+      transition: none;
+    }
+
+    .editable-node {
+      border-radius: 5px;
+    }
+
+    .editable-node:hover > .fa-remove {
+      display: inline;
+    }
+
+    .editable-node > .fa-remove {
+      display: none;
+    }
+
+    .editable-node .fa-remove {
+      padding: 0 5px 0 8px;
+      cursor: pointer;
+      color: #cc0000;
+    }
+
+    .node-container {
+      position: relative;
+    }
+
+    .open-brace {
+      display: inline-block;
+      padding-bottom: 2px;
+    }
+
+    div.property-editor {
+      display: inline-block;
+
+      input {
+        color: $property-color;
+        font-size: $tree-font-size;
+        font-family: $tree-font-family;
+        border: 1px solid darkgray;
+        padding: 2px 2px;
+        background-color: white;
+        box-sizing: content-box;
+
+        &:focus {
+          outline: none;
+        }
+      }
+
+      &.warning {
+        input {
+          border-color: yellow;
+          background: #fffdbf;
+        }
+
+        .property-editor-message {
+          color: black;
+        }
+      }
+
+      &.error {
+        input {
+          border-color: #C20000;
+          background: #ffadb9;
+        }
+
+        .property-editor-message {
+          color: black;
+        }
+      }
+
+      .property-editor-message {
+        z-index: 10;
+        box-shadow: 1px 1px 5px #bbb;
+        padding: 3px;
+        background: #e5e5e5;
+        margin-left: 10px;
+        margin-top: 5px;
+        position: absolute;
+      }
+    }
+
+    .error {
+      color: #C20000;
+    }
+
+    .staged-node {
+      .property {
+        color: #aaa;
+      }
+
+      .value {
+        position: relative;
+        a {
+          color: #999;
+        }
+      }
+
+      .fa-check {
+        color: green;
+        cursor: pointer;
+        padding-left: 3px;
+      }
+
+      .error {
+        color: red;
+      }
+    }
+
+    textarea.string-editor {
+      color: $string-color;
+      font-size: $tree-font-size;
+      font-family: $tree-font-family;
+      flex: 1;
+      vertical-align: top;
+      white-space: pre;
+      resize: none;
+      border: 1px solid transparent;
+
+      &:hover {
+        background: $editor-hover;
+      }
+
+      &:focus {
+        outline: none;
+        background: white;
+        border: 1px solid;
+      }
+    }
+
+    input.number-editor {
+      color: $number-color;
+      font-size: $tree-font-size;
+      font-family: $tree-font-family;
+      border: 1px solid transparent;
+      box-sizing: content-box;
+      margin-left: 1px;
+
+      &:hover {
+        background: $editor-hover;
+      }
+
+      &:focus {
+        outline: none;
+        background: white;
+        border: 1px solid darkgray;
+      }
+    }
+
+    .date-editor {
+      display: inline-block;
+      color: $date-color;
+      font-size: $tree-font-size;
+      font-family: $tree-font-family;
+      border: 1px solid transparent;
+      min-width: 250px;
+      margin-left: 1px;
+
+      &:hover {
+        background: $editor-hover;
+      }
+
+      &:focus {
+        outline: none;
+        background: white;
+        border: 1px solid darkgray;
+      }
+
+      &.invalid {
+        background: lightpink;
+      }
+    }
+
+    .boolean-editor {
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .new-node {
+      .number-editor {
+        border: 1px solid darkgray;
+      }
+
+      .string-editor {
+        border: 1px solid darkgray;
+      }
+    }
+    .new-node-buttons {
+      padding-left: 5px;
+      vertical-align: middle;
+
+      i {
+        cursor: pointer;
+        padding: 0 3px 0 0;
+      }
+
+      .fa-remove {
+        color: red;
+        padding: 0 3px 0 0;
+
+      }
+
+      .fa-check {
+        color: green;
+      }
+    }
+
+    .highlighters {
+      z-index: -1;
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+
+      .highlighter {
+        position: absolute;
+        background: yellow;
+
+        &.active {
+          background: orange;
+        }
+      }
+    }
+  }
+
+  &.selectable {
+    .property {
+      cursor: pointer;
+    }
+
+    .property:hover {
+      background-color: #d7ecf9;
+    }
+
+    .property.selected, .index.selected, .property.selected:hover {
+      background-color: #b7dcf3;
+      border-color: #11318a;
+    }
+  }
+
+  &.editable {
+    .boolean-value {
+      cursor: pointer;
+
+      &:hover {
+        background: $editor-hover;
+      }
+    }
+  }
+}

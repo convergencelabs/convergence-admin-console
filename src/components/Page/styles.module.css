@@ -1,5 +1,14 @@
 .page {
-  padding: 10px 15px;
+  margin: 10px;
+}
+
+.pageFull {
+  margin: 10px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
 }
 
 .pageContent {
