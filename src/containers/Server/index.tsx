@@ -1,11 +1,11 @@
 import * as React from 'react';
 import {ReactNode} from "react";
 import {Route, RouteComponentProps, Switch} from 'react-router';
-import {ServerDashboard} from "../../pages/server/ServerDashboard";
+import {ServerDashboard} from "../../pages/server/main/ServerDashboard";
 import {Domains} from "../../pages/server/domains/Domains";
 import {NavLayout} from "../../components/NavLayout";
 import {ServerSideNavigation} from "../../components/ServerSideNavigation";
-import {Settings} from "../../pages/server/Settings";
+import {Settings} from "../../pages/server/main/ServerSettings";
 import {ServerUsers} from "../../pages/server/users/Users";
 import {CreateUser} from "../../pages/server/users/CreateUser";
 import {CreateDomain} from "../../pages/server/domains/CreateDomain";
@@ -14,7 +14,7 @@ import {CreateNamespace} from "../../pages/server/namespaces/CreateNamespace";
 import {EditNamespace} from "../../pages/server/namespaces/EditNamespace";
 import {EditUser} from "../../pages/server/users/EditUser";
 import {SetUserPassword} from "../../pages/server/users/SetUserPassword";
-import {ProfilePage} from "../../pages/server/Profile";
+import {ProfilePage} from "../../pages/server/main/Profile";
 
 export class ServerContainer extends React.Component<RouteComponentProps, {}> {
   public render(): ReactNode {

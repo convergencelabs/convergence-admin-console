@@ -37,7 +37,7 @@ class SetUserPasswordComponent extends React.Component<InjectedProps, SetUserPas
 
   public render(): ReactNode {
     return (
-      <Page breadcrumbs={this._breadcrumbs.breadcrumbs()}>
+      <Page breadcrumbs={this._breadcrumbs}>
         <Card title={<span><Icon type="user"/> <Tag>{this.props.match.params.username}</Tag> Set Password</span>}
               className={styles.formCard}>
           <SetPasswordForm

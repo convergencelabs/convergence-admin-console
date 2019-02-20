@@ -12,7 +12,6 @@ import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {RestError} from "../../../../services/RestError";
 import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
-import {DomainDescriptor} from "../../../../models/DomainDescriptor";
 import {toDomainUrl} from "../../../../utils/domain-url";
 import {CollectionAutoComplete} from "../../../../components/CollectionAutoComplete";
 import 'brace';
@@ -20,9 +19,10 @@ import 'brace/mode/javascript';
 import 'brace/theme/solarized_dark';
 import AceEditor from "react-ace";
 import {DomainModelService} from "../../../../services/domain/DomainModelService";
+import {DomainId} from "../../../../models/DomainId";
 
 interface CreateDomainModelProps extends RouteComponentProps {
-  domain: DomainDescriptor;
+  domainId: DomainId;
 }
 
 interface InjectedProps extends CreateDomainModelProps, FormComponentProps {
@@ -39,7 +39,7 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
   constructor(props: InjectedProps) {
     super(props);
 
-    this._breadcrumbs = new DomainBreadcrumbProducer([
+    this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId, [
       {title: "Models", link: "/models"},
       {title: "New Model"}
     ]);
@@ -50,11 +50,10 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
   }
 
   public render(): ReactNode {
-    this._breadcrumbs.setDomain(this.props.domain);
     const {getFieldDecorator} = this.props.form;
 
     return (
-      <Page breadcrumbs={this._breadcrumbs.breadcrumbs()}>
+      <Page breadcrumbs={this._breadcrumbs}>
         <Card title={<span><Icon type="file"/> New Model</span>} className={styles.formCard}>
           <Form onSubmit={this._handleSubmit}>
             <Form.Item label="Collection">
@@ -63,7 +62,7 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
                   required: true, whitespace: true, message: 'Please select a Collection!',
                 }],
               })(
-                <CollectionAutoComplete domainId={this.props.domain.toDomainId()}/>
+                <CollectionAutoComplete domainId={this.props.domainId}/>
               )}
             </Form.Item>
             <Form.Item label="Model Id">
@@ -117,12 +116,11 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
   }
 
   private _onDataChange = (newValue: string) => {
-    console.log('change', newValue);
     this.setState({data: newValue});
   }
 
   private _handleCancel = () => {
-    const url = toDomainUrl("", this.props.domain.toDomainId(), "models");
+    const url = toDomainUrl("", this.props.domainId, "models");
     this.props.history.push(url);
   }
 
@@ -135,7 +133,7 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
 
         try {
           const dataObj = JSON.parse(data);
-          const domainId = this.props.domain.toDomainId();
+          const domainId = this.props.domainId;
 
           const create: Promise<string> = idMode === "auto" ?
             this.props.domainModelService.createModel(domainId, collection, dataObj) :
@@ -158,7 +156,7 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
           });
         }
         catch (parseErr) {
-          console.log(parseErr)
+          console.error(parseErr)
         }
       }
     });

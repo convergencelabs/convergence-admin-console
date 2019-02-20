@@ -15,6 +15,8 @@ import {loggedInUserService} from "./services/LoggedInUserService";
 import {profileStore} from "./stores/ProfileStore";
 import {domainCollectionService} from "./services/domain/DomainCollectionService";
 import {domainModelService} from "./services/domain/DomainModelService";
+import {domainUserService} from "./services/domain/DomainUserService";
+import {domainGroupService} from "./services/domain/DomainGroupService";
 import {convergenceDomainStore} from "./stores/ConvergenceDomainStore";
 
 import {message, notification} from "antd";
@@ -53,7 +55,9 @@ const services = {
   roleService,
 
   domainCollectionService,
-  domainModelService
+  domainModelService,
+  domainUserService,
+  domainGroupService
 };
 
 const authToken = localStorageService.getAuthToken();

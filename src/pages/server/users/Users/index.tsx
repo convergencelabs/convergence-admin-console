@@ -28,7 +28,7 @@ interface ServerUsersState {
 }
 
 export class ServerUsersComponent extends React.Component<InjectedProps, ServerUsersState> {
-  private readonly breadcrumbs = new BasicBreadcrumbsProducer([{title: "Users"}]);
+  private readonly _breadcrumbs = new BasicBreadcrumbsProducer([{title: "Users"}]);
   private readonly _userTableColumns: any[];
   private _usersSubscription: PromiseSubscription | null;
 
@@ -118,7 +118,7 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
 
   public render(): ReactNode {
     return (
-      <Page breadcrumbs={this.breadcrumbs.breadcrumbs()}>
+      <Page breadcrumbs={this._breadcrumbs}>
         <Card title={this._renderToolbar()}>
           <Table className={styles.userTable}
                  size="middle"

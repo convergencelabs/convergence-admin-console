@@ -52,7 +52,11 @@ export class TypeChecker {
       throw new Error("matcher must be defined.");
     }
 
-    if (TypeChecker.isArray(value) && !TypeChecker.isUndefined(matcher.array)) {
+    const customRule = TypeChecker._findCustomRule(value, matcher);
+
+    if (!TypeChecker.isUndefined(customRule)) {
+      return customRule.callback(value);
+    } else if (TypeChecker.isArray(value) && !TypeChecker.isUndefined(matcher.array)) {
       return matcher.array(value);
     } else if (TypeChecker.isBoolean(value) && !TypeChecker.isUndefined(matcher.boolean)) {
       return matcher.boolean(value);
@@ -76,24 +80,23 @@ export class TypeChecker {
       return matcher.symbol(value);
     } else if (TypeChecker.isUndefined(value) && !TypeChecker.isUndefined(matcher.undefined)) {
       return matcher.undefined();
+    } else if (!TypeChecker.isUndefined(matcher.default)) {
+      return matcher.default(value);
     } else {
-      const customRule: ICustomTypeMatchRule<any> | undefined =
-        TypeChecker.isArray(matcher.custom) ?
-          matcher.custom.find(rule => {
-            return TypeChecker.isFunction(rule.test) &&
-              TypeChecker.isFunction(rule.callback) &&
-              rule.test(value);
-          }) :
-          undefined;
-
-      if (!TypeChecker.isUndefined(customRule)) {
-        return customRule.callback(value);
-      } else if (!TypeChecker.isUndefined(matcher.default)) {
-        return matcher.default(value);
-      } else {
-        throw new Error("Value was not handled: " + value);
-      }
+      throw new Error("Value was not handled: " + value);
     }
+  }
+
+  private static _findCustomRule<T>(value: any, matcher: ITypeMatch<T>): ICustomTypeMatchRule<T> | undefined {
+    const customRule: ICustomTypeMatchRule<any> | undefined =
+      TypeChecker.isArray(matcher.custom) ?
+        matcher.custom.find(rule => {
+          return TypeChecker.isFunction(rule.test) &&
+            TypeChecker.isFunction(rule.callback) &&
+            rule.test(value);
+        }) :
+        undefined;
+    return customRule;
   }
 }
 

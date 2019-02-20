@@ -2,13 +2,13 @@ import * as React from 'react';
 import {Route, RouteComponentProps, Switch} from 'react-router';
 import {DomainSideNavigation} from "../../components/";
 import {DomainDashboard} from "../../pages/domain/Dashboard/";
-import {DomainUsers} from "../../pages/domain/Users";
 import {DomainDescriptor} from "../../models/DomainDescriptor";
 import {ReactNode} from "react";
 import {DomainService} from "../../services/DomainService";
 import {NavLayout} from "../../components/NavLayout";
 import {DomainCollections} from "../../pages/domain/collections/DomainCollections";
 import {CreateDomainCollection} from "../../pages/domain/collections/CreateDomainCollection";
+import {EditDomainCollection} from "../../pages/domain/collections/EditDomainCollection";
 import {DomainModels} from "../../pages/domain/models/DomainModels";
 import {CreateDomainModel} from "../../pages/domain/models/CreateDomainModel";
 import {EditDomainModel} from "../../pages/domain/models/EditDomainModel";
@@ -18,6 +18,13 @@ import {DomainId} from "../../models/DomainId";
 import {SERVICES} from "../../services/ServiceConstants";
 import {STORES} from "../../stores/StoreConstants";
 import {ConvergenceDomain} from "@convergence/convergence";
+import {DomainUsers} from "../../pages/domain/users/DomainUsers";
+import {CreateDomainUser} from "../../pages/domain/users/CreateDomainUser";
+import {EditDomainUser} from "../../pages/domain/users/EditDomainUser";
+import {SetDomainUserPassword} from "../../pages/domain/users/SetDomainUserPassword";
+import {DomainUserGroups} from "../../pages/domain/groups/DomainUserGroups";
+import {CreateDomainUserGroup} from "../../pages/domain/groups/CreateDomainUserGroup";
+import {EditDomainUserGroup} from "../../pages/domain/groups/EditDomainUserGroup";
 
 export interface DomainRouteParams {
   namespace: string;
@@ -70,25 +77,38 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
     const {domainData, convergenceDomain} = this.state;
 
     if (domainData !== null && convergenceDomain !== null) {
+      const domainId = domainData.toDomainId();
       return (
-        <NavLayout sideNav={<DomainSideNavigation/>}>
+        <NavLayout sideNav={<DomainSideNavigation domainId={domainId}/>}>
           <Switch>
-            <Route exact path={`${match.url}/`} render={(props) => <DomainDashboard {...props} domain={domainData}/>}/>
-            <Route path={`${match.url}/dashboard`} render={(props) => <DomainDashboard {...props} domain={domainData}/>}/>
-            <Route path={`${match.url}/users`} render={(props) => <DomainUsers {...props} domain={domainData}/>}/>
-            <Route path={`${match.url}/groups`} render={(props) => <div>Groups</div>}/>
-            <Route path={`${match.url}/sessions`} render={(props) => <div>sessions</div>}/>
-            <Route path={`${match.url}/collections`} render={(props) => <DomainCollections {...props} domain={domainData}/>}/>
-            <Route path={`${match.url}/create-collection`} render={(props) => <CreateDomainCollection {...props} domain={domainData}/>}/>
-            <Route exact path={`${match.url}/models`} render={(props) => <DomainModels {...props} domain={domainData}/>} />
-            <Route path={`${match.url}/create-model`} render={(props) => <CreateDomainModel {...props} domain={domainData}/>} />
-            <Route path={`${match.url}/models/:modelId`} render={(props) => <EditDomainModel {...props} domain={domainData}/>} />
+            <Route exact path={`${match.url}/`} render={(props) => <DomainDashboard {...props} domainId={domainId}/>}/>
+            <Route path={`${match.url}/dashboard`} render={(props) => <DomainDashboard {...props} domainId={domainId}/>}/>
+
+            <Route exact path={`${match.url}/users`} render={(props) => <DomainUsers {...props} domainId={domainId}/>}/>
+            <Route exact path={`${match.url}/users/:username`} render={(props) => <EditDomainUser {...props} domainId={domainId}/>}/>
+            <Route exact path={`${match.url}/users/:username/set-password`} render={(props) => <SetDomainUserPassword {...props} domainId={domainId}/>}/>
+            <Route path={`${match.url}/create-user`} render={(props) => <CreateDomainUser {...props} domainId={domainId}/>}/>
+
+            <Route exact path={`${match.url}/groups`} render={(props) => <DomainUserGroups {...props} domainId={domainId}/>}/>
+            <Route exact path={`${match.url}/groups/:id`} render={(props) => <EditDomainUserGroup {...props} domainId={domainId}/>}/>
+            <Route exact path={`${match.url}/create-group`} render={(props) => <CreateDomainUserGroup {...props} domainId={domainId}/>}/>
+
+            <Route path={`${match.url}/sessions`} render={(props) => <div>Sessions</div>}/>
+
+            <Route exact path={`${match.url}/collections`} render={(props) => <DomainCollections {...props} domainId={domainId}/>}/>
+            <Route exact path={`${match.url}/collections/:id`} render={(props) => <EditDomainCollection {...props} domainId={domainId}/>}/>
+            <Route path={`${match.url}/create-collection`} render={(props) => <CreateDomainCollection {...props} domainId={domainId}/>}/>
+
+            <Route exact path={`${match.url}/models`} render={(props) => <DomainModels {...props} domainId={domainId}/>} />
+            <Route path={`${match.url}/create-model`} render={(props) => <CreateDomainModel {...props} domainId={domainId}/>} />
+            <Route path={`${match.url}/models/:modelId`} render={(props) => <EditDomainModel {...props} domainId={domainId}/>} />
+
             <Route path={`${match.url}/settings`} render={(props) => <div>Settings</div>}/>
           </Switch>
         </NavLayout>
       );
     } else {
-      return (<div></div>);
+      return null;
     }
   }
 

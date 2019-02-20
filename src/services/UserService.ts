@@ -21,6 +21,14 @@ export interface CreateUserData {
   serverRole: string;
 }
 
+export interface UpdateUserData {
+  firstName: string;
+  lastName: string;
+  displayName: string;
+  email: string;
+  serverRole: string;
+}
+
 export class UserService extends AbstractAuthenticatedService {
 
   public getUsers(filter?: String, offset: number = 0, limit: number = 10): Promise<ConvergenceUser[]> {
@@ -38,6 +46,12 @@ export class UserService extends AbstractAuthenticatedService {
   public createUser(userData: CreateUserData): Promise<void> {
     return this
       ._post<ConvergenceUserData>("users", userData)
+      .then(() => undefined);
+  }
+
+  public updateUser(username: string, userData: UpdateUserData): Promise<void> {
+    return this
+      ._put<ConvergenceUserData>(`users/${username}`, userData)
       .then(() => undefined);
   }
 

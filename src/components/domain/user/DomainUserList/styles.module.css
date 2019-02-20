@@ -1,0 +1,28 @@
+.addControl {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.addControl :global(.ant-select-auto-complete ) {
+  flex: 1;
+  margin-right: 15px;
+}
+
+.addControl :global(.ant-btn) {
+  margin-left: 15px;
+}
+
+.user {
+  display: flex;
+  flex-direction: row;
+}
+
+.username {
+  flex: 1;
+}
+
+.userList {
+  height: 200px;
+}

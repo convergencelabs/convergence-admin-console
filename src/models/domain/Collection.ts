@@ -6,7 +6,7 @@ export class Collection {
               public readonly description: string,
               public readonly worldPermissions: CollectionPermissions,
               public readonly overrideSnapshotPolicy: boolean,
-              public readonly snapshotPolicy?: ModelSnapshotPolicy
+              public readonly snapshotPolicy: ModelSnapshotPolicy
   ) {
     Object.freeze(this);
   }

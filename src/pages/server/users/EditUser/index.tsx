@@ -9,7 +9,7 @@ import {FormEvent} from "react";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/FormButtonBar/";
-import {CreateUserData, UserService} from "../../../../services/UserService";
+import {CreateUserData, UpdateUserData, UserService} from "../../../../services/UserService";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {RestError} from "../../../../services/RestError";
@@ -35,7 +35,7 @@ class EditUserComponent extends React.Component<InjectedProps, EditUserState> {
 
     const username = this.props.match.params.username;
     this._breadcrumbs = new BasicBreadcrumbsProducer([
-      {title: "Users", link: "/users"},
+      {title: "Users", link: "/users/"},
       {title: username}
     ]);
 
@@ -60,7 +60,7 @@ class EditUserComponent extends React.Component<InjectedProps, EditUserState> {
     if (this.state.user !== null) {
       const user = this.state.user;
       return (
-        <Page breadcrumbs={this._breadcrumbs.breadcrumbs()}>
+        <Page breadcrumbs={this._breadcrumbs}>
           <Card title={<span><Icon type="user"/> Edit User</span>} className={styles.formCard}>
             <Form onSubmit={this.handleSubmit}>
               <Row gutter={16}>
@@ -184,17 +184,15 @@ class EditUserComponent extends React.Component<InjectedProps, EditUserState> {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values: any) => {
       if (!err) {
-        const {username, displayName, firstName, lastName, email, password, serverRole} = values;
-        const userData: CreateUserData = {
-          username,
+        const {username, displayName, firstName, lastName, email, serverRole} = values;
+        const userData: UpdateUserData = {
           displayName,
           firstName,
           lastName,
           email,
-          password,
           serverRole
         };
-        this.props.userService.createUser(userData)
+        this.props.userService.updateUser(username, userData)
           .then(() => {
             notification.success({
               message: 'User Updated',

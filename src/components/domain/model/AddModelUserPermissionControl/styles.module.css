@@ -1,0 +1,14 @@
+.addControl {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.addControl :global(.ant-select-auto-complete ) {
+    flex: 1;
+    margin-right: 15px;
+}
+
+.addControl :global(.ant-btn) {
+    margin-left: 15px;
+}

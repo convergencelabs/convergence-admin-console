@@ -10,6 +10,8 @@ export const SERVICES = {
 
   DOMAIN_COLLECTION_SERVICE: "domainCollectionService",
   DOMAIN_MODEL_SERVICE: "domainModelService",
+  DOMAIN_USER_SERVICE: "domainUserService",
+  DOMAIN_GROUP_SERVICE: "domainGroupService",
 }
 
 Object.freeze(SERVICES);

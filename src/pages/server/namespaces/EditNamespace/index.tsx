@@ -66,7 +66,7 @@ class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespac
       return <div/>;
     } else {
       return (
-        <Page breadcrumbs={this._breadcrumbs.breadcrumbs()}>
+        <Page breadcrumbs={this._breadcrumbs}>
           <Card title={<span><Icon type="folder"/> Edit Namespace</span>} className={styles.formCard}>
             <Form onSubmit={this.handleSubmit}>
               <Row gutter={16}>

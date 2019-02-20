@@ -6,7 +6,7 @@ import {SapphireEditor} from "../../../../../components/ModelEditor/index";
 import {STORES} from "../../../../../stores/StoreConstants";
 import {ConvergenceDomainStore} from "../../../../../stores/ConvergenceDomainStore";
 import {RealTimeModel} from "@convergence/convergence";
-import {Button, Card, Dropdown, Icon, List, Menu, Popover} from "antd";
+import {Button, Popover} from "antd";
 import styles from "./styles.module.css";
 import {filter} from "rxjs/operators";
 import {longDateTime} from "../../../../../utils/format-utils";
@@ -96,7 +96,6 @@ class ModelEditorTabComponent extends React.Component<InjectedProps, ModelEditor
   }
 
   private _renderConnectedUsers(): ReactNode {
-    console.log(this.state.connectedUsers);
     const content =
       this.state.connectedUsers.map(user => (<div key={user}>{user}</div>))
 
@@ -123,7 +122,6 @@ class ModelEditorTabComponent extends React.Component<InjectedProps, ModelEditor
   }
 
   private _onVersionChanged = () => {
-    console.log("version changed");
     const model = this.state.model!;
     const version = model.version();
     const lastModified = model.maxTime();
@@ -132,7 +130,7 @@ class ModelEditorTabComponent extends React.Component<InjectedProps, ModelEditor
   }
 
   private _confirmDelete = () => {
-    console.log("foo");
+
     return Promise.resolve(false);
   }
 }

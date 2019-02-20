@@ -23,7 +23,7 @@ interface NamespacesState {
 }
 
 export class NamespacesComponent extends React.Component<InjectedProps, NamespacesState> {
-  private readonly breadcrumbs = new BasicBreadcrumbsProducer([{title: "Namespaces"}]);
+  private readonly _breadcrumbs = new BasicBreadcrumbsProducer([{title: "Namespaces"}]);
   private readonly _namespaceTableColumns: any[];
   private _namepsacesSubscription: PromiseSubscription | null;
 
@@ -68,7 +68,7 @@ export class NamespacesComponent extends React.Component<InjectedProps, Namespac
 
   public render(): ReactNode {
     return (
-      <Page breadcrumbs={this.breadcrumbs.breadcrumbs()}>
+      <Page breadcrumbs={this._breadcrumbs}>
         <Card title={this._renderToolbar()}>
           <Table className={styles.userTable}
                  rowKey="id"

@@ -89,7 +89,7 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
 
   public render(): ReactNode {
     return (
-      <Page breadcrumbs={this._breadcrumbs.breadcrumbs()}>
+      <Page breadcrumbs={this._breadcrumbs}>
         <Card title={this._renderToolbar()}>
           <Table className={styles.userTable}
                  size="middle"

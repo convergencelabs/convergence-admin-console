@@ -1,17 +1,21 @@
 import * as React from 'react';
-import {ReactNode} from "react";
+import {ReactElement, ReactNode} from "react";
 import {Input, InputNumber, Select} from "antd";
 import {Form, Button} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
 import {CollectionAutoComplete} from "../../../../components/CollectionAutoComplete";
 import {DomainId} from "../../../../models/DomainId";
 import styles from "./styles.module.css";
+import {IReactComponent} from "mobx-react";
 
 const {Option} = Select;
 
-type SearchMode = "browse" | "query" | "id"
-
-interface BrowseModelControlsProps {
+enum SearchMode {
+  BROWSE = "browse",
+  QUERY = "query",
+  ID = "id",
+}
+interface ModelControlsProps {
   domainId: DomainId;
   resultsPerPageDefault: number;
   onBrowse(collection: string, perPage: number): void;
@@ -19,62 +23,59 @@ interface BrowseModelControlsProps {
   onIdLookup(modelId: string, perPage: number): void;
 }
 
-interface InjectedProps extends BrowseModelControlsProps, FormComponentProps {
+interface InjectedProps extends ModelControlsProps, FormComponentProps {
 
 }
 
-interface ModelControlsState {
-  mode: SearchMode;
-}
-
-class ModelControlsComponent extends React.Component<InjectedProps, ModelControlsState> {
-
-  constructor(props: InjectedProps) {
-    super(props);
-  }
+class ModelControlsComponent extends React.Component<InjectedProps, {}> {
 
   public render(): ReactNode {
     const {getFieldDecorator} = this.props.form;
-    const mode = this.props.form.getFieldValue("mode") as string | "browse";
+    const mode = this.props.form.getFieldValue("mode") as SearchMode || SearchMode.BROWSE;
     let fieldLabel = "";
     let buttonLabel = "";
-    if (mode === "browse") {
-      fieldLabel = "Collection";
-      buttonLabel = "Browse"
-    } else if (mode === "query") {
-      fieldLabel = "Query";
-      buttonLabel = "Query"
-    }  else if (mode === "id") {
-      fieldLabel = "Model Id";
-      buttonLabel = "Search"
+    switch (mode) {
+      case SearchMode.BROWSE:
+        fieldLabel = "Collection";
+        buttonLabel = "Browse";
+        break;
+      case SearchMode.QUERY:
+        fieldLabel = "Query";
+        buttonLabel = "Query";
+        break;
+      case SearchMode.ID:
+        fieldLabel = "Model Id";
+        buttonLabel = "Search";
+        break;
     }
+
     return (
       <div className={styles.toolbar}>
         <div className={styles.modeSelector}>
           <span className={styles.label}>Mode:</span>
-          {getFieldDecorator('mode', {initialValue: "browse"})(
+          {getFieldDecorator('mode', {initialValue: SearchMode.BROWSE})(
             <Select style={{width: 150}}>
-              <Option key="browse">Browse</Option>
-              <Option key="query">Query</Option>
-              <Option key="id">Id Lookup</Option>
+              <Option key={SearchMode.BROWSE} value={SearchMode.BROWSE}>Browse</Option>
+              <Option key={SearchMode.QUERY} value={SearchMode.QUERY}>Query</Option>
+              <Option key={SearchMode.ID} value={SearchMode.ID}>Id Lookup</Option>
             </Select>
           )}
         </div>
         <span className={styles.label}>{fieldLabel}:</span>
         {
-          mode === "browse" ?
-          getFieldDecorator('collection')(
-            <CollectionAutoComplete className={styles.collection} domainId={this.props.domainId}/>
-          ) : null
+          mode === SearchMode.BROWSE ?
+            getFieldDecorator('collection')(
+              <CollectionAutoComplete className={styles.collection} domainId={this.props.domainId}/>
+            ) : null
         }
         {
-          mode === "query" ?
+          mode === SearchMode.QUERY ?
             getFieldDecorator('query')(
               <Input className={styles.query} placeholder="Enter Query"/>
             ) : null
         }
         {
-          mode === "id" ?
+          mode === SearchMode.ID ?
             getFieldDecorator('id')(
               <Input className={styles.id} placeholder="Enter Model Id"/>
             ) : null
@@ -83,7 +84,10 @@ class ModelControlsComponent extends React.Component<InjectedProps, ModelControl
         {getFieldDecorator('resultsPerPage', {initialValue: this.props.resultsPerPageDefault || 20})(
           <InputNumber/>
         )}
-        <Button htmlType="button" type="primary" className={styles.button} onClick={this._handleSubmit}>{buttonLabel}</Button>
+        <Button htmlType="button"
+                type="primary"
+                className={styles.button}
+                onClick={this._handleSubmit}>{buttonLabel}</Button>
       </div>
     );
   }
@@ -108,4 +112,4 @@ class ModelControlsComponent extends React.Component<InjectedProps, ModelControl
   }
 }
 
-export const ModelControls = Form.create<{}>()(ModelControlsComponent);
+export const ModelControls = Form.create<{}>()(ModelControlsComponent) as IReactComponent<ModelControlsProps>;

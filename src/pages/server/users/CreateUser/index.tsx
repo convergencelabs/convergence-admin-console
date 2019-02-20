@@ -62,7 +62,7 @@ class CreateUserComponent extends React.Component<InjectedProps, CreateUserCompo
     const {getFieldDecorator} = this.props.form;
     if (this.state.passwordConfig !== null) {
       return (
-        <Page breadcrumbs={this._breadcrumbs.breadcrumbs()}>
+        <Page breadcrumbs={this._breadcrumbs}>
           <Card title={<span><Icon type="user"/> New User</span>} className={styles.formCard}>
             <Form onSubmit={this._handleSubmit}>
               <Row gutter={16}>

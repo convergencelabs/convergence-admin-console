@@ -1,6 +1,4 @@
-import {Component, ReactNode} from "react";
-import * as React from "react";
-import {IBreadcrumbSegment} from "../../../stores/BreacrumStore";
+import React, {ReactNode} from "react";
 import {DomainBreadcrumbProducer} from "../DomainBreadcrumProducer";
 import {RouteComponentProps} from "react-router";
 import {Page} from "../../../components/Page";
@@ -16,23 +14,29 @@ import {ModelOpenAutoCreate} from "./snippet_model_open_auto_create";
 import {ModelCreateSnippet} from "./snippet_model_create";
 import {ModelDataSnippet} from "./snippet_model_data";
 import {InfoTable, InfoTableRow} from "../../../components/InfoTable";
-import {DomainDescriptor} from "../../../models/DomainDescriptor";
+import {DomainId} from "../../../models/DomainId";
 
 const TabPane = Tabs.TabPane;
 
-export interface IDomainDashboard extends RouteComponentProps {
-  domain: DomainDescriptor;
+export interface DomainDashboardProps extends RouteComponentProps {
+  domainId: DomainId;
 }
 
-export class DomainDashboard extends Component<IDomainDashboard, {}> {
+export class DomainDashboard extends React.Component<DomainDashboardProps, {}> {
 
-  private breadcrumbsProvider = new DomainDashboardBreadcrumbs();
+  private _breadcrumbs: DomainBreadcrumbProducer;
+
+  constructor(props: DomainDashboardProps) {
+    super(props);
+
+    this._breadcrumbs =  new DomainBreadcrumbProducer(this.props.domainId);
+  }
 
   public render(): ReactNode {
-    const {domain} = this.props;
-    const domainUrl = `http://localhost:8080/${domain.namespace}/${domain.id}/realtime`;
+    const {domainId} = this.props;
+    const domainUrl = `http://localhost:8080/${domainId.namespace}/${domainId.id}/realtime`;
 
-    this.breadcrumbsProvider.setDomain(domain);
+
 
     const copier =
       <CopyToClipboard text={domainUrl}
@@ -42,16 +46,16 @@ export class DomainDashboard extends Component<IDomainDashboard, {}> {
       </CopyToClipboard>;
 
     return (
-      <Page breadcrumbs={this.breadcrumbsProvider.breadcrumbs()}>
+      <Page breadcrumbs={this._breadcrumbs}>
         <div className={styles.domainDashboard}>
           <Row gutter={16}>
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Card className={styles.card} title={<span><Icon type="profile"/> Overview</span>}>
                 <InfoTable>
-                  <InfoTableRow label="Display Name">{domain.displayName}</InfoTableRow>
-                  <InfoTableRow label="Namespace">{domain.namespace}</InfoTableRow>
-                  <InfoTableRow label="Id">{domain.id}</InfoTableRow>
-                  <InfoTableRow label="Status">{domain.status}</InfoTableRow>
+                  <InfoTableRow label="Display Name">{domainId.id}</InfoTableRow>
+                  <InfoTableRow label="Namespace">{domainId.namespace}</InfoTableRow>
+                  <InfoTableRow label="Id">{domainId.id}</InfoTableRow>
+                  <InfoTableRow label="Status">???</InfoTableRow>
                 </InfoTable>
               </Card>
             </Col>
@@ -109,9 +113,9 @@ export class DomainDashboard extends Component<IDomainDashboard, {}> {
                       <TabPane tab="Data" key="data"><ModelDataSnippet/></TabPane>
                     </Tabs>
                   </TabPane>
-                  <TabPane tab="Activity" key="activity"></TabPane>
-                  <TabPane tab="Chat" key="chat"></TabPane>
-                  <TabPane tab="Presence" key="presence"></TabPane>
+                  <TabPane tab="Activity" key="activity"/>
+                  <TabPane tab="Chat" key="chat"/>
+                  <TabPane tab="Presence" key="presence"/>
                 </Tabs>
               </Card>
             </Col>
@@ -119,13 +123,5 @@ export class DomainDashboard extends Component<IDomainDashboard, {}> {
         </div>
       </Page>
     );
-  }
-}
-
-export class DomainDashboardBreadcrumbs extends DomainBreadcrumbProducer {
-  public breadcrumbs(): IBreadcrumbSegment[] {
-    const segments = super.breadcrumbs();
-    segments.push({title: "Dashboard"});
-    return segments;
   }
 }

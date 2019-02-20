@@ -83,7 +83,7 @@ export class DomainModelService extends AbstractDomainService {
   public setModelUserPermissions(domainId: DomainId,
                                  modelId: string,
                                  permissions: ModelUserPermissions): Promise<void> {
-    const url = this._getDomainUrl(domainId, `models/${modelId}/permissions/user/${permissions.username}`);
+    const url = this._getDomainUrl(domainId, `models/${modelId}/permissions/user/${permissions.userId.username}`);
     return this._put<void>(url, permissions.permissions);
   }
 

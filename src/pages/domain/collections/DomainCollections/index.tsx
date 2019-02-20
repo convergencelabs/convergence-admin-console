@@ -3,7 +3,6 @@ import {Page} from "../../../../components/Page/";
 import {KeyboardEvent, ReactNode} from "react";
 import Tooltip from "antd/es/tooltip";
 import {Button, Card, Icon, Input, notification, Popconfirm, Table} from "antd";
-import styles from "./styles.module.css";
 import {CartTitleToolbar} from "../../../../components/CardTitleToolbar/";
 import {RouteComponentProps} from "react-router";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
@@ -13,13 +12,13 @@ import {Link} from "react-router-dom";
 import {DomainCollectionService} from "../../../../services/domain/DomainCollectionService";
 import {DomainId} from "../../../../models/DomainId";
 import {CollectionSummary} from "../../../../models/domain/CollectionSummary";
-import {DomainDescriptor} from "../../../../models/DomainDescriptor";
 import {ToolbarButton} from "../../../../components/ToolbarButton";
 import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
 import {toDomainUrl} from "../../../../utils/domain-url";
+import styles from "./styles.module.css";
 
 interface DomainCollectionsProps extends RouteComponentProps {
-  domain: DomainDescriptor;
+  domainId: DomainId;
 }
 
 interface InjectedProps extends DomainCollectionsProps {
@@ -38,12 +37,12 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, ServerCo
 
   constructor(props: InjectedProps) {
     super(props);
-    this._breadcrumbs = new DomainBreadcrumbProducer([{title: "Collections"}]);
+    this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId,[{title: "Collections"}]);
     this._collectionTableColumns = [{
       title: 'Id',
       dataIndex: 'id',
       sorter: (a: CollectionSummary, b: CollectionSummary) => (a.id as string).localeCompare(b.id),
-      render: (text: string) => <Link to={`/users/${text}`}>{text}</Link>
+      render: (text: string) => <Link to={toDomainUrl("", this.props.domainId, `collections/${text}`)}>{text}</Link>
     }, {
       title: 'Models',
       dataIndex: 'modelCount',
@@ -95,14 +94,13 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, ServerCo
   }
 
   private _goToCreate = () => {
-    const url = toDomainUrl("", this.props.domain.toDomainId(), "create-collection");
+    const url = toDomainUrl("", this.props.domainId, "create-collection");
     this.props.history.push(url);
   }
 
   public render(): ReactNode {
-    this._breadcrumbs.setDomain(this.props.domain);
     return (
-      <Page breadcrumbs={this._breadcrumbs.breadcrumbs()}>
+      <Page breadcrumbs={this._breadcrumbs}>
         <Card title={this._renderToolbar()}>
           <Table className={styles.userTable}
                  size="middle"
@@ -115,11 +113,11 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, ServerCo
     );
   }
 
-  private _renderActions = (value: CollectionSummary, record: CollectionSummary) => {
+  private _renderActions = (_: undefined, record: CollectionSummary) => {
     return (
       <span className={styles.actions}>
         <Tooltip placement="topRight" title="Edit Collection" mouseEnterDelay={1}>
-          <Link to={`/collections/${value.id}`}>
+          <Link to={toDomainUrl("", this.props.domainId, `collections/${record.id}`)}>
             <Button shape="circle" size="small" htmlType="button" icon="edit"/>
           </Link>
         </Tooltip>
@@ -140,7 +138,7 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, ServerCo
   }
 
   private _onDeleteCollection = (collectionId: string) => {
-    const domainId = new DomainId(this.props.domain.namespace, this.props.domain.id);
+    const domainId = new DomainId(this.props.domainId.namespace, this.props.domainId.id);
     this.props.domainCollectionService.deleteCollection(domainId, collectionId)
       .then(() => {
         this._loadCollections();
@@ -158,7 +156,7 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, ServerCo
   }
 
   private _loadCollections = () => {
-    const domainId = new DomainId(this.props.domain.namespace, this.props.domain.id);
+    const domainId = this.props.domainId;
     const filter = this.state.collectionFilter !== "" ? this.state.collectionFilter : undefined;
     const {promise, subscription} = makeCancelable(this.props.domainCollectionService.getCollectionSummaries(domainId, filter));
     this._collectionsSubscription = subscription;

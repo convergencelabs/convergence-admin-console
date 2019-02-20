@@ -3,7 +3,7 @@ export interface CollectionData {
   description: string;
   worldPermissions: CollectionPermissionsData;
   overrideSnapshotPolicy: boolean;
-  snapshotPolicy?: ModelSnapshotPolicyData;
+  snapshotPolicy: ModelSnapshotPolicyData;
 }
 
 export interface CollectionUpdateData {
@@ -50,7 +50,6 @@ export interface ModelData {
   data: any
 }
 
-
 export interface ModelPermissionSummaryData {
   overrideWorld: boolean;
   worldPermissions: ModelPermissionsData;
@@ -65,6 +64,53 @@ export interface ModelPermissionsData {
 }
 
 export interface ModelUserPermissionsData {
-  username: string;
+  userId: DomainUserIdData;
   permissions: ModelPermissionsData;
 }
+
+export interface DomainUserData {
+  username: string;
+  displayName: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
+export interface CreateDomainUserData {
+  username: string;
+  displayName: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
+
+export interface UpdateDomainUserData {
+  displayName: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
+export interface DomainUserIdData {
+  type: string;
+  username: string;
+}
+
+export interface DomainUserGroupData {
+  id: string;
+  description: string;
+  members: string[];
+}
+
+export interface DomainUserGroupInfoData {
+  id: string;
+  description: string;
+}
+
+export interface DomainUserGroupSummaryData {
+  id: string;
+  description: string;
+  members: number;
+}
+

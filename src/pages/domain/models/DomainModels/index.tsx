@@ -2,13 +2,12 @@ import * as React from 'react';
 import {Page} from "../../../../components/Page/";
 import {ReactNode} from "react";
 import Tooltip from "antd/es/tooltip";
-import {Card, Dropdown, Menu, Table, Icon, Button} from "antd";
+import {Card, Dropdown, Menu, Table, Icon} from "antd";
 import styles from "./styles.module.css";
 import {CartTitleToolbar} from "../../../../components/CardTitleToolbar/";
 import {RouteComponentProps} from "react-router";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
-import {DomainDescriptor} from "../../../../models/DomainDescriptor";
 import {ToolbarButton} from "../../../../components/ToolbarButton";
 import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
 import {toDomainUrl} from "../../../../utils/domain-url";
@@ -20,12 +19,14 @@ import AceEditor from "react-ace";
 import {longDateTime, shortDateTime, truncate} from "../../../../utils/format-utils";
 import {Link} from "react-router-dom";
 import {TypeChecker} from "../../../../utils/TypeChecker";
+import {DomainId} from "../../../../models/DomainId";
 import "brace";
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
 
+
 interface DomainModelsProps extends RouteComponentProps {
-  domain: DomainDescriptor;
+  domainId: DomainId;
 }
 
 interface InjectedProps extends DomainModelsProps {
@@ -36,10 +37,7 @@ interface ServerCollectionsState {
   loading: boolean;
   models: Model[];
   columns: any[];
-  mode: SearchMode;
 }
-
-type SearchMode = "browse" | "query" | "id";
 
 class DomainModelsComponent extends React.Component<InjectedProps, ServerCollectionsState> {
   private readonly _breadcrumbs: DomainBreadcrumbProducer;
@@ -47,11 +45,11 @@ class DomainModelsComponent extends React.Component<InjectedProps, ServerCollect
 
   constructor(props: InjectedProps) {
     super(props);
-    this._breadcrumbs = new DomainBreadcrumbProducer([{title: "Models"}]);
+    this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId, [{title: "Models"}]);
+
     this.state = {
       models: [],
       columns: [],
-      mode: "browse",
       loading: false
     };
 
@@ -79,25 +77,23 @@ class DomainModelsComponent extends React.Component<InjectedProps, ServerCollect
   private _renderToolbar(): ReactNode {
     return (
       <CartTitleToolbar title="Models" icon="file">
-        <span className={styles.search}></span>
         <ToolbarButton icon="plus-circle" tooltip="Create Model" onClick={this._goToCreate}/>
       </CartTitleToolbar>
     )
   }
 
   private _goToCreate = () => {
-    const url = toDomainUrl("", this.props.domain.toDomainId(), "create-model");
+    const url = toDomainUrl("", this.props.domainId, "create-model");
     this.props.history.push(url);
   }
 
   public render(): ReactNode {
-    this._breadcrumbs.setDomain(this.props.domain);
 
     return (
-      <Page breadcrumbs={this._breadcrumbs.breadcrumbs()}>
+      <Page breadcrumbs={this._breadcrumbs}>
         <Card title={this._renderToolbar()}>
           <ModelControls
-            domainId={this.props.domain.toDomainId()}
+            domainId={this.props.domainId}
             resultsPerPageDefault={25}
             onBrowse={this._browse}
             onQuery={this._query}
@@ -128,14 +124,14 @@ class DomainModelsComponent extends React.Component<InjectedProps, ServerCollect
 
     this.setState({loading: true});
     this.props.domainModelService
-      .queryModels(this.props.domain.toDomainId(), query)
+      .queryModels(this.props.domainId, query)
       .then(models => this._updateResults(models));
   }
 
   private _lookup = (id: string, perPage: number) => {
     this.setState({loading: true});
     this.props.domainModelService
-      .getModelById(this.props.domain.toDomainId(), id)
+      .getModelById(this.props.domainId, id)
       .then(model => {
         this._updateResults([model]);
       });
@@ -164,10 +160,10 @@ class DomainModelsComponent extends React.Component<InjectedProps, ServerCollect
   private _renderMenu = (id: string, record: Model) => {
     const menu = (
       <Menu>
-        <Menu.Item key="copy">
+        <Menu.Item key="copyId">
           <a href="#"><Icon type="copy"/> Copy Id</a>
         </Menu.Item>
-        <Menu.Item key="copy">
+        <Menu.Item key="copyData">
           <a href="#"><Icon type="copy"/> Copy Data</a>
         </Menu.Item>
         <Menu.Divider/>
@@ -221,7 +217,19 @@ class DomainModelsComponent extends React.Component<InjectedProps, ServerCollect
       },
       boolean(val: boolean) {
         return val + ""
-      }
+      },
+      custom: [
+        {
+          test(value: any): boolean {
+            return TypeChecker.isObject(value) && value["$$convergence_type"] === "date";
+          },
+          callback(value: any): string {
+            const longDate = value["date"];
+            const date = new Date(longDate);
+            return longDateTime(date);
+          }
+        }
+      ]
     });
   }
 
@@ -229,9 +237,12 @@ class DomainModelsComponent extends React.Component<InjectedProps, ServerCollect
     return (
       <div className={styles.modelExpander}>
         <div className={styles.modelExpanderToolbar}>
-          <ToolbarButton icon="edit" tooltip="Edit Model" onClick={() => {}}/>
-          <ToolbarButton icon="team" tooltip="Edit Permissions" onClick={() => {}}/>
-          <ToolbarButton icon="delete" tooltip="Delete Model" onClick={() => {}}/>
+          <ToolbarButton icon="edit" tooltip="Edit Model" onClick={() => {
+          }}/>
+          <ToolbarButton icon="team" tooltip="Edit Permissions" onClick={() => {
+          }}/>
+          <ToolbarButton icon="delete" tooltip="Delete Model" onClick={() => {
+          }}/>
         </div>
         <table>
           <tbody>
@@ -284,4 +295,3 @@ class DomainModelsComponent extends React.Component<InjectedProps, ServerCollect
 
 const injections = [SERVICES.DOMAIN_MODEL_SERVICE];
 export const DomainModels = injectAs<DomainModelsProps>(injections, DomainModelsComponent);
-

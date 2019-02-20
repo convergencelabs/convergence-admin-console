@@ -8,18 +8,19 @@ import {RouteComponentProps} from "react-router";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
-import {DomainDescriptor} from "../../../../models/DomainDescriptor";
 import {DomainModelService} from "../../../../services/domain/DomainModelService";
 import {ModelEditorTab} from "./ModelEditorTab/";
-import {ModelPermissionsTab} from "./ModelPermissions";
+import {ModelPermissionsTab} from "./ModelPermissionsTab";
 import {ToolbarButton} from "../../../../components/ToolbarButton";
+import {DomainId} from "../../../../models/DomainId";
 
 interface EditDomainModelRouteProps {
   modelId: string;
+
 }
 
 interface EditDomainModelProps extends RouteComponentProps<EditDomainModelRouteProps> {
-  domain: DomainDescriptor;
+  domainId: DomainId;
 }
 
 interface InjectedProps extends EditDomainModelProps {
@@ -34,23 +35,25 @@ class EditDomainModelComponent extends React.Component<InjectedProps, {}> {
 
     const id = this.props.match.params.modelId;
 
-    this._breadcrumbs = new DomainBreadcrumbProducer([
+    this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId, [
       {title: "Models", link: "/models"},
       {title: id}
     ]);
   }
 
   public render(): ReactNode {
-    this._breadcrumbs.setDomain(this.props.domain);
     return (
-      <Page breadcrumbs={this._breadcrumbs.breadcrumbs()} full={true}>
+      <Page breadcrumbs={this._breadcrumbs} full={true}>
         <Card title={this._renderTitle()} className={styles.formCard}>
           <Tabs className={styles.tabs} type="card">
             <Tabs.TabPane tab="Data" key="data">
               <ModelEditorTab modelId={this.props.match.params.modelId}/>
             </Tabs.TabPane>
             <Tabs.TabPane tab="Permissions" key="permissions">
-              <ModelPermissionsTab />
+              <ModelPermissionsTab
+                domainId={this.props.domainId}
+                modelId={this.props.match.params.modelId}
+              />
             </Tabs.TabPane>
           </Tabs>
         </Card>
@@ -70,7 +73,8 @@ class EditDomainModelComponent extends React.Component<InjectedProps, {}> {
           <span className={styles.collectionId}>{"collection"}</span>
         </span>
         <span className={styles.spacer}/>
-        <ToolbarButton icon="delete" tooltip="Delete Model" onClick={() => {}}/>
+        <ToolbarButton icon="delete" tooltip="Delete Model" onClick={() => {
+        }}/>
       </span>
     );
   }

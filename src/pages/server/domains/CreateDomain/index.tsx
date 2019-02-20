@@ -43,7 +43,7 @@ class CreateDomainComponent extends React.Component<InjectedProps, CreateUserCom
   public render(): ReactNode {
     const {getFieldDecorator} = this.props.form;
     return (
-      <Page breadcrumbs={this._breadcrumbs.breadcrumbs()}>
+      <Page breadcrumbs={this._breadcrumbs}>
         <Card title={<span><Icon type="database"/> New Domain</span>} className={styles.formCard}>
           <Form onSubmit={this._handleSubmit}>
             <Row gutter={16}>

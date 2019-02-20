@@ -9,22 +9,5 @@
   bottom: 0;
   right: 0;
   left: 0;
-}
-
-.pageContent {
-
-}
-
-.header {
-  margin-bottom: 10px;
-  border-bottom: 1px solid darkgray;
-}
-
-.icon {
-  margin-right: 10px;
-  font-size: 18px;
-}
-
-.title {
-  font-size: 18px;
+  overflow: auto;
 }

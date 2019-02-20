@@ -1,17 +1,17 @@
 import {BreadcrumbsProducer, IBreadcrumbSegment} from "../../stores/BreacrumStore";
-import {DomainDescriptor} from "../../models/DomainDescriptor";
+import {DomainId} from "../../models/DomainId";
 
 export class DomainBreadcrumbProducer extends BreadcrumbsProducer {
   private readonly _additional: IBreadcrumbSegment[] | undefined;
-  private _domain: DomainDescriptor | null = null;
+  private _domain: DomainId;
 
-  constructor(additional?: IBreadcrumbSegment[]) {
+  constructor(domainId: DomainId, additional?: IBreadcrumbSegment[]) {
     super();
-    this._domain = null;
-    this._additional = additional;
+    this._domain = domainId;
+    this._additional = additional || [];
   }
 
-  public setDomain(domain: DomainDescriptor, ): void {
+  public setDomain(domain: DomainId): void {
     this._domain = domain;
   }
 

@@ -20,7 +20,7 @@ interface InjectedProps extends RouteComponentProps, FormComponentProps {
 
 
 class CreateNamespaceComponent extends React.Component<InjectedProps, {}> {
-  private readonly breadcrumbs = new BasicBreadcrumbsProducer([
+  private readonly _breadcrumbs = new BasicBreadcrumbsProducer([
     {title: "Namespaces", link: "/namespaces"},
     {title: "New Namespace"}
   ]);
@@ -28,7 +28,7 @@ class CreateNamespaceComponent extends React.Component<InjectedProps, {}> {
   public render(): ReactNode {
     const {getFieldDecorator} = this.props.form;
     return (
-      <Page breadcrumbs={this.breadcrumbs.breadcrumbs()}>
+      <Page breadcrumbs={this._breadcrumbs}>
         <Card title={<span><Icon type="folder"/> New Namespace</span>} className={styles.formCard}>
           <Form onSubmit={this.handleSubmit}>
             <Row gutter={16}>

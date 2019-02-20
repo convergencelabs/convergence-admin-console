@@ -37,20 +37,18 @@ export function toCollectionPermissionsData(data: CollectionPermissions): Collec
     data.manage);
 }
 
-export function toModelSnapshotPolicyData(policy?: ModelSnapshotPolicy): ModelSnapshotPolicyData | undefined {
-  if (policy) {
-    return {
-      snapshotsEnabled: policy.snapshotsEnabled,
-      triggerByVersion: policy.triggerByVersion,
-      maximumVersionInterval: policy.maximumVersionInterval,
-      limitByVersion: policy.limitByVersion,
-      minimumVersionInterval: policy.minimumVersionInterval,
-      triggerByTime: policy.triggerByTime,
-      maximumTimeInterval: policy.maximumTimeInterval,
-      limitByTime: policy.limitByTime,
-      minimumTimeInterval: policy.minimumTimeInterval
-    };
-  }
+export function toModelSnapshotPolicyData(policy: ModelSnapshotPolicy): ModelSnapshotPolicyData {
+  return {
+    snapshotsEnabled: policy.snapshotsEnabled,
+    triggerByVersion: policy.triggerByVersion,
+    maximumVersionInterval: policy.maximumVersionInterval,
+    limitByVersion: policy.limitByVersion,
+    minimumVersionInterval: policy.minimumVersionInterval,
+    triggerByTime: policy.triggerByTime,
+    maximumTimeInterval: policy.maximumTimeInterval,
+    limitByTime: policy.limitByTime,
+    minimumTimeInterval: policy.minimumTimeInterval
+  };
 }
 
 export function toCollectionSummaryData(summary: CollectionSummary): CollectionSummaryData {
