@@ -1,20 +1,20 @@
 import * as React from 'react';
-import {Page} from "../../../../components/Page/index";
+import {Page} from "../../../../components/common/Page/";
 import {ReactNode} from "react";
 import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
-import {Button, Card, Icon, Input, message, notification, Popconfirm, Table} from "antd";
+import {Button, Card, Icon, Input, notification, Popconfirm, Table} from "antd";
 import styles from "./styles.module.css";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
 import {RouteComponentProps} from "react-router";
-import {CartTitleToolbar} from "../../../../components/CardTitleToolbar/index";
+import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
 import Tooltip from "antd/es/tooltip";
 import {NamespaceAndDomains} from "../../../../models/NamespaceAndDomains";
 import {NamespaceService} from "../../../../services/NamespaceService";
 import {Link} from "react-router-dom";
 
-interface InjectedProps extends RouteComponentProps {
+export interface InjectedProps extends RouteComponentProps {
   namespaceService: NamespaceService;
 }
 
@@ -22,7 +22,7 @@ interface NamespacesState {
   namespaces: NamespaceAndDomains[] | null;
 }
 
-export class NamespacesComponent extends React.Component<InjectedProps, NamespacesState> {
+class NamespacesComponent extends React.Component<InjectedProps, NamespacesState> {
   private readonly _breadcrumbs = new BasicBreadcrumbsProducer([{title: "Namespaces"}]);
   private readonly _namespaceTableColumns: any[];
   private _namepsacesSubscription: PromiseSubscription | null;
@@ -83,7 +83,7 @@ export class NamespacesComponent extends React.Component<InjectedProps, Namespac
 
   private _renderToolbar(): ReactNode {
     return (
-      <CartTitleToolbar title="Namespaces" icon="folder">
+      <CardTitleToolbar title="Namespaces" icon="folder">
         <span className={styles.search}>
           <Input placeholder="Search Namespaces" addonAfter={<Icon type="search"/>}/>
         </span>
@@ -99,7 +99,7 @@ export class NamespacesComponent extends React.Component<InjectedProps, Namespac
             <Icon type="reload"/>
           </Button>
         </Tooltip>
-      </CartTitleToolbar>
+      </CardTitleToolbar>
     )
   }
 

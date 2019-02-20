@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Page} from "../../../../components/Page/";
+import {Page} from "../../../../components/common/Page/";
 import {ReactNode} from "react";
 import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
 import {Card, Col, notification, Row} from "antd";
@@ -8,27 +8,23 @@ import {FormComponentProps} from "antd/lib/form";
 import {FormEvent} from "react";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
-import {FormButtonBar} from "../../../../components/FormButtonBar/";
+import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {RestError} from "../../../../services/RestError";
 import {NamespaceService} from "../../../../services/NamespaceService";
 import {Namespace} from "../../../../models/Namespace";
-import {UserRoleAdder} from "../../../../components/UserRoleAdder/";
-import {UserRoleTable} from "../../../../components/UserRoleTable/";
+import {UserRoleAdder} from "../../../../components/server/UserRoleAdder/";
+import {UserRoleTable} from "../../../../components/server/UserRoleTable/";
 import {RoleService, RoleTarget} from "../../../../services/RoleService";
 
 
-interface EditNamespaceProps extends RouteComponentProps {
-
-}
-
-interface InjectedProps extends EditNamespaceProps, FormComponentProps {
+interface InjectedProps extends RouteComponentProps, FormComponentProps {
   namespaceService: NamespaceService;
   roleService: RoleService;
 }
 
-interface EditNamespaceState {
+export interface EditNamespaceState {
   namespace: Namespace | null;
   userRoles: Map<string, string>;
 }
@@ -195,4 +191,5 @@ class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespac
   }
 }
 
-export const EditNamespace = injectAs<EditNamespaceProps>([SERVICES.NAMESPACE_SERVICE, SERVICES.ROLE_SERVICE], Form.create<{}>()(EditNamespaceComponent));
+const injections = [SERVICES.NAMESPACE_SERVICE, SERVICES.ROLE_SERVICE];
+export const EditNamespace = injectAs<RouteComponentProps>(injections, Form.create<{}>()(EditNamespaceComponent));

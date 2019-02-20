@@ -1,16 +1,16 @@
 import * as React from 'react';
-import {Page} from "../../../../components/Page/index";
+import {Page} from "../../../../components/common/Page/";
 import {ReactNode} from "react";
 import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
 import {Card, Col, notification, Radio, Row} from "antd";
-import {Form, Input, Tooltip, Icon, Button} from 'antd';
+import {Form, Input, Icon, Button} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
 import {FormEvent} from "react";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
-import {FormButtonBar} from "../../../../components/FormButtonBar/";
-import {FormFieldWithHelp} from "../../../../components/FormFieldWithHelp/";
-import {NamespaceAutoComplete} from "../../../../components/NamespaceAutoComplete";
+import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
+import {FormFieldWithHelp} from "../../../../components/common/FormFieldWithHelp/";
+import {NamespaceAutoComplete} from "../../../../components/server/NamespaceAutoComplete";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {DomainService} from "../../../../services/DomainService";
@@ -19,7 +19,7 @@ import {ProfileStore} from "../../../../stores/ProfileStore";
 import {STORES} from "../../../../stores/StoreConstants";
 import {RestError} from "../../../../services/RestError";
 
-interface CreateUserComponentState {
+export interface CreateDomainState {
   confirmDirty: boolean;
   namespaceType: string;
 }
@@ -29,7 +29,7 @@ interface InjectedProps extends RouteComponentProps, FormComponentProps {
   domainService: DomainService;
 }
 
-class CreateDomainComponent extends React.Component<InjectedProps, CreateUserComponentState> {
+class CreateDomainComponent extends React.Component<InjectedProps, CreateDomainState> {
   private readonly _breadcrumbs = new BasicBreadcrumbsProducer([
     {title: "Domains", link: "/domains"},
     {title: "New Domain"}

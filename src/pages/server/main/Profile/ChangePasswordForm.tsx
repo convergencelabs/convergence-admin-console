@@ -7,7 +7,7 @@ import styles from "./styles.module.css";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {LoggedInUserService} from "../../../../services/LoggedInUserService";
-import {SetPasswordForm} from "../../../../components/SetPasswordForm/index";
+import {SetPasswordForm} from "../../../../components/common/SetPasswordForm/";
 
 interface InjectedProps extends FormComponentProps {
   loggedInUserService: LoggedInUserService;

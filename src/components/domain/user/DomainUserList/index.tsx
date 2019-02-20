@@ -1,6 +1,6 @@
 import React, {ReactNode} from "react";
 import {Button, Icon, List, Popconfirm} from "antd";
-import {DomainUsernameAutoComplete} from "../../DomainUsernameAutoComplete";
+import {DomainUsernameAutoComplete} from "../DomainUsernameAutoComplete";
 import {DomainId} from "../../../../models/DomainId";
 import styles from "./styles.module.css";
 

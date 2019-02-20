@@ -5,7 +5,7 @@ import {DomainUserId} from "../../../../models/domain/DomainUserId";
 import {ModelPermissions} from "../../../../models/domain/ModelPermissions";
 import {ModelUserPermissions} from "../../../../models/domain/ModelUserPermissions";
 import {ModelPermissionsControl} from "../ModelPermissionsControl";
-import {DomainUsernameAutoComplete} from "../../DomainUsernameAutoComplete";
+import {DomainUsernameAutoComplete} from "../../user/DomainUsernameAutoComplete";
 import styles from "./styles.module.css";
 
 interface AddModelUserPermissionControlProps {

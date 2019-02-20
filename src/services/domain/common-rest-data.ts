@@ -114,3 +114,10 @@ export interface DomainUserGroupSummaryData {
   members: number;
 }
 
+export interface DomainJwtKeyData {
+  id: string;
+  description: string;
+  updated: Date;
+  key: string;
+  enabled: boolean
+}

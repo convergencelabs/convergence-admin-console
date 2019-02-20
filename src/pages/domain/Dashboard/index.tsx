@@ -1,7 +1,7 @@
 import React, {ReactNode} from "react";
 import {DomainBreadcrumbProducer} from "../DomainBreadcrumProducer";
 import {RouteComponentProps} from "react-router";
-import {Page} from "../../../components/Page";
+import {Page} from "../../../components/common/Page";
 import {Row, Col, Card, Tabs, Input, Button, Icon} from 'antd';
 import CopyToClipboard from "react-copy-to-clipboard";
 import styles from "./styles.module.css";
@@ -13,7 +13,7 @@ import {ModelOpenSnippet} from "./snippet_model_open";
 import {ModelOpenAutoCreate} from "./snippet_model_open_auto_create";
 import {ModelCreateSnippet} from "./snippet_model_create";
 import {ModelDataSnippet} from "./snippet_model_data";
-import {InfoTable, InfoTableRow} from "../../../components/InfoTable";
+import {InfoTable, InfoTableRow} from "../../../components/server/InfoTable";
 import {DomainId} from "../../../models/DomainId";
 
 const TabPane = Tabs.TabPane;
@@ -24,7 +24,7 @@ export interface DomainDashboardProps extends RouteComponentProps {
 
 export class DomainDashboard extends React.Component<DomainDashboardProps, {}> {
 
-  private _breadcrumbs: DomainBreadcrumbProducer;
+  private readonly _breadcrumbs: DomainBreadcrumbProducer;
 
   constructor(props: DomainDashboardProps) {
     super(props);

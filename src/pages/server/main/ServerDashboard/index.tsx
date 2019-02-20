@@ -1,12 +1,11 @@
-import * as React from 'react';
-import {Page} from "../../../../components/Page/index";
-import {ReactNode} from "react";
+import React, {ReactNode} from "react";
+import {Page} from "../../../../components/common/Page/";
 import {Card, Col, Icon, Row} from "antd";
-import {InfoTable, InfoTableRow} from "../../../../components/InfoTable/index";
+import {InfoTable, InfoTableRow} from "../../../../components/server/InfoTable/";
 import styles from "./styles.module.css";
-import {SpacedGrid} from "../../../../components/SpacedGrid/index";
-import {RecentDomains} from "../../../../components/FavoriteDomains/index";
-import {ServerAlerts} from "../../../../components/ServerAlerts/index";
+import {SpacedGrid} from "../../../../components/common/SpacedGrid/";
+import {RecentDomains} from "../../../../components/server/FavoriteDomains/";
+import {ServerAlerts} from "../../../../components/server/ServerAlerts/";
 import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
 
 export class ServerDashboard extends React.Component<{}, {}> {

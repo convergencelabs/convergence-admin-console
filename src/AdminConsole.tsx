@@ -5,7 +5,7 @@ import {
   Switch,
   RouteComponentProps
 } from "react-router-dom";
-import {LoginForm} from "./components/LoginForm/";
+import {LoginForm} from "./components/common/LoginForm/";
 import {PrivateRoute} from "./containers/PrivateRoute";
 import {Root} from "./containers/Root";
 import {MainLayout} from "./containers/MainLayout";

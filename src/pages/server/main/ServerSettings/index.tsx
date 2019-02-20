@@ -1,6 +1,5 @@
-import * as React from 'react';
-import {Page} from "../../../../components/Page/index";
-import {ReactNode} from "react";
+import React, {ReactNode} from "react";
+import {Page} from "../../../../components/common/Page/";
 import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
 import {Card, Form, Icon, Tabs} from "antd";
 import {FormComponentProps} from "antd/lib/form";

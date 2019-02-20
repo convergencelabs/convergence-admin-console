@@ -1,6 +1,5 @@
-import * as React from 'react';
-import {Page} from "../../../../components/Page/";
-import {ReactNode} from "react";
+import React, {ReactNode} from "react";
+import {Page} from "../../../../components/common/Page/";
 import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
 import {Card, Col, notification, Row} from "antd";
 import {Form, Input, Tooltip, Icon, Button, Select} from 'antd';
@@ -8,21 +7,19 @@ import {FormComponentProps} from "antd/lib/form";
 import {FormEvent} from "react";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
-import {FormButtonBar} from "../../../../components/FormButtonBar/";
-import {CreateUserData, UpdateUserData, UserService} from "../../../../services/UserService";
+import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
+import {UpdateUserData, UserService} from "../../../../services/UserService";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {RestError} from "../../../../services/RestError";
 import {ConvergenceUser} from "../../../../models/ConvergenceUser";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
 
-const {Option} = Select;
-
 interface InjectedProps extends RouteComponentProps<{ username: string }>, FormComponentProps {
   userService: UserService;
 }
 
-interface EditUserState {
+export interface EditUserState {
   user: ConvergenceUser | null
 }
 
@@ -141,9 +138,9 @@ class EditUserComponent extends React.Component<InjectedProps, EditUserState> {
                   rules: [{type: 'string', required: true, message: 'Please select a role!'}],
                 })(
                   <Select>
-                    <Option value="Developer">Developer</Option>
-                    <Option value="Domain Admin">Domain Admin</Option>
-                    <Option value="Server Admin">Server Admin</Option>
+                    <Select.Option value="Developer">Developer</Select.Option>
+                    <Select.Option value="Domain Admin">Domain Admin</Select.Option>
+                    <Select.Option value="Server Admin">Server Admin</Select.Option>
                   </Select>
                 )}
               </Form.Item>
@@ -214,5 +211,5 @@ class EditUserComponent extends React.Component<InjectedProps, EditUserState> {
     });
   }
 }
-
-export const EditUser = injectAs<RouteComponentProps>([SERVICES.USER_SERVICE], Form.create<{}>()(EditUserComponent));
+const injections = [SERVICES.USER_SERVICE];
+export const EditUser = injectAs<RouteComponentProps>(injections, Form.create<{}>()(EditUserComponent));

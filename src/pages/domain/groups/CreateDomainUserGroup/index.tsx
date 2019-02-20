@@ -1,4 +1,4 @@
-import {Page} from "../../../../components/Page/";
+import {Page} from "../../../../components/common/Page/";
 import React, {ReactNode} from "react";
 import {Card, notification, Icon} from "antd";
 import {FormComponentProps} from "antd/lib/form";
@@ -14,7 +14,7 @@ import {DomainGroupService} from "../../../../services/domain/DomainGroupService
 import {DomainUserGroup} from "../../../../models/domain/DomainUserGroup";
 import {RestError} from "../../../../services/RestError";
 
-interface CreateDomainUserGroupProps extends RouteComponentProps {
+export interface CreateDomainUserGroupProps extends RouteComponentProps {
   domainId: DomainId;
 }
 
@@ -64,7 +64,7 @@ class CreateDomainUserGroupComponent extends React.Component<InjectedProps, {}> 
       .then(() => {
         notification.success({
           message: 'Group Created',
-          description: `User '${group.id}' successfully created.`
+          description: `Group '${group.id}' successfully created.`
         });
         const url = toDomainUrl("", this.props.domainId, "groups/");
         this.props.history.push(url);
@@ -73,7 +73,7 @@ class CreateDomainUserGroupComponent extends React.Component<InjectedProps, {}> 
         if (err.code === "duplicate") {
           notification.error({
             message: 'Could Not Create Group',
-            description: `A user with the specified ${err.details["field"]} already exists.`
+            description: `A group with the specified ${err.details["field"]} already exists.`
           });
         }
       }

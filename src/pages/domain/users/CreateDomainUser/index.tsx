@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Page} from "../../../../components/Page/";
+import {Page} from "../../../../components/common/Page/";
 import {ReactNode} from "react";
 import {Card, Col, notification, Row} from "antd";
 import {Form, Input, Tooltip, Icon, Button} from 'antd';
@@ -7,7 +7,7 @@ import {FormComponentProps} from "antd/lib/form";
 import {FormEvent} from "react";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
-import {FormButtonBar} from "../../../../components/FormButtonBar/";
+import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {RestError} from "../../../../services/RestError";
@@ -17,7 +17,7 @@ import {DomainId} from "../../../../models/DomainId";
 import {CreateDomainUserData} from "../../../../services/domain/common-rest-data";
 import {toDomainUrl} from "../../../../utils/domain-url";
 
-interface CreateDomainUserProps extends RouteComponentProps {
+export interface CreateDomainUserProps extends RouteComponentProps {
   domainId: DomainId;
 }
 
@@ -25,7 +25,7 @@ interface InjectedProps extends CreateDomainUserProps, FormComponentProps {
   domainUserService: DomainUserService;
 }
 
-interface CreateDomainUserComponentState {
+export interface CreateDomainUserComponentState {
   confirmDirty: boolean;
 }
 

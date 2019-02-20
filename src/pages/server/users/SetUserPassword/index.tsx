@@ -1,6 +1,5 @@
-import * as React from 'react';
-import {Page} from "../../../../components/Page/";
-import {ReactNode} from "react";
+import React, {ReactNode} from "react";
+import {Page} from "../../../../components/common/Page/";
 import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
 import {Card, notification, Tag} from "antd";
 import {Form, Icon} from 'antd';
@@ -10,14 +9,14 @@ import {RouteComponentProps} from "react-router";
 import {UserService} from "../../../../services/UserService";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
-import {SetPasswordForm} from "../../../../components/SetPasswordForm/"
+import {SetPasswordForm} from "../../../../components/common/SetPasswordForm/"
 import {RestError} from "../../../../services/RestError";
 
 interface InjectedProps extends RouteComponentProps<{ username: string }>, FormComponentProps {
   userService: UserService;
 }
 
-interface SetUserPasswordState {
+export interface SetUserPasswordState {
 
 }
 
@@ -78,4 +77,5 @@ class SetUserPasswordComponent extends React.Component<InjectedProps, SetUserPas
   }
 }
 
-export const SetUserPassword = injectAs<RouteComponentProps>([SERVICES.USER_SERVICE], Form.create<{}>()(SetUserPasswordComponent));
+const injections = [SERVICES.USER_SERVICE];
+export const SetUserPassword = injectAs<RouteComponentProps>(injections, Form.create<{}>()(SetUserPasswordComponent));

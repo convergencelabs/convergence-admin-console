@@ -1,5 +1,5 @@
 import React from 'react';
-import {Page} from "../../../../components/Page/";
+import {Page} from "../../../../components/common/Page/";
 import {ReactNode} from "react";
 import {Card, Tabs} from "antd";
 import {Icon} from 'antd';
@@ -11,12 +11,13 @@ import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
 import {DomainModelService} from "../../../../services/domain/DomainModelService";
 import {ModelEditorTab} from "./ModelEditorTab/";
 import {ModelPermissionsTab} from "./ModelPermissionsTab";
-import {ToolbarButton} from "../../../../components/ToolbarButton";
+import {ToolbarButton} from "../../../../components/common/ToolbarButton";
 import {DomainId} from "../../../../models/DomainId";
+import {toDomainUrl} from "../../../../utils/domain-url";
 
 interface EditDomainModelRouteProps {
-  modelId: string;
-
+  id: string;
+  tab: string;
 }
 
 interface EditDomainModelProps extends RouteComponentProps<EditDomainModelRouteProps> {
@@ -33,26 +34,36 @@ class EditDomainModelComponent extends React.Component<InjectedProps, {}> {
   constructor(props: InjectedProps) {
     super(props);
 
-    const id = this.props.match.params.modelId;
+    const id = this.props.match.params.id;
 
+    const modelsUrl = toDomainUrl("", this.props.domainId, "models");
     this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId, [
-      {title: "Models", link: "/models"},
+      {title: "Models", link: modelsUrl},
       {title: id}
     ]);
   }
 
   public render(): ReactNode {
+    const id = this.props.match.params.id;
+    const tab = this.props.match.params.tab || "data";
+    const baseUrl = toDomainUrl("", this.props.domainId, `models/${id}`);
     return (
       <Page breadcrumbs={this._breadcrumbs} full={true}>
         <Card title={this._renderTitle()} className={styles.formCard}>
-          <Tabs className={styles.tabs} type="card">
+          <Tabs className={styles.tabs}
+                type="card"
+                defaultActiveKey={tab}
+                onChange={key => {
+                  this.props.history.push(`${baseUrl}/${key}`);
+                }}
+          >
             <Tabs.TabPane tab="Data" key="data">
-              <ModelEditorTab modelId={this.props.match.params.modelId}/>
+              <ModelEditorTab modelId={id}/>
             </Tabs.TabPane>
             <Tabs.TabPane tab="Permissions" key="permissions">
               <ModelPermissionsTab
                 domainId={this.props.domainId}
-                modelId={this.props.match.params.modelId}
+                modelId={id}
               />
             </Tabs.TabPane>
           </Tabs>
@@ -69,7 +80,7 @@ class EditDomainModelComponent extends React.Component<InjectedProps, {}> {
           <span> Edit Model</span>
         </span>
         <span className={styles.modelAndCollection}>
-          <span className={styles.modelId}>{this.props.match.params.modelId}</span>
+          <span className={styles.modelId}>{this.props.match.params.id}</span>
           <span className={styles.collectionId}>{"collection"}</span>
         </span>
         <span className={styles.spacer}/>

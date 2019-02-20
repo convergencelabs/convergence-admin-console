@@ -1,10 +1,10 @@
 import * as React from 'react';
-import {Page} from "../../../../components/Page/";
+import {Page} from "../../../../components/common/Page/";
 import {KeyboardEvent, ReactNode} from "react";
 import Tooltip from "antd/es/tooltip";
 import {Button, Card, Icon, Input, notification, Popconfirm, Table} from "antd";
 import styles from "./styles.module.css";
-import {CartTitleToolbar} from "../../../../components/CardTitleToolbar/";
+import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
 import {RouteComponentProps} from "react-router";
 import {ConvergenceUser} from "../../../../models/ConvergenceUser";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
@@ -18,7 +18,7 @@ import {DomainUser} from "../../../../models/domain/DomainUser";
 import {toDomainUrl} from "../../../../utils/domain-url";
 import {shortDateTime} from "../../../../utils/format-utils";
 
-interface DomainUsersProps extends RouteComponentProps {
+export interface DomainUsersProps extends RouteComponentProps {
   domainId: DomainId;
 }
 
@@ -26,7 +26,7 @@ interface InjectedProps extends DomainUsersProps {
   domainUserService: DomainUserService;
 }
 
-interface DomainUsersState {
+export interface DomainUsersState {
   users: DomainUser[] | null;
   userFilter: string;
 }
@@ -84,7 +84,7 @@ export class DomainUsersComponent extends React.Component<InjectedProps, DomainU
 
   private _renderToolbar(): ReactNode {
     return (
-      <CartTitleToolbar title="Users" icon="user">
+      <CardTitleToolbar title="Users" icon="user">
         <span className={styles.search}>
           <Input placeholder="Search Users" addonAfter={<Icon type="search"/>} onKeyUp={this._onFilterChange}/>
         </span>
@@ -100,7 +100,7 @@ export class DomainUsersComponent extends React.Component<InjectedProps, DomainU
             <Icon type="reload"/>
           </Button>
         </Tooltip>
-      </CartTitleToolbar>
+      </CardTitleToolbar>
     )
   }
 

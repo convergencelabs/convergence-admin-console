@@ -17,6 +17,7 @@ import {domainCollectionService} from "./services/domain/DomainCollectionService
 import {domainModelService} from "./services/domain/DomainModelService";
 import {domainUserService} from "./services/domain/DomainUserService";
 import {domainGroupService} from "./services/domain/DomainGroupService";
+import {domainJwtKeyService} from "./services/domain/DomainJwtKeyService";
 import {convergenceDomainStore} from "./stores/ConvergenceDomainStore";
 
 import {message, notification} from "antd";
@@ -57,7 +58,8 @@ const services = {
   domainCollectionService,
   domainModelService,
   domainUserService,
-  domainGroupService
+  domainGroupService,
+  domainJwtKeyService
 };
 
 const authToken = localStorageService.getAuthToken();

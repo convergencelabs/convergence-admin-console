@@ -8,11 +8,11 @@ import styles from "./styles.module.css";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
 import {LoggedInUserService} from "../../../../services/LoggedInUserService";
 import {UserProfile} from "../../../../models/UserProfile";
-import {FormButtonBar} from "../../../../components/FormButtonBar/index";
+import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 
-interface ProfileFormProps {
+export interface ProfileFormProps {
   username: string;
 }
 
@@ -20,7 +20,7 @@ interface InjectedProps extends ProfileFormProps, FormComponentProps {
   loggedInUserService: LoggedInUserService;
 }
 
-interface EditUserState {
+export interface EditUserState {
   profile: UserProfile | null
 }
 

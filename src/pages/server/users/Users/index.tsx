@@ -1,11 +1,10 @@
-import * as React from 'react';
-import {Page} from "../../../../components/Page/";
-import {KeyboardEvent, ReactNode} from "react";
+import React, {KeyboardEvent, ReactNode} from 'react';
+import {Page} from "../../../../components/common/Page/";
 import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
 import Tooltip from "antd/es/tooltip";
 import {Button, Card, Icon, Input, message, notification, Popconfirm, Table, Tag} from "antd";
 import styles from "./styles.module.css";
-import {CartTitleToolbar} from "../../../../components/CardTitleToolbar/";
+import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
 import {RouteComponentProps} from "react-router";
 import {UserService} from "../../../../services/UserService";
 import {ConvergenceUser} from "../../../../models/ConvergenceUser";
@@ -22,12 +21,12 @@ interface InjectedProps extends RouteComponentProps {
   profileStore: ProfileStore;
 }
 
-interface ServerUsersState {
+export interface ServerUsersState {
   users: ConvergenceUser[] | null;
   userFilter: string;
 }
 
-export class ServerUsersComponent extends React.Component<InjectedProps, ServerUsersState> {
+class ServerUsersComponent extends React.Component<InjectedProps, ServerUsersState> {
   private readonly _breadcrumbs = new BasicBreadcrumbsProducer([{title: "Users"}]);
   private readonly _userTableColumns: any[];
   private _usersSubscription: PromiseSubscription | null;
@@ -88,7 +87,7 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
 
   private _renderToolbar(): ReactNode {
     return (
-      <CartTitleToolbar title="Users" icon="user">
+      <CardTitleToolbar title="Users" icon="user">
         <span className={styles.search}>
           <Input placeholder="Search Users" addonAfter={<Icon type="search"/>} onKeyUp={this._onFilterChange}/>
         </span>
@@ -104,7 +103,7 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
             <Icon type="reload"/>
           </Button>
         </Tooltip>
-      </CartTitleToolbar>
+      </CardTitleToolbar>
     )
   }
 
@@ -198,6 +197,5 @@ export class ServerUsersComponent extends React.Component<InjectedProps, ServerU
   }
 }
 
-
-export const ServerUsers = injectAs<RouteComponentProps>([SERVICES.USER_SERVICE, STORES.PROFILE_STORE], ServerUsersComponent);
-
+const injections = [SERVICES.USER_SERVICE, STORES.PROFILE_STORE];
+export const ServerUsers = injectAs<RouteComponentProps>(injections, ServerUsersComponent);

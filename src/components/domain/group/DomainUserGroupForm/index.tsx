@@ -6,9 +6,9 @@ import {FormEvent} from "react";
 import {DomainId} from "../../../../models/DomainId";
 import {DomainUserList} from "../../user/DomainUserList/";
 import {DomainUserGroup} from "../../../../models/domain/DomainUserGroup";
-import {FormButtonBar} from "../../../FormButtonBar";
+import {FormButtonBar} from "../../../common/FormButtonBar";
 
-interface DomainUserGroupFormProps {
+export interface DomainUserGroupFormProps {
   domainId: DomainId;
   initialValue: DomainUserGroup;
   saveButtonLabel: string;
@@ -20,7 +20,7 @@ interface InjectedProps extends DomainUserGroupFormProps, FormComponentProps {
 
 }
 
-interface DomainUserGroupFormState {
+export interface DomainUserGroupFormState {
   members: string[];
 }
 

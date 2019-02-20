@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Page} from "../../../../components/Page/";
+import {Page} from "../../../../components/common/Page/";
 import {ReactNode} from "react";
 import {Card, Col, InputNumber, notification, Row} from "antd";
 import {Form, Input, Tooltip, Icon, Button, Select, Checkbox, Divider} from 'antd';
@@ -7,13 +7,13 @@ import {FormComponentProps} from "antd/lib/form";
 import {FormEvent} from "react";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
-import {FormButtonBar} from "../../../../components/FormButtonBar/";
+import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {RestError} from "../../../../services/RestError";
 import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
 import {toDomainUrl} from "../../../../utils/domain-url";
-import {CollectionAutoComplete} from "../../../../components/CollectionAutoComplete";
+import {CollectionAutoComplete} from "../../../../components/domain/collection/CollectionAutoComplete";
 import 'brace';
 import 'brace/mode/javascript';
 import 'brace/theme/solarized_dark';
@@ -21,7 +21,7 @@ import AceEditor from "react-ace";
 import {DomainModelService} from "../../../../services/domain/DomainModelService";
 import {DomainId} from "../../../../models/DomainId";
 
-interface CreateDomainModelProps extends RouteComponentProps {
+export interface CreateDomainModelProps extends RouteComponentProps {
   domainId: DomainId;
 }
 
@@ -29,7 +29,7 @@ interface InjectedProps extends CreateDomainModelProps, FormComponentProps {
   domainModelService: DomainModelService;
 }
 
-interface CreateDomainModelState {
+export interface CreateDomainModelState {
   data: string;
 }
 

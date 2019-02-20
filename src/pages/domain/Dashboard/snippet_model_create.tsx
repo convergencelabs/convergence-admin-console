@@ -1,4 +1,4 @@
-import {Code, CodeSnippet, CodeSnippetDescription} from "../../../components/CodeSnippet";
+import {Code, CodeSnippet, CodeSnippetDescription} from "../../../components/domain/common/CodeSnippet";
 import * as React from "react";
 
 export const ModelCreateSnippet: React.FunctionComponent<{}> = () => {

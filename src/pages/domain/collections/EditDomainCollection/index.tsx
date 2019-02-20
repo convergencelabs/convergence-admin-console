@@ -7,7 +7,7 @@ import {
 } from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import {RouteComponentProps} from "react-router";
-import {Page} from "../../../../components/Page/";
+import {Page} from "../../../../components/common/Page/";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {RestError} from "../../../../services/RestError";
@@ -20,7 +20,7 @@ import {DomainCollectionForm} from "../../../../components/domain/collection/Dom
 import styles from "./styles.module.css";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
 
-interface EditDomainCollectionsProps extends RouteComponentProps<{ id: string }> {
+export interface EditDomainCollectionsProps extends RouteComponentProps<{ id: string }> {
   domainId: DomainId;
 }
 
@@ -28,7 +28,7 @@ interface InjectedProps extends EditDomainCollectionsProps, FormComponentProps {
   domainCollectionService: DomainCollectionService;
 }
 
-interface EditDomainCollectionState {
+export interface EditDomainCollectionState {
   initialCollection: Collection | null;
 }
 

@@ -1,10 +1,10 @@
 import * as React from 'react';
-import {Page} from "../../../../components/Page/";
+import {Page} from "../../../../components/common/Page/";
 import {KeyboardEvent, ReactNode} from "react";
 import Tooltip from "antd/es/tooltip";
 import {Button, Card, Icon, Input, notification, Popconfirm, Table} from "antd";
 import styles from "./styles.module.css";
-import {CartTitleToolbar} from "../../../../components/CardTitleToolbar/";
+import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
 import {RouteComponentProps} from "react-router";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
 import {injectAs} from "../../../../utils/mobx-utils";
@@ -16,7 +16,7 @@ import {toDomainUrl} from "../../../../utils/domain-url";
 import {DomainGroupService} from "../../../../services/domain/DomainGroupService";
 import {DomainUserGroupSummary} from "../../../../models/domain/DomainUserGroupSummary";
 
-interface DomainUserGroupsProps extends RouteComponentProps {
+export interface DomainUserGroupsProps extends RouteComponentProps {
   domainId: DomainId;
 }
 
@@ -24,12 +24,12 @@ interface InjectedProps extends DomainUserGroupsProps {
   domainGroupService: DomainGroupService;
 }
 
-interface DomainGroupsState {
+export interface DomainGroupsState {
   groups: DomainUserGroupSummary[] | null;
   groupFilter: string;
 }
 
-export class DomainUserGroupsComponent extends React.Component<InjectedProps, DomainGroupsState> {
+class DomainUserGroupsComponent extends React.Component<InjectedProps, DomainGroupsState> {
   private readonly _breadcrumbs: DomainBreadcrumbProducer;
   private readonly _groupTableColumns: any[];
   private _groupsSubscription: PromiseSubscription | null;
@@ -78,11 +78,11 @@ export class DomainUserGroupsComponent extends React.Component<InjectedProps, Do
 
   private _renderToolbar(): ReactNode {
     return (
-      <CartTitleToolbar title="Groups" icon="group">
+      <CardTitleToolbar title="Groups" icon="group">
         <span className={styles.search}>
           <Input placeholder="Search Groups" addonAfter={<Icon type="search"/>} onKeyUp={this._onFilterChange}/>
         </span>
-        <Tooltip placement="topRight" title="Create User" mouseEnterDelay={1}>
+        <Tooltip placement="topRight" title="Create Group" mouseEnterDelay={1}>
           <Button className={styles.iconButton} shape="circle" size="small" htmlType="button"
                   onClick={this._goToCreate}>
             <Icon type="plus-circle"/>
@@ -94,7 +94,7 @@ export class DomainUserGroupsComponent extends React.Component<InjectedProps, Do
             <Icon type="reload"/>
           </Button>
         </Tooltip>
-      </CartTitleToolbar>
+      </CardTitleToolbar>
     )
   }
 
@@ -125,7 +125,7 @@ export class DomainUserGroupsComponent extends React.Component<InjectedProps, Do
   private _renderActions = (_: undefined, record: DomainUserGroupSummary) => {
     return (
       <span className={styles.actions}>
-        <Tooltip placement="topRight" title="Edit User" mouseEnterDelay={1}>
+        <Tooltip placement="topRight" title="Edit Group" mouseEnterDelay={1}>
           <Link to={toDomainUrl("", this.props.domainId, `groups/${record.id}`)}>
             <Button shape="circle" size="small" htmlType="button" icon="edit"/>
           </Link>
@@ -137,7 +137,7 @@ export class DomainUserGroupsComponent extends React.Component<InjectedProps, Do
                     cancelText="No"
                     icon={<Icon type="question-circle-o" style={{color: 'red'}}/>}
         >
-        <Tooltip placement="topRight" title="Delete User" mouseEnterDelay={2}>
+        <Tooltip placement="topRight" title="Delete Group" mouseEnterDelay={2}>
           <Button shape="circle" size="small" htmlType="button" icon="delete"/>
         </Tooltip>
       </Popconfirm>
@@ -157,7 +157,7 @@ export class DomainUserGroupsComponent extends React.Component<InjectedProps, Do
       .catch(err => {
         console.error(err);
         notification.error({
-          message: 'Could Not Delete User',
+          message: 'Could Not Delete Group',
           description: `The group could not be deleted.`,
         });
       });

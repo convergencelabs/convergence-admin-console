@@ -5,6 +5,10 @@ export function shortDateTime(time: Date | number): string {
 }
 
 export function longDateTime(time: Date | number): string {
+  return moment(time).format("MM/DD/YYYY @ hh:mma")
+}
+
+export function longDateTimeWithSeconds(time: Date | number): string {
   return moment(time).format("MM/DD/YYYY @ hh:mm:ssa")
 }
 

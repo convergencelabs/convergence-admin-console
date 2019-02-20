@@ -2,9 +2,9 @@ import * as React from 'react';
 import {Route, RouteComponentProps, Switch} from 'react-router';
 import {Layout} from 'antd';
 import styles from './style.module.css';
-import {AppHeader} from "../../components/AppHeader";
+import {AppHeader} from "../../components/common/AppHeader";
 import {DomainContainer} from "../Domain";
-import {AppBreadcrumbs} from "../../components/AppBreadcrumbs";
+import {AppBreadcrumbs} from "../../components/common/AppBreadcrumbs";
 import {ServerContainer} from "../Server";
 
 export class MainLayout extends React.Component<RouteComponentProps, {}> {

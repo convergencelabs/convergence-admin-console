@@ -1,10 +1,10 @@
 import React, {ReactNode, FormEvent} from 'react';
-import {Page} from "../../../../components/Page/";
+import {Page} from "../../../../components/common/Page/";
 import {Card, Col, notification, Row, Form, Input, Tooltip, Icon, Button} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
-import {FormButtonBar} from "../../../../components/FormButtonBar/";
+import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {RestError} from "../../../../services/RestError";
@@ -15,9 +15,9 @@ import {DomainUser} from "../../../../models/domain/DomainUser";
 import {toDomainUrl} from "../../../../utils/domain-url";
 import {UpdateDomainUserData} from "../../../../services/domain/common-rest-data";
 import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
-import {CartTitleToolbar} from "../../../../components/CardTitleToolbar";
+import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar";
 
-interface EditDomainUserProps extends RouteComponentProps<{ username: string }> {
+export interface EditDomainUserProps extends RouteComponentProps<{ username: string }> {
   domainId: DomainId;
 }
 
@@ -25,7 +25,7 @@ interface InjectedProps extends EditDomainUserProps, FormComponentProps {
   domainUserService: DomainUserService;
 }
 
-interface EditDomainUserState {
+export interface EditDomainUserState {
   user: DomainUser | null
 }
 
@@ -156,7 +156,7 @@ class EditDomainUserComponent extends React.Component<InjectedProps, EditDomainU
   }
 
   private _renderToolbar(): ReactNode {
-    return (<CartTitleToolbar icon="user" title="Edit User"/>)
+    return (<CardTitleToolbar icon="user" title="Edit User"/>)
   }
 
   private _loadUser(): void {

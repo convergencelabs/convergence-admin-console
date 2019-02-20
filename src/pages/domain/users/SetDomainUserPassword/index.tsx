@@ -1,19 +1,19 @@
 import React, {ReactNode} from 'react';
-import {Page} from "../../../../components/Page/";
+import {Page} from "../../../../components/common/Page/";
 import {Card, notification, Tag, Form, Icon} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
-import {SetPasswordForm} from "../../../../components/SetPasswordForm/"
+import {SetPasswordForm} from "../../../../components/common/SetPasswordForm/"
 import {RestError} from "../../../../services/RestError";
 import {DomainId} from "../../../../models/DomainId";
 import {DomainUserService} from "../../../../services/domain/DomainUserService";
 import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
 import {toDomainUrl} from "../../../../utils/domain-url";
 
-interface SetDomainUserPasswordProps extends RouteComponentProps<{ username: string }> {
+export interface SetDomainUserPasswordProps extends RouteComponentProps<{ username: string }> {
   domainId: DomainId;
 }
 

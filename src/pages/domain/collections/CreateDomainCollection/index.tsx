@@ -7,7 +7,7 @@ import {
 } from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import {RouteComponentProps} from "react-router";
-import {Page} from "../../../../components/Page/";
+import {Page} from "../../../../components/common/Page/";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {RestError} from "../../../../services/RestError";
@@ -22,7 +22,7 @@ import {CollectionPermissions} from "../../../../models/domain/CollectionPermiss
 import {ModelSnapshotPolicy} from "../../../../models/domain/ModelSnapshotPolicy";
 
 
-interface CreateDomainCollectionsProps extends RouteComponentProps {
+export interface CreateDomainCollectionsProps extends RouteComponentProps {
   domainId: DomainId;
 }
 

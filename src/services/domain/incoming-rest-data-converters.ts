@@ -2,7 +2,7 @@ import {Collection} from "../../models/domain/Collection";
 import {
   CollectionData,
   CollectionPermissionsData,
-  CollectionSummaryData,
+  CollectionSummaryData, DomainJwtKeyData,
   DomainUserData,
   DomainUserGroupData, DomainUserGroupInfoData, DomainUserGroupSummaryData,
   DomainUserIdData,
@@ -24,6 +24,7 @@ import {DomainUser} from "../../models/domain/DomainUser";
 import {DomainUserGroup} from "../../models/domain/DomainUserGroup";
 import {DomainUserGroupInfo} from "../../models/domain/DomainUserGroupInfo";
 import {DomainUserGroupSummary} from "../../models/domain/DomainUserGroupSummary";
+import {DomainJwtKey} from "../../models/domain/DomainJwtKey";
 
 export function toCollection(data: CollectionData): Collection {
   return new Collection(
@@ -129,4 +130,14 @@ export function toDomainUserGroupSummary(data: DomainUserGroupSummaryData): Doma
     data.id,
     data.description,
     data.members);
+}
+
+export function toDomainJwtKey(data: DomainJwtKeyData): DomainJwtKey {
+  return new DomainJwtKey(
+    data.id,
+    data.description,
+    new Date(data.updated),
+    data.key,
+    data.enabled
+  );
 }

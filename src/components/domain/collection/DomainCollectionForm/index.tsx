@@ -10,7 +10,7 @@ import {
   Divider
 } from "antd";
 import {FormComponentProps} from "antd/lib/form";
-import {FormButtonBar} from "../../../FormButtonBar/";
+import {FormButtonBar} from "../../../common/FormButtonBar/";
 import {CollectionPermissions} from "../../../../models/domain/CollectionPermissions";
 import {ModelSnapshotPolicy} from "../../../../models/domain/ModelSnapshotPolicy";
 import {Collection} from "../../../../models/domain/Collection";

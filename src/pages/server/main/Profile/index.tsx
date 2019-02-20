@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Page} from "../../../../components/Page/index";
+import {Page} from "../../../../components/common/Page/index";
 import {ReactNode} from "react";
 import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
 import {injectAs} from "../../../../utils/mobx-utils";

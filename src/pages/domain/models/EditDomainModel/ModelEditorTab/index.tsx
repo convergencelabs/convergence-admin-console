@@ -2,7 +2,7 @@ import React, {ReactNode} from 'react';
 import {injectAs} from "../../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../../services/ServiceConstants";
 import {DomainModelService} from "../../../../../services/domain/DomainModelService";
-import {SapphireEditor} from "../../../../../components/ModelEditor/index";
+import {SapphireEditor} from "../../../../../components/ModelEditor/";
 import {STORES} from "../../../../../stores/StoreConstants";
 import {ConvergenceDomainStore} from "../../../../../stores/ConvergenceDomainStore";
 import {RealTimeModel} from "@convergence/convergence";
@@ -11,7 +11,7 @@ import styles from "./styles.module.css";
 import {filter} from "rxjs/operators";
 import {longDateTime} from "../../../../../utils/format-utils";
 
-interface ModelEditorTabProps {
+export interface ModelEditorTabProps {
   modelId: string;
 }
 

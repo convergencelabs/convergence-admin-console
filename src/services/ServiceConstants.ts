@@ -12,6 +12,7 @@ export const SERVICES = {
   DOMAIN_MODEL_SERVICE: "domainModelService",
   DOMAIN_USER_SERVICE: "domainUserService",
   DOMAIN_GROUP_SERVICE: "domainGroupService",
+  DOMAIN_JWT_KEY_SERVICE: "domainJwtKeyService"
 }
 
 Object.freeze(SERVICES);

@@ -1,24 +1,20 @@
-import * as React from 'react';
-import {ReactNode} from "react";
+import React, {ReactNode} from "react";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Select, Form, InputNumber, notification} from "antd";
-import {FormButtonBar} from "../../../../components/FormButtonBar/index";
+import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
 import {FormEvent} from "react";
 import styles from "./styles.module.css";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
-import {configService, ConfigService} from "../../../../services/ConfigService";
+import {ConfigService} from "../../../../services/ConfigService";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
-import {CONFIG} from "../../../../constants/config";
 import {PasswordConfig} from "../../../../models/PasswordConfig";
 
-const {Option} = Select;
-
-interface InjectedProps extends FormComponentProps {
+export interface InjectedProps extends FormComponentProps {
   configService: ConfigService;
 }
 
-interface PasswordPolicyState {
+export interface PasswordPolicyState {
   configs: PasswordConfig | null;
 }
 
@@ -87,8 +83,8 @@ class PasswordPolicyComponent extends React.Component<InjectedProps, PasswordPol
   private _renderYesNo(): ReactNode {
     return (
       <Select className={styles.yesNo}>
-        <Option key="yes" value={TRUE}>Yes</Option>
-        <Option key="No" value={FALSE}>No</Option>
+        <Select.Option key="yes" value={TRUE}>Yes</Select.Option>
+        <Select.Option key="No" value={FALSE}>No</Select.Option>
       </Select>
     );
   }

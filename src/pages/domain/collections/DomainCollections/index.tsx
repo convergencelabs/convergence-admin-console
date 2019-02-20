@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {Page} from "../../../../components/Page/";
+import {Page} from "../../../../components/common/Page/";
 import {KeyboardEvent, ReactNode} from "react";
 import Tooltip from "antd/es/tooltip";
 import {Button, Card, Icon, Input, notification, Popconfirm, Table} from "antd";
-import {CartTitleToolbar} from "../../../../components/CardTitleToolbar/";
+import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
 import {RouteComponentProps} from "react-router";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
 import {injectAs} from "../../../../utils/mobx-utils";
@@ -12,12 +12,12 @@ import {Link} from "react-router-dom";
 import {DomainCollectionService} from "../../../../services/domain/DomainCollectionService";
 import {DomainId} from "../../../../models/DomainId";
 import {CollectionSummary} from "../../../../models/domain/CollectionSummary";
-import {ToolbarButton} from "../../../../components/ToolbarButton";
+import {ToolbarButton} from "../../../../components/common/ToolbarButton";
 import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
 import {toDomainUrl} from "../../../../utils/domain-url";
 import styles from "./styles.module.css";
 
-interface DomainCollectionsProps extends RouteComponentProps {
+export interface DomainCollectionsProps extends RouteComponentProps {
   domainId: DomainId;
 }
 
@@ -25,12 +25,12 @@ interface InjectedProps extends DomainCollectionsProps {
   domainCollectionService: DomainCollectionService;
 }
 
-interface ServerCollectionsState {
+export interface DomainCollectionsState {
   collections: CollectionSummary[] | null;
   collectionFilter: string;
 }
 
-class DomainCollectionsComponent extends React.Component<InjectedProps, ServerCollectionsState> {
+class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCollectionsState> {
   private readonly _breadcrumbs: DomainBreadcrumbProducer;
   private readonly _collectionTableColumns: any[];
   private _collectionsSubscription: PromiseSubscription | null;
@@ -79,13 +79,13 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, ServerCo
 
   private _renderToolbar(): ReactNode {
     return (
-      <CartTitleToolbar title="Collections" icon="folder">
+      <CardTitleToolbar title="Collections" icon="folder">
         <span className={styles.search}>
           <Input placeholder="Search Collections" addonAfter={<Icon type="search"/>} onKeyUp={this._onFilterChange}/>
         </span>
         <ToolbarButton icon="plus-circle" tooltip="Create Collection" onClick={this._goToCreate}/>
         <ToolbarButton icon="reload" tooltip="Reload Collections" onClick={this._loadCollections}/>
-      </CartTitleToolbar>
+      </CardTitleToolbar>
     )
   }
 

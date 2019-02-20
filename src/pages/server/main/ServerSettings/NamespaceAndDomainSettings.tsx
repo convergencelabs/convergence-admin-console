@@ -1,8 +1,7 @@
-import * as React from 'react';
-import {ReactNode} from "react";
+import React, {ReactNode} from "react";
 import {Button, Form, Input, Select} from "antd";
-import {FormFieldWithHelp} from "../../../../components/FormFieldWithHelp/index";
-import {FormButtonBar} from "../../../../components/FormButtonBar/index";
+import {FormFieldWithHelp} from "../../../../components/common/FormFieldWithHelp/";
+import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
 import {FormComponentProps} from "antd/lib/form";
 import {FormEvent} from "react";
 import {injectAs} from "../../../../utils/mobx-utils";

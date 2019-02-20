@@ -17,7 +17,7 @@ import {ModelUserPermissions} from "../../../../../models/domain/ModelUserPermis
 import {DomainUserId} from "../../../../../models/domain/DomainUserId";
 import {CheckboxChangeEvent} from "antd/lib/checkbox";
 
-interface ModelPermissionsProps {
+export interface ModelPermissionsProps {
   domainId: DomainId;
   modelId: string;
 }

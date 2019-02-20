@@ -1,14 +1,14 @@
 import * as React from 'react';
-import {Page} from "../../../../components/Page/";
+import {Page} from "../../../../components/common/Page/";
 import {ReactNode} from "react";
 import Tooltip from "antd/es/tooltip";
 import {Card, Dropdown, Menu, Table, Icon} from "antd";
 import styles from "./styles.module.css";
-import {CartTitleToolbar} from "../../../../components/CardTitleToolbar/";
+import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
 import {RouteComponentProps} from "react-router";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
-import {ToolbarButton} from "../../../../components/ToolbarButton";
+import {ToolbarButton} from "../../../../components/common/ToolbarButton";
 import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
 import {toDomainUrl} from "../../../../utils/domain-url";
 import {ModelControls} from "./ModelControls";
@@ -24,8 +24,7 @@ import "brace";
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
 
-
-interface DomainModelsProps extends RouteComponentProps {
+export interface DomainModelsProps extends RouteComponentProps {
   domainId: DomainId;
 }
 
@@ -33,13 +32,13 @@ interface InjectedProps extends DomainModelsProps {
   domainModelService: DomainModelService;
 }
 
-interface ServerCollectionsState {
+export interface DomainModelsState {
   loading: boolean;
   models: Model[];
   columns: any[];
 }
 
-class DomainModelsComponent extends React.Component<InjectedProps, ServerCollectionsState> {
+class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsState> {
   private readonly _breadcrumbs: DomainBreadcrumbProducer;
   private readonly _metaColumns: any[];
 
@@ -76,9 +75,9 @@ class DomainModelsComponent extends React.Component<InjectedProps, ServerCollect
 
   private _renderToolbar(): ReactNode {
     return (
-      <CartTitleToolbar title="Models" icon="file">
+      <CardTitleToolbar title="Models" icon="file">
         <ToolbarButton icon="plus-circle" tooltip="Create Model" onClick={this._goToCreate}/>
-      </CartTitleToolbar>
+      </CardTitleToolbar>
     )
   }
 
@@ -158,6 +157,8 @@ class DomainModelsComponent extends React.Component<InjectedProps, ServerCollect
   }
 
   private _renderMenu = (id: string, record: Model) => {
+    const permission = toDomainUrl("", this.props.domainId, `models/${id}/permissions`);
+    const data = toDomainUrl("", this.props.domainId, `models/${id}`);
     const menu = (
       <Menu>
         <Menu.Item key="copyId">
@@ -168,10 +169,10 @@ class DomainModelsComponent extends React.Component<InjectedProps, ServerCollect
         </Menu.Item>
         <Menu.Divider/>
         <Menu.Item key="edit">
-          <a href="#"><Icon type="edit"/> Edit Model</a>
+          <Link to={data}><Icon type="edit"/> Edit Model</Link>
         </Menu.Item>
         <Menu.Item key="edit">
-          <a href="#"><Icon type="team"/> Edit Permissions</a>
+          <Link to={permission}><Icon type="team"/> Edit Permissions</Link>
         </Menu.Item>
         <Menu.Divider/>
         <Menu.Item key="delete">
@@ -183,7 +184,7 @@ class DomainModelsComponent extends React.Component<InjectedProps, ServerCollect
     return (
       <div style={{display: "flex", alignItems: "center"}}>
         <Tooltip title={id}>
-          <Link to={id} style={{flex: 1}}>{truncate(id, 10)}</Link>
+          <Link to={data} style={{flex: 1}}>{truncate(id, 10)}</Link>
         </Tooltip>
         <Dropdown overlay={menu} trigger={['click']}>
           <Icon type="down-square"/>

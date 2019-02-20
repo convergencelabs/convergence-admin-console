@@ -1,4 +1,4 @@
-import {Page} from "../../../../components/Page/";
+import {Page} from "../../../../components/common/Page/";
 import React, {ReactNode} from "react";
 import {Card, notification, Icon} from "antd";
 import {FormComponentProps} from "antd/lib/form";
@@ -15,7 +15,7 @@ import {DomainUserGroup} from "../../../../models/domain/DomainUserGroup";
 import {RestError} from "../../../../services/RestError";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
 
-interface EditDomainUserGroupProps extends RouteComponentProps<{id: string}> {
+export interface EditDomainUserGroupProps extends RouteComponentProps<{id: string}> {
   domainId: DomainId;
 }
 
@@ -23,7 +23,7 @@ interface InjectedProps extends EditDomainUserGroupProps, FormComponentProps {
   domainGroupService: DomainGroupService;
 }
 
-interface EditDomainUserGroupState {
+export interface EditDomainUserGroupState {
   initialGroup: DomainUserGroup | null;
 }
 
@@ -34,9 +34,8 @@ class EditDomainUserGroupComponent extends React.Component<InjectedProps, EditDo
   constructor(props: InjectedProps) {
     super(props);
 
-    const groupsUrl = toDomainUrl("", this.props.domainId, "groups/");
     this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId, [
-      {title: "Groups", link: toDomainUrl("", this.props.domainId, groupsUrl)},
+      {title: "Groups", link: toDomainUrl("", this.props.domainId, "groups/")},
       {title: this.props.match.params.id}
     ]);
 
@@ -77,8 +76,8 @@ class EditDomainUserGroupComponent extends React.Component<InjectedProps, EditDo
     this.props.domainGroupService.updateUserGroup(this.props.domainId, this.props.match.params.id, group)
       .then(() => {
         notification.success({
-          message: 'Group Editd',
-          description: `User '${group.id}' successfully created.`
+          message: 'Group Updated',
+          description: `Group '${group.id}' successfully created.`
         });
         const url = toDomainUrl("", this.props.domainId, "groups/");
         this.props.history.push(url);
@@ -87,7 +86,7 @@ class EditDomainUserGroupComponent extends React.Component<InjectedProps, EditDo
         if (err.code === "duplicate") {
           notification.error({
             message: 'Could Not Edit Group',
-            description: `A user with the specified ${err.details["field"]} already exists.`
+            description: `A group with the specified ${err.details["field"]} already exists.`
           });
         }
       }
@@ -102,8 +101,8 @@ class EditDomainUserGroupComponent extends React.Component<InjectedProps, EditDo
 
     this._groupSubscription = subscription;
 
-    promise.then(collection => {
-      this.setState({initialGroup: collection});
+    promise.then(group => {
+      this.setState({initialGroup: group});
     })
   }
 

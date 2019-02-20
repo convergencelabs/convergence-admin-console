@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Page} from "../../../../components/Page/";
+import {Page} from "../../../../components/common/Page/";
 import {ReactNode} from "react";
 import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
 import {Button, Card, Icon, Input, notification, Popconfirm, Table} from "antd";
@@ -10,11 +10,11 @@ import {DomainService} from "../../../../services/DomainService";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
 import {DomainDescriptor} from "../../../../models/DomainDescriptor";
 import {RouteComponentProps} from "react-router";
-import {CartTitleToolbar} from "../../../../components/CardTitleToolbar/";
+import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
 import Tooltip from "antd/es/tooltip";
 import {KeyboardEvent} from "react";
 import {Link} from "react-router-dom";
-import {NamespaceAutoComplete} from "../../../../components/NamespaceAutoComplete";
+import {NamespaceAutoComplete} from "../../../../components/server/NamespaceAutoComplete";
 import {LoggedInUserService} from "../../../../services/LoggedInUserService";
 import {DomainId} from "../../../../models/DomainId";
 
@@ -23,7 +23,7 @@ interface InjectedProps extends RouteComponentProps {
   loggedInUserService: LoggedInUserService;
 }
 
-interface DomainsState {
+export interface DomainsState {
   domains: DomainDescriptor[] | null;
   favorites: DomainId[];
   domainsFilter: string;
@@ -104,7 +104,7 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
 
   private _renderToolbar(): ReactNode {
     return (
-      <CartTitleToolbar title="Domains" icon="database">
+      <CardTitleToolbar title="Domains" icon="database">
         <NamespaceAutoComplete placeholder={"Filter Namespace"}
                                onChange={this._onNamespaceChange}/>
         <span className={styles.search}>
@@ -122,7 +122,7 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
             <Icon type="reload"/>
           </Button>
         </Tooltip>
-      </CartTitleToolbar>
+      </CardTitleToolbar>
     )
   }
 

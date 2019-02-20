@@ -1,6 +1,5 @@
-import * as React from 'react';
-import {Page} from "../../../../components/Page/";
-import {ReactNode} from "react";
+import React, {ReactNode} from "react";
+import {Page} from "../../../../components/common/Page/";
 import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
 import {Card, Col, notification, Row} from "antd";
 import {Form, Input, Tooltip, Icon, Button, Select} from 'antd';
@@ -8,7 +7,7 @@ import {FormComponentProps} from "antd/lib/form";
 import {FormEvent} from "react";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
-import {FormButtonBar} from "../../../../components/FormButtonBar/";
+import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
 import {CreateUserData, UserService} from "../../../../services/UserService";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
@@ -18,14 +17,12 @@ import {PromiseSubscription} from "../../../../utils/make-cancelable";
 import {PasswordConfig} from "../../../../models/PasswordConfig";
 import {PasswordFormValidator} from "../../../../utils/PasswordFormValidator";
 
-const {Option} = Select;
-
 interface InjectedProps extends RouteComponentProps, FormComponentProps {
   userService: UserService;
   configService: ConfigService;
 }
 
-interface CreateUserComponentState {
+export interface CreateUserComponentState {
   confirmDirty: boolean;
   passwordConfig: PasswordConfig | null;
 }
@@ -138,9 +135,9 @@ class CreateUserComponent extends React.Component<InjectedProps, CreateUserCompo
                   rules: [{type: 'string', required: true, message: 'Please select a role!'}],
                 })(
                   <Select>
-                    <Option value="Developer">Developer</Option>
-                    <Option value="Domain Admin">Domain Admin</Option>
-                    <Option value="Server Admin">Server Admin</Option>
+                    <Select.Option value="Developer">Developer</Select.Option>
+                    <Select.Option value="Domain Admin">Domain Admin</Select.Option>
+                    <Select.Option value="Server Admin">Server Admin</Select.Option>
                   </Select>
                 )}
               </Form.Item>

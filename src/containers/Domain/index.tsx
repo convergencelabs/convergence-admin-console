@@ -5,7 +5,7 @@ import {DomainDashboard} from "../../pages/domain/Dashboard/";
 import {DomainDescriptor} from "../../models/DomainDescriptor";
 import {ReactNode} from "react";
 import {DomainService} from "../../services/DomainService";
-import {NavLayout} from "../../components/NavLayout";
+import {NavLayout} from "../../components/common/NavLayout";
 import {DomainCollections} from "../../pages/domain/collections/DomainCollections";
 import {CreateDomainCollection} from "../../pages/domain/collections/CreateDomainCollection";
 import {EditDomainCollection} from "../../pages/domain/collections/EditDomainCollection";
@@ -25,6 +25,10 @@ import {SetDomainUserPassword} from "../../pages/domain/users/SetDomainUserPassw
 import {DomainUserGroups} from "../../pages/domain/groups/DomainUserGroups";
 import {CreateDomainUserGroup} from "../../pages/domain/groups/CreateDomainUserGroup";
 import {EditDomainUserGroup} from "../../pages/domain/groups/EditDomainUserGroup";
+import {DomainAuthentication} from "../../pages/domain/auth/";
+import {DomainSettings} from "../../pages/domain/settings";
+import {CreateDomainJwtKey} from "../../pages/domain/auth/jwt/CreateDomainJwtKey";
+import {EditDomainJwtKey} from "../../pages/domain/auth/jwt/EditDomainJwtKey";
 
 export interface DomainRouteParams {
   namespace: string;
@@ -100,10 +104,18 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
             <Route path={`${match.url}/create-collection`} render={(props) => <CreateDomainCollection {...props} domainId={domainId}/>}/>
 
             <Route exact path={`${match.url}/models`} render={(props) => <DomainModels {...props} domainId={domainId}/>} />
-            <Route path={`${match.url}/create-model`} render={(props) => <CreateDomainModel {...props} domainId={domainId}/>} />
-            <Route path={`${match.url}/models/:modelId`} render={(props) => <EditDomainModel {...props} domainId={domainId}/>} />
+            <Route exact path={`${match.url}/models/:id`} render={(props) => <EditDomainModel {...props} domainId={domainId}/>} />
+            <Route path={`${match.url}/models/:id/:tab`} render={(props) => <EditDomainModel {...props} domainId={domainId}/>} />
 
-            <Route path={`${match.url}/settings`} render={(props) => <div>Settings</div>}/>
+            <Route path={`${match.url}/create-model`} render={(props) => <CreateDomainModel {...props} domainId={domainId}/>} />
+
+
+            <Route exact path={`${match.url}/authentication/:tab/`} render={(props) => <DomainAuthentication {...props} domainId={domainId}/>}/>
+            <Route exact path={`${match.url}/authentication/`} render={(props) => <DomainAuthentication {...props} domainId={domainId}/>}/>
+            <Route exact path={`${match.url}/authentication/jwt/create-jwt-key`} render={(props) => <CreateDomainJwtKey {...props} domainId={domainId}/>}/>
+            <Route exact path={`${match.url}/authentication/jwt/:id`} render={(props) => <EditDomainJwtKey {...props} domainId={domainId}/>}/>
+
+            <Route exact path={`${match.url}/settings`} render={(props) => <DomainSettings {...props} domainId={domainId}/>}/>
           </Switch>
         </NavLayout>
       );
