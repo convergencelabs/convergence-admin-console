@@ -36,7 +36,7 @@ class DomainJwtKeyFormComponent extends React.Component<InjectedProps, {}> {
           {getFieldDecorator('id', {
             initialValue: this.props.initialValue.id,
             rules: [{
-              required: true, whitespace: true, message: 'Please input a Id!',
+              required: !this.props.disableId, whitespace: true, message: 'Please input a Id!',
             }],
           })(
             <Input disabled={this.props.disableId}/>

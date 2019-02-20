@@ -8,11 +8,11 @@ import {DomainJwtKeyService} from "../../../../../services/domain/DomainJwtKeySe
 import {DomainJwtKey} from "../../../../../models/domain/DomainJwtKey";
 import {makeCancelable, PromiseSubscription} from "../../../../../utils/make-cancelable";
 import {toDomainUrl} from "../../../../../utils/domain-url";
-import {CardTitleToolbar} from "../../../../../components/common/CardTitleToolbar/index";
+import {CardTitleToolbar} from "../../../../../components/common/CardTitleToolbar/";
 import {SERVICES} from "../../../../../services/ServiceConstants";
 import {injectAs} from "../../../../../utils/mobx-utils";
 import * as H from "history";
-import {longDateTime, shortDateTime} from "../../../../../utils/format-utils";
+import {durationToNow, yesNo} from "../../../../../utils/format-utils";
 
 export interface DomainJwtKeysProps {
   domainId: DomainId;
@@ -45,15 +45,15 @@ class DomainJwtKeysComponent extends React.Component<InjectedProps, DomainJwtKey
       dataIndex: 'description',
       sorter: (a: DomainJwtKey, b: DomainJwtKey) => (a.description).localeCompare(b.description)
     }, {
-      title: 'Updated',
+      title: 'Key Age',
       dataIndex: 'updated',
       sorter: (a: DomainJwtKey, b: DomainJwtKey) => a.updated.getTime() - b.updated.getTime(),
-      render: (val: Date, record: DomainJwtKey) => longDateTime(val)
+      render: (val: Date, record: DomainJwtKey) => durationToNow(val)
     }, {
       title: 'Enabled',
       dataIndex: 'enabled',
       sorter: (a: DomainJwtKey, b: DomainJwtKey) => a.updated,
-      render: (val: boolean, record: DomainJwtKey) => "" + val
+      render: (val: boolean, record: DomainJwtKey) => yesNo(val)
     }, {
       title: '',
       align: 'right',
