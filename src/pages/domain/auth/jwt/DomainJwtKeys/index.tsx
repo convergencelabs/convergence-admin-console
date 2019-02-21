@@ -13,6 +13,7 @@ import {SERVICES} from "../../../../../services/ServiceConstants";
 import {injectAs} from "../../../../../utils/mobx-utils";
 import * as H from "history";
 import {durationToNow, yesNo} from "../../../../../utils/format-utils";
+import {DescriptionBox} from "../../../../../components/common/DescriptionBox";
 
 export interface DomainJwtKeysProps {
   domainId: DomainId;
@@ -39,7 +40,8 @@ class DomainJwtKeysComponent extends React.Component<InjectedProps, DomainJwtKey
       title: 'Id',
       dataIndex: 'id',
       sorter: (a: DomainJwtKey, b: DomainJwtKey) => (a.id as string).localeCompare(b.id),
-      render: (text: string) => <Link to={toDomainUrl("", this.props.domainId, `authentication/jwt/${text}`)}>{text}</Link>
+      render: (text: string) => <Link
+        to={toDomainUrl("", this.props.domainId, `authentication/jwt/${text}`)}>{text}</Link>
     }, {
       title: 'Description',
       dataIndex: 'description',
@@ -78,6 +80,30 @@ class DomainJwtKeysComponent extends React.Component<InjectedProps, DomainJwtKey
     }
   }
 
+  public render(): ReactNode {
+    return (
+      <React.Fragment>
+        <DescriptionBox>
+          JSON Web Tokens (JWT) provide a mechanism for convergence to trust users authenticated by external systems. If
+          you have an external application tht you would like to have manage authentication, you can set up a
+          JWT Authentication key so Convergence will trust the authentication performed by the external system. You can
+          read more about JWT at <a href="https://jwt.io/" target="_blank">https://jwt.io/</a>
+        </DescriptionBox>
+        <Card className={styles.keysTable}
+              title={this._renderToolbar()}
+              type="inner"
+              size="small">
+          <Table
+            size="middle"
+            rowKey="id"
+            columns={this._keyTableColumns}
+            dataSource={this.state.keys || []}
+          />
+        </Card>
+      </React.Fragment>
+    );
+  }
+
   private _renderToolbar(): ReactNode {
     return (
       <CardTitleToolbar title="Keys" icon="key">
@@ -107,19 +133,6 @@ class DomainJwtKeysComponent extends React.Component<InjectedProps, DomainJwtKey
   private _goToCreate = () => {
     const url = toDomainUrl("", this.props.domainId, "authentication/jwt/create-jwt-key");
     this.props.history.push(url);
-  }
-
-  public render(): ReactNode {
-    return (
-      <Card title={this._renderToolbar()} type="inner">
-        <Table className={styles.groupTable}
-               size="middle"
-               rowKey="id"
-               columns={this._keyTableColumns}
-               dataSource={this.state.keys || []}
-        />
-      </Card>
-    );
   }
 
   private _renderActions = (_: undefined, record: DomainJwtKey) => {

@@ -18,8 +18,10 @@ import {domainModelService} from "./services/domain/DomainModelService";
 import {domainUserService} from "./services/domain/DomainUserService";
 import {domainGroupService} from "./services/domain/DomainGroupService";
 import {domainJwtKeyService} from "./services/domain/DomainJwtKeyService";
+import {domainConfigService} from "./services/domain/DomainConfigService";
+import {domainMemberService} from "./services/domain/DomainMemberService";
+import {domainSessionService} from "./services/domain/DomainSessionService";
 import {convergenceDomainStore} from "./stores/ConvergenceDomainStore";
-
 import {message, notification} from "antd";
 import {configure} from "mobx"
 
@@ -59,7 +61,10 @@ const services = {
   domainModelService,
   domainUserService,
   domainGroupService,
-  domainJwtKeyService
+  domainJwtKeyService,
+  domainConfigService,
+  domainMemberService,
+  domainSessionService
 };
 
 const authToken = localStorageService.getAuthToken();

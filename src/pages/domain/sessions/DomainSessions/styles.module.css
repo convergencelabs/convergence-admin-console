@@ -1,0 +1,23 @@
+.titleTools {
+  font-size: 14px;
+  font-weight: normal;
+  display: flex;
+  align-items: center;
+}
+
+.titleTools span {
+  margin-right: 10px;
+  margin-left: 15px;
+}
+
+.expander {
+  padding-left: 20px;
+}
+
+.expander tr {
+  border-bottom: 1px solid lightgray;
+}
+
+.expander td {
+  padding: 2px 6px;
+}

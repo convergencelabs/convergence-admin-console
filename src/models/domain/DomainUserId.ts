@@ -1,6 +1,12 @@
+export enum DomainUserType {
+  NORMAL = "normal",
+  CONVERGENCE = "convergence",
+  ANONYMOUS = "anonymous"
+}
+
 export class DomainUserId {
-  constructor(public type: string,
+  constructor(public type: DomainUserType,
               public username: string) {
-    // no-op
+    Object.freeze(this);
   }
 }

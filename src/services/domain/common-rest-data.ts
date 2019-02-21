@@ -121,3 +121,17 @@ export interface DomainJwtKeyData {
   key: string;
   enabled: boolean
 }
+
+
+export interface DomainSessionData {
+  id: string;
+  username: string;
+  userType: string;
+  connected: number;
+  disconnected?: number;
+  authMethod: string;
+  client: string;
+  clientVersion: string;
+  clientMetaData: string;
+  remoteHost: string;
+}

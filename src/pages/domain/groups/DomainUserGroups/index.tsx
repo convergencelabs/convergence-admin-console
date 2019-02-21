@@ -1,6 +1,5 @@
-import * as React from 'react';
+import React, {KeyboardEvent, ReactNode} from "react";
 import {Page} from "../../../../components/common/Page/";
-import {KeyboardEvent, ReactNode} from "react";
 import Tooltip from "antd/es/tooltip";
 import {Button, Card, Icon, Input, notification, Popconfirm, Table} from "antd";
 import styles from "./styles.module.css";

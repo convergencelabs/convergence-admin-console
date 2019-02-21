@@ -205,7 +205,7 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
   }
 
   private _onDeleteDomain = (namespace: string, id: string) => {
-    this.props.domainService.deleteDomain(namespace, id)
+    this.props.domainService.deleteDomain(new DomainId(namespace, id))
       .then(() => {
         this._loadDomains();
         notification.success({

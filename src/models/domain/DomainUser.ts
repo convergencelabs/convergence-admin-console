@@ -4,6 +4,6 @@ export class DomainUser {
               public firstName: string,
               public lastName: string,
               public email: string) {
-    // no-op
+    Object.freeze(this);
   }
 }

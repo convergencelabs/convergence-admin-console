@@ -1,7 +1,6 @@
 import React, {ReactNode, FormEvent} from "react";
 import {
   Col,
-  InputNumber,
   Row,
   Form,
   Input,
@@ -11,6 +10,7 @@ import {
 } from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import {FormButtonBar} from "../../../common/FormButtonBar/";
+import {ModelSnapshotPolicyFormFragment} from "../../common/ModelSnapshotPolicyFormFragment";
 import {CollectionPermissions} from "../../../../models/domain/CollectionPermissions";
 import {ModelSnapshotPolicy} from "../../../../models/domain/ModelSnapshotPolicy";
 import {Collection} from "../../../../models/domain/Collection";
@@ -42,7 +42,7 @@ class DomainCollectionFormComponent extends React.Component<DomainCollectionForm
                   required: !this.props.disableId, whitespace: true, message: 'Please input an Id!',
                 }],
               })(
-                <Input disabled={this.props.disableId}/>
+                <Input disabled={disableId}/>
               )}
             </Form.Item>
           </Col>
@@ -109,89 +109,7 @@ class DomainCollectionFormComponent extends React.Component<DomainCollectionForm
             )}
           </Col>
         </Row>
-        <Row>
-          <Col span={24}>
-            {getFieldDecorator('snapshotsEnabled', {
-              initialValue: initialValue.snapshotPolicy.snapshotsEnabled,
-              valuePropName: 'checked'
-            })(
-              <Checkbox>Snapshots Enabled</Checkbox>
-            )}
-          </Col>
-        </Row>
-        <Row>
-          <Col span={12}>
-            {getFieldDecorator('triggerByVersion', {
-              initialValue: initialValue.snapshotPolicy.triggerByVersion,
-              valuePropName: 'checked'
-            })(
-              <Checkbox>Trigger By Version</Checkbox>
-            )}
-          </Col>
-          <Col span={12}>
-            {getFieldDecorator('limitByVersion', {
-              initialValue: initialValue.snapshotPolicy.limitByVersion,
-              valuePropName: 'checked'
-            })(
-              <Checkbox>Limit By Version</Checkbox>
-            )}
-          </Col>
-        </Row>
-        <Row>
-          <Col span={12}>
-            <Form.Item label="Maximum Version">
-              {getFieldDecorator('maximumVersion', {
-                initialValue: initialValue.snapshotPolicy.maximumVersionInterval
-              })(
-                <InputNumber/>
-              )}
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item label="Minimum Version">
-              {getFieldDecorator('minimumVersion', {
-                initialValue: initialValue.snapshotPolicy.minimumVersionInterval
-              })(
-                <InputNumber/>
-              )}
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row>
-          <Col span={12}>
-            {getFieldDecorator('triggerByTime', {
-              initialValue: initialValue.snapshotPolicy.triggerByTime, valuePropName: 'checked'
-            })(
-              <Checkbox>Trigger By Time</Checkbox>
-            )}
-          </Col>
-          <Col span={12}>
-            {getFieldDecorator('limitByTime', {
-              initialValue: initialValue.snapshotPolicy.limitByTime,
-              valuePropName: 'checked'
-            })(
-              <Checkbox>Limit By Time</Checkbox>
-            )}
-          </Col>
-        </Row>
-        <Row>
-          <Col span={12}>
-            <Form.Item label="Maximum Time (min)">
-              {getFieldDecorator('maximumTime', {
-                initialValue: initialValue.snapshotPolicy.maximumTimeInterval
-              })(
-                <InputNumber/>
-              )}
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item label="Minimum Time (min)">
-              {getFieldDecorator('minimumTime', {
-                initialValue: initialValue.snapshotPolicy.minimumTimeInterval
-              })(<InputNumber/>)}
-            </Form.Item>
-          </Col>
-        </Row>
+        <ModelSnapshotPolicyFormFragment initialValue={initialValue.snapshotPolicy} form={this.props.form} />
         <Row>
           <Col span={24}>
             <FormButtonBar>

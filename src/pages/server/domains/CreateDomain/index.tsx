@@ -18,6 +18,7 @@ import RadioGroup from "antd/es/radio/group";
 import {ProfileStore} from "../../../../stores/ProfileStore";
 import {STORES} from "../../../../stores/StoreConstants";
 import {RestError} from "../../../../services/RestError";
+import {DomainId} from "../../../../models/DomainId";
 
 export interface CreateDomainState {
   confirmDirty: boolean;
@@ -136,7 +137,7 @@ class CreateDomainComponent extends React.Component<InjectedProps, CreateDomainS
           namespace;
 
         this.props.domainService
-          .createDomain(ns, id, displayName)
+          .createDomain(new DomainId(ns, id), displayName)
           .then(() => {
             notification.success({
               message: "Domain Created",

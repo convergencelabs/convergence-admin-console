@@ -8,6 +8,7 @@ import {DomainBreadcrumbProducer} from "../DomainBreadcrumProducer";
 import {Page} from "../../../components/common/Page";
 import {DomainJwtKeys} from "./jwt/DomainJwtKeys";
 import {toDomainUrl} from "../../../utils/domain-url";
+import {AnonymousAuthForm} from "./anonymous/AnonymousAuthForm";
 
 export interface DomainAuthenticationProps extends RouteComponentProps<{tab: string}> {
   domainId: DomainId;
@@ -44,6 +45,7 @@ export class DomainAuthentication extends React.Component<DomainAuthenticationPr
               />
             </Tabs.TabPane>
             <Tabs.TabPane tab="Anonymous Authentication" key="anonymous">
+              <AnonymousAuthForm domainId={this.props.domainId}/>
             </Tabs.TabPane>
           </Tabs>
         </Card>

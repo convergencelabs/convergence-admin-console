@@ -2,7 +2,7 @@ import {Collection} from "../../models/domain/Collection";
 import {
   CollectionData,
   CollectionPermissionsData,
-  CollectionSummaryData, DomainJwtKeyData,
+  CollectionSummaryData, DomainJwtKeyData, DomainSessionData,
   DomainUserData,
   DomainUserGroupData, DomainUserGroupInfoData, DomainUserGroupSummaryData,
   DomainUserIdData,
@@ -19,12 +19,13 @@ import {Model} from "../../models/domain/Model";
 import {ModelPermissionSummary} from "../../models/domain/ModelPermissionsSummary";
 import {ModelPermissions} from "../../models/domain/ModelPermissions";
 import {ModelUserPermissions} from "../../models/domain/ModelUserPermissions";
-import {DomainUserId} from "../../models/domain/DomainUserId";
+import {DomainUserId, DomainUserType} from "../../models/domain/DomainUserId";
 import {DomainUser} from "../../models/domain/DomainUser";
 import {DomainUserGroup} from "../../models/domain/DomainUserGroup";
 import {DomainUserGroupInfo} from "../../models/domain/DomainUserGroupInfo";
 import {DomainUserGroupSummary} from "../../models/domain/DomainUserGroupSummary";
 import {DomainJwtKey} from "../../models/domain/DomainJwtKey";
+import {DomainSession} from "../../models/domain/DomainSession";
 
 export function toCollection(data: CollectionData): Collection {
   return new Collection(
@@ -109,7 +110,7 @@ export function toDomainUser(data: DomainUserData): DomainUser {
 }
 
 export function toDomainUserId(data: DomainUserIdData): DomainUserId {
-  return new DomainUserId(data.type, data.username);
+  return new DomainUserId(data.type as DomainUserType, data.username);
 }
 
 export function toDomainUserGroup(data: DomainUserGroupData): DomainUserGroup {
@@ -140,4 +141,18 @@ export function toDomainJwtKey(data: DomainJwtKeyData): DomainJwtKey {
     data.key,
     data.enabled
   );
+}
+
+export function toDomainSession(data: DomainSessionData): DomainSession {
+  return new DomainSession(
+    data.id,
+    new DomainUserId(data.userType as DomainUserType, data.username),
+    new Date(data.connected),
+    data.disconnected ? new Date(data.disconnected) : null,
+    data.authMethod,
+    data.client,
+    data.clientVersion,
+    data.clientMetaData,
+    data.remoteHost
+  )
 }

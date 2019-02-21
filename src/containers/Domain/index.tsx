@@ -29,6 +29,7 @@ import {DomainAuthentication} from "../../pages/domain/auth/";
 import {DomainSettings} from "../../pages/domain/settings";
 import {CreateDomainJwtKey} from "../../pages/domain/auth/jwt/CreateDomainJwtKey";
 import {EditDomainJwtKey} from "../../pages/domain/auth/jwt/EditDomainJwtKey";
+import {DomainSessions} from "../../pages/domain/sessions/DomainSessions";
 
 export interface DomainRouteParams {
   namespace: string;
@@ -69,10 +70,10 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
       return;
     }
 
-    const domainInfo = this._extractNamespaceAndDomain();
-    if (this.state.domainData!.namespace !== domainInfo.namespace ||
-      this.state.domainData!.id !== domainInfo.domainId) {
-      this._loadDomain(domainInfo);
+    const domainId = this._extractNamespaceAndDomain();
+    if (this.state.domainData!.namespace !== domainId.namespace ||
+      this.state.domainData!.id !== domainId.id) {
+      this._loadDomain(domainId);
     }
   }
 
@@ -97,7 +98,7 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
             <Route exact path={`${match.url}/groups/:id`} render={(props) => <EditDomainUserGroup {...props} domainId={domainId}/>}/>
             <Route exact path={`${match.url}/create-group`} render={(props) => <CreateDomainUserGroup {...props} domainId={domainId}/>}/>
 
-            <Route path={`${match.url}/sessions`} render={(props) => <div>Sessions</div>}/>
+            <Route path={`${match.url}/sessions`} render={(props) => <DomainSessions {...props} domainId={domainId}/>}/>
 
             <Route exact path={`${match.url}/collections`} render={(props) => <DomainCollections {...props} domainId={domainId}/>}/>
             <Route exact path={`${match.url}/collections/:id`} render={(props) => <EditDomainCollection {...props} domainId={domainId}/>}/>
@@ -109,13 +110,13 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
 
             <Route path={`${match.url}/create-model`} render={(props) => <CreateDomainModel {...props} domainId={domainId}/>} />
 
-
             <Route exact path={`${match.url}/authentication/:tab/`} render={(props) => <DomainAuthentication {...props} domainId={domainId}/>}/>
             <Route exact path={`${match.url}/authentication/`} render={(props) => <DomainAuthentication {...props} domainId={domainId}/>}/>
             <Route exact path={`${match.url}/authentication/jwt/create-jwt-key`} render={(props) => <CreateDomainJwtKey {...props} domainId={domainId}/>}/>
             <Route exact path={`${match.url}/authentication/jwt/:id`} render={(props) => <EditDomainJwtKey {...props} domainId={domainId}/>}/>
 
             <Route exact path={`${match.url}/settings`} render={(props) => <DomainSettings {...props} domainId={domainId}/>}/>
+            <Route exact path={`${match.url}/settings/:tab`} render={(props) => <DomainSettings {...props} domainId={domainId}/>}/>
           </Switch>
         </NavLayout>
       );
@@ -124,27 +125,27 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
     }
   }
 
-  private _loadDomain(domain: { namespace: string, domainId: string }): void {
+  private _loadDomain(domainId: DomainId): void {
     this.setState({domainData: null, convergenceDomain: null});
 
     this.props.domainService
-      .getDomain(domain.namespace, domain.domainId)
+      .getDomain(domainId)
       .then(domainData => {
         this.setState({ domainData});
       });
 
     this.props.convergenceDomainStore.
-    activateDomain(new DomainId(domain.namespace, domain.domainId))
+    activateDomain(domainId)
       .then(() => {
         this.setState({convergenceDomain: this.props.convergenceDomainStore.domain});
       })
   }
 
-  private _extractNamespaceAndDomain(): { namespace: string, domainId: string } {
+  private _extractNamespaceAndDomain(): DomainId {
     const {namespace, domainId} = this.props.match.params;
-    return {namespace, domainId};
+    return new DomainId(namespace, domainId);
   }
 }
 
-const INJECTIONS = [SERVICES.DOMAIN_SERVICE, STORES.CONVERGENCE_DOMAIN_STORE]
+const INJECTIONS = [SERVICES.DOMAIN_SERVICE, STORES.CONVERGENCE_DOMAIN_STORE];
 export const DomainContainer = injectAs<RouteComponentProps>(INJECTIONS, DomainContainerComponent);

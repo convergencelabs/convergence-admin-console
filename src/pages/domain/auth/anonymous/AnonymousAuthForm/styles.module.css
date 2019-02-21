@@ -1,0 +1,24 @@
+.anonymousAuth {
+  max-width: 800px;
+}
+
+.controls {
+  margin-top: 35px;
+}
+
+.warning {
+  color: #843434;
+  font-style: italic;
+}
+
+.label {
+  font-weight: bold;
+}
+
+.controls :global(.ant-switch) {
+  margin: 0 10px;
+}
+
+.enabled {
+
+}

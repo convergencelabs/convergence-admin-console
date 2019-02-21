@@ -1,3 +1,7 @@
+.members {
+  max-width: 700px;
+}
+
 .actions button {
   margin-right: 5px;
 }
@@ -10,7 +14,6 @@
   margin-left: 10px;
 }
 
-
-.keysTable:global(.ant-card) {
-  margin-top: 25px;
+.memberTable {
+  margin-top: 20px;
 }

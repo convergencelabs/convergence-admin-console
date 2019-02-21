@@ -1,6 +1,8 @@
 export enum DomainStatus {
-  ONLINE,
-  OFFLINE,
-  INITIALIZING,
-  ERROR
+  ONLINE = "online",
+  OFFLINE = "offline",
+  INITIALIZING = "initializing",
+  ERROR = "error",
+  MAINTENANCE = "maintenance",
+  DELETING = "deleting"
 }

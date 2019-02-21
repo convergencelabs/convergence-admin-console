@@ -1,7 +1,7 @@
 import React, {ReactNode} from 'react';
 import {Button} from "antd";
 import {DomainId} from "../../../../models/DomainId";
-import {DomainUserId} from "../../../../models/domain/DomainUserId";
+import {DomainUserId, DomainUserType} from "../../../../models/domain/DomainUserId";
 import {ModelPermissions} from "../../../../models/domain/ModelPermissions";
 import {ModelUserPermissions} from "../../../../models/domain/ModelUserPermissions";
 import {ModelPermissionsControl} from "../ModelPermissionsControl";
@@ -67,7 +67,7 @@ export class AddModelUserPermissionControl extends React.Component<AddModelUserP
 
   private _onAdd = () => {
     this.props
-      .onAdd(new ModelUserPermissions(new DomainUserId("normal", this.state.username), this.state.permissions))
+      .onAdd(new ModelUserPermissions(new DomainUserId(DomainUserType.NORMAL, this.state.username), this.state.permissions))
       .then(() => {
         this.setState({
           username: "",

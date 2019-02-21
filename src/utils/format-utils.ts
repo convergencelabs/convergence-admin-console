@@ -1,4 +1,5 @@
 import moment from "moment";
+import {DomainUserId, DomainUserType} from "../models/domain/DomainUserId";
 
 export function shortDateTime(time: Date | number): string {
   return moment(time).format("MM/DD @ hh:mma")
@@ -50,5 +51,16 @@ export function truncate(str: string, maxLen: number): string {
     return str.substring(0, maxLen - 3) + "...";
   } else {
     return str;
+  }
+}
+
+export function formatDomainUserId(userId: DomainUserId): string {
+  switch (userId.type) {
+    case DomainUserType.NORMAL:
+    return userId.username;
+    case DomainUserType.ANONYMOUS:
+      return `${userId.username} (Anonymous)`;
+    case DomainUserType.CONVERGENCE:
+      return `${userId.username} (Convergence)`;
   }
 }

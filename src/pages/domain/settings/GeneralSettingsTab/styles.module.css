@@ -1,0 +1,7 @@
+.generalSettings {
+  max-width: 600px;
+}
+
+.generalSettings :global(.ant-card) {
+  margin-bottom: 20px;
+}

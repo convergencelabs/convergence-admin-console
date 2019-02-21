@@ -1,0 +1,15 @@
+.warning {
+  color: #843434;
+  font-style: italic;
+}
+
+.dangerSettings {
+  max-width: 700px;
+}
+
+.domainId {
+  background: #ffc8cf;
+  border: 1px solid #6b4144;
+  padding: 0 5px;
+  border-radius: 4px;
+}
