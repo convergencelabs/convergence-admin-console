@@ -23,7 +23,7 @@
   "scripts": {
     "dist": "node scripts/dist.js",
     "docker-prep": "node scripts/dist.js",
-    "clean": "rm -rf build dist",
+    "clean": "rm -rf build dist docker-build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -32,6 +32,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "homepage": ".",
   "browserslist": [
     ">0.2%",
     "not dead",
