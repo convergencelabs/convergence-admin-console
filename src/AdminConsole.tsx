@@ -11,6 +11,7 @@ import {Root} from "./containers/Root";
 import {MainLayout} from "./containers/MainLayout";
 import {AuthStore} from "./stores/AuthStore";
 import {injectObserver} from "./utils/mobx-utils";
+import {AppConfig} from "./stores/AppConfig";
 
 interface InjectedStores {
   authStore: AuthStore;
@@ -20,7 +21,7 @@ class App extends Component<InjectedStores, {}> {
   render() {
     return (
       <Root>
-        <Router>
+        <Router basename={AppConfig.baseUrl}>
           <Switch>
             <Route
               path="/login"

@@ -123,7 +123,7 @@ class DomainSessionsComponent extends React.Component<InjectedProps, DomainSessi
             <td>{session.userId.username}</td>
           </tr>
           <tr>
-            <td>Username Type:</td>
+            <td>User Type:</td>
             <td>{session.userId.type}</td>
           </tr>
           <tr>

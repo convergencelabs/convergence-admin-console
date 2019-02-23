@@ -8,6 +8,7 @@ import {ConfigService} from "../../../services/ConfigService";
 import {injectAs} from "../../../utils/mobx-utils";
 import {domainUrl} from "../../../utils/domain-url";
 import {CopyAddonButton} from "../../common/CopyAddonButton/index";
+import {AppConfig} from "../../../stores/AppConfig";
 
 export interface DomainCardProps {
   domain: DomainDescriptor
@@ -20,8 +21,7 @@ interface Injected {
 export class DomainCardComponent extends React.Component<DomainCardProps & Injected, {}> {
   render() {
     const domain = this.props.domain;
-    const baseUrl = this.props.configService.getServerRealtimeUrl();
-    const url = domainUrl(baseUrl, domain.namespace, domain.id);
+    const url = domainUrl(domain.namespace, domain.id);
     return (
       <Card className={styles.domainCard} hoverable={true}>
         <Link to={{pathname: `/domain/${domain.namespace}/${domain.id}/`}}>

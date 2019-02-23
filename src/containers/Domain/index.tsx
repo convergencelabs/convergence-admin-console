@@ -17,7 +17,7 @@ import {ConvergenceDomainStore} from "../../stores/ConvergenceDomainStore";
 import {DomainId} from "../../models/DomainId";
 import {SERVICES} from "../../services/ServiceConstants";
 import {STORES} from "../../stores/StoreConstants";
-import {ConvergenceDomain} from "@convergence/convergence";
+import {ConvergenceDomain} from "@convergence-internal/convergence";
 import {DomainUsers} from "../../pages/domain/users/DomainUsers";
 import {CreateDomainUser} from "../../pages/domain/users/CreateDomainUser";
 import {EditDomainUser} from "../../pages/domain/users/EditDomainUser";
@@ -30,6 +30,7 @@ import {DomainSettings} from "../../pages/domain/settings";
 import {CreateDomainJwtKey} from "../../pages/domain/auth/jwt/CreateDomainJwtKey";
 import {EditDomainJwtKey} from "../../pages/domain/auth/jwt/EditDomainJwtKey";
 import {DomainSessions} from "../../pages/domain/sessions/DomainSessions";
+import {PageNotFound} from "../../components/common/PageNotFound";
 
 export interface DomainRouteParams {
   namespace: string;
@@ -87,28 +88,28 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
         <NavLayout sideNav={<DomainSideNavigation domainId={domainId}/>}>
           <Switch>
             <Route exact path={`${match.url}/`} render={(props) => <DomainDashboard {...props} domainId={domainId}/>}/>
-            <Route path={`${match.url}/dashboard`} render={(props) => <DomainDashboard {...props} domainId={domainId}/>}/>
+            <Route exact path={`${match.url}/dashboard`} render={(props) => <DomainDashboard {...props} domainId={domainId}/>}/>
 
             <Route exact path={`${match.url}/users`} render={(props) => <DomainUsers {...props} domainId={domainId}/>}/>
             <Route exact path={`${match.url}/users/:username`} render={(props) => <EditDomainUser {...props} domainId={domainId}/>}/>
             <Route exact path={`${match.url}/users/:username/set-password`} render={(props) => <SetDomainUserPassword {...props} domainId={domainId}/>}/>
-            <Route path={`${match.url}/create-user`} render={(props) => <CreateDomainUser {...props} domainId={domainId}/>}/>
+            <Route exact path={`${match.url}/create-user`} render={(props) => <CreateDomainUser {...props} domainId={domainId}/>}/>
 
             <Route exact path={`${match.url}/groups`} render={(props) => <DomainUserGroups {...props} domainId={domainId}/>}/>
             <Route exact path={`${match.url}/groups/:id`} render={(props) => <EditDomainUserGroup {...props} domainId={domainId}/>}/>
             <Route exact path={`${match.url}/create-group`} render={(props) => <CreateDomainUserGroup {...props} domainId={domainId}/>}/>
 
-            <Route path={`${match.url}/sessions`} render={(props) => <DomainSessions {...props} domainId={domainId}/>}/>
+            <Route exact path={`${match.url}/sessions`} render={(props) => <DomainSessions {...props} domainId={domainId}/>}/>
 
             <Route exact path={`${match.url}/collections`} render={(props) => <DomainCollections {...props} domainId={domainId}/>}/>
             <Route exact path={`${match.url}/collections/:id`} render={(props) => <EditDomainCollection {...props} domainId={domainId}/>}/>
-            <Route path={`${match.url}/create-collection`} render={(props) => <CreateDomainCollection {...props} domainId={domainId}/>}/>
+            <Route exact path={`${match.url}/create-collection`} render={(props) => <CreateDomainCollection {...props} domainId={domainId}/>}/>
 
             <Route exact path={`${match.url}/models`} render={(props) => <DomainModels {...props} domainId={domainId}/>} />
             <Route exact path={`${match.url}/models/:id`} render={(props) => <EditDomainModel {...props} domainId={domainId}/>} />
-            <Route path={`${match.url}/models/:id/:tab`} render={(props) => <EditDomainModel {...props} domainId={domainId}/>} />
+            <Route exact path={`${match.url}/models/:id/:tab`} render={(props) => <EditDomainModel {...props} domainId={domainId}/>} />
 
-            <Route path={`${match.url}/create-model`} render={(props) => <CreateDomainModel {...props} domainId={domainId}/>} />
+            <Route exact path={`${match.url}/create-model`} render={(props) => <CreateDomainModel {...props} domainId={domainId}/>} />
 
             <Route exact path={`${match.url}/authentication/:tab/`} render={(props) => <DomainAuthentication {...props} domainId={domainId}/>}/>
             <Route exact path={`${match.url}/authentication/`} render={(props) => <DomainAuthentication {...props} domainId={domainId}/>}/>
@@ -117,6 +118,8 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
 
             <Route exact path={`${match.url}/settings`} render={(props) => <DomainSettings {...props} domainId={domainId}/>}/>
             <Route exact path={`${match.url}/settings/:tab`} render={(props) => <DomainSettings {...props} domainId={domainId}/>}/>
+
+            <Route component={PageNotFound}/>
           </Switch>
         </NavLayout>
       );

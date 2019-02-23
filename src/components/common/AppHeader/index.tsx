@@ -1,5 +1,5 @@
 import React, {ReactNode} from 'react';
-import {Avatar, Badge, Dropdown, Icon, Layout, Menu} from 'antd';
+import {Avatar, Badge, Dropdown, Icon, Layout, Menu, Popover, Tooltip} from 'antd';
 import styles from './styles.module.css';
 import logo from '../../../assets/images/logo.png';
 import {authStore} from "../../../stores/AuthStore";
@@ -35,15 +35,17 @@ class AppHeaderComponent extends React.Component<InjectedProps, {}> {
   );
 
   public render(): ReactNode {
-    const {username, displayName, email} = this.props.profileStore.profile!;
+    const {displayName, email} = this.props.profileStore.profile!;
     const emailHash = md5(email);
     return (
       <Layout.Header className={styles.header}>
         <img src={logo} className={styles.logo}/>
         <span className={styles.logoName}>Convergence</span>
         <span className={styles.slogan}>Convergence Admin Console</span>
-        <Badge count={5}>
+        <Badge count={0}>
+          <Tooltip title={"No Alerts"} mouseEnterDelay={1}>
           <Icon type="bell" className={styles.icon}/>
+          </Tooltip>
         </Badge>
         <Dropdown overlay={this._menu} trigger={['click']}>
           <a className="ant-dropdown-link" href="#">

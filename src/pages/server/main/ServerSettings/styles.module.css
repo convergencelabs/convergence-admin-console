@@ -1,3 +1,7 @@
-.yesNo {
-  width: 100px;
+.groupCard {
+  max-width: 600px;
+}
+
+.groupCard:not(:first-child) {
+  margin-bottom: 15px;
 }

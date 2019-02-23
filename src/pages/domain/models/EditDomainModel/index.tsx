@@ -1,6 +1,5 @@
-import React from 'react';
 import {Page} from "../../../../components/common/Page/";
-import {ReactNode} from "react";
+import React, {ReactNode} from "react";
 import {Card, Tabs} from "antd";
 import {Icon} from 'antd';
 import styles from "./styles.module.css";

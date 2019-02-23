@@ -1,6 +1,6 @@
 import {NullElement} from "../NullElement";
 import {ModelPathElement} from "../ModelPath";
-import {RealTimeNull} from "@convergence/convergence";
+import {RealTimeNull} from "@convergence-internal/convergence";
 import {ContainerElement} from "../ContainterElement";
 
 export class RealTimeNullElement extends NullElement {

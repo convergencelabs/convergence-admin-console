@@ -1,0 +1,6 @@
+[template]
+src   = "convergence-admin-console.config.js"
+dest  = "/usr/share/nginx/html/convergence-admin-console.config.js"
+owner = "root"
+group = "root"
+mode  = "0644"

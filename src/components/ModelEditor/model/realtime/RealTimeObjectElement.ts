@@ -3,7 +3,7 @@ import {ModelElement} from "../ModelElement";
 import {ModelPathElement} from "../ModelPath";
 import {
   RealTimeObject, ObjectSetValueEvent, ObjectSetEvent, ObjectRemoveEvent
-} from "@convergence/convergence";
+} from "@convergence-internal/convergence";
 import {createRealTimeModelElement} from "./RealTimeModelElementFactory";
 import {ContainerElement} from "../ContainterElement";
 import {filter} from "rxjs/operators";

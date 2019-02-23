@@ -1,8 +1,7 @@
-import * as React from 'react';
+import React, {ReactNode} from "react";
 import styles from "./styles.module.css";
-import {Component, ReactNode} from "react";
 
-export class InfoTable extends Component<{}, {}> {
+export class InfoTable extends React.Component<{}, {}> {
   render(): ReactNode {
     return (
       <table className={styles.infoTable}>
@@ -14,7 +13,7 @@ export class InfoTable extends Component<{}, {}> {
   }
 }
 
-export class InfoTableRow extends Component<{ label: string }, {}> {
+export class InfoTableRow extends React.Component<{ label: string }, {}> {
   public render(): ReactNode {
     return (
       <tr>

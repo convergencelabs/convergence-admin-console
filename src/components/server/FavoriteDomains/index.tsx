@@ -1,13 +1,13 @@
-import * as React from 'react';
-import {Component, ReactNode} from "react";
-import styles from "./styles.module.css";
+import React, {ReactNode} from "react";
 import {DomainDescriptor} from "../../../models/DomainDescriptor";
 import {Card, Col, Icon} from "antd";
 import {injectAs} from "../../../utils/mobx-utils";
-import {DomainCard} from "../DomainCard/index";
+import {DomainCard} from "../DomainCard/";
 import {makeCancelable, PromiseSubscription} from "../../../utils/make-cancelable";
 import {SERVICES} from "../../../services/ServiceConstants";
 import {LoggedInUserService} from "../../../services/LoggedInUserService";
+import {Link} from "react-router-dom";
+import styles from "./styles.module.css";
 
 export interface RecentDomainInjectedProps {
   loggedInUserService: LoggedInUserService
@@ -18,7 +18,7 @@ export interface RecentDomainState {
   error: boolean;
 }
 
-export class FavoriteDomainsComponent extends Component<RecentDomainInjectedProps, RecentDomainState> {
+export class FavoriteDomainsComponent extends React.Component<RecentDomainInjectedProps, RecentDomainState> {
   private readonly _loadingSubscription: PromiseSubscription;
 
   constructor(props: RecentDomainInjectedProps) {
@@ -30,7 +30,8 @@ export class FavoriteDomainsComponent extends Component<RecentDomainInjectedProp
     };
 
     const {promise, subscription} = makeCancelable(this.props.loggedInUserService.getFavoriteDomains());
-    promise.then(domains => {
+    promise
+      .then(domains => {
         this.setState({domains});
       })
       .catch(error => {
@@ -45,15 +46,23 @@ export class FavoriteDomainsComponent extends Component<RecentDomainInjectedProp
   }
 
   public render(): ReactNode {
+    const domains = this.state.domains || [];
     return (
       <Card title={<span><Icon type="database"/> Favorite Domains</span>}>
         {
-
-          (this.state.domains || []).map((d: DomainDescriptor) => (
-            <Col span={8} key={`${d.namespace}/${d.id}`}>
-              <DomainCard domain={d}/>
-            </Col>
-          ))
+          domains.length > 0 ?
+            (domains).map((d: DomainDescriptor) => (
+              <Col span={8} key={`${d.namespace}/${d.id}`}>
+                <DomainCard domain={d}/>
+              </Col>
+            )) :
+            <div className={styles.noDomains}>
+              <div className={styles.centered}>
+               <Icon className={styles.icon} type="database" />
+                <div>No Favorite Domains</div>
+                <div>(Select One <Link to={"/domains"}>Here</Link>)</div>
+              </div>
+            </div>
         }
       </Card>
     );

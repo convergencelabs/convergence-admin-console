@@ -1,3 +1,7 @@
 .grid :global .ant-row {
   margin-bottom: 16px;
 }
+
+.grid :global .ant-row-flex {
+  margin-bottom: 16px;
+}

@@ -1,8 +1,9 @@
 import * as React from 'react';
 import {Component, ReactNode} from "react";
 import styles from "./styles.module.css";
-import {Card, Icon, Table} from "antd";
+import {Button, Card, Icon, Table} from "antd";
 import moment from "moment";
+import {shortDateTime} from "../../../utils/format-utils";
 
 
 interface ServerMessage {
@@ -13,9 +14,11 @@ interface ServerMessage {
 }
 
 const data: ServerMessage[] = [
-  {id: "0", type: "warning", message: "A warning", time: moment("2019-01-22 09:30:26.123").toDate()},
-  {id: "1", type: "error", message: "A critical error", time: new Date()},
-  {id: "2", type: "info", message: "A message", time: new Date()}
+  // {id: "0", type: "warning", message: "A warning", time: moment("2019-01-22 09:30:26.123").toDate()},
+  // {id: "1", type: "error", message: "A critical error", time: new Date()},
+  // {id: "2", type: "info", message: "A message", time: new Date()},
+  // {id: "3", type: "info", message: "A message", time: new Date()},
+  // {id: "4", type: "info", message: "A message", time: new Date()},
 ];
 
 export class ServerAlerts extends Component<{}, {}> {
@@ -25,7 +28,7 @@ export class ServerAlerts extends Component<{}, {}> {
     super(props);
 
     this._tableColumns = [{
-      title: '!',
+      title: '',
       dataIndex: 'type',
       sorter: ServerAlerts._sortType,
       render: ServerAlerts._renderType,
@@ -34,25 +37,33 @@ export class ServerAlerts extends Component<{}, {}> {
       title: 'Time',
       dataIndex: 'time',
       sorter: (a: ServerMessage, b: ServerMessage) => a.time.getTime() - b.time.getTime(),
-      render: (date: Date) => <span>{moment(date).format("MM/DD @ HH:mma")}</span>,
+      render: (date: Date) => shortDateTime(date),
       width: 150
     }, {
       title: 'Message',
       dataIndex: 'message',
-      sorter: (a: any, b: any) => (a.email as string).localeCompare(b.email)
+      sorter: (a: any, b: any) => (a.message as string).localeCompare(b.message)
+    }, {
+      title: '',
+      dataIndex: 'actions',
+      render: ServerAlerts._renderActions,
+      align: "right",
+      width: 40
     }];
+
   }
 
   public render(): ReactNode {
     return (
-      <Card className={styles.alerts} title={<span><Icon type="warning"/> Alerts & Messages</span>}>
-        <Table className={styles.userTable}
+      <Card className={styles.alerts} title={<span><Icon type="warning"/> Alerts</span>}>
+        <Table className={styles.alertTable}
                size="small"
                columns={this._tableColumns}
                pagination={false}
                dataSource={data}
                rowKey="id"
-               scroll={{ y: 125 }}
+               scroll={{ y: 121 }}
+               locale={{emptyText: "No Alerts"}}
         />
       </Card>
     );
@@ -84,5 +95,8 @@ export class ServerAlerts extends Component<{}, {}> {
       case "info":
         return (<Icon type="info-circle" style={{color: "#2388a9"}}/>);
     }
+  }
+  private static _renderActions = (text: any, record: any) => {
+    return (<Button htmlType="button" size="small" shape="circle" icon="delete"/>);
   }
 }

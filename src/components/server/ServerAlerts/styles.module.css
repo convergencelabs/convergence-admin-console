@@ -1,3 +1,11 @@
 .alerts :global .ant-card-body {
   padding: 4px;
 }
+
+.alertTable {
+  height: 161px;
+}
+
+.alertTable :global(.ant-table-placeholder) {
+  margin: 34px 0;
+}

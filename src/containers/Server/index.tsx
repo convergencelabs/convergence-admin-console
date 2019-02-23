@@ -15,6 +15,7 @@ import {EditNamespace} from "../../pages/server/namespaces/EditNamespace";
 import {EditUser} from "../../pages/server/users/EditUser";
 import {SetUserPassword} from "../../pages/server/users/SetUserPassword";
 import {ProfilePage} from "../../pages/server/main/Profile";
+import {PageNotFound} from "../../components/common/PageNotFound";
 
 export class ServerContainer extends React.Component<RouteComponentProps, {}> {
   public render(): ReactNode {
@@ -30,10 +31,11 @@ export class ServerContainer extends React.Component<RouteComponentProps, {}> {
           <Route exact path={`${match.url}create-namespace`} render={(props) => <CreateNamespace {...props}/>}/>
           <Route exact path={`${match.url}namespaces/:id`} render={(props) => <EditNamespace {...props}/>}/>
           <Route exact path={`${match.url}domains`} render={(props) => <Domains {...props}/>}/>
-          <Route path={`${match.url}create-domain`} render={(props) => <CreateDomain {...props}/>}/>
-          <Route path={`${match.url}settings`} render={(props) => <Settings />}/>
-          <Route path={`${match.url}profile`} render={(props) => <ProfilePage />}/>
-          <Route path={`${match.url}`} render={(props) => <ServerDashboard {...props} />}/>
+          <Route exact path={`${match.url}create-domain`} render={(props) => <CreateDomain {...props}/>}/>
+          <Route exact path={`${match.url}settings`} render={(props) => <Settings />}/>
+          <Route exact path={`${match.url}profile`} render={(props) => <ProfilePage />}/>
+          <Route exact path={`${match.url}`} render={(props) => <ServerDashboard {...props} />}/>
+          <Route component={PageNotFound}/>
         </Switch>
       </NavLayout>
     );

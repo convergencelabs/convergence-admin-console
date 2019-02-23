@@ -4,7 +4,7 @@ import {ModelPathElement} from "../ModelPath";
 import {
   RealTimeArray, ArraySetValueEvent, ArrayInsertEvent, ArrayReorderEvent,
   ArraySetEvent, ArrayRemoveEvent
-} from "@convergence/convergence";
+} from "@convergence-internal/convergence";
 import {createRealTimeModelElement} from "./RealTimeModelElementFactory";
 import {ContainerElement} from "../ContainterElement";
 import {filter} from "rxjs/operators";

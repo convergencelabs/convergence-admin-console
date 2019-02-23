@@ -1,0 +1,7 @@
+.info :global(.ant-card) {
+  height: 100%;
+}
+
+.info :global(.ant-card-body) {
+  padding: 4px;
+}

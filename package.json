@@ -1,6 +1,11 @@
 {
-  "name": "convergence-admin-console-react",
-  "version": "0.1.0",
+  "name": "@convergence-internal/admin-console",
+  "version": "1.0.0-SNAPSHOT",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.dev.int.convergencelabs.tech/ui/convergence-admin-console.git"
+  },
+  "bugs": "https://gitlab.dev.int.convergencelabs.tech/ui/convergence-admin-console/issues",
   "private": true,
   "dependencies": {
     "@types/jest": "23.3.10",
@@ -16,6 +21,9 @@
     "typescript": "3.2.4"
   },
   "scripts": {
+    "dist": "node scripts/dist.js",
+    "docker-prep": "node scripts/dist.js",
+    "clean": "rm -rf build dist",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -31,30 +39,33 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@convergence/convergence": "^1.0.0-beta.7",
-    "@convergence/string-change-detector": "^0.1.8",
-    "@types/classnames": "^2.2.7",
-    "@types/md5": "^2.1.33",
+    "@convergence-internal/convergence": "^1.0.0-SNAPSHOT",
+    "@convergence/string-change-detector": "0.1.8",
+    "@types/classnames": "2.2.7",
+    "@types/md5": "2.1.33",
     "@types/react-copy-to-clipboard": "4.2.6",
     "@types/react-highlight": "0.12.1",
-    "@types/react-onclickoutside": "^6.7.0",
-    "@types/react-transition-group": "^2.0.16",
+    "@types/react-onclickoutside": "6.7.0",
+    "@types/react-transition-group": "2.0.16",
     "@types/superagent": "3.8.6",
-    "classnames": "^2.2.6",
-    "install": "^0.12.2",
-    "md5": "^2.2.1",
+    "bump-regex": "^4.0.0",
+    "classnames": "2.2.6",
+    "install": "0.12.2",
+    "md5": "2.2.1",
+    "mkdirp": "^0.5.1",
     "mobx": "5.8.0",
     "mobx-react": "5.4.3",
     "mobx-react-devtools": "6.0.3",
-    "moment": "^2.24.0",
+    "moment": "2.24.0",
+    "ncp": "^2.0.0",
     "node-mock-server": "0.23.6",
-    "node-sass": "^4.11.0",
-    "npm": "^6.8.0",
-    "react-ace": "^6.4.0",
+    "node-sass": "4.11.0",
+    "npm": "6.8.0",
+    "react-ace": "6.4.0",
     "react-copy-to-clipboard": "5.0.1",
     "react-highlight": "0.12.0",
-    "react-onclickoutside": "^6.7.1",
-    "react-transition-group": "^2.5.3",
+    "react-onclickoutside": "6.7.1",
+    "react-transition-group": "2.5.3",
     "superagent": "4.1.0"
   }
 }

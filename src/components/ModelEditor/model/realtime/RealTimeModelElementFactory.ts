@@ -9,7 +9,7 @@ import {RealTimeDateElement} from "./RealTimeDateElement";
 import {
   RealTimeElement, RealTimeArray, RealTimeNull, RealTimeNumber, RealTimeBoolean,
   RealTimeDate, RealTimeString, RealTimeObject
-} from "@convergence/convergence";
+} from "@convergence-internal/convergence";
 import {ContainerElement} from "../ContainterElement";
 
 export function createRealTimeModelElement(parent: ContainerElement<any>, value: RealTimeElement<any>): ModelElement<any> {

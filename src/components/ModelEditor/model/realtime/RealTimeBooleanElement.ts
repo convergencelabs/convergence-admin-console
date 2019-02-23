@@ -1,6 +1,6 @@
 import {BooleanElement} from "../BooleanElement";
 import {ModelPathElement} from "../ModelPath";
-import {RealTimeBoolean, BooleanSetValueEvent} from "@convergence/convergence";
+import {RealTimeBoolean, BooleanSetValueEvent} from "@convergence-internal/convergence";
 import {ContainerElement} from "../ContainterElement";
 import {filter} from "rxjs/operators";
 

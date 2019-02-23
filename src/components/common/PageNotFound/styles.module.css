@@ -1,0 +1,22 @@
+.notFoundContainer {
+  height: 100%;
+}
+
+.notFound {
+  position: absolute;
+  top: 33%;
+  left: 50%;
+  transform: translate(-50%, -33%);
+  text-align: center;
+}
+
+.icon {
+  font-size: 36px;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}

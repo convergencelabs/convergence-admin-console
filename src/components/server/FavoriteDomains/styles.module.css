@@ -1,7 +1,18 @@
-.buttons {
-  text-align: right;
+.noDomains {
+  text-align: center;
+  height: 200px;
+  position: relative;
 }
 
-.buttons button {
-  margin-left: 16px;
+.centered {
+  opacity: 0.7;
+  margin: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.icon {
+  font-size: 36px;
 }

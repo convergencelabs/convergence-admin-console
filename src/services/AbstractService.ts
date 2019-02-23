@@ -1,7 +1,6 @@
 import superagent, {Response, SuperAgentRequest} from 'superagent';
-import {CONFIG} from "../constants";
 import {RestError} from "./RestError";
-import {authStore} from "../stores/AuthStore";
+import {AppConfig} from "../stores/AppConfig";
 
 export abstract class AbstractService {
 
@@ -45,12 +44,14 @@ export abstract class AbstractService {
   }
 
   private _computePath(relPath: string): string {
-    return `${CONFIG.convergenceRestApiUrl}/${relPath}`;
+    return `${AppConfig.restApiUrl}${relPath}`;
   }
 
   protected _processResponse(httpResponse: Response) {
     const body = httpResponse.body;
-    if (body.ok) {
+    if (body === null) {
+      return Promise.reject(new Error("The response from the server had no body."));
+    } else if (body.ok) {
       return Promise.resolve(body.body)
     } else {
       if (body.body) {

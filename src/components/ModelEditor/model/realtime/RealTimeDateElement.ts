@@ -1,6 +1,6 @@
 import {DateElement} from "../DateElement";
 import {ModelPathElement} from "../ModelPath";
-import {RealTimeDate, DateSetValueEvent} from "@convergence/convergence";
+import {RealTimeDate, DateSetValueEvent} from "@convergence-internal/convergence";
 import {ContainerElement} from "../ContainterElement";
 import {filter} from "rxjs/operators";
 

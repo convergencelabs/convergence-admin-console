@@ -1,7 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script>const CONVERGENCE_DEBUG = {PROTOCOL_MESSAGES: true};</script>
+    <script src="%PUBLIC_URL%/convergence-admin-console.config.js"></script>
+
+    <script>
+      const base = CONVERGENCE_ADMIN_CONSOLE_CONFIG.baseUrl;
+      window['base-href'] = base;
+      document.write(`<base href="${base}"/>`);
+    </script>
 
     <meta charset="utf-8" />
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon/favicon.ico" />
@@ -27,6 +33,7 @@
     <title>Convergence Admin Console</title>
 
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

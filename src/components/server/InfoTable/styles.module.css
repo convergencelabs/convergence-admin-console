@@ -27,11 +27,10 @@
   background: rgb(232, 248, 255);
 }
 
-
 .infoTable td, .infoTable th {
   border-top: 1px solid rgb(228, 228, 228);
   border-left: 1px solid rgb(228, 228, 228);
-  padding: 3px;
+  padding: 5px;
   color: rgba(0, 0, 0, 0.65);
 }
 

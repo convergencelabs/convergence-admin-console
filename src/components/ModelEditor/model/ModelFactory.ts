@@ -1,4 +1,4 @@
-import {RealTimeObject} from "@convergence/convergence";
+import {RealTimeObject} from "@convergence-internal/convergence";
 import {ObjectElement} from "./ObjectElement";
 import {LocalObjectElement} from "./local/LocalObjectElement";
 import {RealTimeObjectElement} from "./realtime/RealTimeObjectElement";

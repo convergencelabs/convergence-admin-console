@@ -1,7 +1,8 @@
 import {DomainId} from "../models/DomainId";
+import {AppConfig} from "../stores/AppConfig";
 
-export function domainUrl(baseUrl: string, namespace: string, domainId: string): string {
-  return `${baseUrl}/${namespace}/${domainId}`;
+export function domainUrl(namespace: string, domainId: string): string {
+  return `${AppConfig.realtimeApiUrl}${namespace}/${domainId}`;
 }
 
 export function toDomainUrl(baseUrl: string, domainId: DomainId, path: string): string {

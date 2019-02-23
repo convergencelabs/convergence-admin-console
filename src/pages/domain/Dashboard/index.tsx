@@ -15,6 +15,8 @@ import {ModelCreateSnippet} from "./snippet_model_create";
 import {ModelDataSnippet} from "./snippet_model_data";
 import {InfoTable, InfoTableRow} from "../../../components/server/InfoTable";
 import {DomainId} from "../../../models/DomainId";
+import {AppConfig} from "../../../stores/AppConfig";
+import {domainUrl} from "../../../utils/domain-url";
 
 const TabPane = Tabs.TabPane;
 
@@ -34,12 +36,10 @@ export class DomainDashboard extends React.Component<DomainDashboardProps, {}> {
 
   public render(): ReactNode {
     const {domainId} = this.props;
-    const domainUrl = `http://localhost:8080/${domainId.namespace}/${domainId.id}/realtime`;
-
-
+    const domainConnectUrl = domainUrl(domainId.namespace, domainId.id);
 
     const copier =
-      <CopyToClipboard text={domainUrl}
+      <CopyToClipboard text={domainConnectUrl}
                        onCopy={() => {
                        }}>
         <Button className={styles.copyButton} htmlType="button" icon="copy"/>
@@ -74,7 +74,7 @@ export class DomainDashboard extends React.Component<DomainDashboardProps, {}> {
             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
               <Card title={<span><Icon type="cloud"/> Connection URL</span>} className={styles.card}>
                 <Input placeholder="Basic usage"
-                       value={domainUrl}
+                       value={domainConnectUrl}
                        readOnly={true}
                        addonAfter={copier}
                 />
@@ -92,16 +92,16 @@ export class DomainDashboard extends React.Component<DomainDashboardProps, {}> {
                   <TabPane tab="Connection" key="connection">
                     <Tabs defaultActiveKey="password">
                       <TabPane tab="Password" key="password">
-                        <ConnectionPasswordSnippet connectionUrl={domainUrl}/>
+                        <ConnectionPasswordSnippet connectionUrl={domainConnectUrl}/>
                       </TabPane>
                       <TabPane tab="Anonymous" key="anonymous">
-                        <ConnectionAnonymousSnippet connectionUrl={domainUrl}/>
+                        <ConnectionAnonymousSnippet connectionUrl={domainConnectUrl}/>
                       </TabPane>
                       <TabPane tab="JWT" key="jwt">
-                        <ConnectionJwtSnippet connectionUrl={domainUrl}/>
+                        <ConnectionJwtSnippet connectionUrl={domainConnectUrl}/>
                       </TabPane>
                       <TabPane tab="Reconnect" key="reconnect">
-                        <ConnectionReconnectSnippet connectionUrl={domainUrl}/>
+                        <ConnectionReconnectSnippet connectionUrl={domainConnectUrl}/>
                       </TabPane>
                     </Tabs>
                   </TabPane>

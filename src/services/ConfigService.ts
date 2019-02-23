@@ -4,14 +4,6 @@ import {PasswordConfig} from "../models/PasswordConfig";
 import {CONFIG} from "../constants/config";
 
 export class ConfigService extends AbstractAuthenticatedService {
-  public getServerRestUrl(): string {
-    return "http://localhost:8081/v1";
-  }
-
-  public getServerRealtimeUrl(): string {
-    return "http://localhost:8080";
-  }
-
   public getConfig(): Promise<Map<string, any>> {
     return this
       ._get<{ [key: string]: any }>("config")

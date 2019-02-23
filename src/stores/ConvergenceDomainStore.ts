@@ -1,8 +1,8 @@
 import {action, decorate, observable} from "mobx";
-import {ConvergenceDomain, Convergence} from "@convergence/convergence";
+import {ConvergenceDomain, Convergence} from "@convergence-internal/convergence";
 import {DomainId} from "../models/DomainId";
 import {domainConvergenceJwtService} from "../services/domain/DomainConvergenceUserJwtService";
-import {CONFIG} from "../constants";
+import {AppConfig} from "./AppConfig";
 
 export class ConvergenceDomainStore {
   public domain: ConvergenceDomain | null = null;
@@ -19,20 +19,22 @@ export class ConvergenceDomainStore {
 
   public disconnect(): void {
     if (this.domain !== null) {
-      console.log("Disconnecting domain: ", this.domainId);
-      this.domain.dispose();
+      if (this.domain.session().isConnected()) {
+        this.domain.dispose().catch(err => {
+          console.warn(err);
+        });
+      }
     }
     this.domain = null;
     this.domainId = null;
   }
 
   public connect(domainId: DomainId): Promise<void> {
-    console.log("Connecting to domain: ", domainId);
     this.domainId = domainId;
     return domainConvergenceJwtService
       .getJwt(this.domainId)
       .then((jwt) => {
-        const url = `${CONFIG.convergenceRealtimeApiUrl}${domainId.namespace}/${domainId.id}`;
+        const url = `${AppConfig.realtimeApiUrl}${domainId.namespace}/${domainId.id}`;
         return Convergence.connectWithJwt(url, jwt);
       })
       .then(domain => {
