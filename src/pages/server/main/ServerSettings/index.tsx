@@ -5,6 +5,7 @@ import {Card, Form, Icon, Tabs} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import {NamespaceAndDomainSettings} from "./NamespaceAndDomainSettings";
 import {PasswordPolicy} from "./PasswordPolicy";
+import {SessionTimeout} from "./SessionTimeout";
 import styles from "./styles.module.css";
 
 export class SettingsComponent extends React.Component<FormComponentProps, {}> {
@@ -23,6 +24,7 @@ export class SettingsComponent extends React.Component<FormComponentProps, {}> {
             {/*<TabPane tab="API Keys" key="api-keys"><ApiKeysSettings/></TabPane>*/}
             <Tabs.TabPane tab="Security" key="security">
               <Card title="Sessions" type="inner" className={styles.groupCard}>
+                <SessionTimeout />
               </Card>
               <Card title="Password Policy" type="inner" className={styles.groupCard}>
                 <PasswordPolicy/>

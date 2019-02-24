@@ -27,7 +27,7 @@ export class ConfigService extends AbstractAuthenticatedService {
         const specialRequired = configs.get(CONFIG.Passwords.RequireSpecialCharacters) as boolean;
 
         return new PasswordConfig(minLen, upperRequired, lowerRequired, digitRequired, specialRequired);
-      })
+      });
   }
 
   public setPasswordConfig(config: PasswordConfig): Promise<void> {
@@ -37,9 +37,22 @@ export class ConfigService extends AbstractAuthenticatedService {
     body[CONFIG.Passwords.RequireLowerCase] = config.requireLower;
     body[CONFIG.Passwords.RequireNumeric] = config.requireDigit;
     body[CONFIG.Passwords.RequireSpecialCharacters] = config.requireSpecial;
+    return this._post<void>("config", body);
+  }
+
+  public getSessionTimeoutMinutes(): Promise<number> {
     return this
-      ._post("config", body)
-      .then(() => undefined);
+      .getAppConfig()
+      .then(configs => {
+        const timeout = configs.get(CONFIG.Sessions.Timeout) as number;
+        return timeout;
+      });
+  }
+
+  public setSessionTimeoutMinutes(timeout: number): Promise<void> {
+    const body: any = {};
+    body[CONFIG.Sessions.Timeout] = timeout;
+    return this._post<void>("config", body);
   }
 }
 

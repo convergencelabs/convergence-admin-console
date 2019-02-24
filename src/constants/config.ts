@@ -14,5 +14,8 @@ export const CONFIG  = {
     RequireNumeric: "passwords.require-numeric",
     RequireSpecialCharacters: "passwords.require-special-characters",
     RequireLowerCase: "passwords.require-lower-case",
+  },
+  Sessions: {
+    Timeout: "sessions.timeout"
   }
 };

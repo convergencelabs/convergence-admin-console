@@ -31,6 +31,7 @@ import {CreateDomainJwtKey} from "../../pages/domain/auth/jwt/CreateDomainJwtKey
 import {EditDomainJwtKey} from "../../pages/domain/auth/jwt/EditDomainJwtKey";
 import {DomainSessions} from "../../pages/domain/sessions/DomainSessions";
 import {PageNotFound} from "../../components/common/PageNotFound";
+import {RestError} from "../../services/RestError";
 
 export interface DomainRouteParams {
   namespace: string;
@@ -45,6 +46,7 @@ interface DomainContainerProps extends RouteComponentProps<DomainRouteParams> {
 interface DomainContainerState {
   domainData: DomainDescriptor | null;
   convergenceDomain: ConvergenceDomain | null;
+  error: string | null;
 }
 
 export class DomainContainerComponent extends React.Component<DomainContainerProps, DomainContainerState> {
@@ -53,7 +55,8 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
 
     this.state = {
       domainData: null,
-      convergenceDomain: null
+      convergenceDomain: null,
+      error: ""
     };
   }
 
@@ -123,25 +126,41 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
           </Switch>
         </NavLayout>
       );
+    } else if (this.state.error) {
+      return (<PageNotFound text={this.state.error} />);
     } else {
       return null;
     }
   }
 
   private _loadDomain(domainId: DomainId): void {
-    this.setState({domainData: null, convergenceDomain: null});
+    this.setState({domainData: null, convergenceDomain: null, error: null});
 
     this.props.domainService
       .getDomain(domainId)
       .then(domainData => {
         this.setState({ domainData});
-      });
-
-    this.props.convergenceDomainStore.
-    activateDomain(domainId)
-      .then(() => {
-        this.setState({convergenceDomain: this.props.convergenceDomainStore.domain});
+        return this.props.convergenceDomainStore.
+        activateDomain(domainId)
+          .then(() => {
+            this.setState({convergenceDomain: this.props.convergenceDomainStore.domain});
+          })
       })
+      .catch(err => {
+        let error = "Unknown error loading domain";
+
+        if (err instanceof RestError) {
+          if (err.code === "not_found") {
+            error = `The domain '${domainId.namespace}/${domainId.id}' does not exist!`;
+          }
+        }
+
+        this.setState({
+          domainData: null,
+          convergenceDomain: null,
+          error
+        });
+      });
   }
 
   private _extractNamespaceAndDomain(): DomainId {
