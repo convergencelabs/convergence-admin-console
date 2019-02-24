@@ -1,13 +1,8 @@
-import {Code, CodeSnippet, CodeSnippetDescription} from "../../../components/domain/common/CodeSnippet";
-import * as React from "react";
+import React from "react";
+import {CodeSnippet} from "../../../components/domain/common/CodeSnippet";
 
-export const ModelOpenSnippet: React.FunctionComponent<{}> = () => {
-  return (
-    <CodeSnippet>
-      <CodeSnippetDescription>
-        This snippet demonstrates opening an existing model with a known model id.
-      </CodeSnippetDescription>
-      <Code>{`
+const DESCRIPTION = "This snippet demonstrates opening an existing model with a known model id.";
+const CODE = `
 const modelId = "my-model-id";
 domain.models()
   .open(modelId)
@@ -16,8 +11,8 @@ domain.models()
     // use the model
   }).catch((error) => {
     console.log("Could not open the model", error);
-  });
-`.trim()}</Code>
-    </CodeSnippet>
-  );
+  });`.trim();
+
+export const ModelOpenSnippet: React.FunctionComponent<{}> = () => {
+  return (<CodeSnippet code={CODE} description={DESCRIPTION} />);
 }

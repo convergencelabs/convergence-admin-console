@@ -15,8 +15,11 @@ import {ModelCreateSnippet} from "./snippet_model_create";
 import {ModelDataSnippet} from "./snippet_model_data";
 import {InfoTable, InfoTableRow} from "../../../components/server/InfoTable";
 import {DomainId} from "../../../models/DomainId";
-import {AppConfig} from "../../../stores/AppConfig";
 import {domainUrl} from "../../../utils/domain-url";
+import {ActivityJoinSnippet} from "./snippet_activity_join";
+import {ChatRoomSnippet} from "./snippet_chat_room";
+import {DirectChatSnippet} from "./snippet_chat_direct";
+import {PresenceSubscriptionSnippet} from "./snippet_presence_subscribe";
 
 const TabPane = Tabs.TabPane;
 
@@ -31,7 +34,7 @@ export class DomainDashboard extends React.Component<DomainDashboardProps, {}> {
   constructor(props: DomainDashboardProps) {
     super(props);
 
-    this._breadcrumbs =  new DomainBreadcrumbProducer(this.props.domainId);
+    this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId);
   }
 
   public render(): ReactNode {
@@ -113,9 +116,22 @@ export class DomainDashboard extends React.Component<DomainDashboardProps, {}> {
                       <TabPane tab="Data" key="data"><ModelDataSnippet/></TabPane>
                     </Tabs>
                   </TabPane>
-                  <TabPane tab="Activity" key="activity"/>
-                  <TabPane tab="Chat" key="chat"/>
-                  <TabPane tab="Presence" key="presence"/>
+                  <TabPane tab="Activity" key="activity">
+                    <Tabs defaultActiveKey="join">
+                      <TabPane tab="Join" key="join"><ActivityJoinSnippet/></TabPane>
+                    </Tabs>
+                  </TabPane>
+                  <TabPane tab="Chat" key="chat">
+                    <Tabs defaultActiveKey="room">
+                      <TabPane tab="Chat Room" key="room"><ChatRoomSnippet/></TabPane>
+                      <TabPane tab="Direct Chat" key="direct"><DirectChatSnippet/></TabPane>
+                    </Tabs>
+                  </TabPane>
+                  <TabPane tab="Presence" key="presence">
+                    <Tabs defaultActiveKey="list">
+                      <TabPane tab="Presence Subscription" key="list"><PresenceSubscriptionSnippet/></TabPane>
+                    </Tabs>
+                  </TabPane>
                 </Tabs>
               </Card>
             </Col>

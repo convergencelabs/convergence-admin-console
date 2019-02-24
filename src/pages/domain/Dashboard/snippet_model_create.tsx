@@ -1,13 +1,11 @@
-import {Code, CodeSnippet, CodeSnippetDescription} from "../../../components/domain/common/CodeSnippet";
-import * as React from "react";
+import React from "react";
+import {CodeSnippet} from "../../../components/domain/common/CodeSnippet";
 
-export const ModelCreateSnippet: React.FunctionComponent<{}> = () => {
-  return (
-    <CodeSnippet>
-      <CodeSnippetDescription>
-        This example demonstrates creating a Realtime Model in a specific collection, with some initial data.
-      </CodeSnippetDescription>
-      <Code>{`
+const DESCRIPTION = `
+This example demonstrates creating a Realtime Model in a specific collection, with some initial data.
+`.trim();
+
+const CODE = `
 domain.models()
   .create({
     collection: "my-collection",
@@ -31,7 +29,8 @@ domain.models()
   })
   .then(() => console.log("model created"))
   .catch((error) => console.log("Could not open the model", error));
-`.trim()}</Code>
-    </CodeSnippet>
-  )
+`.trim();
+
+export const ModelCreateSnippet: React.FunctionComponent<{}> = () => {
+  return (<CodeSnippet code={CODE} description={DESCRIPTION} />);
 }

@@ -1,14 +1,12 @@
-import {Code, CodeSnippet, CodeSnippetDescription} from "../../../components/domain/common/CodeSnippet";
-import * as React from "react";
+import React from "react";
+import {CodeSnippet} from "../../../components/domain/common/CodeSnippet";
+
+const DESCRIPTION = `
+This snippet demonstrates connecting to a domain and authenticating with a the username and password of
+an existing domain user.`.trim();
 
 export const ConnectionPasswordSnippet: React.FunctionComponent<{ connectionUrl: string }> = (props) => {
-  return (
-    <CodeSnippet>
-      <CodeSnippetDescription>
-        This snippet demonstrates connecting to a domain and authenticating with a the username and password of
-        an existing domain user.
-      </CodeSnippetDescription>
-      <Code>{`
+  const code = `
 const url = "${props.connectionUrl}";
 Convergence.connect(url, "username", "password")
   .then((domain) => {
@@ -16,8 +14,6 @@ Convergence.connect(url, "username", "password")
   })
   .catch((error) => {
     console.log("Connection failure", error);
-  });`.trim()
-      }</Code>
-    </CodeSnippet>
-  );
+  });`.trim();
+  return (<CodeSnippet code={code} description={DESCRIPTION}/>);
 }

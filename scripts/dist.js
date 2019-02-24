@@ -1,15 +1,13 @@
-const fs = require("fs");
+const fs = require("fs-extra");
 const bump = require("bump-regex");
-const ncp = require("ncp");
-const mkdirp = require("mkdirp");
 
 if (!fs.existsSync("build")) {
   throw new Error("The project must be built first");
 }
 
 // Create the dist dir and copy the build into it.
-mkdirp("dist");
-ncp("build", "dist/www");
+fs.mkdirpSync("dist");
+fs.copySync("build", "dist/www");
 
 // Copy the publish package into the dist dir and update the version
 const packageFile = "package.json";

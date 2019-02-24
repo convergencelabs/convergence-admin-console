@@ -1,14 +1,12 @@
-import {Code, CodeSnippet, CodeSnippetDescription} from "../../../components/domain/common/CodeSnippet";
-import * as React from "react";
+import React from "react";
+import {CodeSnippet} from "../../../components/domain/common/CodeSnippet";
 
 export const ConnectionAnonymousSnippet: React.FunctionComponent<{ connectionUrl: string }> = (props) => {
-  return (
-    <CodeSnippet>
-      <CodeSnippetDescription>
-        This snippet demonstrates connecting to a domain and authenticating anonymously and providing a Display Name
-        for the anonymous user.
-      </CodeSnippetDescription>
-      <Code>{`
+
+  const description = `This snippet demonstrates connecting to a domain and authenticating anonymously and providing a Display Name
+        for the anonymous user.`;
+
+  const code = `
 const url = "${props.connectionUrl}";
 Convergence.connectAnonymously(url, "display name")
   .then((domain) => {
@@ -17,8 +15,7 @@ Convergence.connectAnonymously(url, "display name")
   .catch((error) => {
     console.log("Connection failure", error);
   });
-`.trim()
-      }</Code>
-    </CodeSnippet>
-  );
+`.trim();
+
+  return (<CodeSnippet code={code} description={description} />);
 }

@@ -1,14 +1,12 @@
-import {Code, CodeSnippet, CodeSnippetDescription} from "../../../components/domain/common/CodeSnippet";
-import * as React from "react";
+import React from "react";
+import {CodeSnippet} from "../../../components/domain/common/CodeSnippet";
 
-export const ModelOpenAutoCreate: React.FunctionComponent<{}> = () => {
-  return (
-    <CodeSnippet>
-      <CodeSnippetDescription>
-        This snippet demonstrates opening or creating a model using the openAutoCreate method. If the model
-        exists, it will be opened. If the model does not exist it will be created and then opened.
-      </CodeSnippetDescription>
-      <Code>{`
+const DESCRIPTION = `
+This snippet demonstrates opening or creating a model using the openAutoCreate method. If the model
+exists, it will be opened. If the model does not exist it will be created and then opened.
+`.trim();
+
+const CODE = `
 domain.models()
   .openAutoCreate({
     id: "my-model-id",
@@ -38,8 +36,9 @@ domain.models()
   })
   .catch((error) => {
     console.log("Could not open the model", error);
-  });`.trim()}</Code>
-    </CodeSnippet>
-  );
+  });`
+
+export const ModelOpenAutoCreate: React.FunctionComponent<{}> = () => {
+  return (<CodeSnippet code={CODE} description={DESCRIPTION} />);
 }
 

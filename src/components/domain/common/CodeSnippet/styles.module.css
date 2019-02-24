@@ -1,7 +1,3 @@
-.codeSnippet {
-
-}
-
 .codeSnippet .description {
   border: 1px solid #e8e8e8;
   background: #fafafa;
@@ -20,3 +16,22 @@
 .codeSnippet code {
   border-radius: 4px;
 }
+
+.copy {
+  position: absolute;
+  opacity: 0;
+  top: 8px;
+  right: 8px;
+
+  transition: opacity 0.25s ease-in-out;
+}
+
+.code:hover .copy {
+  opacity: 1;
+  transition: opacity 0.25s ease-in-out;
+}
+
+.code {
+  position: relative;
+}
+

@@ -1,16 +1,15 @@
-import {Code, CodeSnippet, CodeSnippetDescription} from "../../../components/domain/common/CodeSnippet";
-import * as React from "react";
+import React from "react";
+import {CodeSnippet} from "../../../components/domain/common/CodeSnippet";
+
+const DESCRIPTION = (
+  <div>
+    This snippet demonstrates connecting to a domain using a trusted JSON Web Token (JWT). It makes use of the
+    <a href="https://www.npmjs.com/package/@convergence/jwt-util" target="_blank"> Convergence Jwt Utility</a> to
+    simplify the creation of appropriate JTWs.
+  </div>);
 
 export const ConnectionJwtSnippet: React.FunctionComponent<{ connectionUrl: string }> = (props) => {
-  return (
-    <CodeSnippet>
-      <CodeSnippetDescription>
-        This snippet demonstrates connecting to a domain using a trusted JSON Web Token (JWT). It makes use of the
-         <a href="https://www.npmjs.com/package/@convergence/jwt-util" target="_blank"> Convergence Jwt Utility</a> to
-        simplify the creation of appropriate JTWs.
-      </CodeSnippetDescription>
-      <Code>
-        {`
+  const code = `
 var JwtGenerator = require('@convergence/jwt-util');
 var privateKey = fs.readFileSync('test/private.key');
 var keyId = "my-convergence-key";
@@ -27,9 +26,7 @@ Convergence.connectJwt(url, "username", "password")
   .catch((error) => {
     console.log("Connection failure", error);
   });
-`.trim()
-        }
-      </Code>
-    </CodeSnippet>
-  );
+`.trim();
+
+  return (<CodeSnippet code={code} description={DESCRIPTION}/>);
 }

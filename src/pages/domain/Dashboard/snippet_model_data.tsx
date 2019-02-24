@@ -1,13 +1,8 @@
-import {Code, CodeSnippet, CodeSnippetDescription} from "../../../components/domain/common/CodeSnippet";
-import * as React from "react";
+import React from "react";
+import {CodeSnippet} from "../../../components/domain/common/CodeSnippet";
 
-export const ModelDataSnippet: React.FunctionComponent<{}> = () => {
-  return (
-    <CodeSnippet>
-      <CodeSnippetDescription>
-        This snippet demonstrates opening a model and working with the Realtime data model.
-      </CodeSnippetDescription>
-      <Code>{`
+const DESCRIPTION = "This snippet demonstrates opening a model and working with the Realtime data model.";
+const CODE = `
 var modelId = "myModel";
 domain.models
   .open(modelId)
@@ -39,8 +34,8 @@ domain.models
 
     // Insert an "N" at index 0.
     firstName.insert("N", 0); // "Ned", "change"
-  });
-`.trim()}</Code>
-    </CodeSnippet>
-  );
+  });`.trim();
+
+export const ModelDataSnippet: React.FunctionComponent<{}> = () => {
+  return (<CodeSnippet code={CODE} description={DESCRIPTION} />);
 }
