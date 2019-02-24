@@ -13,7 +13,7 @@ ADD bin/boot.sh /boot.sh
 RUN chmod +x /boot.sh
 
 # nginx
-COPY app /usr/share/nginx/html
+COPY www /usr/share/nginx/html
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # let's go
