@@ -6,6 +6,8 @@ import {DomainId} from "../../../../models/DomainId";
 import {InfoTable, InfoTableRow} from "../../../../components/server/InfoTable";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
+import {formatDomainStatus} from "../../../../utils/format-utils";
+import {DomainStatusIcon} from "../../../../components/common/DomainStatusIcon";
 
 export interface DomainInfoProps {
   domainId: DomainId;
@@ -49,7 +51,10 @@ export class DomainInfoComponent extends React.Component<InjectedProps, DomainIn
           <InfoTableRow label="Display Name">{domain.displayName}</InfoTableRow>
           <InfoTableRow label="Namespace">{domain.namespace}</InfoTableRow>
           <InfoTableRow label="Id">{domain.id}</InfoTableRow>
-          <InfoTableRow label="Status">{domain.status}</InfoTableRow>
+          <InfoTableRow label="Status">
+            <span style={{marginRight: 10}}>{formatDomainStatus(domain.status)}</span>
+            <DomainStatusIcon status={domain.status}/>
+          </InfoTableRow>
         </InfoTable>
       ) :
       null;

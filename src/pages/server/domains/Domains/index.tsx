@@ -17,6 +17,9 @@ import {Link} from "react-router-dom";
 import {NamespaceAutoComplete} from "../../../../components/server/NamespaceAutoComplete";
 import {LoggedInUserService} from "../../../../services/LoggedInUserService";
 import {DomainId} from "../../../../models/DomainId";
+import {formatDomainStatus} from "../../../../utils/format-utils";
+import {DomainStatusIcon} from "../../../../components/common/DomainStatusIcon";
+import {InfoTableRow} from "../../../../components/server/InfoTable";
 
 interface InjectedProps extends RouteComponentProps {
   domainService: DomainService;
@@ -55,7 +58,13 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
     }, {
       title: 'Status',
       dataIndex: 'status',
-      align: 'left'
+      align: 'left',
+      render: (val: any, domain: DomainDescriptor) => (
+        <span>
+          <DomainStatusIcon status={domain.status}/>
+          <span style={{marginLeft: 10}}>{formatDomainStatus(domain.status)}</span>
+        </span>
+      )
     }, {
       title: '',
       dataIndex: '',

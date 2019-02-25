@@ -27,6 +27,7 @@ import {CreateDomainUserGroup} from "../../pages/domain/groups/CreateDomainUserG
 import {EditDomainUserGroup} from "../../pages/domain/groups/EditDomainUserGroup";
 import {DomainAuthentication} from "../../pages/domain/auth/";
 import {DomainSettings} from "../../pages/domain/settings";
+import {DomainChats} from "../../pages/domain/chats/DomainChats";
 import {CreateDomainJwtKey} from "../../pages/domain/auth/jwt/CreateDomainJwtKey";
 import {EditDomainJwtKey} from "../../pages/domain/auth/jwt/EditDomainJwtKey";
 import {DomainSessions} from "../../pages/domain/sessions/DomainSessions";
@@ -111,6 +112,8 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
             <Route exact path={`${match.url}/models`} render={(props) => <DomainModels {...props} domainId={domainId}/>} />
             <Route exact path={`${match.url}/models/:id`} render={(props) => <EditDomainModel {...props} domainId={domainId}/>} />
             <Route exact path={`${match.url}/models/:id/:tab`} render={(props) => <EditDomainModel {...props} domainId={domainId}/>} />
+
+            <Route exact path={`${match.url}/chat`} render={(props) => <DomainChats {...props} domainId={domainId}/>} />
 
             <Route exact path={`${match.url}/create-model`} render={(props) => <CreateDomainModel {...props} domainId={domainId}/>} />
 

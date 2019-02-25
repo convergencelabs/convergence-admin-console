@@ -1,5 +1,6 @@
 import moment from "moment";
 import {DomainUserId, DomainUserType} from "../models/domain/DomainUserId";
+import {DomainStatus} from "../models/DomainStatus";
 
 export function shortDateTime(time: Date | number): string {
   return moment(time).format("MM/DD @ hh:mma")
@@ -80,4 +81,23 @@ export function formatBytes(bytes: number, decimals: number) {
   let i = Math.floor(Math.log(bytes) / Math.log(k));
 
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+}
+
+export function formatDomainStatus(status: DomainStatus): string {
+  switch (status) {
+    case DomainStatus.ONLINE:
+      return "Online";
+    case DomainStatus.OFFLINE:
+      return "Offline";
+    case DomainStatus.ERROR:
+      return "Error";
+    case DomainStatus.INITIALIZING:
+      return "Initializing";
+    case DomainStatus.DELETING:
+      return "Deleting";
+    case DomainStatus.ERROR:
+      return "Error";
+    default:
+      throw new Error("Unknown domain status: " + status);
+  }
 }

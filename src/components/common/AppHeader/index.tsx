@@ -23,14 +23,14 @@ class AppHeaderComponent extends React.Component<InjectedProps, {}> {
 
   private _menu = (
     <Menu className={styles.userMenu}>
-      <Menu.Item key="0">
+      <Menu.Item key="profile">
         <Link to={"/profile"}><Icon type="profile"/>Profile</Link>
       </Menu.Item>
-      <Menu.Item key="1">
-        <a><Icon type="setting"/> Settings</a>
-      </Menu.Item>
+      {/*<Menu.Item key="settings">*/}
+        {/*<a><Icon type="setting"/> Settings</a>*/}
+      {/*</Menu.Item>*/}
       <Menu.Divider/>
-      <Menu.Item key="3" onClick={this._logout}><Icon type="logout"/> Logout</Menu.Item>
+      <Menu.Item key="logout" onClick={this._logout}><Icon type="logout"/> Logout</Menu.Item>
     </Menu>
   );
 

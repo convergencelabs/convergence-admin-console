@@ -9,6 +9,8 @@ import {injectAs} from "../../../utils/mobx-utils";
 import {domainUrl} from "../../../utils/domain-url";
 import {CopyAddonButton} from "../../common/CopyAddonButton/index";
 import {AppConfig} from "../../../stores/AppConfig";
+import {DomainStatusIcon} from "../../common/DomainStatusIcon";
+import {formatDomainStatus} from "../../../utils/format-utils";
 
 export interface DomainCardProps {
   domain: DomainDescriptor
@@ -27,7 +29,11 @@ export class DomainCardComponent extends React.Component<DomainCardProps & Injec
         <Link to={{pathname: `/domain/${domain.namespace}/${domain.id}/`}}>
           <span className={styles.title}>{domain.displayName}</span>
         </Link>
-        <Icon type="check-circle" className={styles.status}/>
+        <span className={styles.status}>
+          <Tooltip title={formatDomainStatus(domain.status)}>
+            <span><DomainStatusIcon status={domain.status}/></span>
+          </Tooltip>
+        </span>
         <div className={styles.nsid}>{domain.namespace} / {domain.id}</div>
         <Input
           className={styles.url}
@@ -49,7 +55,7 @@ export class DomainCardComponent extends React.Component<DomainCardProps & Injec
   }
 }
 
-function CardButton(props: {domain: DomainDescriptor, icon: string, link: string, tooltip: string}) {
+function CardButton(props: { domain: DomainDescriptor, icon: string, link: string, tooltip: string }) {
   const {domain, link, tooltip, icon} = props;
   const url = `domain/${domain.namespace}/${domain.id}/${link}`
   return (
