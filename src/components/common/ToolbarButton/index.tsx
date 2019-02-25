@@ -1,5 +1,4 @@
-import * as React from 'react';
-import {Component, ReactNode} from "react";
+import React, {ReactNode} from "react";
 import styles from "./styles.module.css";
 import {Button} from "antd";
 import Tooltip from "antd/es/tooltip";
@@ -7,11 +6,11 @@ import Tooltip from "antd/es/tooltip";
 export interface ToolbarButtonProps {
   icon: string;
   tooltip: string;
-  onClick(): void;
+  onClick?: () => void;
 }
 
-export class ToolbarButton extends Component<ToolbarButtonProps, {}> {
-  render(): ReactNode {
+export class ToolbarButton extends React.Component<ToolbarButtonProps, {}> {
+  public render(): ReactNode {
     return (
       <Tooltip placement="topRight" title={this.props.tooltip} mouseEnterDelay={1}>
         <Button className={styles.iconButton}
@@ -19,8 +18,14 @@ export class ToolbarButton extends Component<ToolbarButtonProps, {}> {
                 size="small"
                 htmlType="button"
                 icon={this.props.icon}
-                onClick={this.props.onClick}/>
+                onClick={this._onClick}/>
       </Tooltip>
     );
+  }
+
+  private _onClick = () => {
+    if (this.props.onClick) {
+      this.props.onClick();
+    }
   }
 }

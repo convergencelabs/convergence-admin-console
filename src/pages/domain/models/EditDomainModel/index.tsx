@@ -1,6 +1,6 @@
 import {Page} from "../../../../components/common/Page/";
 import React, {ReactNode} from "react";
-import {Card, Tabs} from "antd";
+import {Card, notification, Popconfirm, Tabs} from "antd";
 import {Icon} from 'antd';
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
@@ -83,10 +83,32 @@ class EditDomainModelComponent extends React.Component<InjectedProps, {}> {
           <span className={styles.collectionId}>{"collection"}</span>
         </span>
         <span className={styles.spacer}/>
-        <ToolbarButton icon="delete" tooltip="Delete Model" onClick={() => {
-        }}/>
+        <Popconfirm title="Delete this model?" onConfirm={this._onDeleteModel} placement="bottomRight">
+          <ToolbarButton icon="delete" tooltip="Delete Model"/>
+        </Popconfirm>
       </span>
     );
+  }
+
+  private _onDeleteModel = () => {
+    this.props.domainModelService
+      .deleteModel(this.props.domainId, this.props.match.params.id)
+      .then( () => {
+          notification.success({
+            message: "Model Deleted",
+            description: `The model '${this.props.match.params.id}' was deleted.`
+          });
+
+          this.props.history.push(toDomainUrl("", this.props.domainId, "models"));
+        }
+      )
+      .catch(err => {
+        console.log(err);
+        notification.error({
+          message: "Model Not Deleted",
+          description: `Ths model could not be deleted.`
+        });
+      });
   }
 }
 

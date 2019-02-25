@@ -1,8 +1,6 @@
-import * as React from 'react';
+import React, {ReactNode} from "react";
 import {Page} from "../../../../components/common/Page/";
-import {ReactNode} from "react";
-import {Card, Col, InputNumber, notification, Row} from "antd";
-import {Form, Input, Tooltip, Icon, Button, Select, Checkbox, Divider} from 'antd';
+import {Form, Input, Icon, Button, Select, Card, notification} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
 import {FormEvent} from "react";
 import styles from "./styles.module.css";
@@ -143,7 +141,7 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
               message: 'Model Created',
               description: `Model '${modelId}' successfully created`
             });
-            this.props.history.push(toDomainUrl("", domainId, "models"));
+            this.props.history.push(toDomainUrl("", domainId, `models/${modelId}`));
           }).catch((err) => {
             if (err instanceof RestError) {
               if (err.code === "duplicate") {
