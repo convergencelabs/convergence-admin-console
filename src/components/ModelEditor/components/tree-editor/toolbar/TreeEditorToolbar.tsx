@@ -1,13 +1,14 @@
 import React from "react";
 import {ReactNode} from "react";
-import {ToolbarButton} from "../../toolbar/ToolbarButton";
-import {ToolbarRadioButton} from "../../toolbar/ToolbarRadioButton";
-import {SearchControl} from "./SearchControl";
-import {NewNodeButton} from "../../toolbar/NewNodeButton";
+import {ToolbarButton} from "../../common/ToolbarButton/";
+import {ToolbarRadioButton} from "../../common/ToolbarRadioButton/";
+import {SearchControl} from "./SearchControl/";
+import {NewNodeButton} from "./NewNodeButton/";
 import {Subscription} from "rxjs";
-import {Spacer} from "../../toolbar/Spacer";
+import {Spacer} from "../../common/Spacer/";
 import {EditorMode} from "../../../EditorMode";
 import {TreeModel} from "../model/TreeModel";
+import styles from "./styles.module.css";
 
 export interface TreeEditorToolbarProps {
   treeModel: TreeModel;
@@ -65,35 +66,30 @@ export class TreeEditorToolbar extends React.Component<TreeEditorToolbarProps, {
     }
 
     return (
-      <div className="sapphire-toolbar">
-        <div className="button-group">
+      <div className={styles.toolbar}>
+        <div className={styles.buttonGroup}>
           <ToolbarRadioButton enabled={!this.props.treeModel.isAddingNode()}
-                              selected={this.props.editMode === "view"}
-                              icon="eye"
-                              tooltip="View"
-                              onSelect={() => this.setMode("view")}/>
+                 selected={this.props.editMode === "view"}
+                 icon="eye"
+                 tooltip="View"
+                 onSelect={() => this.setMode("view")}/>
           <ToolbarRadioButton enabled={!this.props.treeModel.isAddingNode()}
-                              selected={this.props.editMode === "edit"}
-                              icon="pencil-square-o"
-                              tooltip="Edit"
-                              onSelect={() => this.setMode("edit")}/>
-          {/*<ToolbarRadioButton enabled={!this.props.treeModel.isAddingNode()}*/}
-          {/*selected={this.props.editMode === "history"}*/}
-          {/*icon="clock-o"*/}
-          {/*tooltip="History"*/}
-          {/*onSelect={() => this.setMode("history")}/>*/}
+                 selected={this.props.editMode === "edit"}
+                 icon="pencil-square-o"
+                 tooltip="Edit"
+                 onSelect={() => this.setMode("edit")}/>
           <Spacer/>
           <ToolbarButton enabled={!this.props.treeModel.isAddingNode()}
-                         icon="plus-square-o"
-                         onClick={() => this.props.treeModel.expandAll()}/>
+                 icon="plus-square-o"
+                 onClick={() => this.props.treeModel.expandAll()}/>
           <ToolbarButton enabled={!this.props.treeModel.isAddingNode()}
-                         icon="minus-square-o"
-                         onClick={() => this.props.treeModel.collapseAll()}/>
+                 icon="minus-square-o"
+                 onClick={() => this.props.treeModel.collapseAll()}/>
           {edit}
           <Spacer/>
           <ToolbarButton enabled={!this.props.treeModel.isAddingNode()}
-                         icon="file-code-o"
-                         onClick={this.onEditSource}/>
+                 icon="file-code-o"
+                 onClick={this.onEditSource}/>
         </div>
         <SearchControl treeModel={this.props.treeModel}/>
       </div>

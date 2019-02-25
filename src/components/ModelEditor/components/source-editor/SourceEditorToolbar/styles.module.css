@@ -1,0 +1,3 @@
+.toolbar {
+  composes: toolbar from "../../tree-editor/toolbar/styles.module.css";
+}

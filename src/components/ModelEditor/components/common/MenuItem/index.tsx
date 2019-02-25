@@ -1,4 +1,5 @@
 import React, {ReactNode} from 'react';
+import styles from "./styles.module.css";
 
 export interface MenuItemProps {
   label: string;
@@ -10,13 +11,14 @@ export class MenuItem extends React.Component<MenuItemProps, any> {
   onClick = () => {
     try {
       this.props.onClick();
-    } finally {
+    } catch (err) {
+      console.log(err);
     }
   };
 
   public render(): ReactNode {
     return (
-      <div className="sapphire-menu-item" onClick={this.onClick}>{this.props.label}</div>
+      <div className={styles.menuItem} onClick={this.onClick}>{this.props.label}</div>
     );
   }
 }

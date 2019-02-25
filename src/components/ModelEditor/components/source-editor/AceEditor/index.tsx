@@ -1,8 +1,9 @@
 import React, {ReactNode} from "react";
 import ace from 'brace';
-
 import 'brace/mode/json' ;
 import 'brace/theme/xcode';
+
+import styles from "./styles.module.css";
 
 export interface CursorPosition {
   row: number;
@@ -51,7 +52,7 @@ export class AceEditor extends React.Component<AceEditorProps, {}> {
   }
 
   public render(): ReactNode {
-    return <div className="source-editor-ace" ref={div => {
+    return <div className={styles.aceEditor} ref={div => {
       this._container = div;
     }}/>
   }

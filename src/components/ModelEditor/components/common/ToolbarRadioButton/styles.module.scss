@@ -1,0 +1,20 @@
+.toolbarRadioButton {
+  composes: toolbarButton from "../ToolbarButton/styles.module.scss";
+}
+
+.enabled {
+  composes: enabled from "../ToolbarButton/styles.module.scss";
+}
+
+.disabled {
+  composes: disabled from "../ToolbarButton/styles.module.scss";
+}
+
+.selected {
+  background: #1890ff;
+  color: white;
+}
+
+.selected.enabled:hover {
+  color: white;
+}

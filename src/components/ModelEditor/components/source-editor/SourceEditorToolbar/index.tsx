@@ -1,5 +1,6 @@
 import React, {ReactNode} from "react";
-import {ToolbarButton} from "../toolbar/ToolbarButton";
+import {ToolbarButton} from "../../common/ToolbarButton/";
+import styles from "./styles.module.css";
 
 export interface SourceEditorToolbarProps {
   onSaveSource: (data: {[key: string]: any}) => void;
@@ -16,7 +17,7 @@ export class SourceEditorToolbar extends React.Component<SourceEditorToolbarProp
       save = <ToolbarButton icon="floppy-o" enabled={this.props.canSaveSource} onClick={this.onSaveSource} />;
     }
 
-    return <div className="sapphire-toolbar">
+    return <div className={styles.toolbar}>
       {save}
       <span style={{flex: 1}} />
       <ToolbarButton icon="window-close" enabled onClick={this.onCancelSource} />

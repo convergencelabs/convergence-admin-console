@@ -111,7 +111,6 @@ class NormalLoginForm extends Component<InjectedProps, LoginFormState> {
             })(
               <Checkbox>Remember me</Checkbox>
             )}
-            <a className={styles.loginFormForgot} href="">Forgot password</a>
             <Button type="primary" htmlType="submit" className={styles.loginFormButton}>
               Log in
             </Button>

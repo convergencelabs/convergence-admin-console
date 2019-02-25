@@ -1,8 +1,9 @@
-import {TreeModel} from "../tree-editor/model/TreeModel";
+import {TreeModel} from "../../tree-editor/model/TreeModel";
 import React, {ReactNode} from "react";
-import {AceEditor, CursorPosition} from "./AceEditor";
-import {SourceEditorStatusBar, SourceStatus, SOURCE_STATUS_ERROR} from "./SourceEditorStatusBar";
-import {SourceEditorToolbar} from "./SourceEditorToolbar";
+import {AceEditor, CursorPosition} from "../AceEditor/";
+import {SourceEditorStatusBar, SourceStatus, SOURCE_STATUS_ERROR} from "../SourceEditorStatusBar/";
+import {SourceEditorToolbar} from "../SourceEditorToolbar/";
+import styles from "./styles.module.css";
 
 export interface SourceEditorProps {
   treeModel: TreeModel;
@@ -77,11 +78,11 @@ export class SourceEditor extends React.Component<SourceEditorProps, SourceEdito
   public render(): ReactNode {
 
     return (
-      <div className="source-editor">
+      <div className={styles.sourceEditor}>
         <SourceEditorToolbar onSaveSource={this._onSaveSource}
-                             onCancelSource={this._onCancelSource}
-                             canSaveSource={this.state.status === null}
-                             editable={this.props.editable}/>
+               onCancelSource={this._onCancelSource}
+               canSaveSource={this.state.status === null}
+               editable={this.props.editable}/>
         <AceEditor initialSource={this.state.originalSource}
                    editable={this.props.editable}
                    onCursorChanged={this._onCursorChange}

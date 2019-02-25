@@ -5,6 +5,8 @@ export type SourceStatus = "error" | "warning";
 export const SOURCE_STATUS_ERROR: SourceStatus = "error";
 export const SOURCE_STATUS_WARNING: SourceStatus = "warning";
 
+import styles from "./styles.module.scss";
+
 export interface SourceEditorStatusBarProps {
   cursor: {row: number, col: number};
   status: SourceStatus | null;
@@ -33,10 +35,10 @@ export class SourceEditorStatusBar extends React.Component<SourceEditorStatusBar
     }
 
     return (
-      <div className="status-bar">
+      <div className={styles.statusBar}>
         {icon}
         <span className="message">{this.props.statusMessage}</span>
-        <span className="cursor-info">{this.props.cursor.row}:{this.props.cursor.col}</span>
+        <span className={styles.cursorInfo}>{this.props.cursor.row}:{this.props.cursor.col}</span>
       </div>
     );
   }

@@ -1,0 +1,16 @@
+.menuItem {
+  padding: 5px 12px;
+  color: rgba(0,0,0,0.65);
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 22px;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+}
+
+.menuItem:hover {
+  background: #e6f7ff;
+}
+

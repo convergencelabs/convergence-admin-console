@@ -2,7 +2,7 @@ import React, {ReactNode} from "react";
 import {TreeModel} from "./components/tree-editor/model/TreeModel";
 import {PathControlModel} from "./components/path/PathControlModel";
 import {EditorMode, ViewType} from "./EditorMode";
-import {SourceEditor} from "./components/source-editor/SourceEditor";
+import {SourceEditor} from "./components/source-editor/SourceEditor/index";
 import {TreeEditor} from "./components/tree-editor/TreeEditor";
 
 export interface SapphireEditorComponentProps {

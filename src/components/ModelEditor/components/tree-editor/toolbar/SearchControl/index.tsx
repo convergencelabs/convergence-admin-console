@@ -1,6 +1,7 @@
 import React, {ReactNode} from "react";
 import {Subscription} from "rxjs";
-import {TreeModel} from "../model/TreeModel";
+import {TreeModel} from "../../model/TreeModel";
+import styles from "./styles.module.scss";
 
 export interface SearchControlProps {
   treeModel: TreeModel;
@@ -97,12 +98,12 @@ export class SearchControl extends React.Component<SearchControlProps, SearchCon
     let resultIndicator = null;
     if (this.state.searchTerm && this.state.searchTerm.length > 0) {
       resultIndicator = (
-        <span className="search-meta">{this.state.currentResult + 1} of {this.state.resultCount}</span>);
+        <span className={styles.searchMeta}>{this.state.currentResult + 1} of {this.state.resultCount}</span>);
     } else {
-      resultIndicator = (<span className="search-meta">&nbsp;</span>);
+      resultIndicator = (<span className={styles.searchMeta}>&nbsp;</span>);
     }
     return (
-      <div className="search-control">
+      <div className={styles.searchControl}>
         <input type="text"
                id="searchField"
                placeholder={"Search"}
@@ -111,9 +112,9 @@ export class SearchControl extends React.Component<SearchControlProps, SearchCon
                onChange={() => {}}
                onKeyDown={this.onKeyDown}
                onInput={this.onInput}/>{resultIndicator}
-        <i className="fa fa-chevron-up" onClick={this.onPrev}/>
-        <i className="fa fa-chevron-down" onClick={this.onNext}/>
-        <i className="fa fa-times" onClick={this.onClear}/>
+        <i className={`fa fa-chevron-up ${styles.button}`} onClick={this.onPrev}/>
+        <i className={`fa fa-chevron-down ${styles.button}`} onClick={this.onNext}/>
+        <i className={`fa fa-times ${styles.button}`} onClick={this.onClear}/>
       </div>
     );
   }

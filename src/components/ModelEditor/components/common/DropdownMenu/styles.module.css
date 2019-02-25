@@ -1,0 +1,11 @@
+.menu {
+  position: absolute;
+  border: 1px solid lightgrey;
+  border-radius: 4px;
+  background: #FFFFFF;
+  z-index: 5;
+  font-family: 'Open Sans', Verdana, sans-serif;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  padding: 4px 0;
+  text-align: left;
+}

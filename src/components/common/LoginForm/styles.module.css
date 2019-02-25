@@ -4,6 +4,7 @@
     border-radius: 7px;
     padding: 15px;
     background: white;
+    width: 350px;
 }
 
 .header {
@@ -21,10 +22,6 @@
 .title {
     font-weight: bold;
     font-size: 28px;
-}
-
-.loginForm {
-    max-width: 300px;
 }
 
 .loginFormForgot {

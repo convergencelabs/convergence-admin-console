@@ -1,0 +1,25 @@
+.statusBar {
+  font-size: 12px;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+
+  border: 1px solid lightgrey;
+  padding: 2px;
+
+  i {
+    font-size: 12px;
+    margin: 0 5px;
+
+    &.warning {
+      color: orange;
+    }
+
+    &.error {
+      color: red;
+    }
+  }
+
+  span.cursorInfo {
+    float: right;
+    margin-right: 5px;
+  }
+}

@@ -1,0 +1,12 @@
+.toolbar {
+  border: 1px solid lightgrey;
+  padding: 2px;
+  display: flex;
+  background: rgb(250,250,250);
+  align-items: center;
+}
+
+.buttonGroup {
+  margin: 0;
+  flex: 1;
+}

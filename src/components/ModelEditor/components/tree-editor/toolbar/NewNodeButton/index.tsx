@@ -1,10 +1,10 @@
 import React, {ReactNode} from 'react';
-import {MenuItem} from "../menu/MenuItem";
-import {MenuButton} from "./MenuButton";
-import {ModelElementTypes} from "../../model/ModelElementTypes";
+import {MenuItem} from "../../../common/MenuItem/index";
+import {MenuButton} from "../../../common/MenuButton/";
+import {ModelElementTypes} from "../../../../model/ModelElementTypes";
 import {Subscription} from "rxjs";
-import {TreeModel} from "../tree-editor/model/TreeModel";
-import {ContainerNode} from "../tree-editor/model/ContainerNode";
+import {TreeModel} from "../../model/TreeModel";
+import {ContainerNode} from "../../model/ContainerNode";
 
 export interface NewNodeButtonProps {
   treeModel: TreeModel;

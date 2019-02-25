@@ -1,0 +1,26 @@
+.toolbarButton {
+  float: left;
+  cursor: pointer;
+  border: 1px solid lightgray;
+  transition: color 0.3s, border-color 0.3s;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  margin: 2px 2px;
+}
+
+.enabled:hover {
+  color: #40a9ff;
+  border-color: #40a9ff;
+}
+
+.enabled:active {
+  border-color: #096dd9;
+  color: #096dd9;
+}
+
+.disabled {
+  opacity: 0.4;
+  cursor: default;
+}

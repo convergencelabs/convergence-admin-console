@@ -1,0 +1,45 @@
+div.menuButtonWrapper {
+  display: inline-block;
+  float: left;
+}
+
+div.menuButton {
+  display: inline-block;
+  cursor: pointer;
+  border: 1px solid lightgray;
+  transition: color 0.3s, border-color 0.3s;
+  border-radius: 4px;
+  text-align: center;
+  margin: 2px 2px;
+  padding: 0 5px;
+}
+
+.enabled {
+  composes: enabled from "../ToolbarButton/styles.module.scss";
+}
+
+.disabled {
+  composes: disabled from "../ToolbarButton/styles.module.scss";
+}
+
+span.icons {
+  font-size: 11px;
+}
+
+i.icon {
+  position: relative;
+  top: -2px;
+}
+
+i.dropDown {
+  margin-left: 10px;
+  position: relative;
+  top: -3px;
+  font-size: 8px;
+}
+
+div.menuContainer {
+  position: relative;
+  top: 2px;
+  left: 0;
+}
