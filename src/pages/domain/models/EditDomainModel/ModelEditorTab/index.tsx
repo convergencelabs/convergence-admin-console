@@ -10,6 +10,7 @@ import {Button, Popover} from "antd";
 import styles from "./styles.module.css";
 import {filter} from "rxjs/operators";
 import {longDateTime} from "../../../../../utils/format-utils";
+import confirm from "antd/lib/modal/confirm";
 
 export interface ModelEditorTabProps {
   modelId: string;
@@ -130,8 +131,19 @@ class ModelEditorTabComponent extends React.Component<InjectedProps, ModelEditor
   }
 
   private _confirmDelete = () => {
-
-    return Promise.resolve(false);
+    return new Promise<boolean>(function(resolve, reject) {
+      confirm({
+        title: 'Delete element?',
+        content: 'Are you sure you want to delete this element?',
+        okType: 'danger',
+        onOk() {
+          resolve(true);
+        },
+        onCancel() {
+          resolve(false);
+        },
+      });
+    });
   }
 }
 
