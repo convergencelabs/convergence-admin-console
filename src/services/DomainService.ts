@@ -2,6 +2,8 @@ import {AbstractAuthenticatedService} from "./AbstractAuthenticatedService";
 import {DomainDescriptor} from "../models/DomainDescriptor";
 import {DomainStatus} from "../models/DomainStatus";
 import {DomainId} from "../models/DomainId";
+import {DomainStatistics} from "../models/domain/DomainStatistics";
+import {DomainStatisticsData} from "./domain/common-rest-data";
 
 export interface DomainDescriptorData {
   namespace: string;
@@ -25,6 +27,12 @@ export class DomainService extends AbstractAuthenticatedService {
       .then(DomainService._toDomainDescriptor);
   }
 
+  public getDomainStats(domainId: DomainId): Promise<DomainStatistics> {
+    return this
+      ._get<DomainStatisticsData>(`domains/${domainId.namespace}/${domainId.id}/stats`)
+      .then(DomainService._toDomainStatistics);
+  }
+
   public createDomain(domainId: DomainId, displayName: string): Promise<void> {
     const data = {namespace: domainId.namespace, id: domainId.id, displayName};
     return this._post<void>("domains", data);
@@ -39,6 +47,15 @@ export class DomainService extends AbstractAuthenticatedService {
 
   public deleteDomain(domainId: DomainId): Promise<void> {
     return this._delete<void>(`domains/${domainId.namespace}/${domainId.id}`);
+  }
+
+  public static _toDomainStatistics(data: DomainStatisticsData): DomainStatistics {
+    return new DomainStatistics(
+      data.activeSessionCount,
+      data.userCount,
+      data.modelCount,
+      data.dbSize
+    );
   }
 
   public static _toDomainDescriptor(data: DomainDescriptorData): DomainDescriptor {

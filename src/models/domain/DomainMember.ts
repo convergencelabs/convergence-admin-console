@@ -1,6 +1,6 @@
 export class DomainMember {
-  constructor(public username: string,
-              public role: string) {
+  constructor(public readonly username: string,
+              public readonly role: string) {
     Object.freeze(this);
   }
 }

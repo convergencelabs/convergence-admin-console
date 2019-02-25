@@ -135,3 +135,10 @@ export interface DomainSessionData {
   clientMetaData: string;
   remoteHost: string;
 }
+
+export interface DomainStatisticsData {
+  activeSessionCount: number;
+  userCount: number;
+  modelCount: number;
+  dbSize: number
+}

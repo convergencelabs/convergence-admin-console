@@ -13,13 +13,14 @@ import {ModelOpenSnippet} from "./snippet_model_open";
 import {ModelOpenAutoCreate} from "./snippet_model_open_auto_create";
 import {ModelCreateSnippet} from "./snippet_model_create";
 import {ModelDataSnippet} from "./snippet_model_data";
-import {InfoTable, InfoTableRow} from "../../../components/server/InfoTable";
 import {DomainId} from "../../../models/DomainId";
 import {domainUrl} from "../../../utils/domain-url";
 import {ActivityJoinSnippet} from "./snippet_activity_join";
 import {ChatRoomSnippet} from "./snippet_chat_room";
 import {DirectChatSnippet} from "./snippet_chat_direct";
 import {PresenceSubscriptionSnippet} from "./snippet_presence_subscribe";
+import {DomainInfo} from "./DomainInfo";
+import {DomainStats} from "./DomainStats";
 
 const TabPane = Tabs.TabPane;
 
@@ -54,22 +55,12 @@ export class DomainDashboard extends React.Component<DomainDashboardProps, {}> {
           <Row gutter={16}>
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Card className={styles.card} title={<span><Icon type="profile"/> Overview</span>}>
-                <InfoTable>
-                  <InfoTableRow label="Display Name">{domainId.id}</InfoTableRow>
-                  <InfoTableRow label="Namespace">{domainId.namespace}</InfoTableRow>
-                  <InfoTableRow label="Id">{domainId.id}</InfoTableRow>
-                  <InfoTableRow label="Status">???</InfoTableRow>
-                </InfoTable>
+                <DomainInfo domainId={this.props.domainId}/>
               </Card>
             </Col>
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Card className={styles.card} title={<span><Icon type="bar-chart"/> Statistics</span>}>
-                <InfoTable>
-                  <InfoTableRow label="Active Sessions">7</InfoTableRow>
-                  <InfoTableRow label="Total Users">53</InfoTableRow>
-                  <InfoTableRow label="Total Models">201</InfoTableRow>
-                  <InfoTableRow label="Storage">475MB</InfoTableRow>
-                </InfoTable>
+                <DomainStats domainId={this.props.domainId}/>
               </Card>
             </Col>
           </Row>
