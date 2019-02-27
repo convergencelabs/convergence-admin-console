@@ -1,46 +1,51 @@
 .domainCard {
-    padding: 10px;
+  padding: 10px;
+}
+
+.domainCard:global(.ant-card) {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .domainCard:hover {
-    cursor: default;
+  cursor: default;
 }
 
 .title {
-    font-size: 24px;
+  font-size: 24px;
 }
 
 .nsid {
-    font-size: 12px;
-    color: darkgray;
+  font-size: 12px;
+  color: darkgray;
 }
 
 .status {
-    float: right;
-    color: green;
+  float: right;
+  color: green;
 }
 
 .url {
-    margin-top: 10px;
-    width: 100%;
+  margin-top: 10px;
+  width: 100%;
 }
 
 .url:active, .url:focus {
-    outline: none;
+  outline: none;
 }
 
 .url :global .ant-btn {
-    border: none;
-    padding: 0 !important;
-    background: transparent;
-    height: inherit;
+  border: none;
+  padding: 0 !important;
+  background: transparent;
+  height: inherit;
 }
 
 .buttons {
-    margin-top: 20px;
-    text-align: right;
+  margin-top: 20px;
+  text-align: right;
 }
 
 .buttons :global .ant-btn {
-    margin-left: 5px;
+  margin-left: 5px;
 }

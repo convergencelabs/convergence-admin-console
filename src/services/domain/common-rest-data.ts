@@ -74,6 +74,7 @@ export interface DomainUserData {
   firstName: string;
   lastName: string;
   email: string;
+  disabled: boolean;
 }
 
 export interface CreateDomainUserData {
@@ -90,6 +91,7 @@ export interface UpdateDomainUserData {
   firstName: string;
   lastName: string;
   email: string;
+  disabled: boolean;
 }
 
 export interface DomainUserIdData {

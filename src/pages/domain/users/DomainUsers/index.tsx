@@ -60,6 +60,10 @@ export class DomainUsersComponent extends React.Component<InjectedProps, DomainU
       align: 'left',
       render: (value: any, record: any) => record.lastLogin ? shortDateTime(record.lastLogin) : "Never"
     }, {
+      title: 'Status',
+      dataIndex: 'disabled',
+      render: (disabled: boolean, record: DomainUser) => disabled ? "Disabled" : "Enabled"
+    }, {
       title: '',
       align: 'right',
       render: this._renderActions

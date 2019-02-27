@@ -138,16 +138,15 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
   private _renderActions = (text: any, record: DomainDescriptor) => {
     const fav = this._isFav(record);
     const favType = fav ? undefined : "dashed";
-    const twoToneColor = fav ? "#eb2f96" : undefined;
-    const theme = fav ? "twoTone" : undefined;
+    const color = fav ? "#e3b12e" : "darkgray";
+    const theme = fav ? "filled" : undefined;
 
     const deleteDisabled = false;
     const deleteButton = <Button className={styles.iconButton}
                                  shape="circle"
                                  size="small"
                                  htmlType="button"
-                                 disabled={deleteDisabled}><Icon
-      type="delete"/></Button>;
+                                 disabled={deleteDisabled}><Icon type="delete"/></Button>;
 
     const deleteComponent = deleteDisabled ?
       <Tooltip placement="topRight" title="You do not have permissions to delete this domain!" mouseEnterDelay={1}>
@@ -174,9 +173,9 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
                 type={favType}
                 onClick={() => this._onFavClick(record)}
         >
-          <Icon type="heart"
+          <Icon type="star"
                 theme={theme}
-                twoToneColor={twoToneColor}/>
+                style={{color}}/>
         </Button>
         {deleteComponent}
       </span>

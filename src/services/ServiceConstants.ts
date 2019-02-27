@@ -1,4 +1,5 @@
 export const SERVICES = {
+  SERVER_STATUS_SERVICE: "serverStatusService",
   CONFIG_SERVICE: "configService",
   AUTH_SERVICE: "authService",
   LOGGED_IN_USER_SERVICE: "loggedInUserService",

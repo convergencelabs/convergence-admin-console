@@ -1,6 +1,6 @@
 import React, {ReactNode, FormEvent} from 'react';
 import {Page} from "../../../../components/common/Page/";
-import {Card, Col, notification, Row, Form, Input, Tooltip, Icon, Button} from "antd";
+import {Card, Col, notification, Row, Form, Input, Tooltip, Icon, Button, Switch, Select} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
@@ -59,7 +59,7 @@ class EditDomainUserComponent extends React.Component<InjectedProps, EditDomainU
   }
 
   public render(): ReactNode {
-    const {getFieldDecorator} = this.props.form;
+    const {getFieldDecorator, getFieldValue} = this.props.form;
     if (this.state.user !== null) {
       const user = this.state.user;
       return (
@@ -82,7 +82,7 @@ class EditDomainUserComponent extends React.Component<InjectedProps, EditDomainU
                 <Col span={12}>
                   <Form.Item label={(
                     <span>Display Name&nbsp;
-                      <Tooltip title="What do you want others to call you?">
+                      <Tooltip title="The name that should be displayed for this user.">
                   <Icon type="question-circle-o"/>
                 </Tooltip>
                 </span>
@@ -140,6 +140,20 @@ class EditDomainUserComponent extends React.Component<InjectedProps, EditDomainU
               </Row>
               <Row>
                 <Col span={24}>
+                  <Form.Item label="User Status">
+                    {getFieldDecorator('status', {
+                      initialValue: user.disabled ? "disabled" : "enabled"
+                    })(
+                      <Select>
+                        <Select.Option key="enabled" value="enabled">Enabled</Select.Option>
+                        <Select.Option key="disabled" value="disabled">Disabled</Select.Option>
+                      </Select>
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row>
+                <Col span={24}>
                   <FormButtonBar>
                     <Button htmlType="button" onClick={this._handleCancel}>Cancel</Button>
                     <Button type="primary" htmlType="submit">Save</Button>
@@ -181,12 +195,14 @@ class EditDomainUserComponent extends React.Component<InjectedProps, EditDomainU
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values: any) => {
       if (!err) {
-        const {username, displayName, firstName, lastName, email} = values;
+        const {username, displayName, firstName, lastName, email, status} = values;
+        const disabled = status === "disabled";
         const userData: UpdateDomainUserData = {
           displayName,
           firstName,
           lastName,
           email,
+          disabled
         };
         this.props.domainUserService.updateUser(this.props.domainId, username, userData)
           .then(() => {

@@ -3,7 +3,8 @@ export class DomainUser {
               public displayName: string,
               public firstName: string,
               public lastName: string,
-              public email: string) {
+              public email: string,
+              public disabled: boolean) {
     Object.freeze(this);
   }
 }

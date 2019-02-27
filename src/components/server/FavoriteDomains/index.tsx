@@ -1,6 +1,6 @@
 import React, {ReactNode} from "react";
 import {DomainDescriptor} from "../../../models/DomainDescriptor";
-import {Card, Col, Icon} from "antd";
+import {Card, Col, Icon, Row} from "antd";
 import {injectAs} from "../../../utils/mobx-utils";
 import {DomainCard} from "../DomainCard/";
 import {makeCancelable, PromiseSubscription} from "../../../utils/make-cancelable";
@@ -51,14 +51,16 @@ export class FavoriteDomainsComponent extends React.Component<RecentDomainInject
       <Card title={<span><Icon type="database"/> Favorite Domains</span>}>
         {
           domains.length > 0 ?
-            (domains).map((d: DomainDescriptor) => (
-              <Col span={8} key={`${d.namespace}/${d.id}`}>
-                <DomainCard domain={d}/>
-              </Col>
-            )) :
+            (<Row gutter={16}>
+              {(domains).map((d: DomainDescriptor) => (
+                <Col xxl={8} xl={12} lg={24} md={24} sm={24} key={`${d.namespace}/${d.id}`}>
+                  <DomainCard domain={d}/>
+                </Col>
+              ))}
+            </Row>) :
             <div className={styles.noDomains}>
               <div className={styles.centered}>
-               <Icon className={styles.icon} type="database" />
+                <Icon className={styles.icon} type="database"/>
                 <div>No Favorite Domains</div>
                 <div>(Select One <Link to={"/domains"}>Here</Link>)</div>
               </div>

@@ -11,6 +11,7 @@ import {namespaceService} from "./services/NamespaceService";
 import {userService} from "./services/UserService";
 import {roleService} from "./services/RoleService";
 import {authService} from "./services/AuthService";
+import {serverStatusService} from "./services/ServerStatusService";
 import {loggedInUserService} from "./services/LoggedInUserService";
 import {profileStore} from "./stores/ProfileStore";
 import {domainCollectionService} from "./services/domain/DomainCollectionService";
@@ -57,6 +58,7 @@ const services = {
   namespaceService,
   userService,
   roleService,
+  serverStatusService,
 
   domainCollectionService,
   domainModelService,

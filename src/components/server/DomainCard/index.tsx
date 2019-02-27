@@ -11,6 +11,7 @@ import {CopyAddonButton} from "../../common/CopyAddonButton/index";
 import {AppConfig} from "../../../stores/AppConfig";
 import {DomainStatusIcon} from "../../common/DomainStatusIcon";
 import {formatDomainStatus} from "../../../utils/format-utils";
+import {ReactNode} from "react";
 
 export interface DomainCardProps {
   domain: DomainDescriptor
@@ -21,7 +22,7 @@ interface Injected {
 }
 
 export class DomainCardComponent extends React.Component<DomainCardProps & Injected, {}> {
-  render() {
+  public render(): ReactNode {
     const domain = this.props.domain;
     const url = domainUrl(domain.namespace, domain.id);
     return (

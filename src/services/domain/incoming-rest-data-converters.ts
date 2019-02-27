@@ -108,7 +108,8 @@ export function toDomainUser(data: DomainUserData): DomainUser {
     data.displayName,
     data.firstName,
     data.lastName,
-    data.email);
+    data.email,
+    data.disabled);
 }
 
 export function toDomainUserId(data: DomainUserIdData): DomainUserId {
