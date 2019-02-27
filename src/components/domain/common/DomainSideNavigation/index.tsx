@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {SideNavigation, SideNavigationMenuItem} from "../../../server/SideNavigation/index";
+import {SideNavigation, SideNavigationMenuItem} from "../../../common/SideNavigation/";
 import {ReactNode} from "react";
 import {DomainId} from "../../../../models/DomainId";
 import {toDomainUrl} from "../../../../utils/domain-url";
@@ -22,7 +22,7 @@ export class DomainSideNavigation extends React.Component<DomainSideNavigationPr
     const sessions = toDomainUrl("", domainId, "sessions/");
     const collections = toDomainUrl("", domainId, "collections/");
     const models = toDomainUrl("", domainId, "models/");
-    const chat = toDomainUrl("", domainId, "chat/");
+    const chat = toDomainUrl("", domainId, "chats/");
     const settings = toDomainUrl("", domainId, "settings/");
     const auth = toDomainUrl("", domainId, "authentication/");
 

@@ -10,12 +10,12 @@ import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {Link} from "react-router-dom";
 import {DomainId} from "../../../../models/DomainId";
-import {CollectionSummary} from "../../../../models/domain/CollectionSummary";
 import {ToolbarButton} from "../../../../components/common/ToolbarButton";
 import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
 import {toDomainUrl} from "../../../../utils/domain-url";
 import styles from "./styles.module.css";
 import {DomainChatService} from "../../../../services/domain/DomainChatService";
+import {ChatInfo} from "../../../../models/domain/ChatInfo";
 
 export interface DomainChatProps extends RouteComponentProps {
   domainId: DomainId;
@@ -26,7 +26,7 @@ interface InjectedProps extends DomainChatProps {
 }
 
 export interface DomainChatState {
-  chats: CollectionSummary[] | null;
+  chats: ChatInfo[] | null;
   chatsFilter: string;
 }
 
@@ -40,7 +40,7 @@ class DomainChatComponent extends React.Component<InjectedProps, DomainChatState
     this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId,[{title: "Chat"}]);
     this._chatTableColumns = [{
       title: 'Id',
-      dataIndex: 'id',
+      dataIndex: 'chatId',
       sorter: (a: any, b: any) => (a.id as string).localeCompare(b.id),
       render: (text: string) => <Link to={toDomainUrl("", this.props.domainId, `chats/${text}`)}>{text}</Link>
     }, {
@@ -48,7 +48,14 @@ class DomainChatComponent extends React.Component<InjectedProps, DomainChatState
       dataIndex: 'name',
     }, {
       title: 'Type',
-      dataIndex: 'channelType',
+      dataIndex: 'type',
+    }, {
+      title: 'Membership',
+      dataIndex: 'membership',
+    },  {
+      title: 'Members',
+      dataIndex: 'members',
+      render: (val: any[]) => val.length + ""
     }, {
       title: '',
       align: 'right',
@@ -75,12 +82,12 @@ class DomainChatComponent extends React.Component<InjectedProps, DomainChatState
 
   private _renderToolbar(): ReactNode {
     return (
-      <CardTitleToolbar title="Chat" icon="folder">
+      <CardTitleToolbar title="Chat" icon="message">
         <span className={styles.search}>
           <Input placeholder="Search Chat" addonAfter={<Icon type="search"/>} onKeyUp={this._onFilterChange}/>
         </span>
-        <ToolbarButton icon="plus-circle" tooltip="Create Collection" onClick={this._goToCreate}/>
-        <ToolbarButton icon="reload" tooltip="Reload Chat" onClick={this._loadChats}/>
+        <ToolbarButton icon="plus-circle" tooltip="Create Chat" onClick={this._goToCreate}/>
+        <ToolbarButton icon="reload" tooltip="Reload Chats" onClick={this._loadChats}/>
       </CardTitleToolbar>
     )
   }
@@ -90,7 +97,7 @@ class DomainChatComponent extends React.Component<InjectedProps, DomainChatState
   }
 
   private _goToCreate = () => {
-    const url = toDomainUrl("", this.props.domainId, "create-collection");
+    const url = toDomainUrl("", this.props.domainId, "create-chat");
     this.props.history.push(url);
   }
 
@@ -109,22 +116,22 @@ class DomainChatComponent extends React.Component<InjectedProps, DomainChatState
     );
   }
 
-  private _renderActions = (_: undefined, record: CollectionSummary) => {
+  private _renderActions = (_: undefined, record: ChatInfo) => {
     return (
       <span className={styles.actions}>
-        <Tooltip placement="topRight" title="Edit Collection" mouseEnterDelay={1}>
-          <Link to={toDomainUrl("", this.props.domainId, `chats/${record.id}`)}>
+        <Tooltip placement="topRight" title="Edit Chat" mouseEnterDelay={1}>
+          <Link to={toDomainUrl("", this.props.domainId, `chats/${record.chatId}`)}>
             <Button shape="circle" size="small" htmlType="button" icon="edit"/>
           </Link>
         </Tooltip>
-         <Popconfirm title="Are you sure delete this collection?"
+         <Popconfirm title="Are you sure delete this chat?"
                      placement="topRight"
-                     onConfirm={() => this._onDeleteCollection(record.id)}
+                     onConfirm={() => this._onDeleteChat(record.chatId)}
                      okText="Yes"
                      cancelText="No"
                      icon={<Icon type="question-circle-o" style={{color: 'red'}}/>}
          >
-        <Tooltip placement="topRight" title="Delete Collection" mouseEnterDelay={2}>
+        <Tooltip placement="topRight" title="Delete Chat" mouseEnterDelay={2}>
           <Button shape="circle" size="small" htmlType="button"><Icon
             type="delete"/></Button>
         </Tooltip>
@@ -133,9 +140,8 @@ class DomainChatComponent extends React.Component<InjectedProps, DomainChatState
     );
   }
 
-  private _onDeleteCollection = (chatId: string) => {
-    const domainId = new DomainId(this.props.domainId.namespace, this.props.domainId.id);
-    this.props.domainChatService.deleteChat(domainId, chatId)
+  private _onDeleteChat = (chatId: string) => {
+    this.props.domainChatService.deleteChat(this.props.domainId, chatId)
       .then(() => {
         this._loadChats();
         notification.success({

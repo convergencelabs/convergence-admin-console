@@ -138,8 +138,7 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
   }
 
   private _onDeleteCollection = (collectionId: string) => {
-    const domainId = new DomainId(this.props.domainId.namespace, this.props.domainId.id);
-    this.props.domainCollectionService.deleteCollection(domainId, collectionId)
+    this.props.domainCollectionService.deleteCollection(this.props.domainId, collectionId)
       .then(() => {
         this._loadCollections();
         notification.success({

@@ -35,7 +35,7 @@ class CreateNamespaceComponent extends React.Component<InjectedProps, {}> {
                 <Form.Item label="Namespace Id">
                   {getFieldDecorator('id', {
                     rules: [{
-                      required: true, whitespace: true, message: 'Please input a Username!',
+                      required: true, whitespace: true, message: 'Please input a namespace id!',
                     }],
                   })(
                     <Input/>
@@ -47,7 +47,7 @@ class CreateNamespaceComponent extends React.Component<InjectedProps, {}> {
               <Col span={24}>
                 <Form.Item label={(
                   <span>Display Name&nbsp;
-                    <Tooltip title="What do you want others to call you?">
+                    <Tooltip title="A display friendly name for the namespace?">
                   <Icon type="question-circle-o"/>
                 </Tooltip>
                 </span>

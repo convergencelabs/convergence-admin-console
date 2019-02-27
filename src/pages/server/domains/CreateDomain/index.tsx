@@ -101,7 +101,7 @@ class CreateDomainComponent extends React.Component<InjectedProps, CreateDomainS
                 )}>
                   {getFieldDecorator('displayName', {
                     rules: [{
-                      required: false, whitespace: true, message: 'Please input a display name!',
+                      required: true, whitespace: true, message: 'Please input a display name!',
                     }],
                   })(
                     <Input placeholder="Enter an optional display name"/>

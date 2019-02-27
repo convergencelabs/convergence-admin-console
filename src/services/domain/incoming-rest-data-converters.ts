@@ -1,5 +1,6 @@
 import {Collection} from "../../models/domain/Collection";
 import {
+  ChatInfoData,
   CollectionData,
   CollectionPermissionsData,
   CollectionSummaryData, DomainJwtKeyData, DomainSessionData,
@@ -26,6 +27,7 @@ import {DomainUserGroupInfo} from "../../models/domain/DomainUserGroupInfo";
 import {DomainUserGroupSummary} from "../../models/domain/DomainUserGroupSummary";
 import {DomainJwtKey} from "../../models/domain/DomainJwtKey";
 import {DomainSession} from "../../models/domain/DomainSession";
+import {ChatInfo} from "../../models/domain/ChatInfo";
 
 export function toCollection(data: CollectionData): Collection {
   return new Collection(
@@ -155,4 +157,15 @@ export function toDomainSession(data: DomainSessionData): DomainSession {
     data.clientMetaData,
     data.remoteHost
   )
+}
+
+export function toChatInfo(data: ChatInfoData): ChatInfo {
+  return new ChatInfo(
+    data.chatId,
+    data.chatType,
+    data.membership,
+    data.name,
+    data.topic,
+    data.members
+  );
 }

@@ -28,6 +28,8 @@ import {EditDomainUserGroup} from "../../pages/domain/groups/EditDomainUserGroup
 import {DomainAuthentication} from "../../pages/domain/auth/";
 import {DomainSettings} from "../../pages/domain/settings";
 import {DomainChats} from "../../pages/domain/chats/DomainChats";
+import {CreateDomainChat} from "../../pages/domain/chats/CreateDomainChat";
+import {EditDomainChat} from "../../pages/domain/chats/EditDomainChat";
 import {CreateDomainJwtKey} from "../../pages/domain/auth/jwt/CreateDomainJwtKey";
 import {EditDomainJwtKey} from "../../pages/domain/auth/jwt/EditDomainJwtKey";
 import {DomainSessions} from "../../pages/domain/sessions/DomainSessions";
@@ -112,10 +114,11 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
             <Route exact path={`${match.url}/models`} render={(props) => <DomainModels {...props} domainId={domainId}/>} />
             <Route exact path={`${match.url}/models/:id`} render={(props) => <EditDomainModel {...props} domainId={domainId}/>} />
             <Route exact path={`${match.url}/models/:id/:tab`} render={(props) => <EditDomainModel {...props} domainId={domainId}/>} />
-
-            <Route exact path={`${match.url}/chat`} render={(props) => <DomainChats {...props} domainId={domainId}/>} />
-
             <Route exact path={`${match.url}/create-model`} render={(props) => <CreateDomainModel {...props} domainId={domainId}/>} />
+
+            <Route exact path={`${match.url}/chats`} render={(props) => <DomainChats {...props} domainId={domainId}/>} />
+            <Route exact path={`${match.url}/chats/:id`} render={(props) => <EditDomainChat {...props} domainId={domainId}/>} />
+            <Route exact path={`${match.url}/create-chat`} render={(props) => <CreateDomainChat {...props} domainId={domainId}/>} />
 
             <Route exact path={`${match.url}/authentication/:tab/`} render={(props) => <DomainAuthentication {...props} domainId={domainId}/>}/>
             <Route exact path={`${match.url}/authentication/`} render={(props) => <DomainAuthentication {...props} domainId={domainId}/>}/>
@@ -150,12 +153,16 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
           })
       })
       .catch(err => {
-        let error = "Unknown error loading domain";
+        let error = "Unknown error loading domain.";
 
         if (err instanceof RestError) {
           if (err.code === "not_found") {
             error = `The domain '${domainId.namespace}/${domainId.id}' does not exist!`;
+          } else {
+            console.error(err);
           }
+        } else {
+          console.error(err);
         }
 
         this.setState({

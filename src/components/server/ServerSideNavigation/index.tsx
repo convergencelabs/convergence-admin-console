@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {SideNavigation, SideNavigationMenuItem} from "../SideNavigation/index";
+import {SideNavigation, SideNavigationMenuItem} from "../../common/SideNavigation/index";
 import {ReactNode} from "react";
 
 export class ServerSideNavigation extends React.Component<{}, {}> {

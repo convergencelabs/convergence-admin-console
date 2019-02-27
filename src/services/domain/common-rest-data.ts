@@ -142,3 +142,21 @@ export interface DomainStatisticsData {
   modelCount: number;
   dbSize: number
 }
+
+export interface ChatInfoData {
+  chatId: string;
+  chatType: string;
+  membership: string;
+  name: string;
+  topic: string;
+  members: string[];
+}
+
+export interface CreateChatData {
+  chatId: string;
+  chatType: string;
+  membership: string;
+  name: string;
+  topic: string;
+  members: string[];
+}

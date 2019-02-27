@@ -52,6 +52,13 @@ class EditDomainCollectionComponent extends React.Component<InjectedProps, EditD
     this._loadCollection();
   }
 
+  public componentWillUnmount(): void {
+    if (this._collectionSubscription !== null) {
+      this._collectionSubscription.unsubscribe();
+      this._collectionSubscription = null;
+    }
+  }
+
   public render(): ReactNode {
     const {initialCollection} = this.state;
     if (initialCollection !== null) {
@@ -92,7 +99,7 @@ class EditDomainCollectionComponent extends React.Component<InjectedProps, EditD
       if (err instanceof RestError) {
         notification.error({
           message: 'Could Not Update Collection',
-          description: `A collection could not be updated.`
+          description: `The collection could not be updated.`
         });
       }
     });
