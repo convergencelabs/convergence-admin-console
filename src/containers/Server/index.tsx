@@ -5,7 +5,7 @@ import {ServerDashboard} from "../../pages/server/main/ServerDashboard";
 import {Domains} from "../../pages/server/domains/Domains";
 import {NavLayout} from "../../components/common/NavLayout";
 import {ServerSideNavigation} from "../../components/server/ServerSideNavigation";
-import {Settings} from "../../pages/server/main/ServerSettings";
+import {Settings} from "../../pages/server/settings/index";
 import {ServerUsers} from "../../pages/server/users/Users";
 import {CreateUser} from "../../pages/server/users/CreateUser";
 import {CreateDomain} from "../../pages/server/domains/CreateDomain";

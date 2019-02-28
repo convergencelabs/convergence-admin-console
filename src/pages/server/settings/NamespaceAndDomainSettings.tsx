@@ -1,14 +1,14 @@
 import React, {ReactNode} from "react";
 import {Button, Form, Input, Select} from "antd";
-import {FormFieldWithHelp} from "../../../../components/common/FormFieldWithHelp/";
-import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
+import {FormFieldWithHelp} from "../../../components/common/FormFieldWithHelp/index";
+import {FormButtonBar} from "../../../components/common/FormButtonBar/index";
 import {FormComponentProps} from "antd/lib/form";
 import {FormEvent} from "react";
-import {injectAs} from "../../../../utils/mobx-utils";
-import {SERVICES} from "../../../../services/ServiceConstants";
-import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
-import {ConfigService} from "../../../../services/ConfigService";
-import {CONFIG} from "../../../../constants/config";
+import {injectAs} from "../../../utils/mobx-utils";
+import {SERVICES} from "../../../services/ServiceConstants";
+import {makeCancelable, PromiseSubscription} from "../../../utils/make-cancelable";
+import {ConfigService} from "../../../services/ConfigService";
+import {CONFIG} from "../../../constants/config";
 
 const {Option} = Select;
 

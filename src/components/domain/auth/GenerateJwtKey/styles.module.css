@@ -1,0 +1,11 @@
+.tabs:global(.ant-tabs) {
+  margin-bottom: 20px;
+}
+
+.modal {
+  width: 600px;
+}
+
+.copyButton {
+  margin-top: 20px;
+}

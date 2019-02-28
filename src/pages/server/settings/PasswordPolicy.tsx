@@ -1,14 +1,14 @@
 import React, {ReactNode} from "react";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Select, Form, InputNumber, notification} from "antd";
-import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
+import {FormButtonBar} from "../../../components/common/FormButtonBar/index";
 import {FormEvent} from "react";
 import styles from "./styles.module.css";
-import {injectAs} from "../../../../utils/mobx-utils";
-import {SERVICES} from "../../../../services/ServiceConstants";
-import {ConfigService} from "../../../../services/ConfigService";
-import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
-import {PasswordConfig} from "../../../../models/PasswordConfig";
+import {injectAs} from "../../../utils/mobx-utils";
+import {SERVICES} from "../../../services/ServiceConstants";
+import {ConfigService} from "../../../services/ConfigService";
+import {makeCancelable, PromiseSubscription} from "../../../utils/make-cancelable";
+import {PasswordConfig} from "../../../models/PasswordConfig";
 
 export interface InjectedProps extends FormComponentProps {
   configService: ConfigService;

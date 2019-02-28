@@ -80,7 +80,6 @@ class CreateDomainJwtKeyComponent extends React.Component<InjectedProps, {}> {
       }
     });
   }
-
 }
 
 const injections = [SERVICES.DOMAIN_JWT_KEY_SERVICE];

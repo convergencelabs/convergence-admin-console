@@ -1,6 +1,6 @@
 import React, {ReactNode} from "react";
-import {Page} from "../../../../components/common/Page/";
-import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
+import {Page} from "../../../components/common/Page/index";
+import {BasicBreadcrumbsProducer} from "../../../stores/BreacrumStore";
 import {Card, Form, Icon, Tabs} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import {NamespaceAndDomainSettings} from "./NamespaceAndDomainSettings";

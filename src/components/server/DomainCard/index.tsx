@@ -7,7 +7,7 @@ import {SERVICES} from "../../../services/ServiceConstants";
 import {ConfigService} from "../../../services/ConfigService";
 import {injectAs} from "../../../utils/mobx-utils";
 import {domainUrl} from "../../../utils/domain-url";
-import {CopyAddonButton} from "../../common/CopyAddonButton/";
+import {CopyAddOnButton} from "../../common/CopyAddonButton/";
 import {DomainStatusIcon} from "../../common/DomainStatusIcon";
 import {formatDomainStatus} from "../../../utils/format-utils";
 import {DomainStatus} from "../../../models/DomainStatus";
@@ -48,7 +48,7 @@ export class DomainCardComponent extends React.Component<DomainCardProps & Injec
         <Input
           className={styles.url}
           value={url}
-          addonAfter={<CopyAddonButton copyText={url}/>}
+          addonAfter={<CopyAddOnButton copyText={url}/>}
         />
         <div className={styles.buttons}>
           <DomainCardButton link="" domain={domain} tooltip={"Domain Dashboard"} icon="dashboard" disabled={disabled}/>
