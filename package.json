@@ -8,6 +8,7 @@
   "bugs": "https://gitlab.dev.int.convergencelabs.tech/ui/convergence-admin-console/issues",
   "private": true,
   "dependencies": {
+    "@fortawesome/free-regular-svg-icons": "^5.7.2",
     "@types/jest": "23.3.10",
     "@types/node": "10.12.18",
     "@types/react": "16.7.18",
@@ -42,6 +43,9 @@
   "devDependencies": {
     "@convergence-internal/convergence": "^1.0.0-SNAPSHOT",
     "@convergence/string-change-detector": "0.1.8",
+    "@fortawesome/fontawesome-svg-core": "^1.2.15",
+    "@fortawesome/free-solid-svg-icons": "^5.7.2",
+    "@fortawesome/react-fontawesome": "^0.1.4",
     "@types/classnames": "2.2.7",
     "@types/md5": "2.1.33",
     "@types/react-copy-to-clipboard": "4.2.6",

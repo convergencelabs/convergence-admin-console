@@ -54,7 +54,7 @@ export class ServerInfoComponent extends Component<InjectedProps, ServerInfoStat
         </InfoTable>
       ) :
       null;
-    
+
     return (
       <Card className={styles.info} title={<span><Icon type="profile"/> Server Info</span>}>
         {contents}

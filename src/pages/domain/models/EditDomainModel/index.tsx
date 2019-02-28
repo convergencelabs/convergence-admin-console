@@ -80,7 +80,7 @@ class EditDomainModelComponent extends React.Component<InjectedProps, {}> {
         </span>
         <span className={styles.modelAndCollection}>
           <span className={styles.modelId}>{this.props.match.params.id}</span>
-          <span className={styles.collectionId}>{"collection"}</span>
+          <span className={styles.collectionId}><Icon className={styles.collectionIcon} type="folder"/>{"collection"}</span>
         </span>
         <span className={styles.spacer}/>
         <Popconfirm title="Delete this model?" onConfirm={this._onDeleteModel} placement="bottomRight">

@@ -22,16 +22,13 @@ div.menuButton {
   composes: disabled from "../ToolbarButton/styles.module.scss";
 }
 
-span.icons {
+span.icon {
   font-size: 11px;
-}
-
-i.icon {
   position: relative;
   top: -2px;
 }
 
-i.dropDown {
+span.dropDown {
   margin-left: 10px;
   position: relative;
   top: -3px;

@@ -52,7 +52,7 @@ class DomainCollectionFormComponent extends React.Component<DomainCollectionForm
             <Form.Item label="Description">
               {getFieldDecorator('description', {
                 initialValue: initialValue.description,
-                rules: [{required: true, message: 'Please input a Description!', whitespace: true}],
+                rules: [{required: false, message: 'Please input a Description!', whitespace: true}],
               })(
                 <Input.TextArea autosize={{minRows: 2, maxRows: 6}}/>
               )}

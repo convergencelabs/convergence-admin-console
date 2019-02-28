@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Page} from "../../../../components/common/Page/";
 import {ReactNode} from "react";
 import Tooltip from "antd/es/tooltip";
-import {Card, Dropdown, Menu, Table, Icon} from "antd";
+import {Card, Dropdown, Menu, Table, Icon, notification, Popconfirm} from "antd";
 import styles from "./styles.module.css";
 import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
 import {RouteComponentProps} from "react-router";
@@ -23,6 +23,8 @@ import {DomainId} from "../../../../models/DomainId";
 import "brace";
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
+import confirm from "antd/lib/modal/confirm";
+import CopyToClipboard from "react-copy-to-clipboard";
 
 export interface DomainModelsProps extends RouteComponentProps {
   domainId: DomainId;
@@ -162,21 +164,25 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
     const menu = (
       <Menu>
         <Menu.Item key="copyId">
-          <a href="#"><Icon type="copy"/> Copy Id</a>
+          <CopyToClipboard text={id}>
+            <span><Icon type="copy"/> Copy Id</span>
+          </CopyToClipboard>
         </Menu.Item>
         <Menu.Item key="copyData">
-          <a href="#"><Icon type="copy"/> Copy Data</a>
+          <CopyToClipboard text={JSON.stringify(record.data, null, "  ")}>
+            <span><Icon type="copy"/> Copy Data</span>
+          </CopyToClipboard>
         </Menu.Item>
         <Menu.Divider/>
-        <Menu.Item key="edit">
+        <Menu.Item key="edit-data">
           <Link to={data}><Icon type="edit"/> Edit Model</Link>
         </Menu.Item>
-        <Menu.Item key="edit">
+        <Menu.Item key="edit-permissions">
           <Link to={permission}><Icon type="team"/> Edit Permissions</Link>
         </Menu.Item>
         <Menu.Divider/>
         <Menu.Item key="delete">
-          <a href="#"><Icon type="delete"/> Delete</a>
+          <span onClick={() => this._onContextDelete(id)}><Icon type="delete"/> Delete</span>
         </Menu.Item>
       </Menu>
     );
@@ -234,16 +240,52 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
     });
   }
 
+  private _onContextDelete = (id: string) => {
+    confirm({
+      title: 'Delete Model?',
+      content: 'Are you sure you want to delete this model?',
+      okType: 'danger',
+      onOk: () => {
+        this._deleteModel(id);
+      }
+    });
+  }
+
+  private _deleteModel = (id: string) => {
+    this.props.domainModelService
+      .deleteModel(this.props.domainId, id)
+      .then(() => {
+          notification.success({
+            message: "Model Deleted",
+            description: `The model '${id}' was deleted.`
+          });
+
+          const models = this.state.models.filter((m: Model) => m.id !== id);
+          this.setState({models});
+        }
+      )
+      .catch(err => {
+        console.log(err);
+        notification.error({
+          message: "Model Not Deleted",
+          description: `Ths model could not be deleted.`
+        });
+      });
+  }
+
   private _expander = (model: Model, index: number, indent: number, expanded: boolean) => {
+    const permission = toDomainUrl("", this.props.domainId, `models/${model.id}/permissions`);
+    const data = toDomainUrl("", this.props.domainId, `models/${model.id}`);
+
     return (
       <div className={styles.modelExpander}>
         <div className={styles.modelExpanderToolbar}>
-          <ToolbarButton icon="edit" tooltip="Edit Model" onClick={() => {
-          }}/>
-          <ToolbarButton icon="team" tooltip="Edit Permissions" onClick={() => {
-          }}/>
-          <ToolbarButton icon="delete" tooltip="Delete Model" onClick={() => {
-          }}/>
+          <Link to={data}><ToolbarButton icon="edit" tooltip="Edit Model"/></Link>
+
+          <Link to={permission}><ToolbarButton icon="team" tooltip="Edit Permissions"/></Link>
+          <Popconfirm title="Delete this model?" onConfirm={() => this._deleteModel(model.id)}>
+            <ToolbarButton icon="delete" tooltip="Delete Model"/>
+          </Popconfirm>
         </div>
         <table>
           <tbody>
@@ -290,7 +332,6 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
         </table>
       </div>
     );
-
   }
 }
 

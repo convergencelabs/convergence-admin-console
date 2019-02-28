@@ -45,7 +45,7 @@ class DomainJwtKeyFormComponent extends React.Component<InjectedProps, {}> {
         <Form.Item label="Description">
           {getFieldDecorator('description', {
             initialValue: this.props.initialValue.description,
-            rules: [{required: true, message: 'Please input a Description!', whitespace: true}],
+            rules: [{required: false, message: 'Please input a Description!', whitespace: true}],
           })(
             <Input.TextArea autosize={{minRows: 2, maxRows: 6}}/>
           )}

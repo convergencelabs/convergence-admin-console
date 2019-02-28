@@ -52,7 +52,7 @@ class EditDomainJwtKeyComponent extends React.Component<InjectedProps, EditDomai
     if (this.state.initialKey !== null) {
       return (
         <Page breadcrumbs={this._breadcrumbs}>
-          <Card title={<span><Icon type="key"/> Edit Jwt Key</span>} className={styles.formCard}>
+          <Card title={<span><Icon type="key"/> Edit JWT Key</span>} className={styles.formCard}>
             <DomainJwtKeyForm
               disableId={true}
               domainId={this.props.domainId}

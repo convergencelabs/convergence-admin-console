@@ -133,7 +133,7 @@ class ModelEditorTabComponent extends React.Component<InjectedProps, ModelEditor
   private _confirmDelete = () => {
     return new Promise<boolean>(function(resolve, reject) {
       confirm({
-        title: 'Delete element?',
+        title: 'Delete Element?',
         content: 'Are you sure you want to delete this element?',
         okType: 'danger',
         onOk() {

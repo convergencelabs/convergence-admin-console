@@ -9,6 +9,7 @@ import {Spacer} from "../../common/Spacer/";
 import {EditorMode} from "../../../EditorMode";
 import {TreeModel} from "../model/TreeModel";
 import styles from "./styles.module.css";
+import {faEye, faEdit, faPlusSquare, faMinusSquare, faFileCode, faTrashAlt} from "@fortawesome/free-regular-svg-icons";
 
 export interface TreeEditorToolbarProps {
   treeModel: TreeModel;
@@ -60,7 +61,7 @@ export class TreeEditorToolbar extends React.Component<TreeEditorToolbarProps, {
         <div>
           <Spacer />
           <NewNodeButton treeModel={this.props.treeModel}/>
-          <ToolbarButton enabled={deleteEnabled} icon="times" onClick={this.onDelete}/>
+          <ToolbarButton enabled={deleteEnabled} icon={faTrashAlt} onClick={this.onDelete}/>
         </div>
       );
     }
@@ -70,25 +71,25 @@ export class TreeEditorToolbar extends React.Component<TreeEditorToolbarProps, {
         <div className={styles.buttonGroup}>
           <ToolbarRadioButton enabled={!this.props.treeModel.isAddingNode()}
                  selected={this.props.editMode === "view"}
-                 icon="eye"
+                 icon={faEye}
                  tooltip="View"
                  onSelect={() => this.setMode("view")}/>
           <ToolbarRadioButton enabled={!this.props.treeModel.isAddingNode()}
                  selected={this.props.editMode === "edit"}
-                 icon="pencil-square-o"
+                 icon={faEdit}
                  tooltip="Edit"
                  onSelect={() => this.setMode("edit")}/>
           <Spacer/>
           <ToolbarButton enabled={!this.props.treeModel.isAddingNode()}
-                 icon="plus-square-o"
+                 icon={faPlusSquare}
                  onClick={() => this.props.treeModel.expandAll()}/>
           <ToolbarButton enabled={!this.props.treeModel.isAddingNode()}
-                 icon="minus-square-o"
+                 icon={faMinusSquare}
                  onClick={() => this.props.treeModel.collapseAll()}/>
           {edit}
           <Spacer/>
           <ToolbarButton enabled={!this.props.treeModel.isAddingNode()}
-                 icon="file-code-o"
+                 icon={faFileCode}
                  onClick={this.onEditSource}/>
         </div>
         <SearchControl treeModel={this.props.treeModel}/>

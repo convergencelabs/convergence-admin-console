@@ -1,10 +1,11 @@
 import React, {ReactNode} from 'react';
-import {MenuItem} from "../../../common/MenuItem/index";
+import {MenuItem} from "../../../common/MenuItem/";
 import {MenuButton} from "../../../common/MenuButton/";
 import {ModelElementTypes} from "../../../../model/ModelElementTypes";
 import {Subscription} from "rxjs";
 import {TreeModel} from "../../model/TreeModel";
 import {ContainerNode} from "../../model/ContainerNode";
+import {faPlus} from "@fortawesome/free-solid-svg-icons";
 
 export interface NewNodeButtonProps {
   treeModel: TreeModel;
@@ -76,7 +77,7 @@ export class NewNodeButton extends React.Component<NewNodeButtonProps, NewNodeBu
 
   public render(): ReactNode {
     return (
-      <MenuButton enabled={this.state.enabled} icon="plus">
+      <MenuButton enabled={this.state.enabled} icon={faPlus}>
         <MenuItem label="Object" onClick={this.onNewObject}/>
         <MenuItem label="Array" onClick={this.onNewArray}/>
         <MenuItem label="String" onClick={this.onNewString}/>

@@ -1,6 +1,7 @@
 import React, {ReactNode} from "react";
 import {ToolbarButton} from "../../common/ToolbarButton/";
 import styles from "./styles.module.css";
+import { faSave } from "@fortawesome/free-regular-svg-icons";
 
 export interface SourceEditorToolbarProps {
   onSaveSource: (data: {[key: string]: any}) => void;
@@ -14,13 +15,13 @@ export class SourceEditorToolbar extends React.Component<SourceEditorToolbarProp
   public render(): ReactNode {
     let save = null;
     if (this.props.editable) {
-      save = <ToolbarButton icon="floppy-o" enabled={this.props.canSaveSource} onClick={this.onSaveSource} />;
+      save = <ToolbarButton icon={faSave} enabled={this.props.canSaveSource} onClick={this.onSaveSource} />;
     }
 
     return <div className={styles.toolbar}>
       {save}
       <span style={{flex: 1}} />
-      <ToolbarButton icon="window-close" enabled onClick={this.onCancelSource} />
+      <ToolbarButton icon={faSave} enabled onClick={this.onCancelSource} />
     </div>;
   }
 
