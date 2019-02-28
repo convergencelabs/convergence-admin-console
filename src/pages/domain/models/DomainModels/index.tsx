@@ -11,7 +11,7 @@ import {SERVICES} from "../../../../services/ServiceConstants";
 import {ToolbarButton} from "../../../../components/common/ToolbarButton";
 import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
 import {toDomainUrl} from "../../../../utils/domain-url";
-import {ModelControls} from "./ModelControls";
+import {ModelControls, ModelSearchMode} from "./ModelControls";
 import {DomainModelService} from "../../../../services/domain/DomainModelService";
 import {Model} from "../../../../models/domain/Model";
 import moment from "moment";
@@ -20,11 +20,12 @@ import {longDateTime, shortDateTime, truncate} from "../../../../utils/format-ut
 import {Link} from "react-router-dom";
 import {TypeChecker} from "../../../../utils/TypeChecker";
 import {DomainId} from "../../../../models/DomainId";
+import confirm from "antd/lib/modal/confirm";
+import CopyToClipboard from "react-copy-to-clipboard";
+import queryString from "query-string";
 import "brace";
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
-import confirm from "antd/lib/modal/confirm";
-import CopyToClipboard from "react-copy-to-clipboard";
 
 export interface DomainModelsProps extends RouteComponentProps {
   domainId: DomainId;
@@ -38,8 +39,11 @@ export interface DomainModelsState {
   loading: boolean;
   models: Model[];
   columns: any[];
+  initialMode?: ModelSearchMode;
+  initialData?: string;
 }
 
+// Fixme this really needs to be broken up into a few classes.
 class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsState> {
   private readonly _breadcrumbs: DomainBreadcrumbProducer;
   private readonly _metaColumns: any[];
@@ -48,11 +52,6 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
     super(props);
     this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId, [{title: "Models"}]);
 
-    this.state = {
-      models: [],
-      columns: [],
-      loading: false
-    };
 
     this._metaColumns = [{
       title: 'Id',
@@ -73,6 +72,45 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
       render: (val: Date, record: Model) => shortDateTime(val),
       sorter: (a: Model, b: Model) => a.modified.getTime() - b.modified.getTime()
     }];
+
+    const {mode, query, collection, id} = queryString.parse(this.props.location.search);
+    let data: string | undefined;
+    if (mode !== undefined) {
+      switch (mode) {
+        case ModelSearchMode.BROWSE:
+          data = collection as string;
+          break;
+        case ModelSearchMode.ID:
+          data = id as string;
+          break;
+        case ModelSearchMode.QUERY:
+          data = query as string;
+          break;
+      }
+    }
+
+    this.state = {
+      models: [],
+      columns: [],
+      loading: false,
+      initialMode: mode as ModelSearchMode,
+      initialData: data
+    };
+
+  }
+
+  public componentDidMount(): void {
+    switch (this.state.initialMode) {
+      case ModelSearchMode.BROWSE:
+        this._browse(this.state.initialData!, 25);
+        break;
+      case ModelSearchMode.ID:
+        this._lookup(this.state.initialData!, 25);
+        break;
+      case ModelSearchMode.QUERY:
+        this._query(this.state.initialData!, 25);
+        break;
+    }
   }
 
   private _renderToolbar(): ReactNode {
@@ -80,8 +118,9 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
       <CardTitleToolbar title="Models" icon="file">
         <ToolbarButton icon="plus-circle" tooltip="Create Model" onClick={this._goToCreate}/>
       </CardTitleToolbar>
-    )
+    );
   }
+
 
   private _goToCreate = () => {
     const url = toDomainUrl("", this.props.domainId, "create-model");
@@ -89,11 +128,12 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
   }
 
   public render(): ReactNode {
-
     return (
       <Page breadcrumbs={this._breadcrumbs}>
-        <Card title={this._renderToolbar()}>
+        <Card title={this._renderToolbar()} className={styles.modelCard}>
           <ModelControls
+            initialData={this.state.initialData}
+            initialMode={this.state.initialMode}
             domainId={this.props.domainId}
             resultsPerPageDefault={25}
             onBrowse={this._browse}
@@ -281,7 +321,6 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
       <div className={styles.modelExpander}>
         <div className={styles.modelExpanderToolbar}>
           <Link to={data}><ToolbarButton icon="edit" tooltip="Edit Model"/></Link>
-
           <Link to={permission}><ToolbarButton icon="team" tooltip="Edit Permissions"/></Link>
           <Popconfirm title="Delete this model?" onConfirm={() => this._deleteModel(model.id)}>
             <ToolbarButton icon="delete" tooltip="Delete Model"/>

@@ -17,6 +17,7 @@ export interface CollectionAutoCompleteProps {
   onChange?: (username: string) => void;
   placeholder?: string;
   value?: string;
+  initialValue?: string;
 }
 
 export interface InjectedProps extends CollectionAutoCompleteProps {
@@ -34,18 +35,14 @@ export class CollectionAutoCompleteComponent extends Component<InjectedProps, Co
     super(props);
     this.state = {
       collections: [],
-      selectedValue: ""
+      selectedValue: props.initialValue || ""
     };
-
-    this._onSearch("");
   }
 
   public render(): ReactNode {
     const {collections} = this.state;
     const {className, placeholder, value} = this.props;
     const inputValue = value !== undefined ? value : this.state.selectedValue;
-
-    const initial: string | undefined = collections.length > 0 ? collections[0].id : undefined;
 
     const children = collections.map((collection: Collection) =>
       <Option

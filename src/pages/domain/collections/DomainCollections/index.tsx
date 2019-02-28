@@ -56,7 +56,7 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
     }, {
       title: '',
       align: 'right',
-      width: 80,
+      width: 110,
       render: this._renderActions
     }];
 
@@ -116,6 +116,11 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
   private _renderActions = (_: undefined, record: CollectionSummary) => {
     return (
       <span className={styles.actions}>
+        <Tooltip placement="topRight" title="Browse Collection" mouseEnterDelay={1}>
+          <Link to={toDomainUrl("", this.props.domainId, `models/?mode=browse&collection=${record.id}`)}>
+            <Button shape="circle" size="small" htmlType="button" icon="eye"/>
+          </Link>
+        </Tooltip>
         <Tooltip placement="topRight" title="Edit Collection" mouseEnterDelay={1}>
           <Link to={toDomainUrl("", this.props.domainId, `collections/${record.id}`)}>
             <Button shape="circle" size="small" htmlType="button" icon="edit"/>
