@@ -181,7 +181,7 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
   private _updateResults(models: Model[]): void {
     const dataCols: Map<string, any> = new Map();
     models.forEach(model => {
-      const data = model.data;
+      const data = model.data!;
       Object.keys(data).forEach(key => {
         dataCols.set(key, typeof data[key]);
       });

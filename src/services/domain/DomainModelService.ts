@@ -34,10 +34,10 @@ export class DomainModelService extends AbstractDomainService {
     return this._delete<void>(url);
   }
 
-  public getModelById(domain: DomainId, id: String): Promise<Model> {
+  public getModelById(domain: DomainId, id: String, data?: boolean): Promise<Model> {
     const url = this._getDomainUrl(domain, `models/${id}`);
     return this
-      ._get<ModelData>(url)
+      ._get<ModelData>(url, {data})
       .then(toModel);
   }
 

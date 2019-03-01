@@ -103,9 +103,8 @@ class EditDomainUserGroupComponent extends React.Component<InjectedProps, EditDo
 
     promise.then(group => {
       this.setState({initialGroup: group});
-    })
+    });
   }
-
 }
 
 const injections = [SERVICES.DOMAIN_GROUP_SERVICE];

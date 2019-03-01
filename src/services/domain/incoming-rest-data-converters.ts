@@ -69,11 +69,11 @@ export function toCollectionSummary(data: CollectionSummaryData): CollectionSumm
 
 export function toModel(data: ModelData): Model {
   return new Model(
-    data.metaData.id,
-    data.metaData.collection,
-    data.metaData.version,
-    new Date(data.metaData.createdTime),
-    new Date(data.metaData.modifiedTime),
+    data.id,
+    data.collection,
+    data.version,
+    new Date(data.createdTime),
+    new Date(data.modifiedTime),
     data.data
   );
 }
