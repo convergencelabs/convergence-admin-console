@@ -8,6 +8,8 @@ import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {formatDomainStatus} from "../../../../utils/format-utils";
 import {DomainStatusIcon} from "../../../../components/common/DomainStatusIcon";
+import {STORES} from "../../../../stores/StoreConstants";
+import {ConfigStore} from "../../../../stores/ConfigStore";
 
 export interface DomainInfoProps {
   domainId: DomainId;
@@ -15,6 +17,7 @@ export interface DomainInfoProps {
 
 interface InjectedProps extends DomainInfoProps {
   domainService: DomainService;
+  configStore: ConfigStore;
 }
 
 interface DomainInfoState {
@@ -49,7 +52,7 @@ export class DomainInfoComponent extends React.Component<InjectedProps, DomainIn
       (
         <InfoTable>
           <InfoTableRow label="Display Name">{domain.displayName}</InfoTableRow>
-          <InfoTableRow label="Namespace">{domain.namespace}</InfoTableRow>
+          <InfoTableRow label="Namespace">{this.props.configStore.namespacesEnabled ? domain.namespace : <i>(Disabled)</i>}</InfoTableRow>
           <InfoTableRow label="Id">{domain.id}</InfoTableRow>
           <InfoTableRow label="Status">
             <span style={{marginRight: 10}}>{formatDomainStatus(domain.status)}</span>
@@ -73,5 +76,5 @@ export class DomainInfoComponent extends React.Component<InjectedProps, DomainIn
   }
 }
 
-const injections = [SERVICES.DOMAIN_SERVICE];
+const injections = [SERVICES.DOMAIN_SERVICE, STORES.CONFIG_STORE];
 export const DomainInfo = injectAs<DomainInfoProps>(injections, DomainInfoComponent);
