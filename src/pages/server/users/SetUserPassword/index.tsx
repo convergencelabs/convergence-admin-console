@@ -1,16 +1,16 @@
 import React, {ReactNode} from "react";
 import {Page} from "../../../../components/common/Page/";
-import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
+import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
 import {Card, notification, Tag} from "antd";
 import {Form, Icon} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
-import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {UserService} from "../../../../services/UserService";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {SetPasswordForm} from "../../../../components/common/SetPasswordForm/"
 import {RestError} from "../../../../services/RestError";
+import styles from "./styles.module.css";
 
 interface InjectedProps extends RouteComponentProps<{ username: string }>, FormComponentProps {
   userService: UserService;
@@ -21,17 +21,17 @@ export interface SetUserPasswordState {
 }
 
 class SetUserPasswordComponent extends React.Component<InjectedProps, SetUserPasswordState> {
-  private readonly _breadcrumbs: BasicBreadcrumbsProducer;
+  private readonly _breadcrumbs: IBreadcrumbSegment[];
 
   constructor(props: InjectedProps) {
     super(props);
 
     const username = this.props.match.params.username;
-    this._breadcrumbs = new BasicBreadcrumbsProducer([
+    this._breadcrumbs = [
       {title: "Users", link: "/users"},
       {title: username},
       {title: "Set Password"}
-    ]);
+    ];
   }
 
   public render(): ReactNode {

@@ -1,9 +1,6 @@
-import * as React from 'react';
+import React, {ReactNode} from "react";
 import {Page} from "../../../../components/common/Page/";
-import {ReactNode} from "react";
-import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
 import {Button, Card, Icon, Input, notification, Popconfirm, Table} from "antd";
-import styles from "./styles.module.css";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
@@ -13,6 +10,7 @@ import Tooltip from "antd/es/tooltip";
 import {NamespaceAndDomains} from "../../../../models/NamespaceAndDomains";
 import {NamespaceService} from "../../../../services/NamespaceService";
 import {Link} from "react-router-dom";
+import styles from "./styles.module.css";
 
 export interface InjectedProps extends RouteComponentProps {
   namespaceService: NamespaceService;
@@ -23,7 +21,7 @@ interface NamespacesState {
 }
 
 class NamespacesComponent extends React.Component<InjectedProps, NamespacesState> {
-  private readonly _breadcrumbs = new BasicBreadcrumbsProducer([{title: "Namespaces"}]);
+  private readonly _breadcrumbs = [{title: "Namespaces"}];
   private readonly _namespaceTableColumns: any[];
   private _namepsacesSubscription: PromiseSubscription | null;
 

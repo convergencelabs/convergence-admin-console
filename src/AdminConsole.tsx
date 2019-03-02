@@ -12,6 +12,7 @@ import {MainLayout} from "./containers/MainLayout";
 import {AuthStore} from "./stores/AuthStore";
 import {injectObserver} from "./utils/mobx-utils";
 import {AppConfig} from "./stores/AppConfig";
+import {STORES} from "./stores/StoreConstants";
 
 interface InjectedStores {
   authStore: AuthStore;
@@ -35,6 +36,5 @@ class App extends Component<InjectedStores, {}> {
   }
 }
 
-export const AdminConsole = injectObserver<{}>(["authStore"], App);
-
-
+const injections = [STORES.AUTH_STORE, STORES.CONFIG_STORE];
+export const AdminConsole = injectObserver<{}>(injections, App);

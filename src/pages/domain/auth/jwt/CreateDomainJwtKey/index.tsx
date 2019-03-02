@@ -1,18 +1,17 @@
 import React, {ReactNode} from "react";
 import {Card, notification, Icon} from "antd";
 import {FormComponentProps} from "antd/lib/form";
-import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {DomainId} from "../../../../../models/DomainId";
 import {DomainJwtKeyService} from "../../../../../services/domain/DomainJwtKeyService";
 import {SERVICES} from "../../../../../services/ServiceConstants";
 import {toDomainUrl} from "../../../../../utils/domain-url";
-import {DomainBreadcrumbProducer} from "../../../DomainBreadcrumProducer";
 import {DomainJwtKey} from "../../../../../models/domain/DomainJwtKey";
 import {Page} from "../../../../../components/common/Page";
 import {RestError} from "../../../../../services/RestError";
 import {injectAs} from "../../../../../utils/mobx-utils";
 import {DomainJwtKeyForm} from "../../../../../components/domain/auth/DomainJwtKeyForm";
+import styles from "./styles.module.css";
 
 export interface CreateDomainJwtKeyProps extends RouteComponentProps {
   domainId: DomainId;
@@ -23,20 +22,13 @@ interface InjectedProps extends CreateDomainJwtKeyProps, FormComponentProps {
 }
 
 class CreateDomainJwtKeyComponent extends React.Component<InjectedProps, {}> {
-  private readonly _breadcrumbs: DomainBreadcrumbProducer;
-  private readonly _newKey: DomainJwtKey;
+  private readonly _breadcrumbs = [
+    {title: "Authentication", link: toDomainUrl(this.props.domainId, "authentication/")},
+    {title: "JWT Keys", link: toDomainUrl(this.props.domainId, "authentication/jwt")},
+    {title: "New JWT Key"}
+  ];
+  private readonly _newKey = new DomainJwtKey("", "", new Date(), "", true);
 
-  constructor(props: InjectedProps) {
-    super(props);
-
-    this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId, [
-      {title: "Authentication", link: toDomainUrl("", this.props.domainId, "authentication/")},
-      {title: "JWT Keys", link: toDomainUrl("", this.props.domainId, "authentication/jwt")},
-      {title: "New JWT Key"}
-    ]);
-
-    this._newKey = new DomainJwtKey("", "", new Date(), "", true);
-  }
 
   public render(): ReactNode {
     return (
@@ -56,7 +48,7 @@ class CreateDomainJwtKeyComponent extends React.Component<InjectedProps, {}> {
   }
 
   private _handleCancel = () => {
-    const url = toDomainUrl("", this.props.domainId, "authentication/jwt");
+    const url = toDomainUrl(this.props.domainId, "authentication/jwt");
     this.props.history.push(url);
   }
 
@@ -67,7 +59,7 @@ class CreateDomainJwtKeyComponent extends React.Component<InjectedProps, {}> {
           message: 'Key Created',
           description: `Jwt Key '${key.id}' successfully created.`
         });
-        const url = toDomainUrl("", this.props.domainId, "authentication/jwt");
+        const url = toDomainUrl(this.props.domainId, "authentication/jwt");
         this.props.history.push(url);
       }).catch((err) => {
       if (err instanceof RestError) {

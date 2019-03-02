@@ -1,6 +1,5 @@
-import * as React from 'react';
+import React, {KeyboardEvent, ReactNode} from "react";
 import {Page} from "../../../../components/common/Page/";
-import {KeyboardEvent, ReactNode} from "react";
 import Tooltip from "antd/es/tooltip";
 import {Button, Card, Icon, Input, notification, Popconfirm, Table} from "antd";
 import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
@@ -11,7 +10,6 @@ import {SERVICES} from "../../../../services/ServiceConstants";
 import {Link} from "react-router-dom";
 import {DomainId} from "../../../../models/DomainId";
 import {ToolbarButton} from "../../../../components/common/ToolbarButton";
-import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
 import {toDomainUrl} from "../../../../utils/domain-url";
 import styles from "./styles.module.css";
 import {DomainChatService} from "../../../../services/domain/DomainChatService";
@@ -31,18 +29,17 @@ export interface DomainChatState {
 }
 
 class DomainChatComponent extends React.Component<InjectedProps, DomainChatState> {
-  private readonly _breadcrumbs: DomainBreadcrumbProducer;
+  private readonly _breadcrumbs = [{title: "Chat"}];
   private readonly _chatTableColumns: any[];
   private _chatsSubscription: PromiseSubscription | null;
 
   constructor(props: InjectedProps) {
     super(props);
-    this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId,[{title: "Chat"}]);
     this._chatTableColumns = [{
       title: 'Id',
       dataIndex: 'chatId',
       sorter: (a: any, b: any) => (a.id as string).localeCompare(b.id),
-      render: (text: string) => <Link to={toDomainUrl("", this.props.domainId, `chats/${text}`)}>{text}</Link>
+      render: (text: string) => <Link to={toDomainUrl(this.props.domainId, `chats/${text}`)}>{text}</Link>
     }, {
       title: 'Name',
       dataIndex: 'name',
@@ -97,7 +94,7 @@ class DomainChatComponent extends React.Component<InjectedProps, DomainChatState
   }
 
   private _goToCreate = () => {
-    const url = toDomainUrl("", this.props.domainId, "create-chat");
+    const url = toDomainUrl(this.props.domainId, "create-chat");
     this.props.history.push(url);
   }
 
@@ -120,7 +117,7 @@ class DomainChatComponent extends React.Component<InjectedProps, DomainChatState
     return (
       <span className={styles.actions}>
         <Tooltip placement="topRight" title="Edit Chat" mouseEnterDelay={1}>
-          <Link to={toDomainUrl("", this.props.domainId, `chats/${record.chatId}`)}>
+          <Link to={toDomainUrl(this.props.domainId, `chats/${record.chatId}`)}>
             <Button shape="circle" size="small" htmlType="button" icon="edit"/>
           </Link>
         </Tooltip>

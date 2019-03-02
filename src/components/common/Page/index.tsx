@@ -1,17 +1,23 @@
 import * as React from 'react';
 import {ReactNode} from "react";
 import styles from './styles.module.css';
-import {BreadcrumbsProducer, breadcrumbStore} from "../../../stores/BreacrumStore";
+import {BreadcrumbsStore, IBreadcrumbSegment} from "../../../stores/BreacrumsStore";
+import {STORES} from "../../../stores/StoreConstants";
+import {injectAs} from "../../../utils/mobx-utils";
 
 export interface PageProps {
-  breadcrumbs: BreadcrumbsProducer;
+  breadcrumbs: IBreadcrumbSegment[];
   full?: boolean;
 }
 
-export class Page extends React.Component<PageProps,{}> {
+interface InjectedProps extends PageProps {
+  breadcrumbsStore: BreadcrumbsStore;
+}
+
+export class PageComponent extends React.Component<InjectedProps,{}> {
 
   public componentDidMount(): void {
-    breadcrumbStore.setBreadcrumbs(this.props.breadcrumbs.breadcrumbs());
+    this.props.breadcrumbsStore.setPath(this.props.breadcrumbs);
   }
 
   public render(): ReactNode {
@@ -19,3 +25,6 @@ export class Page extends React.Component<PageProps,{}> {
     return <div className={className}>{this.props.children}</div>;
   }
 }
+
+const injections = [STORES.BREADCRUMBS_STORE];
+export const Page = injectAs<PageProps>(injections, PageComponent);

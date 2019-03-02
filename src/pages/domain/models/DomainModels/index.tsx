@@ -9,7 +9,6 @@ import {RouteComponentProps} from "react-router";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {ToolbarButton} from "../../../../components/common/ToolbarButton";
-import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
 import {toDomainUrl} from "../../../../utils/domain-url";
 import {ModelControls, ModelSearchMode} from "./ModelControls";
 import {DomainModelService} from "../../../../services/domain/DomainModelService";
@@ -45,13 +44,11 @@ export interface DomainModelsState {
 
 // Fixme this really needs to be broken up into a few classes.
 class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsState> {
-  private readonly _breadcrumbs: DomainBreadcrumbProducer;
+  private readonly _breadcrumbs = [{title: "Models"}];
   private readonly _metaColumns: any[];
 
   constructor(props: InjectedProps) {
     super(props);
-    this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId, [{title: "Models"}]);
-
 
     this._metaColumns = [{
       title: 'Id',
@@ -123,7 +120,7 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
 
 
   private _goToCreate = () => {
-    const url = toDomainUrl("", this.props.domainId, "create-model");
+    const url = toDomainUrl(this.props.domainId, "create-model");
     this.props.history.push(url);
   }
 
@@ -199,8 +196,8 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
   }
 
   private _renderMenu = (id: string, record: Model) => {
-    const permission = toDomainUrl("", this.props.domainId, `models/${id}/permissions`);
-    const data = toDomainUrl("", this.props.domainId, `models/${id}`);
+    const permission = toDomainUrl(this.props.domainId, `models/${id}/permissions`);
+    const data = toDomainUrl(this.props.domainId, `models/${id}`);
     const menu = (
       <Menu>
         <Menu.Item key="copyId">
@@ -314,8 +311,8 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
   }
 
   private _expander = (model: Model, index: number, indent: number, expanded: boolean) => {
-    const permission = toDomainUrl("", this.props.domainId, `models/${model.id}/permissions`);
-    const data = toDomainUrl("", this.props.domainId, `models/${model.id}`);
+    const permission = toDomainUrl(this.props.domainId, `models/${model.id}/permissions`);
+    const data = toDomainUrl(this.props.domainId, `models/${model.id}`);
 
     return (
       <div className={styles.modelExpander}>

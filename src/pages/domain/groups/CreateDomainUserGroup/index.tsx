@@ -6,7 +6,6 @@ import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
-import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
 import {DomainId} from "../../../../models/DomainId";
 import {toDomainUrl} from "../../../../utils/domain-url";
 import {DomainUserGroupForm} from "../../../../components/domain/group/DomainUserGroupForm/";
@@ -23,20 +22,11 @@ interface InjectedProps extends CreateDomainUserGroupProps, FormComponentProps {
 }
 
 class CreateDomainUserGroupComponent extends React.Component<InjectedProps, {}> {
-  private readonly _breadcrumbs: DomainBreadcrumbProducer;
-  private readonly _newGroup: DomainUserGroup;
-
-  constructor(props: InjectedProps) {
-    super(props);
-
-    const groupsUrl = toDomainUrl("", this.props.domainId, "groups/");
-    this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId, [
-      {title: "Groups", link: toDomainUrl("", this.props.domainId, groupsUrl)},
-      {title: "New Group"}
-    ]);
-
-    this._newGroup = new DomainUserGroup("", "", []);
-  }
+  private readonly _breadcrumbs = [
+    {title: "Groups", link: toDomainUrl(this.props.domainId, "groups/")},
+    {title: "New Group"}
+  ];
+  private readonly _newGroup = new DomainUserGroup("", "", []);
 
   public render(): ReactNode {
     return (
@@ -55,7 +45,7 @@ class CreateDomainUserGroupComponent extends React.Component<InjectedProps, {}> 
   }
 
   private _handleCancel = () => {
-    const url = toDomainUrl("", this.props.domainId, "groups/");
+    const url = toDomainUrl(this.props.domainId, "groups/");
     this.props.history.push(url);
   }
 
@@ -66,7 +56,7 @@ class CreateDomainUserGroupComponent extends React.Component<InjectedProps, {}> 
           message: 'Group Created',
           description: `Group '${group.id}' successfully created.`
         });
-        const url = toDomainUrl("", this.props.domainId, "groups/");
+        const url = toDomainUrl(this.props.domainId, "groups/");
         this.props.history.push(url);
       }).catch((err) => {
       if (err instanceof RestError) {

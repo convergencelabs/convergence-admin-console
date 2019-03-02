@@ -1,6 +1,6 @@
 import React, {KeyboardEvent, ReactNode} from 'react';
 import {Page} from "../../../../components/common/Page/";
-import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
+import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
 import Tooltip from "antd/es/tooltip";
 import {Button, Card, Icon, Input, message, notification, Popconfirm, Table, Tag} from "antd";
 import styles from "./styles.module.css";
@@ -27,7 +27,7 @@ export interface ServerUsersState {
 }
 
 class ServerUsersComponent extends React.Component<InjectedProps, ServerUsersState> {
-  private readonly _breadcrumbs = new BasicBreadcrumbsProducer([{title: "Users"}]);
+  private readonly _breadcrumbs = [{title: "Users"}];
   private readonly _userTableColumns: any[];
   private _usersSubscription: PromiseSubscription | null;
 

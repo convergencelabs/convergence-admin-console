@@ -1,5 +1,4 @@
 import React, {ReactNode} from "react";
-import {DomainBreadcrumbProducer} from "../DomainBreadcrumProducer";
 import {RouteComponentProps} from "react-router";
 import {Page} from "../../../components/common/Page";
 import {Row, Col, Card, Tabs, Input, Button, Icon} from 'antd';
@@ -30,13 +29,7 @@ export interface DomainDashboardProps extends RouteComponentProps {
 
 export class DomainDashboard extends React.Component<DomainDashboardProps, {}> {
 
-  private readonly _breadcrumbs: DomainBreadcrumbProducer;
-
-  constructor(props: DomainDashboardProps) {
-    super(props);
-
-    this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId);
-  }
+  private readonly _breadcrumbs = [];
 
   public render(): ReactNode {
     const {domainId} = this.props;

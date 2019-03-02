@@ -1,8 +1,7 @@
 import React, {ReactNode} from "react";
 import {Page} from "../../../../components/common/Page/";
-import {Card, Table, Icon, Switch} from "antd";
+import {Card, Table, Switch} from "antd";
 import {RouteComponentProps} from "react-router";
-import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
 import {formatDomainUserId, longDateTime, shortDateTime} from "../../../../utils/format-utils";
 import {DomainSession} from "../../../../models/domain/DomainSession";
 import {DomainSessionFilter, DomainSessionService} from "../../../../services/domain/DomainSessionService";
@@ -30,13 +29,12 @@ export interface DomainSessionsState {
 }
 
 class DomainSessionsComponent extends React.Component<InjectedProps, DomainSessionsState> {
-  private readonly _breadcrumbs: DomainBreadcrumbProducer;
+  private readonly _breadcrumbs = [{title: "Sessions"}];
   private readonly _sessionColumns: any[];
   private _sessionsSubscription: PromiseSubscription | null;
 
   constructor(props: InjectedProps) {
     super(props);
-    this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId, [{title: "Sessions"}]);
 
     this.state = {
       sessions: [],

@@ -6,7 +6,6 @@ import {RouteComponentProps} from "react-router";
 import {DomainId} from "../../../../../models/DomainId";
 import {DomainJwtKeyService} from "../../../../../services/domain/DomainJwtKeyService";
 import {DomainJwtKey} from "../../../../../models/domain/DomainJwtKey";
-import {DomainBreadcrumbProducer} from "../../../DomainBreadcrumProducer";
 import {makeCancelable, PromiseSubscription} from "../../../../../utils/make-cancelable";
 import {toDomainUrl} from "../../../../../utils/domain-url";
 import {SERVICES} from "../../../../../services/ServiceConstants";
@@ -14,6 +13,7 @@ import {injectAs} from "../../../../../utils/mobx-utils";
 import {RestError} from "../../../../../services/RestError";
 import {Page} from "../../../../../components/common/Page";
 import {DomainJwtKeyForm} from "../../../../../components/domain/auth/DomainJwtKeyForm";
+import {IBreadcrumbSegment} from "../../../../../stores/BreacrumsStore";
 
 export interface EditDomainJwtKeyProps extends RouteComponentProps<{id: string}> {
   domainId: DomainId;
@@ -28,17 +28,17 @@ export interface EditDomainJwtKeyState {
 }
 
 class EditDomainJwtKeyComponent extends React.Component<InjectedProps, EditDomainJwtKeyState> {
-  private readonly _breadcrumbs: DomainBreadcrumbProducer;
+  private readonly _breadcrumbs: IBreadcrumbSegment[];
   private _keySubscription: PromiseSubscription | null;
 
   constructor(props: InjectedProps) {
     super(props);
 
-    this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId, [
-      {title: "Authentication", link: toDomainUrl("", this.props.domainId, "authentication/")},
-      {title: "JWT Keys", link: toDomainUrl("", this.props.domainId, "authentication/jwt")},
+    this._breadcrumbs = [
+      {title: "Authentication", link: toDomainUrl(this.props.domainId, "authentication/")},
+      {title: "JWT Keys", link: toDomainUrl(this.props.domainId, "authentication/jwt")},
       {title: this.props.match.params.id}
-    ]);
+    ];
 
     this.state = {
       initialKey: null
@@ -70,7 +70,7 @@ class EditDomainJwtKeyComponent extends React.Component<InjectedProps, EditDomai
   }
 
   private _handleCancel = () => {
-    const url = toDomainUrl("", this.props.domainId, "authentication/jwt");
+    const url = toDomainUrl(this.props.domainId, "authentication/jwt");
     this.props.history.push(url);
   }
 
@@ -81,7 +81,7 @@ class EditDomainJwtKeyComponent extends React.Component<InjectedProps, EditDomai
           message: 'Key Updated',
           description: `Key '${key.id}' successfully created.`
         });
-        const url = toDomainUrl("", this.props.domainId, "authentication/jwt");
+        const url = toDomainUrl(this.props.domainId, "authentication/jwt");
         this.props.history.push(url);
       }).catch((err) => {
       if (err instanceof RestError) {

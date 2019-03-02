@@ -1,12 +1,9 @@
-import * as React from 'react';
+import React, {ReactNode, FormEvent} from "react";
 import {Page} from "../../../../components/common/Page/";
-import {ReactNode} from "react";
-import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
+import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
 import {Card, Col, notification, Row} from "antd";
 import {Form, Input, Icon, Button} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
-import {FormEvent} from "react";
-import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
 import {injectAs} from "../../../../utils/mobx-utils";
@@ -17,7 +14,7 @@ import {Namespace} from "../../../../models/Namespace";
 import {UserRoleAdder} from "../../../../components/server/UserRoleAdder/";
 import {UserRoleTable} from "../../../../components/server/UserRoleTable/";
 import {RoleService, RoleTarget} from "../../../../services/RoleService";
-
+import styles from "./styles.module.css";
 
 interface InjectedProps extends RouteComponentProps, FormComponentProps {
   namespaceService: NamespaceService;
@@ -30,7 +27,7 @@ export interface EditNamespaceState {
 }
 
 class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespaceState> {
-  private readonly _breadcrumbs: BasicBreadcrumbsProducer;
+  private readonly _breadcrumbs: IBreadcrumbSegment[];
 
   private readonly _roles = ["Developer", "Domain Admin", "Owner"];
 
@@ -43,11 +40,10 @@ class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespac
     };
 
     const namespaceId = (props.match.params as any).id;
-
-    this._breadcrumbs = new BasicBreadcrumbsProducer([
+    this._breadcrumbs = [
       {title: "Namespaces", link: "/namespaces"},
       {title: namespaceId}
-    ]);
+    ];
 
     this.props.namespaceService.getNamespace(namespaceId).then(namespace => {
       this.setState({namespace});

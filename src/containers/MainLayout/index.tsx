@@ -1,25 +1,55 @@
-import * as React from 'react';
+import React, {ReactNode} from "react";
 import {Route, RouteComponentProps, Switch} from 'react-router';
 import {Layout} from 'antd';
-import styles from './style.module.css';
 import {AppHeader} from "../../components/common/AppHeader";
-import {DomainContainer} from "../Domain";
 import {AppBreadcrumbs} from "../../components/common/AppBreadcrumbs";
 import {ServerContainer} from "../Server";
+import {DomainContainer} from "../Domain";
+import {STORES} from "../../stores/StoreConstants";
+import {SERVICES} from "../../services/ServiceConstants";
+import {injectObserver} from "../../utils/mobx-utils";
+import {ConfigStore} from "../../stores/ConfigStore";
+import {ConfigService} from "../../services/ConfigService";
+import styles from './style.module.css';
 
-export class MainLayout extends React.Component<RouteComponentProps, {}> {
-  render() {
-    return (
+export interface InjectedProps extends RouteComponentProps {
+  configStore: ConfigStore;
+  configService: ConfigService;
+}
+
+export class MainLayoutComponent extends React.Component<InjectedProps, {}> {
+
+  public componentDidMount(): void {
+    if (!this.props.configStore.configLoaded) {
+      this.props.configService.getNamespaceConfig().then(nsConfig => {
+        this.props.configStore.setNamespacesEnabled(nsConfig.namespacesEnabled);
+        this.props.configStore.setUserNamespacesEnabled(nsConfig.userNamespacesEnabled);
+        this.props.configStore.setDefaultNamespace(nsConfig.defaultNamespace);
+        this.props.configStore.setConfigLoaded(true);
+      })
+    }
+  }
+
+  public render(): ReactNode {
+    const domainRoute = this.props.configStore.namespacesEnabled ?
+      <Route path='/domain/:namespace/:domainId/' component={DomainContainer}/> :
+      <Route path='/domain/:domainId/' component={DomainContainer}/>
+
+    return this.props.configStore.configLoaded ? (
       <div className={styles.mainLayout}>
         <Layout>
           <AppHeader/>
           <AppBreadcrumbs/>
           <Switch>
-            <Route path='/domain/:namespace/:domainId/' component={DomainContainer}/>
+            {domainRoute}
             <Route path='/' component={ServerContainer}/>
           </Switch>
         </Layout>
       </div>
-    );
+    ) : null;
   }
 }
+
+
+const injections = [STORES.CONFIG_STORE, SERVICES.CONFIG_SERVICE];
+export const MainLayout = injectObserver<RouteComponentProps>(injections, MainLayoutComponent);

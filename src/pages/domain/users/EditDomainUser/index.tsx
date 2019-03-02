@@ -1,8 +1,7 @@
 import React, {ReactNode, FormEvent} from 'react';
 import {Page} from "../../../../components/common/Page/";
-import {Card, Col, notification, Row, Form, Input, Tooltip, Icon, Button, Switch, Select} from "antd";
+import {Card, Col, notification, Row, Form, Input, Tooltip, Icon, Button, Select} from "antd";
 import {FormComponentProps} from "antd/lib/form";
-import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
 import {injectAs} from "../../../../utils/mobx-utils";
@@ -14,8 +13,10 @@ import {DomainUserService} from "../../../../services/domain/DomainUserService";
 import {DomainUser} from "../../../../models/domain/DomainUser";
 import {toDomainUrl} from "../../../../utils/domain-url";
 import {UpdateDomainUserData} from "../../../../services/domain/common-rest-data";
-import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
 import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar";
+import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
+import styles from "./styles.module.css";
+
 
 export interface EditDomainUserProps extends RouteComponentProps<{ username: string }> {
   domainId: DomainId;
@@ -30,17 +31,16 @@ export interface EditDomainUserState {
 }
 
 class EditDomainUserComponent extends React.Component<InjectedProps, EditDomainUserState> {
-  private readonly _breadcrumbs: DomainBreadcrumbProducer;
+  private readonly _breadcrumbs: IBreadcrumbSegment[];
   private _userSubscription: PromiseSubscription | null;
 
   constructor(props: InjectedProps) {
     super(props);
-    const usersUrl = toDomainUrl("", this.props.domainId, "users/");
-    const username = this.props.match.params.username;
-    this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId, [
-      {title: "Users", link: usersUrl},
-      {title: username}
-    ]);
+
+    this._breadcrumbs = [
+      {title: "Users", link: toDomainUrl(this.props.domainId, "users/")},
+      {title: this.props.match.params.username}
+    ];
 
     this.state = {
       user: null
@@ -187,7 +187,7 @@ class EditDomainUserComponent extends React.Component<InjectedProps, EditDomainU
   }
 
   private _handleCancel = () => {
-    const usersUrl = toDomainUrl("", this.props.domainId, "users/");
+    const usersUrl = toDomainUrl(this.props.domainId, "users/");
     this.props.history.push(usersUrl);
   }
 
@@ -210,7 +210,7 @@ class EditDomainUserComponent extends React.Component<InjectedProps, EditDomainU
               message: 'User Updated',
               description: `User '${username}' successfully updated`
             });
-            const usersUrl = toDomainUrl("", this.props.domainId, "users/");
+            const usersUrl = toDomainUrl(this.props.domainId, "users/");
             this.props.history.push(usersUrl);
           }).catch((err) => {
           if (err instanceof RestError) {

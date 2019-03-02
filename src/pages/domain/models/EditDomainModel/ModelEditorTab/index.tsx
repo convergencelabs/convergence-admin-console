@@ -65,7 +65,9 @@ class ModelEditorTabComponent extends React.Component<InjectedProps, ModelEditor
 
   public componentWillUnmount(): void {
     if (this.state.model !== null) {
-      this.state.model.close();
+      if (this.state.model.isOpen()) {
+        this.state.model.close().catch(err => console.error(err));
+      }
     }
   }
 

@@ -9,7 +9,6 @@ import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancel
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {Link} from "react-router-dom";
-import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
 import {DomainId} from "../../../../models/DomainId";
 import {toDomainUrl} from "../../../../utils/domain-url";
 import {DomainGroupService} from "../../../../services/domain/DomainGroupService";
@@ -29,20 +28,18 @@ export interface DomainGroupsState {
 }
 
 class DomainUserGroupsComponent extends React.Component<InjectedProps, DomainGroupsState> {
-  private readonly _breadcrumbs: DomainBreadcrumbProducer;
+  private readonly _breadcrumbs = [{title: "Groups"}];
   private readonly _groupTableColumns: any[];
   private _groupsSubscription: PromiseSubscription | null;
 
   constructor(props: InjectedProps) {
     super(props);
 
-    this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId, [{title: "Groups"}]);
-
     this._groupTableColumns = [{
       title: 'Id',
       dataIndex: 'id',
       sorter: (a: DomainUserGroupSummary, b: DomainUserGroupSummary) => (a.id as string).localeCompare(b.id),
-      render: (text: string) => <Link to={toDomainUrl("", this.props.domainId,`groups/${text}`)}>{text}</Link>
+      render: (text: string) => <Link to={toDomainUrl(this.props.domainId,`groups/${text}`)}>{text}</Link>
     }, {
       title: 'Description',
       dataIndex: 'description',
@@ -102,7 +99,7 @@ class DomainUserGroupsComponent extends React.Component<InjectedProps, DomainGro
   }
 
   private _goToCreate = () => {
-    const url = toDomainUrl("", this.props.domainId, "create-group");
+    const url = toDomainUrl(this.props.domainId, "create-group");
     this.props.history.push(url);
   }
 
@@ -125,7 +122,7 @@ class DomainUserGroupsComponent extends React.Component<InjectedProps, DomainGro
     return (
       <span className={styles.actions}>
         <Tooltip placement="topRight" title="Edit Group" mouseEnterDelay={1}>
-          <Link to={toDomainUrl("", this.props.domainId, `groups/${record.id}`)}>
+          <Link to={toDomainUrl(this.props.domainId, `groups/${record.id}`)}>
             <Button shape="circle" size="small" htmlType="button" icon="edit"/>
           </Link>
         </Tooltip>

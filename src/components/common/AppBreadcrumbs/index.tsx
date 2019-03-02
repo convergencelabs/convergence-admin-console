@@ -1,9 +1,9 @@
 import React, {ReactNode} from 'react';
-import styles from './styles.module.css';
-import {Breadcrumb, Icon} from 'antd';
 import {Link} from "react-router-dom";
-import {breadcrumbStore, IBreadcrumbSegment} from "../../../stores/BreacrumStore";
 import {observer} from "mobx-react";
+import {Breadcrumb, Icon} from 'antd';
+import {breadcrumbsStore, IBreadcrumbSegment} from "../../../stores/BreacrumsStore";
+import styles from './styles.module.css';
 
 export interface AppBreadcrumbsProps {
   hideHome?: boolean;
@@ -12,7 +12,7 @@ export interface AppBreadcrumbsProps {
 class AppBreadcrumbsComponent extends React.Component<AppBreadcrumbsProps, {}> {
 
   private _renderItems(): ReactNode[] {
-    const breadcrumbs = breadcrumbStore.breadcrumbs;
+    const breadcrumbs = breadcrumbsStore.breadcrumbs;
     return breadcrumbs ? breadcrumbs.map((v, i) => this._renderItem(v, i + 1)) : [];
   }
 

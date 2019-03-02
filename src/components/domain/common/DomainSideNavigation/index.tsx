@@ -16,15 +16,15 @@ export class DomainSideNavigation extends React.Component<DomainSideNavigationPr
     super(props);
 
     const {domainId} = this.props;
-    const dashboard = toDomainUrl("", domainId, "");
-    const users = toDomainUrl("", domainId, "users");
-    const groups = toDomainUrl("", domainId, "groups/");
-    const sessions = toDomainUrl("", domainId, "sessions/");
-    const collections = toDomainUrl("", domainId, "collections/");
-    const models = toDomainUrl("", domainId, "models/");
-    const chat = toDomainUrl("", domainId, "chats/");
-    const settings = toDomainUrl("", domainId, "settings/");
-    const auth = toDomainUrl("", domainId, "authentication/");
+    const dashboard = toDomainUrl( domainId, "");
+    const users = toDomainUrl(domainId, "users");
+    const groups = toDomainUrl(domainId, "groups/");
+    const sessions = toDomainUrl(domainId, "sessions/");
+    const collections = toDomainUrl(domainId, "collections/");
+    const models = toDomainUrl(domainId, "models/");
+    const chat = toDomainUrl(domainId, "chats/");
+    const settings = toDomainUrl(domainId, "settings/");
+    const auth = toDomainUrl(domainId, "authentication/");
 
     this._menus = [
       {key: "dashboard", icon: "dashboard", title: "Dashboard", link: dashboard, routeMatch: {path: dashboard, exact: true}},

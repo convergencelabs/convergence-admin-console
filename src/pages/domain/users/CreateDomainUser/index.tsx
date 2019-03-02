@@ -1,21 +1,17 @@
-import * as React from 'react';
+import React, {ReactNode, FormEvent} from 'react';
 import {Page} from "../../../../components/common/Page/";
-import {ReactNode} from "react";
-import {Card, Col, notification, Row} from "antd";
-import {Form, Input, Tooltip, Icon, Button} from 'antd';
+import {Card, Col, notification, Row, Form, Input, Tooltip, Icon, Button} from "antd";
 import {FormComponentProps} from "antd/lib/form";
-import {FormEvent} from "react";
-import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {RestError} from "../../../../services/RestError";
 import {DomainUserService} from "../../../../services/domain/DomainUserService";
-import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
 import {DomainId} from "../../../../models/DomainId";
 import {CreateDomainUserData} from "../../../../services/domain/common-rest-data";
 import {toDomainUrl} from "../../../../utils/domain-url";
+import styles from "./styles.module.css";
 
 export interface CreateDomainUserProps extends RouteComponentProps {
   domainId: DomainId;
@@ -30,16 +26,13 @@ export interface CreateDomainUserComponentState {
 }
 
 class CreateDomainUserComponent extends React.Component<InjectedProps, CreateDomainUserComponentState> {
-  private readonly _breadcrumbs: DomainBreadcrumbProducer;
+  private readonly _breadcrumbs = [
+    {title: "Users", link: toDomainUrl(this.props.domainId, "users/")},
+    {title: "New User"}
+  ];
 
   constructor(props: InjectedProps) {
     super(props);
-
-    const usersUrl = toDomainUrl("", this.props.domainId, "users/");
-    this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId, [
-      {title: "Users", link: toDomainUrl("", this.props.domainId, usersUrl)},
-      {title: "New User"}
-    ]);
 
     this.state = {
       confirmDirty: false
@@ -162,7 +155,7 @@ class CreateDomainUserComponent extends React.Component<InjectedProps, CreateDom
   }
 
   private _handleCancel = () => {
-    const url = toDomainUrl("", this.props.domainId, "users/");
+    const url = toDomainUrl(this.props.domainId, "users/");
     this.props.history.push(url);
   }
 
@@ -185,7 +178,7 @@ class CreateDomainUserComponent extends React.Component<InjectedProps, CreateDom
               message: 'User Created',
               description: `User '${username}' successfully created.`
             });
-            const url = toDomainUrl("", this.props.domainId, "users/");
+            const url = toDomainUrl(this.props.domainId, "users/");
             this.props.history.push(url);
           }).catch((err) => {
           if (err instanceof RestError) {

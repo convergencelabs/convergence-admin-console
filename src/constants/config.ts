@@ -1,8 +1,4 @@
 export const CONFIG  = {
-  Domains: {
-    DefaultDomain: "domains.default-domain-id",
-      Mode: "domains.mode"
-  },
   Namespaces: {
     Enabled: "namespaces.enabled",
     DefaultNamespace: "namespaces.default-namespace",

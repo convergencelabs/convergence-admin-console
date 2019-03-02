@@ -39,6 +39,8 @@ import {DomainStatus} from "../../models/DomainStatus";
 import {DomainLoading} from "../../components/domain/common/DomainLoading";
 import {ErrorPage} from "../../components/common/ErrorPage";
 import {DomainInitializing} from "../../components/domain/common/DomainInitializing";
+import {BreadcrumbsStore} from "../../stores/BreacrumsStore";
+import {ConfigStore} from "../../stores/ConfigStore";
 
 export interface DomainRouteParams {
   namespace: string;
@@ -48,6 +50,8 @@ export interface DomainRouteParams {
 interface DomainContainerProps extends RouteComponentProps<DomainRouteParams> {
   domainService: DomainService;
   convergenceDomainStore: ConvergenceDomainStore;
+  breadcrumbsStore: BreadcrumbsStore;
+  configStore: ConfigStore;
 }
 
 interface DomainContainerState {
@@ -70,12 +74,14 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
   }
 
   public componentDidMount() {
-    const domainInfo = this._extractNamespaceAndDomain();
-    this._loadDomain(domainInfo);
+    const domainId = this._extractNamespaceAndDomain();
+    this.props.breadcrumbsStore.setDomain(domainId);
+    this._loadDomain(domainId);
   }
 
   public componentWillUnmount() {
     this.props.convergenceDomainStore.disconnect();
+    this.props.breadcrumbsStore.setDomain(null);
   }
 
   public componentDidUpdate(prevProps: Readonly<DomainContainerProps>, prevState: Readonly<DomainContainerState>): void {
@@ -193,10 +199,15 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
   }
 
   private _extractNamespaceAndDomain(): DomainId {
-    const {namespace, domainId} = this.props.match.params;
-    return new DomainId(namespace, domainId);
+    if (this.props.configStore.namespacesEnabled) {
+      const {namespace, domainId} = this.props.match.params;
+      return new DomainId(namespace, domainId);
+    } else {
+      const {domainId} = this.props.match.params;
+      return new DomainId(this.props.configStore.defaultNamespace, domainId);
+    }
   }
 }
 
-const INJECTIONS = [SERVICES.DOMAIN_SERVICE, STORES.CONVERGENCE_DOMAIN_STORE];
+const INJECTIONS = [SERVICES.DOMAIN_SERVICE, STORES.CONVERGENCE_DOMAIN_STORE, STORES.BREADCRUMBS_STORE, STORES.CONFIG_STORE];
 export const DomainContainer = injectAs<RouteComponentProps>(INJECTIONS, DomainContainerComponent);

@@ -41,7 +41,7 @@ class DomainJwtKeysComponent extends React.Component<InjectedProps, DomainJwtKey
       dataIndex: 'id',
       sorter: (a: DomainJwtKey, b: DomainJwtKey) => (a.id as string).localeCompare(b.id),
       render: (text: string) => <Link
-        to={toDomainUrl("", this.props.domainId, `authentication/jwt/${text}`)}>{text}</Link>
+        to={toDomainUrl(this.props.domainId, `authentication/jwt/${text}`)}>{text}</Link>
     }, {
       title: 'Description',
       dataIndex: 'description',
@@ -131,7 +131,7 @@ class DomainJwtKeysComponent extends React.Component<InjectedProps, DomainJwtKey
   }
 
   private _goToCreate = () => {
-    const url = toDomainUrl("", this.props.domainId, "authentication/jwt/create-jwt-key");
+    const url = toDomainUrl(this.props.domainId, "authentication/jwt/create-jwt-key");
     this.props.history.push(url);
   }
 
@@ -139,7 +139,7 @@ class DomainJwtKeysComponent extends React.Component<InjectedProps, DomainJwtKey
     return (
       <span className={styles.actions}>
         <Tooltip placement="topRight" title="Edit User" mouseEnterDelay={1}>
-          <Link to={toDomainUrl("", this.props.domainId, `authentication/jwt/${record.id}`)}>
+          <Link to={toDomainUrl(this.props.domainId, `authentication/jwt/${record.id}`)}>
             <Button shape="circle" size="small" htmlType="button" icon="edit"/>
           </Link>
         </Tooltip>

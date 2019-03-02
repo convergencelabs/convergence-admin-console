@@ -1,6 +1,5 @@
-import * as React from 'react';
+import React, {KeyboardEvent, ReactNode} from "react";
 import {Page} from "../../../../components/common/Page/";
-import {KeyboardEvent, ReactNode} from "react";
 import Tooltip from "antd/es/tooltip";
 import {Button, Card, Icon, Input, notification, Popconfirm, Table} from "antd";
 import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
@@ -13,7 +12,6 @@ import {DomainCollectionService} from "../../../../services/domain/DomainCollect
 import {DomainId} from "../../../../models/DomainId";
 import {CollectionSummary} from "../../../../models/domain/CollectionSummary";
 import {ToolbarButton} from "../../../../components/common/ToolbarButton";
-import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
 import {toDomainUrl} from "../../../../utils/domain-url";
 import styles from "./styles.module.css";
 
@@ -31,18 +29,17 @@ export interface DomainCollectionsState {
 }
 
 class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCollectionsState> {
-  private readonly _breadcrumbs: DomainBreadcrumbProducer;
+  private readonly _breadcrumbs =[{title: "Collections"}];
   private readonly _collectionTableColumns: any[];
   private _collectionsSubscription: PromiseSubscription | null;
 
   constructor(props: InjectedProps) {
     super(props);
-    this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId,[{title: "Collections"}]);
     this._collectionTableColumns = [{
       title: 'Id',
       dataIndex: 'id',
       sorter: (a: CollectionSummary, b: CollectionSummary) => (a.id as string).localeCompare(b.id),
-      render: (text: string) => <Link to={toDomainUrl("", this.props.domainId, `collections/${text}`)}>{text}</Link>
+      render: (text: string) => <Link to={toDomainUrl(this.props.domainId, `collections/${text}`)}>{text}</Link>
     }, {
       title: 'Models',
       dataIndex: 'modelCount',
@@ -94,7 +91,7 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
   }
 
   private _goToCreate = () => {
-    const url = toDomainUrl("", this.props.domainId, "create-collection");
+    const url = toDomainUrl(this.props.domainId, "create-collection");
     this.props.history.push(url);
   }
 
@@ -117,12 +114,12 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
     return (
       <span className={styles.actions}>
         <Tooltip placement="topRight" title="Browse Collection" mouseEnterDelay={1}>
-          <Link to={toDomainUrl("", this.props.domainId, `models/?mode=browse&collection=${record.id}`)}>
+          <Link to={toDomainUrl(this.props.domainId, `models/?mode=browse&collection=${record.id}`)}>
             <Button shape="circle" size="small" htmlType="button" icon="eye"/>
           </Link>
         </Tooltip>
         <Tooltip placement="topRight" title="Edit Collection" mouseEnterDelay={1}>
-          <Link to={toDomainUrl("", this.props.domainId, `collections/${record.id}`)}>
+          <Link to={toDomainUrl(this.props.domainId, `collections/${record.id}`)}>
             <Button shape="circle" size="small" htmlType="button" icon="edit"/>
           </Link>
         </Tooltip>

@@ -11,7 +11,6 @@ import {Page} from "../../../../components/common/Page/";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {RestError} from "../../../../services/RestError";
-import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
 import {DomainCollectionService} from "../../../../services/domain/DomainCollectionService";
 import {Collection} from "../../../../models/domain/Collection";
 import {toDomainUrl} from "../../../../utils/domain-url";
@@ -33,16 +32,14 @@ export interface EditDomainCollectionState {
 }
 
 class EditDomainCollectionComponent extends React.Component<InjectedProps, EditDomainCollectionState> {
-  private readonly _breadcrumbs: DomainBreadcrumbProducer;
+  private readonly _breadcrumbs = [
+    {title: "Collection", link: "/collections"},
+    {title: this.props.match.params.id}
+  ];
   private _collectionSubscription: PromiseSubscription | null;
 
   constructor(props: InjectedProps) {
     super(props);
-
-    this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId, [
-      {title: "Collection", link: "/collections"},
-      {title: this.props.match.params.id}
-    ]);
 
     this.state = {
       initialCollection: null
@@ -81,7 +78,7 @@ class EditDomainCollectionComponent extends React.Component<InjectedProps, EditD
   }
 
   private _handleCancel = () => {
-    const url = toDomainUrl("", this.props.domainId, "collections/");
+    const url = toDomainUrl(this.props.domainId, "collections/");
     this.props.history.push(url);
   }
 
@@ -93,7 +90,7 @@ class EditDomainCollectionComponent extends React.Component<InjectedProps, EditD
           message: 'Collection Updated',
           description: `Collection '${collection.id}' successfully updated`
         });
-        const url = toDomainUrl("", domainId, "collections/");
+        const url = toDomainUrl(domainId, "collections/");
         this.props.history.push(url);
       }).catch((err) => {
       if (err instanceof RestError) {

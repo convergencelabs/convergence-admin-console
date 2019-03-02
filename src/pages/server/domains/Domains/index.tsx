@@ -1,7 +1,5 @@
-import * as React from 'react';
-import {KeyboardEvent, ReactNode} from 'react';
+import React, {KeyboardEvent, ReactNode} from 'react';
 import {Page} from "../../../../components/common/Page/";
-import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
 import {Button, Card, Icon, Input, notification, Popconfirm, Table} from "antd";
 import styles from "./styles.module.css";
 import {injectAs} from "../../../../utils/mobx-utils";
@@ -12,7 +10,6 @@ import {DomainDescriptor} from "../../../../models/DomainDescriptor";
 import {RouteComponentProps} from "react-router";
 import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
 import Tooltip from "antd/es/tooltip";
-import {Link} from "react-router-dom";
 import {NamespaceAutoComplete} from "../../../../components/server/NamespaceAutoComplete";
 import {LoggedInUserService} from "../../../../services/LoggedInUserService";
 import {DomainId} from "../../../../models/DomainId";
@@ -20,10 +17,15 @@ import {formatDomainStatus} from "../../../../utils/format-utils";
 import {DomainStatusIcon} from "../../../../components/common/DomainStatusIcon";
 import {DomainStatus} from "../../../../models/DomainStatus";
 import {DisableableLink} from "../../../../components/common/DisableableLink";
+import {STORES} from "../../../../stores/StoreConstants";
+import {ConfigStore} from "../../../../stores/ConfigStore";
+import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
+import {toDomainUrl} from "../../../../utils/domain-url";
 
 interface InjectedProps extends RouteComponentProps {
   domainService: DomainService;
   loggedInUserService: LoggedInUserService;
+  configStore: ConfigStore;
 }
 
 export interface DomainsState {
@@ -34,7 +36,7 @@ export interface DomainsState {
 }
 
 export class DomainsComponent extends React.Component<InjectedProps, DomainsState> {
-  private readonly _breadcrumbs = new BasicBreadcrumbsProducer([{title: "Domains"}]);
+  private readonly _breadcrumbs: IBreadcrumbSegment[] = ([{title: "Domains"}]);
   private readonly _domainTableColumns: any[];
   private _domainSubscription: PromiseSubscription | null;
   private _favoritesSubscription: PromiseSubscription | null;
@@ -49,7 +51,8 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
       sorter: (a: any, b: any) => (a.displayName as string).localeCompare(b.displayName),
       render: (text: string, domain: DomainDescriptor) => {
         const disabled = domain.status === DomainStatus.INITIALIZING || domain.status === DomainStatus.DELETING;
-        return <DisableableLink to={`/domain/${domain.namespace}/${domain.id}/`} disabled={disabled}>{text}</DisableableLink>
+        return <DisableableLink to={toDomainUrl(new DomainId(domain.namespace, domain.id), "")}
+                                disabled={disabled}>{text}</DisableableLink>
       }
     }, {
       title: 'Namespace',
@@ -76,6 +79,10 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
       align: 'right',
       render: this._renderActions
     }];
+
+    if (!this.props.configStore.namespacesEnabled) {
+      this._domainTableColumns.splice(1, 1);
+    }
 
     this._domainSubscription = null;
     this._favoritesSubscription = null;
@@ -118,8 +125,9 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
   private _renderToolbar(): ReactNode {
     return (
       <CardTitleToolbar title="Domains" icon="database">
-        <NamespaceAutoComplete placeholder={"Filter Namespace"}
-                               onChange={this._onNamespaceChange}/>
+        {this.props.configStore.namespacesEnabled ?
+          <NamespaceAutoComplete placeholder={"Filter Namespace"} onChange={this._onNamespaceChange}/> : null
+        }
         <span className={styles.search}>
           <Input placeholder="Search Domains" addonAfter={<Icon type="search"/>} onKeyUp={this._onFilterChange}/>
         </span>
@@ -263,4 +271,5 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
   }
 }
 
-export const Domains = injectAs<RouteComponentProps>([SERVICES.DOMAIN_SERVICE, SERVICES.LOGGED_IN_USER_SERVICE], DomainsComponent);
+const injections = [SERVICES.DOMAIN_SERVICE, SERVICES.LOGGED_IN_USER_SERVICE, STORES.CONFIG_STORE];
+export const Domains = injectAs<RouteComponentProps>(injections, DomainsComponent);

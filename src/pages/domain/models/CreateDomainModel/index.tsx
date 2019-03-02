@@ -1,23 +1,22 @@
-import React, {ReactNode} from "react";
+import React, {ReactNode, FormEvent} from "react";
 import {Page} from "../../../../components/common/Page/";
 import {Form, Input, Icon, Button, Select, Card, notification} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
-import {FormEvent} from "react";
-import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {RestError} from "../../../../services/RestError";
-import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
 import {toDomainUrl} from "../../../../utils/domain-url";
 import {CollectionAutoComplete} from "../../../../components/domain/collection/CollectionAutoComplete";
-import 'brace';
-import 'brace/mode/javascript';
-import 'brace/theme/solarized_dark';
 import AceEditor from "react-ace";
 import {DomainModelService} from "../../../../services/domain/DomainModelService";
 import {DomainId} from "../../../../models/DomainId";
+import styles from "./styles.module.css";
+
+import 'brace';
+import 'brace/mode/javascript';
+import 'brace/theme/solarized_dark';
 
 export interface CreateDomainModelProps extends RouteComponentProps {
   domainId: DomainId;
@@ -32,15 +31,13 @@ export interface CreateDomainModelState {
 }
 
 class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDomainModelState> {
-  private readonly _breadcrumbs: DomainBreadcrumbProducer;
+  private readonly _breadcrumbs = [
+    {title: "Models", link: "/models"},
+    {title: "New Model"}
+  ];
 
   constructor(props: InjectedProps) {
     super(props);
-
-    this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId, [
-      {title: "Models", link: "/models"},
-      {title: "New Model"}
-    ]);
 
     this.state = {
       data: "{\n\n}"
@@ -118,7 +115,7 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
   }
 
   private _handleCancel = () => {
-    const url = toDomainUrl("", this.props.domainId, "models");
+    const url = toDomainUrl(this.props.domainId, "models");
     this.props.history.push(url);
   }
 
@@ -141,7 +138,7 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
               message: 'Model Created',
               description: `Model '${modelId}' successfully created`
             });
-            this.props.history.push(toDomainUrl("", domainId, `models/${modelId}`));
+            this.props.history.push(toDomainUrl(domainId, `models/${modelId}`));
           }).catch((err) => {
             if (err instanceof RestError) {
               if (err.code === "duplicate") {

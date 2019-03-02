@@ -5,21 +5,25 @@ import {DomainDescriptor} from "../../../models/DomainDescriptor";
 import {Button, Card, Input, Tooltip} from "antd";
 import {SERVICES} from "../../../services/ServiceConstants";
 import {ConfigService} from "../../../services/ConfigService";
-import {injectAs} from "../../../utils/mobx-utils";
-import {domainUrl} from "../../../utils/domain-url";
+import {injectObserver} from "../../../utils/mobx-utils";
+import {domainUrl, toDomainUrl} from "../../../utils/domain-url";
 import {CopyAddOnButton} from "../../common/CopyAddonButton/";
 import {DomainStatusIcon} from "../../common/DomainStatusIcon";
 import {formatDomainStatus} from "../../../utils/format-utils";
 import {DomainStatus} from "../../../models/DomainStatus";
 import {DisableableLink} from "../../common/DisableableLink"
 import classNames from "classnames";
+import {STORES} from "../../../stores/StoreConstants";
+import {ConfigStore} from "../../../stores/ConfigStore";
+import {DomainId} from "../../../models/DomainId";
 
 export interface DomainCardProps {
   domain: DomainDescriptor
 }
 
 interface Injected {
-  configService: ConfigService
+  configService: ConfigService;
+  configStore: ConfigStore;
 }
 
 export class DomainCardComponent extends React.Component<DomainCardProps & Injected, {}> {
@@ -34,9 +38,10 @@ export class DomainCardComponent extends React.Component<DomainCardProps & Injec
     }
 
     const className = classNames(...cls);
+    const linkUrl = toDomainUrl(new DomainId(domain.namespace, domain.id), "");
     return (
       <Card className={className} hoverable={true}>
-        <DisableableLink to={{pathname: `/domain/${domain.namespace}/${domain.id}/`}} disabled={disabled} >
+        <DisableableLink to={{pathname: linkUrl}} disabled={disabled} >
           <span className={styles.title}>{domain.displayName}</span>
         </DisableableLink>
         <span className={styles.status}>
@@ -44,7 +49,7 @@ export class DomainCardComponent extends React.Component<DomainCardProps & Injec
             <span><DomainStatusIcon status={domain.status}/></span>
           </Tooltip>
         </span>
-        <div className={styles.nsid}>{domain.namespace} / {domain.id}</div>
+        <div className={styles.nsid}>{this.props.configStore.namespacesEnabled ? domain.namespace + " / " : ""}{domain.id}</div>
         <Input
           className={styles.url}
           value={url}
@@ -65,9 +70,14 @@ export class DomainCardComponent extends React.Component<DomainCardProps & Injec
   }
 }
 
-function DomainCardButton(props: { domain: DomainDescriptor, icon: string, link: string, tooltip: string, disabled: boolean}) {
+function DomainCardButton(props: {
+  domain: DomainDescriptor,
+  icon: string,
+  link: string,
+  tooltip: string,
+  disabled: boolean}) {
   const {domain, link, tooltip, icon, disabled} = props;
-  const url = `domain/${domain.namespace}/${domain.id}/${link}`;
+  const url = toDomainUrl(new DomainId(domain.namespace, domain.id), link)
   return (
     <Tooltip title={tooltip} mouseEnterDelay={1}>
       <DisableableLink to={url} disabled={disabled}>
@@ -78,5 +88,5 @@ function DomainCardButton(props: { domain: DomainDescriptor, icon: string, link:
 }
 
 
-
-export const DomainCard = injectAs<DomainCardProps>([SERVICES.CONFIG_SERVICE], DomainCardComponent);
+const injections = [SERVICES.CONFIG_SERVICE, STORES.CONFIG_STORE];
+export const DomainCard = injectObserver<DomainCardProps>(injections, DomainCardComponent);

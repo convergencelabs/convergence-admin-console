@@ -6,7 +6,6 @@ import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
-import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
 import {DomainModelService} from "../../../../services/domain/DomainModelService";
 import {ModelEditorTab} from "./ModelEditorTab/";
 import {ModelPermissionsTab} from "./ModelPermissionsTab";
@@ -15,6 +14,7 @@ import {DomainId} from "../../../../models/DomainId";
 import {toDomainUrl} from "../../../../utils/domain-url";
 import {Model} from "../../../../models/domain/Model";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
+import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
 
 interface EditDomainModelRouteProps {
   id: string;
@@ -34,19 +34,17 @@ interface EditDomainModelState {
 }
 
 class EditDomainModelComponent extends React.Component<InjectedProps, EditDomainModelState> {
-  private readonly _breadcrumbs: DomainBreadcrumbProducer;
+  private readonly _breadcrumbs: IBreadcrumbSegment[];
   private _modelSubscription: PromiseSubscription | null;
 
   constructor(props: InjectedProps) {
     super(props);
 
     const id = this.props.match.params.id;
-
-    const modelsUrl = toDomainUrl("", this.props.domainId, "models");
-    this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId, [
-      {title: "Models", link: modelsUrl},
+    this._breadcrumbs = [
+      {title: "Models", link: toDomainUrl(this.props.domainId, "models")},
       {title: id}
-    ]);
+    ];
 
     this.state = {
       model: null
@@ -70,7 +68,7 @@ class EditDomainModelComponent extends React.Component<InjectedProps, EditDomain
     const {model}= this.state;
     if (model != null) {
       const tab = this.props.match.params.tab || "data";
-      const baseUrl = toDomainUrl("", this.props.domainId, `models/${model.id}`);
+      const baseUrl = toDomainUrl(this.props.domainId, `models/${model.id}`);
       return (
         <Page breadcrumbs={this._breadcrumbs} full={true}>
           <Card title={this._renderTitle(model)} className={styles.formCard}>
@@ -128,7 +126,7 @@ class EditDomainModelComponent extends React.Component<InjectedProps, EditDomain
             description: `The model '${this.props.match.params.id}' was deleted.`
           });
 
-          this.props.history.push(toDomainUrl("", this.props.domainId, "models"));
+          this.props.history.push(toDomainUrl(this.props.domainId, "models"));
         }
       )
       .catch(err => {

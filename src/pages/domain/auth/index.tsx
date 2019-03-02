@@ -4,7 +4,6 @@ import {Icon} from 'antd';
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {DomainId} from "../../../models/DomainId";
-import {DomainBreadcrumbProducer} from "../DomainBreadcrumProducer";
 import {Page} from "../../../components/common/Page";
 import {DomainJwtKeys} from "./jwt/DomainJwtKeys";
 import {toDomainUrl} from "../../../utils/domain-url";
@@ -15,19 +14,15 @@ export interface DomainAuthenticationProps extends RouteComponentProps<{tab: str
 }
 
 export class DomainAuthentication extends React.Component<DomainAuthenticationProps, {}> {
-  private readonly _breadcrumbs: DomainBreadcrumbProducer;
+  private readonly _breadcrumbs = [{title: "Authentication"}];
 
   constructor(props: DomainAuthenticationProps) {
     super(props);
-
-    this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId, [
-      {title: "Authentication"}
-    ]);
   }
 
   public render(): ReactNode {
     const tab = this.props.match.params.tab || "jwt";
-    const baseUrl = toDomainUrl("", this.props.domainId, `authentication`);
+    const baseUrl = toDomainUrl(this.props.domainId, `authentication`);
     return (
       <Page breadcrumbs={this._breadcrumbs}>
         <Card title={ <span><Icon type="lock"/> Authentication</span>} className={styles.formCard}>

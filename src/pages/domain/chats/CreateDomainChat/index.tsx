@@ -1,10 +1,7 @@
-import * as React from 'react';
+import React, {ReactNode, FormEvent} from "react";
 import {Page} from "../../../../components/common/Page/";
-import {ReactNode} from "react";
-import {Card, Col, notification, Row, Select} from "antd";
-import {Form, Input, Tooltip, Icon, Button} from 'antd';
+import {Card, notification, Select, Form, Input, Icon, Button} from "antd";
 import {FormComponentProps} from "antd/lib/form";
-import {FormEvent} from "react";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
@@ -12,8 +9,7 @@ import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {RestError} from "../../../../services/RestError";
 import {DomainChatService} from "../../../../services/domain/DomainChatService";
-import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
-import {domainUrl, toDomainUrl} from "../../../../utils/domain-url";
+import {toDomainUrl} from "../../../../utils/domain-url";
 import {DomainId} from "../../../../models/DomainId";
 
 interface CreateDomainChatProps extends RouteComponentProps {
@@ -25,15 +21,10 @@ interface InjectedProps extends CreateDomainChatProps, FormComponentProps {
 }
 
 class CreateDomainChatComponent extends React.Component<InjectedProps, {}> {
-  private readonly _breadcrumbs: DomainBreadcrumbProducer;
-
-  constructor(props: InjectedProps) {
-    super(props);
-    this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId, [
-      {title: "Chats", link: toDomainUrl("", this.props.domainId, "chats")},
-      {title: "New Chat"}
-    ]);
-  }
+  private readonly _breadcrumbs = [
+    {title: "Chats", link: toDomainUrl(this.props.domainId, "chats")},
+    {title: "New Chat"}
+  ];
 
   public render(): ReactNode {
     const {getFieldDecorator} = this.props.form;
@@ -87,7 +78,7 @@ class CreateDomainChatComponent extends React.Component<InjectedProps, {}> {
   }
 
   private _handleCancel = () => {
-    this.props.history.push(toDomainUrl("", this.props.domainId, "chats"));
+    this.props.history.push(toDomainUrl(this.props.domainId, "chats"));
   }
 
   private handleSubmit = (e: FormEvent<HTMLInputElement>) => {
@@ -95,7 +86,7 @@ class CreateDomainChatComponent extends React.Component<InjectedProps, {}> {
     this.props.form.validateFieldsAndScroll((err, values: any) => {
       if (!err) {
         const {chatId, chatType, membership, name, topic} = values;
-        const createChatData ={
+        const createChatData = {
           chatId,
           chatType,
           membership,
@@ -111,7 +102,7 @@ class CreateDomainChatComponent extends React.Component<InjectedProps, {}> {
               placement: "bottomRight",
               duration: 3
             });
-            this.props.history.push(toDomainUrl("", this.props.domainId, "chats"));
+            this.props.history.push(toDomainUrl(this.props.domainId, "chats"));
           }).catch((err) => {
           if (err instanceof RestError) {
             console.log(JSON.stringify(err));
