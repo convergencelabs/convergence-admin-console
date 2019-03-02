@@ -3,6 +3,7 @@ import {ConvergenceDomain, Convergence} from "@convergence-internal/convergence"
 import {DomainId} from "../models/DomainId";
 import {domainConvergenceJwtService} from "../services/domain/DomainConvergenceUserJwtService";
 import {AppConfig} from "./AppConfig";
+import {domainRealtimeUrl} from "../utils/domain-url";
 
 export class ConvergenceDomainStore {
   public domain: ConvergenceDomain | null = null;
@@ -34,7 +35,7 @@ export class ConvergenceDomainStore {
     return domainConvergenceJwtService
       .getJwt(this.domainId)
       .then((jwt) => {
-        const url = `${AppConfig.realtimeApiUrl}${domainId.namespace}/${domainId.id}`;
+        const url = domainRealtimeUrl(domainId.namespace, domainId.id);
         return Convergence.connectWithJwt(url, jwt);
       })
       .then(domain => {

@@ -10,7 +10,7 @@ import {SERVICES} from "../../../../services/ServiceConstants";
 import {Link} from "react-router-dom";
 import {DomainId} from "../../../../models/DomainId";
 import {ToolbarButton} from "../../../../components/common/ToolbarButton";
-import {toDomainUrl} from "../../../../utils/domain-url";
+import {toDomainRoute} from "../../../../utils/domain-url";
 import styles from "./styles.module.css";
 import {DomainChatService} from "../../../../services/domain/DomainChatService";
 import {ChatInfo} from "../../../../models/domain/ChatInfo";
@@ -39,7 +39,7 @@ class DomainChatComponent extends React.Component<InjectedProps, DomainChatState
       title: 'Id',
       dataIndex: 'chatId',
       sorter: (a: any, b: any) => (a.id as string).localeCompare(b.id),
-      render: (text: string) => <Link to={toDomainUrl(this.props.domainId, `chats/${text}`)}>{text}</Link>
+      render: (text: string) => <Link to={toDomainRoute(this.props.domainId, `chats/${text}`)}>{text}</Link>
     }, {
       title: 'Name',
       dataIndex: 'name',
@@ -94,7 +94,7 @@ class DomainChatComponent extends React.Component<InjectedProps, DomainChatState
   }
 
   private _goToCreate = () => {
-    const url = toDomainUrl(this.props.domainId, "create-chat");
+    const url = toDomainRoute(this.props.domainId, "create-chat");
     this.props.history.push(url);
   }
 
@@ -117,7 +117,7 @@ class DomainChatComponent extends React.Component<InjectedProps, DomainChatState
     return (
       <span className={styles.actions}>
         <Tooltip placement="topRight" title="Edit Chat" mouseEnterDelay={1}>
-          <Link to={toDomainUrl(this.props.domainId, `chats/${record.chatId}`)}>
+          <Link to={toDomainRoute(this.props.domainId, `chats/${record.chatId}`)}>
             <Button shape="circle" size="small" htmlType="button" icon="edit"/>
           </Link>
         </Tooltip>

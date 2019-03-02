@@ -2,7 +2,7 @@ import * as React from 'react';
 import {SideNavigation, SideNavigationMenuItem} from "../../../common/SideNavigation/";
 import {ReactNode} from "react";
 import {DomainId} from "../../../../models/DomainId";
-import {toDomainUrl} from "../../../../utils/domain-url";
+import {toDomainRoute} from "../../../../utils/domain-url";
 
 export interface DomainSideNavigationProps {
   domainId: DomainId
@@ -16,15 +16,15 @@ export class DomainSideNavigation extends React.Component<DomainSideNavigationPr
     super(props);
 
     const {domainId} = this.props;
-    const dashboard = toDomainUrl( domainId, "");
-    const users = toDomainUrl(domainId, "users");
-    const groups = toDomainUrl(domainId, "groups/");
-    const sessions = toDomainUrl(domainId, "sessions/");
-    const collections = toDomainUrl(domainId, "collections/");
-    const models = toDomainUrl(domainId, "models/");
-    const chat = toDomainUrl(domainId, "chats/");
-    const settings = toDomainUrl(domainId, "settings/");
-    const auth = toDomainUrl(domainId, "authentication/");
+    const dashboard = toDomainRoute( domainId, "");
+    const users = toDomainRoute(domainId, "users");
+    const groups = toDomainRoute(domainId, "groups/");
+    const sessions = toDomainRoute(domainId, "sessions/");
+    const collections = toDomainRoute(domainId, "collections/");
+    const models = toDomainRoute(domainId, "models/");
+    const chat = toDomainRoute(domainId, "chats/");
+    const settings = toDomainRoute(domainId, "settings/");
+    const auth = toDomainRoute(domainId, "authentication/");
 
     this._menus = [
       {key: "dashboard", icon: "dashboard", title: "Dashboard", link: dashboard, routeMatch: {path: dashboard, exact: true}},

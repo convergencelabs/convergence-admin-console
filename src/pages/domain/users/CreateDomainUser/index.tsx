@@ -10,7 +10,7 @@ import {RestError} from "../../../../services/RestError";
 import {DomainUserService} from "../../../../services/domain/DomainUserService";
 import {DomainId} from "../../../../models/DomainId";
 import {CreateDomainUserData} from "../../../../services/domain/common-rest-data";
-import {toDomainUrl} from "../../../../utils/domain-url";
+import {toDomainRoute} from "../../../../utils/domain-url";
 import styles from "./styles.module.css";
 
 export interface CreateDomainUserProps extends RouteComponentProps {
@@ -27,7 +27,7 @@ export interface CreateDomainUserComponentState {
 
 class CreateDomainUserComponent extends React.Component<InjectedProps, CreateDomainUserComponentState> {
   private readonly _breadcrumbs = [
-    {title: "Users", link: toDomainUrl(this.props.domainId, "users/")},
+    {title: "Users", link: toDomainRoute(this.props.domainId, "users/")},
     {title: "New User"}
   ];
 
@@ -155,7 +155,7 @@ class CreateDomainUserComponent extends React.Component<InjectedProps, CreateDom
   }
 
   private _handleCancel = () => {
-    const url = toDomainUrl(this.props.domainId, "users/");
+    const url = toDomainRoute(this.props.domainId, "users/");
     this.props.history.push(url);
   }
 
@@ -178,7 +178,7 @@ class CreateDomainUserComponent extends React.Component<InjectedProps, CreateDom
               message: 'User Created',
               description: `User '${username}' successfully created.`
             });
-            const url = toDomainUrl(this.props.domainId, "users/");
+            const url = toDomainRoute(this.props.domainId, "users/");
             this.props.history.push(url);
           }).catch((err) => {
           if (err instanceof RestError) {

@@ -12,7 +12,7 @@ import {DomainCollectionService} from "../../../../services/domain/DomainCollect
 import {DomainId} from "../../../../models/DomainId";
 import {CollectionSummary} from "../../../../models/domain/CollectionSummary";
 import {ToolbarButton} from "../../../../components/common/ToolbarButton";
-import {toDomainUrl} from "../../../../utils/domain-url";
+import {toDomainRoute} from "../../../../utils/domain-url";
 import styles from "./styles.module.css";
 
 export interface DomainCollectionsProps extends RouteComponentProps {
@@ -39,7 +39,7 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
       title: 'Id',
       dataIndex: 'id',
       sorter: (a: CollectionSummary, b: CollectionSummary) => (a.id as string).localeCompare(b.id),
-      render: (text: string) => <Link to={toDomainUrl(this.props.domainId, `collections/${text}`)}>{text}</Link>
+      render: (text: string) => <Link to={toDomainRoute(this.props.domainId, `collections/${text}`)}>{text}</Link>
     }, {
       title: 'Models',
       dataIndex: 'modelCount',
@@ -91,7 +91,7 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
   }
 
   private _goToCreate = () => {
-    const url = toDomainUrl(this.props.domainId, "create-collection");
+    const url = toDomainRoute(this.props.domainId, "create-collection");
     this.props.history.push(url);
   }
 
@@ -114,12 +114,12 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
     return (
       <span className={styles.actions}>
         <Tooltip placement="topRight" title="Browse Collection" mouseEnterDelay={1}>
-          <Link to={toDomainUrl(this.props.domainId, `models/?mode=browse&collection=${record.id}`)}>
+          <Link to={toDomainRoute(this.props.domainId, `models/?mode=browse&collection=${record.id}`)}>
             <Button shape="circle" size="small" htmlType="button" icon="eye"/>
           </Link>
         </Tooltip>
         <Tooltip placement="topRight" title="Edit Collection" mouseEnterDelay={1}>
-          <Link to={toDomainUrl(this.props.domainId, `collections/${record.id}`)}>
+          <Link to={toDomainRoute(this.props.domainId, `collections/${record.id}`)}>
             <Button shape="circle" size="small" htmlType="button" icon="edit"/>
           </Link>
         </Tooltip>

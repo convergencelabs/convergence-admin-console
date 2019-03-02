@@ -10,7 +10,7 @@ import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {Link} from "react-router-dom";
 import {DomainId} from "../../../../models/DomainId";
-import {toDomainUrl} from "../../../../utils/domain-url";
+import {toDomainRoute} from "../../../../utils/domain-url";
 import {DomainGroupService} from "../../../../services/domain/DomainGroupService";
 import {DomainUserGroupSummary} from "../../../../models/domain/DomainUserGroupSummary";
 
@@ -39,7 +39,7 @@ class DomainUserGroupsComponent extends React.Component<InjectedProps, DomainGro
       title: 'Id',
       dataIndex: 'id',
       sorter: (a: DomainUserGroupSummary, b: DomainUserGroupSummary) => (a.id as string).localeCompare(b.id),
-      render: (text: string) => <Link to={toDomainUrl(this.props.domainId,`groups/${text}`)}>{text}</Link>
+      render: (text: string) => <Link to={toDomainRoute(this.props.domainId,`groups/${text}`)}>{text}</Link>
     }, {
       title: 'Description',
       dataIndex: 'description',
@@ -99,7 +99,7 @@ class DomainUserGroupsComponent extends React.Component<InjectedProps, DomainGro
   }
 
   private _goToCreate = () => {
-    const url = toDomainUrl(this.props.domainId, "create-group");
+    const url = toDomainRoute(this.props.domainId, "create-group");
     this.props.history.push(url);
   }
 
@@ -122,7 +122,7 @@ class DomainUserGroupsComponent extends React.Component<InjectedProps, DomainGro
     return (
       <span className={styles.actions}>
         <Tooltip placement="topRight" title="Edit Group" mouseEnterDelay={1}>
-          <Link to={toDomainUrl(this.props.domainId, `groups/${record.id}`)}>
+          <Link to={toDomainRoute(this.props.domainId, `groups/${record.id}`)}>
             <Button shape="circle" size="small" htmlType="button" icon="edit"/>
           </Link>
         </Tooltip>

@@ -7,7 +7,7 @@ import {RouteComponentProps} from "react-router";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {DomainId} from "../../../../models/DomainId";
-import {toDomainUrl} from "../../../../utils/domain-url";
+import {toDomainRoute} from "../../../../utils/domain-url";
 import {DomainUserGroupForm} from "../../../../components/domain/group/DomainUserGroupForm/";
 import {DomainGroupService} from "../../../../services/domain/DomainGroupService";
 import {DomainUserGroup} from "../../../../models/domain/DomainUserGroup";
@@ -23,7 +23,7 @@ interface InjectedProps extends CreateDomainUserGroupProps, FormComponentProps {
 
 class CreateDomainUserGroupComponent extends React.Component<InjectedProps, {}> {
   private readonly _breadcrumbs = [
-    {title: "Groups", link: toDomainUrl(this.props.domainId, "groups/")},
+    {title: "Groups", link: toDomainRoute(this.props.domainId, "groups/")},
     {title: "New Group"}
   ];
   private readonly _newGroup = new DomainUserGroup("", "", []);
@@ -45,7 +45,7 @@ class CreateDomainUserGroupComponent extends React.Component<InjectedProps, {}> 
   }
 
   private _handleCancel = () => {
-    const url = toDomainUrl(this.props.domainId, "groups/");
+    const url = toDomainRoute(this.props.domainId, "groups/");
     this.props.history.push(url);
   }
 
@@ -56,7 +56,7 @@ class CreateDomainUserGroupComponent extends React.Component<InjectedProps, {}> 
           message: 'Group Created',
           description: `Group '${group.id}' successfully created.`
         });
-        const url = toDomainUrl(this.props.domainId, "groups/");
+        const url = toDomainRoute(this.props.domainId, "groups/");
         this.props.history.push(url);
       }).catch((err) => {
       if (err instanceof RestError) {

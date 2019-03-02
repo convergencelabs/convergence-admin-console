@@ -11,7 +11,7 @@ import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancel
 import {DomainId} from "../../../../models/DomainId";
 import {DomainUserService} from "../../../../services/domain/DomainUserService";
 import {DomainUser} from "../../../../models/domain/DomainUser";
-import {toDomainUrl} from "../../../../utils/domain-url";
+import {toDomainRoute} from "../../../../utils/domain-url";
 import {UpdateDomainUserData} from "../../../../services/domain/common-rest-data";
 import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar";
 import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
@@ -38,7 +38,7 @@ class EditDomainUserComponent extends React.Component<InjectedProps, EditDomainU
     super(props);
 
     this._breadcrumbs = [
-      {title: "Users", link: toDomainUrl(this.props.domainId, "users/")},
+      {title: "Users", link: toDomainRoute(this.props.domainId, "users/")},
       {title: this.props.match.params.username}
     ];
 
@@ -187,7 +187,7 @@ class EditDomainUserComponent extends React.Component<InjectedProps, EditDomainU
   }
 
   private _handleCancel = () => {
-    const usersUrl = toDomainUrl(this.props.domainId, "users/");
+    const usersUrl = toDomainRoute(this.props.domainId, "users/");
     this.props.history.push(usersUrl);
   }
 
@@ -210,7 +210,7 @@ class EditDomainUserComponent extends React.Component<InjectedProps, EditDomainU
               message: 'User Updated',
               description: `User '${username}' successfully updated`
             });
-            const usersUrl = toDomainUrl(this.props.domainId, "users/");
+            const usersUrl = toDomainRoute(this.props.domainId, "users/");
             this.props.history.push(usersUrl);
           }).catch((err) => {
           if (err instanceof RestError) {

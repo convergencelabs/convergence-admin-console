@@ -5,7 +5,7 @@ import {RouteComponentProps} from "react-router";
 import {DomainId} from "../../../../../models/DomainId";
 import {DomainJwtKeyService} from "../../../../../services/domain/DomainJwtKeyService";
 import {SERVICES} from "../../../../../services/ServiceConstants";
-import {toDomainUrl} from "../../../../../utils/domain-url";
+import {toDomainRoute} from "../../../../../utils/domain-url";
 import {DomainJwtKey} from "../../../../../models/domain/DomainJwtKey";
 import {Page} from "../../../../../components/common/Page";
 import {RestError} from "../../../../../services/RestError";
@@ -23,8 +23,8 @@ interface InjectedProps extends CreateDomainJwtKeyProps, FormComponentProps {
 
 class CreateDomainJwtKeyComponent extends React.Component<InjectedProps, {}> {
   private readonly _breadcrumbs = [
-    {title: "Authentication", link: toDomainUrl(this.props.domainId, "authentication/")},
-    {title: "JWT Keys", link: toDomainUrl(this.props.domainId, "authentication/jwt")},
+    {title: "Authentication", link: toDomainRoute(this.props.domainId, "authentication/")},
+    {title: "JWT Keys", link: toDomainRoute(this.props.domainId, "authentication/jwt")},
     {title: "New JWT Key"}
   ];
   private readonly _newKey = new DomainJwtKey("", "", new Date(), "", true);
@@ -48,7 +48,7 @@ class CreateDomainJwtKeyComponent extends React.Component<InjectedProps, {}> {
   }
 
   private _handleCancel = () => {
-    const url = toDomainUrl(this.props.domainId, "authentication/jwt");
+    const url = toDomainRoute(this.props.domainId, "authentication/jwt");
     this.props.history.push(url);
   }
 
@@ -59,7 +59,7 @@ class CreateDomainJwtKeyComponent extends React.Component<InjectedProps, {}> {
           message: 'Key Created',
           description: `Jwt Key '${key.id}' successfully created.`
         });
-        const url = toDomainUrl(this.props.domainId, "authentication/jwt");
+        const url = toDomainRoute(this.props.domainId, "authentication/jwt");
         this.props.history.push(url);
       }).catch((err) => {
       if (err instanceof RestError) {

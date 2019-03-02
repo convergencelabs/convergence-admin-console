@@ -20,7 +20,7 @@ import {DisableableLink} from "../../../../components/common/DisableableLink";
 import {STORES} from "../../../../stores/StoreConstants";
 import {ConfigStore} from "../../../../stores/ConfigStore";
 import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
-import {toDomainUrl} from "../../../../utils/domain-url";
+import {toDomainRoute} from "../../../../utils/domain-url";
 
 interface InjectedProps extends RouteComponentProps {
   domainService: DomainService;
@@ -51,7 +51,7 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
       sorter: (a: any, b: any) => (a.displayName as string).localeCompare(b.displayName),
       render: (text: string, domain: DomainDescriptor) => {
         const disabled = domain.status === DomainStatus.INITIALIZING || domain.status === DomainStatus.DELETING;
-        return <DisableableLink to={toDomainUrl(new DomainId(domain.namespace, domain.id), "")}
+        return <DisableableLink to={toDomainRoute(new DomainId(domain.namespace, domain.id), "")}
                                 disabled={disabled}>{text}</DisableableLink>
       }
     }, {

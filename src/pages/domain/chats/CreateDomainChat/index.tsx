@@ -9,7 +9,7 @@ import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {RestError} from "../../../../services/RestError";
 import {DomainChatService} from "../../../../services/domain/DomainChatService";
-import {toDomainUrl} from "../../../../utils/domain-url";
+import {toDomainRoute} from "../../../../utils/domain-url";
 import {DomainId} from "../../../../models/DomainId";
 
 interface CreateDomainChatProps extends RouteComponentProps {
@@ -22,7 +22,7 @@ interface InjectedProps extends CreateDomainChatProps, FormComponentProps {
 
 class CreateDomainChatComponent extends React.Component<InjectedProps, {}> {
   private readonly _breadcrumbs = [
-    {title: "Chats", link: toDomainUrl(this.props.domainId, "chats")},
+    {title: "Chats", link: toDomainRoute(this.props.domainId, "chats")},
     {title: "New Chat"}
   ];
 
@@ -78,7 +78,7 @@ class CreateDomainChatComponent extends React.Component<InjectedProps, {}> {
   }
 
   private _handleCancel = () => {
-    this.props.history.push(toDomainUrl(this.props.domainId, "chats"));
+    this.props.history.push(toDomainRoute(this.props.domainId, "chats"));
   }
 
   private handleSubmit = (e: FormEvent<HTMLInputElement>) => {
@@ -102,7 +102,7 @@ class CreateDomainChatComponent extends React.Component<InjectedProps, {}> {
               placement: "bottomRight",
               duration: 3
             });
-            this.props.history.push(toDomainUrl(this.props.domainId, "chats"));
+            this.props.history.push(toDomainRoute(this.props.domainId, "chats"));
           }).catch((err) => {
           if (err instanceof RestError) {
             console.log(JSON.stringify(err));

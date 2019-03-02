@@ -13,7 +13,7 @@ import {ModelOpenAutoCreate} from "./snippet_model_open_auto_create";
 import {ModelCreateSnippet} from "./snippet_model_create";
 import {ModelDataSnippet} from "./snippet_model_data";
 import {DomainId} from "../../../models/DomainId";
-import {domainUrl} from "../../../utils/domain-url";
+import {domainRealtimeUrl} from "../../../utils/domain-url";
 import {ActivityJoinSnippet} from "./snippet_activity_join";
 import {ChatRoomSnippet} from "./snippet_chat_room";
 import {DirectChatSnippet} from "./snippet_chat_direct";
@@ -33,7 +33,7 @@ export class DomainDashboard extends React.Component<DomainDashboardProps, {}> {
 
   public render(): ReactNode {
     const {domainId} = this.props;
-    const domainConnectUrl = domainUrl(domainId.namespace, domainId.id);
+    const domainConnectUrl = domainRealtimeUrl(domainId.namespace, domainId.id);
 
     const copier =
       <CopyToClipboard text={domainConnectUrl}

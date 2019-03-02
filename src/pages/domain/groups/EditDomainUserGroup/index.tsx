@@ -6,7 +6,7 @@ import {RouteComponentProps} from "react-router";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {DomainId} from "../../../../models/DomainId";
-import {toDomainUrl} from "../../../../utils/domain-url";
+import {toDomainRoute} from "../../../../utils/domain-url";
 import {DomainUserGroupForm} from "../../../../components/domain/group/DomainUserGroupForm/";
 import {DomainGroupService} from "../../../../services/domain/DomainGroupService";
 import {DomainUserGroup} from "../../../../models/domain/DomainUserGroup";
@@ -28,7 +28,7 @@ export interface EditDomainUserGroupState {
 
 class EditDomainUserGroupComponent extends React.Component<InjectedProps, EditDomainUserGroupState> {
   private readonly _breadcrumbs = [
-    {title: "Groups", link: toDomainUrl(this.props.domainId, "groups/")},
+    {title: "Groups", link: toDomainRoute(this.props.domainId, "groups/")},
     {title: this.props.match.params.id}
   ];
   private _groupSubscription: PromiseSubscription | null;
@@ -65,7 +65,7 @@ class EditDomainUserGroupComponent extends React.Component<InjectedProps, EditDo
   }
 
   private _handleCancel = () => {
-    const url = toDomainUrl(this.props.domainId, "groups/");
+    const url = toDomainRoute(this.props.domainId, "groups/");
     this.props.history.push(url);
   }
 
@@ -76,7 +76,7 @@ class EditDomainUserGroupComponent extends React.Component<InjectedProps, EditDo
           message: 'Group Updated',
           description: `Group '${group.id}' successfully created.`
         });
-        const url = toDomainUrl(this.props.domainId, "groups/");
+        const url = toDomainRoute(this.props.domainId, "groups/");
         this.props.history.push(url);
       }).catch((err) => {
       if (err instanceof RestError) {

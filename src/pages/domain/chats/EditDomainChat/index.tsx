@@ -8,7 +8,7 @@ import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {RestError} from "../../../../services/RestError";
 import {DomainChatService} from "../../../../services/domain/DomainChatService";
-import {toDomainUrl} from "../../../../utils/domain-url";
+import {toDomainRoute} from "../../../../utils/domain-url";
 import {DomainId} from "../../../../models/DomainId";
 import {ChatInfo} from "../../../../models/domain/ChatInfo";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
@@ -30,7 +30,7 @@ export interface EditDomainChatState {
 
 class EditDomainChatComponent extends React.Component<InjectedProps, EditDomainChatState> {
   private readonly _breadcrumbs = [
-    {title: "Chats", link: toDomainUrl(this.props.domainId, "chats")},
+    {title: "Chats", link: toDomainRoute(this.props.domainId, "chats")},
     {title: "Edit Chat"}
   ];
   private _chatSubscription: PromiseSubscription | null;

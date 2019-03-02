@@ -6,7 +6,7 @@ import {Button, Card, Input, Tooltip} from "antd";
 import {SERVICES} from "../../../services/ServiceConstants";
 import {ConfigService} from "../../../services/ConfigService";
 import {injectObserver} from "../../../utils/mobx-utils";
-import {domainUrl, toDomainUrl} from "../../../utils/domain-url";
+import {domainRealtimeUrl, toDomainRoute} from "../../../utils/domain-url";
 import {CopyAddOnButton} from "../../common/CopyAddonButton/";
 import {DomainStatusIcon} from "../../common/DomainStatusIcon";
 import {formatDomainStatus} from "../../../utils/format-utils";
@@ -29,7 +29,7 @@ interface Injected {
 export class DomainCardComponent extends React.Component<DomainCardProps & Injected, {}> {
   public render(): ReactNode {
     const domain = this.props.domain;
-    const url = domainUrl(domain.namespace, domain.id);
+    const url = domainRealtimeUrl(domain.namespace, domain.id);
     const disabled = domain.status === DomainStatus.INITIALIZING || domain.status === DomainStatus.DELETING;
     const cls: string[] = [];
     cls.push(styles.domainCard);
@@ -38,7 +38,7 @@ export class DomainCardComponent extends React.Component<DomainCardProps & Injec
     }
 
     const className = classNames(...cls);
-    const linkUrl = toDomainUrl(new DomainId(domain.namespace, domain.id), "");
+    const linkUrl = toDomainRoute(new DomainId(domain.namespace, domain.id), "");
     return (
       <Card className={className} hoverable={true}>
         <DisableableLink to={{pathname: linkUrl}} disabled={disabled} >
@@ -77,7 +77,7 @@ function DomainCardButton(props: {
   tooltip: string,
   disabled: boolean}) {
   const {domain, link, tooltip, icon, disabled} = props;
-  const url = toDomainUrl(new DomainId(domain.namespace, domain.id), link)
+  const url = toDomainRoute(new DomainId(domain.namespace, domain.id), link)
   return (
     <Tooltip title={tooltip} mouseEnterDelay={1}>
       <DisableableLink to={url} disabled={disabled}>

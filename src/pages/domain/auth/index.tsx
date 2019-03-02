@@ -6,7 +6,7 @@ import {RouteComponentProps} from "react-router";
 import {DomainId} from "../../../models/DomainId";
 import {Page} from "../../../components/common/Page";
 import {DomainJwtKeys} from "./jwt/DomainJwtKeys";
-import {toDomainUrl} from "../../../utils/domain-url";
+import {toDomainRoute} from "../../../utils/domain-url";
 import {AnonymousAuthForm} from "./anonymous/AnonymousAuthForm";
 
 export interface DomainAuthenticationProps extends RouteComponentProps<{tab: string}> {
@@ -22,7 +22,7 @@ export class DomainAuthentication extends React.Component<DomainAuthenticationPr
 
   public render(): ReactNode {
     const tab = this.props.match.params.tab || "jwt";
-    const baseUrl = toDomainUrl(this.props.domainId, `authentication`);
+    const baseUrl = toDomainRoute(this.props.domainId, `authentication`);
     return (
       <Page breadcrumbs={this._breadcrumbs}>
         <Card title={ <span><Icon type="lock"/> Authentication</span>} className={styles.formCard}>

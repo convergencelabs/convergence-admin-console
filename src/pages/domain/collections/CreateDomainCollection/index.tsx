@@ -13,7 +13,7 @@ import {SERVICES} from "../../../../services/ServiceConstants";
 import {RestError} from "../../../../services/RestError";
 import {DomainCollectionService} from "../../../../services/domain/DomainCollectionService";
 import {Collection} from "../../../../models/domain/Collection";
-import {toDomainUrl} from "../../../../utils/domain-url";
+import {toDomainRoute} from "../../../../utils/domain-url";
 import {DomainId} from "../../../../models/DomainId";
 import {DomainCollectionForm} from "../../../../components/domain/collection/DomainCollectionForm";
 import {CollectionPermissions} from "../../../../models/domain/CollectionPermissions";
@@ -72,7 +72,7 @@ class CreateDomainCollectionComponent extends React.Component<InjectedProps, {}>
   }
 
   private _handleCancel = () => {
-    const url = toDomainUrl(this.props.domainId, "collections/");
+    const url = toDomainRoute(this.props.domainId, "collections/");
     this.props.history.push(url);
   }
 
@@ -84,7 +84,7 @@ class CreateDomainCollectionComponent extends React.Component<InjectedProps, {}>
           message: 'Collection Created',
           description: `Collection '${collection.id}' successfully created`
         });
-        const url = toDomainUrl(domainId, "collections/");
+        const url = toDomainRoute(domainId, "collections/");
         this.props.history.push(url);
       }).catch((err) => {
       if (err instanceof RestError) {

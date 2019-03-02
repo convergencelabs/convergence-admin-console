@@ -9,7 +9,7 @@ import {SetPasswordForm} from "../../../../components/common/SetPasswordForm/"
 import {RestError} from "../../../../services/RestError";
 import {DomainId} from "../../../../models/DomainId";
 import {DomainUserService} from "../../../../services/domain/DomainUserService";
-import {toDomainUrl} from "../../../../utils/domain-url";
+import {toDomainRoute} from "../../../../utils/domain-url";
 import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
 import styles from "./styles.module.css";
 
@@ -29,8 +29,8 @@ class SetDomainUserPasswordComponent extends React.Component<InjectedProps, {}> 
 
     const username = this.props.match.params.username;
     this._breadcrumbs = [
-      {title: "Users", link: toDomainUrl(this.props.domainId, "users")},
-      {title: username, link: toDomainUrl(this.props.domainId, `users/${username}`)},
+      {title: "Users", link: toDomainRoute(this.props.domainId, "users")},
+      {title: username, link: toDomainRoute(this.props.domainId, `users/${username}`)},
       {title: "Set Password"}
     ];
   }
@@ -51,7 +51,7 @@ class SetDomainUserPasswordComponent extends React.Component<InjectedProps, {}> 
   }
 
   private _handleCancel = () => {
-    this.props.history.push(toDomainUrl(this.props.domainId, "users"));
+    this.props.history.push(toDomainRoute(this.props.domainId, "users"));
   }
 
   private _handleSetPassword = (password: string) => {
@@ -62,7 +62,7 @@ class SetDomainUserPasswordComponent extends React.Component<InjectedProps, {}> 
           message: 'namespaces Created',
           description: `Password for '${username}' successfully set.`
         });
-        this.props.history.push(toDomainUrl(this.props.domainId, "users"));
+        this.props.history.push(toDomainRoute(this.props.domainId, "users"));
         return true;
       }).catch((err) => {
       console.error(err);

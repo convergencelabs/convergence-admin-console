@@ -7,7 +7,7 @@ import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {RestError} from "../../../../services/RestError";
-import {toDomainUrl} from "../../../../utils/domain-url";
+import {toDomainRoute} from "../../../../utils/domain-url";
 import {CollectionAutoComplete} from "../../../../components/domain/collection/CollectionAutoComplete";
 import AceEditor from "react-ace";
 import {DomainModelService} from "../../../../services/domain/DomainModelService";
@@ -115,7 +115,7 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
   }
 
   private _handleCancel = () => {
-    const url = toDomainUrl(this.props.domainId, "models");
+    const url = toDomainRoute(this.props.domainId, "models");
     this.props.history.push(url);
   }
 
@@ -138,7 +138,7 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
               message: 'Model Created',
               description: `Model '${modelId}' successfully created`
             });
-            this.props.history.push(toDomainUrl(domainId, `models/${modelId}`));
+            this.props.history.push(toDomainRoute(domainId, `models/${modelId}`));
           }).catch((err) => {
             if (err instanceof RestError) {
               if (err.code === "duplicate") {

@@ -9,7 +9,7 @@ import {RouteComponentProps} from "react-router";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {ToolbarButton} from "../../../../components/common/ToolbarButton";
-import {toDomainUrl} from "../../../../utils/domain-url";
+import {toDomainRoute} from "../../../../utils/domain-url";
 import {ModelControls, ModelSearchMode} from "./ModelControls";
 import {DomainModelService} from "../../../../services/domain/DomainModelService";
 import {Model} from "../../../../models/domain/Model";
@@ -120,7 +120,7 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
 
 
   private _goToCreate = () => {
-    const url = toDomainUrl(this.props.domainId, "create-model");
+    const url = toDomainRoute(this.props.domainId, "create-model");
     this.props.history.push(url);
   }
 
@@ -196,8 +196,8 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
   }
 
   private _renderMenu = (id: string, record: Model) => {
-    const permission = toDomainUrl(this.props.domainId, `models/${id}/permissions`);
-    const data = toDomainUrl(this.props.domainId, `models/${id}`);
+    const permission = toDomainRoute(this.props.domainId, `models/${id}/permissions`);
+    const data = toDomainRoute(this.props.domainId, `models/${id}`);
     const menu = (
       <Menu>
         <Menu.Item key="copyId">
@@ -311,8 +311,8 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
   }
 
   private _expander = (model: Model, index: number, indent: number, expanded: boolean) => {
-    const permission = toDomainUrl(this.props.domainId, `models/${model.id}/permissions`);
-    const data = toDomainUrl(this.props.domainId, `models/${model.id}`);
+    const permission = toDomainRoute(this.props.domainId, `models/${model.id}/permissions`);
+    const data = toDomainRoute(this.props.domainId, `models/${model.id}`);
 
     return (
       <div className={styles.modelExpander}>

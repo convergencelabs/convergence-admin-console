@@ -13,7 +13,7 @@ import {SERVICES} from "../../../../services/ServiceConstants";
 import {RestError} from "../../../../services/RestError";
 import {DomainCollectionService} from "../../../../services/domain/DomainCollectionService";
 import {Collection} from "../../../../models/domain/Collection";
-import {toDomainUrl} from "../../../../utils/domain-url";
+import {toDomainRoute} from "../../../../utils/domain-url";
 import {DomainId} from "../../../../models/DomainId";
 import {DomainCollectionForm} from "../../../../components/domain/collection/DomainCollectionForm";
 import styles from "./styles.module.css";
@@ -78,7 +78,7 @@ class EditDomainCollectionComponent extends React.Component<InjectedProps, EditD
   }
 
   private _handleCancel = () => {
-    const url = toDomainUrl(this.props.domainId, "collections/");
+    const url = toDomainRoute(this.props.domainId, "collections/");
     this.props.history.push(url);
   }
 
@@ -90,7 +90,7 @@ class EditDomainCollectionComponent extends React.Component<InjectedProps, EditD
           message: 'Collection Updated',
           description: `Collection '${collection.id}' successfully updated`
         });
-        const url = toDomainUrl(domainId, "collections/");
+        const url = toDomainRoute(domainId, "collections/");
         this.props.history.push(url);
       }).catch((err) => {
       if (err instanceof RestError) {
