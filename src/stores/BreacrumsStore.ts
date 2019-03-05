@@ -34,11 +34,9 @@ export class BreadcrumbsStore {
         link: "/domains"
       });
 
-      if (configStore.namespacesEnabled) {
-        segments.push({
-          title: this._domainId.namespace
-        });
-      }
+      segments.push({
+        title: this._domainId.namespace
+      });
 
       segments.push({
         title: this._domainId.id

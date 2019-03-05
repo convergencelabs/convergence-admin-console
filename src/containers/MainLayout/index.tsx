@@ -31,17 +31,13 @@ export class MainLayoutComponent extends React.Component<InjectedProps, {}> {
   }
 
   public render(): ReactNode {
-    const domainRoute = this.props.configStore.namespacesEnabled ?
-      <Route path='/domain/:namespace/:domainId/' component={DomainContainer}/> :
-      <Route path='/domain/:domainId/' component={DomainContainer}/>
-
     return this.props.configStore.configLoaded ? (
       <div className={styles.mainLayout}>
         <Layout>
           <AppHeader/>
           <AppBreadcrumbs/>
           <Switch>
-            {domainRoute}
+            <Route path='/domain/:namespace/:domainId/' component={DomainContainer}/>
             <Route path='/' component={ServerContainer}/>
           </Switch>
         </Layout>

@@ -49,7 +49,7 @@ class CreateDomainComponent extends React.Component<InjectedProps, CreateDomainS
         <Card title={<span><Icon type="database"/> New Domain</span>} className={styles.formCard}>
           <Form onSubmit={this._handleSubmit}>
             {
-              this.props.configStore.namespacesEnabled  && this.props.configStore.userNamespacesEnabled ?
+              this.props.configStore.namespacesEnabled && this.props.configStore.userNamespacesEnabled ?
                 <Row gutter={16}>
                   <Col span={24}>
                     <Form.Item label="Create In">
@@ -70,7 +70,7 @@ class CreateDomainComponent extends React.Component<InjectedProps, CreateDomainS
                 null
             }
             {
-              this.state.namespaceType !== "user" ?
+              this.props.configStore.namespacesEnabled && this.state.namespaceType !== "user" ?
                 <Row gutter={16}>
                   <Col span={24}>
                     <Form.Item label="Shared Namespace">

@@ -15,21 +15,31 @@ import {EditUser} from "../../pages/server/users/EditUser";
 import {SetUserPassword} from "../../pages/server/users/SetUserPassword";
 import {ProfilePage} from "../../pages/server/main/Profile";
 import {PageNotFound} from "../../components/common/PageNotFound";
+import {STORES} from "../../stores/StoreConstants";
+import {injectAs} from "../../utils/mobx-utils";
+import {ConfigStore} from "../../stores/ConfigStore";
 
-export class ServerContainer extends React.Component<RouteComponentProps, {}> {
+interface InjectedProps extends RouteComponentProps {
+  configStore: ConfigStore;
+}
+
+export class ServerContainerComponent extends React.Component<InjectedProps, {}> {
   public render(): ReactNode {
     const {match} = this.props;
+    const namespaces = this.props.configStore.namespacesEnabled ? [
+        <Route exact path={`${match.url}namespaces`} render={(props) => <Namespaces {...props}/>}/>,
+        <Route exact path={`${match.url}create-namespace`} render={(props) => <CreateNamespace {...props}/>}/>,
+        <Route exact path={`${match.url}namespaces/:id`} render={(props) => <EditNamespace {...props}/>}/>
+      ] :
+      [];
     return (
       <NavLayout sideNav={<ServerSideNavigation/>}>
         <Switch>
           <Route exact path={`${match.url}users`} render={(props) => <ServerUsers {...props}/>}/>
           <Route exact path={`${match.url}create-user`} render={(props) => <CreateUser {...props}/>}/>
           <Route exact path={`${match.url}users/:username`} render={(props) => <EditUser {...props}/>}/>
-          <Route exact path={`${match.url}users/:username/set-password`}
-                 render={(props) => <SetUserPassword {...props}/>}/>
-          <Route exact path={`${match.url}namespaces`} render={(props) => <Namespaces {...props}/>}/>
-          <Route exact path={`${match.url}create-namespace`} render={(props) => <CreateNamespace {...props}/>}/>
-          <Route exact path={`${match.url}namespaces/:id`} render={(props) => <EditNamespace {...props}/>}/>
+          <Route exact path={`${match.url}users/:username/set-password`} render={(props) => <SetUserPassword {...props}/>}/>
+          {namespaces}
           <Route exact path={`${match.url}domains`} render={(props) => <Domains {...props}/>}/>
           <Route exact path={`${match.url}create-domain`} render={(props) => <CreateDomain {...props}/>}/>
           <Route exact path={`${match.url}settings`} render={(props) => <Settings/>}/>
@@ -41,3 +51,7 @@ export class ServerContainer extends React.Component<RouteComponentProps, {}> {
     );
   }
 }
+
+const injections = [STORES.CONFIG_STORE];
+export const ServerContainer = injectAs<RouteComponentProps>(injections, ServerContainerComponent);
+

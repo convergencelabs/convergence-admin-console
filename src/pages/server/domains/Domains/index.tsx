@@ -80,10 +80,6 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
       render: this._renderActions
     }];
 
-    if (!this.props.configStore.namespacesEnabled) {
-      this._domainTableColumns.splice(1, 1);
-    }
-
     this._domainSubscription = null;
     this._favoritesSubscription = null;
 

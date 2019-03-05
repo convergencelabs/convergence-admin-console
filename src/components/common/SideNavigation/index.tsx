@@ -2,8 +2,9 @@ import * as React from 'react';
 import * as H from 'history';
 import {Icon, Layout, Menu} from 'antd';
 import styles from './styles.module.css';
-import {match, matchPath, RouteComponentProps, withRouter} from "react-router";
+import {matchPath, RouteComponentProps, withRouter} from "react-router";
 import {Link} from "react-router-dom";
+import {UnregisterCallback} from "history";
 const {Sider} = Layout;
 
 export interface SideNavigationMenuItem {
@@ -18,7 +19,7 @@ export interface SideNavigationMenuItem {
 }
 
 export interface SideNavigationProps extends RouteComponentProps {
-  menus: SideNavigationMenuItem[]
+  menus: SideNavigationMenuItem[];
 }
 
 export interface SideNavigationState {
@@ -26,6 +27,8 @@ export interface SideNavigationState {
 }
 
 export class SideNavigationComponent extends React.Component<SideNavigationProps, SideNavigationState> {
+  private _historyUnregister: UnregisterCallback | null = null;
+
   state = {
     collapsed: false
   };
@@ -37,6 +40,16 @@ export class SideNavigationComponent extends React.Component<SideNavigationProps
   onSelect = ({item, key, selectedKeys}: any) => {
     // console.log(key);
   };
+
+  public componentDidMount(): void {
+    this._historyUnregister = this.props.history.listen(() => this.forceUpdate());
+  }
+
+  public componentWillUnmount(): void {
+    if (this._historyUnregister !== null) {
+      this._historyUnregister();
+    }
+  }
 
   render() {
     const selectProps = {selectedKeys: [this._selectMenuFromRoute(this.props.location)]};

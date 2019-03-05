@@ -49,7 +49,7 @@ export class DomainCardComponent extends React.Component<DomainCardProps & Injec
             <span><DomainStatusIcon status={domain.status}/></span>
           </Tooltip>
         </span>
-        <div className={styles.nsid}>{this.props.configStore.namespacesEnabled ? domain.namespace + " / " : ""}{domain.id}</div>
+        <div className={styles.nsid}>{domain.namespace} / {domain.id}</div>
         <Input
           className={styles.url}
           value={url}

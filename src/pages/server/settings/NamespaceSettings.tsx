@@ -22,6 +22,7 @@ interface InjectedProps extends FormComponentProps {
 
 interface NamespaceAndDomainSettingsState {
   configs: Map<string, any> | null;
+  namespacesEnabled: boolean;
 }
 
 const ENABLED = "enabled";
@@ -37,7 +38,8 @@ class NamespaceSettingsComponent extends React.Component<InjectedProps, Namespac
     this._configSubscription = null;
 
     this.state = {
-      configs: null
+      configs: null,
+      namespacesEnabled: this.props.configStore.namespacesEnabled
     };
 
     this._loadConfig();
@@ -62,7 +64,7 @@ class NamespaceSettingsComponent extends React.Component<InjectedProps, Namespac
               initialValue: namespacesEnabled,
               rules: []
             })(
-              <Select>
+              <Select onChange={(val: string) => this.setState({namespacesEnabled: val === ENABLED})}>
                 <Option key={ENABLED} value={ENABLED}>Enabled</Option>
                 <Option key={DISABLED} value={DISABLED}>Disabled</Option>
               </Select>
@@ -81,7 +83,7 @@ class NamespaceSettingsComponent extends React.Component<InjectedProps, Namespac
               initialValue: userNamespacesEnabled,
               rules: []
             })(
-              <Select>
+              <Select disabled={!this.state.namespacesEnabled}>
                 <Option key={ENABLED} value={ENABLED}>Enabled</Option>
                 <Option key={DISABLED} value={DISABLED}>Disabled</Option>
               </Select>
