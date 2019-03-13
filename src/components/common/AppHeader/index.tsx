@@ -41,7 +41,7 @@ class AppHeaderComponent extends React.Component<InjectedProps, {}> {
       <Layout.Header className={styles.header}>
         <img src={logo} className={styles.logo}/>
         <span className={styles.logoName}>Convergence</span>
-        <span className={styles.slogan}>Convergence Admin Console</span>
+        <span className={styles.slogan}>Admin Console</span>
         <Badge count={0}>
           <Tooltip title={"No Alerts"} mouseEnterDelay={1}>
           <Icon type="bell" className={styles.icon}/>
