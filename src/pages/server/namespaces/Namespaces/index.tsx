@@ -32,7 +32,7 @@ class NamespacesComponent extends React.Component<InjectedProps, NamespacesState
       title: 'Id',
       dataIndex: 'id',
       sorter: (a: any, b: any) => (a.id as string).localeCompare(b.id),
-      render: (text: string) => <Link to={`/namespace/${text}`}>{text}</Link>
+      render: (text: string) => <Link to={`/namespaces/${text}`}>{text}</Link>
     }, {
       title: 'Display Name',
       dataIndex: 'displayName',

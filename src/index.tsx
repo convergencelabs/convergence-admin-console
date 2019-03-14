@@ -89,6 +89,10 @@ if (authToken) {
       } else {
         boostrap();
       }
+    })
+    .catch(err => {
+      console.error(err);
+      boostrap();
     });
 } else {
   boostrap();
