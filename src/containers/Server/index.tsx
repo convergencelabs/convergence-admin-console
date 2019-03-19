@@ -27,9 +27,9 @@ export class ServerContainerComponent extends React.Component<InjectedProps, {}>
   public render(): ReactNode {
     const {match} = this.props;
     const namespaces = this.props.configStore.namespacesEnabled ? [
-        <Route exact path={`${match.url}namespaces`} render={(props) => <Namespaces {...props}/>}/>,
-        <Route exact path={`${match.url}create-namespace`} render={(props) => <CreateNamespace {...props}/>}/>,
-        <Route exact path={`${match.url}namespaces/:id`} render={(props) => <EditNamespace {...props}/>}/>
+        <Route exact path={`${match.url}namespaces`} key="0" render={(props) => <Namespaces {...props}/>}/>,
+        <Route exact path={`${match.url}create-namespace`} key="1" render={(props) => <CreateNamespace {...props}/>}/>,
+        <Route exact path={`${match.url}namespaces/:id`} key="2" render={(props) => <EditNamespace {...props}/>}/>
       ] :
       [];
     return (

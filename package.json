@@ -1,6 +1,6 @@
 {
   "name": "@convergence-internal/admin-console",
-  "version": "1.0.0-SNAPSHOT",
+  "version": "1.0.0-rc.1",
   "repository": {
     "type": "git",
     "url": "https://gitlab.dev.int.convergencelabs.tech/ui/convergence-admin-console.git"
@@ -41,7 +41,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@convergence-internal/convergence": "^1.0.0-SNAPSHOT",
+    "@convergence-internal/convergence": "1.0.0-rc.1",
     "@convergence/string-change-detector": "0.1.8",
     "@fortawesome/fontawesome-svg-core": "^1.2.15",
     "@fortawesome/free-solid-svg-icons": "^5.7.2",
