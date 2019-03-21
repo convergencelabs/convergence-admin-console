@@ -1,5 +1,4 @@
-import * as React from 'react';
-import {ReactNode} from 'react';
+import React, {ReactNode, Component} from 'react';
 import styles from './styles.module.css';
 import {DomainDescriptor} from "../../../models/DomainDescriptor";
 import {Button, Card, Input, Tooltip} from "antd";
@@ -16,18 +15,20 @@ import classNames from "classnames";
 import {STORES} from "../../../stores/StoreConstants";
 import {ConfigStore} from "../../../stores/ConfigStore";
 import {DomainId} from "../../../models/DomainId";
+import {RouteComponentProps, withRouter} from "react-router";
 
 export interface DomainCardProps {
   domain: DomainDescriptor
 }
 
-interface Injected {
+interface InjectedProps extends DomainCardProps, RouteComponentProps {
   configService: ConfigService;
   configStore: ConfigStore;
 }
 
-export class DomainCardComponent extends React.Component<DomainCardProps & Injected, {}> {
+export class DomainCardComponent extends Component<InjectedProps, {}> {
   public render(): ReactNode {
+    const props = this.props;
     const domain = this.props.domain;
     const url = domainRealtimeUrl(domain.namespace, domain.id);
     const disabled = domain.status === DomainStatus.INITIALIZING || domain.status === DomainStatus.DELETING;
@@ -41,7 +42,7 @@ export class DomainCardComponent extends React.Component<DomainCardProps & Injec
     const linkUrl = toDomainRoute(new DomainId(domain.namespace, domain.id), "");
     return (
       <Card className={className} hoverable={true}>
-        <DisableableLink to={{pathname: linkUrl}} disabled={disabled} >
+        <DisableableLink to={{pathname: linkUrl}} disabled={disabled}>
           <span className={styles.title}>{domain.displayName}</span>
         </DisableableLink>
         <span className={styles.status}>
@@ -56,37 +57,48 @@ export class DomainCardComponent extends React.Component<DomainCardProps & Injec
           addonAfter={<CopyAddOnButton copyText={url}/>}
         />
         <div className={styles.buttons}>
-          <DomainCardButton link="" domain={domain} tooltip={"Domain Dashboard"} icon="dashboard" disabled={disabled}/>
-          <DomainCardButton link="users" domain={domain} tooltip={"Domain Users"} icon="user" disabled={disabled}/>
-          <DomainCardButton link="groups" domain={domain} tooltip={"Domain Groups"} icon="team" disabled={disabled}/>
-          <DomainCardButton link="sessions" domain={domain} tooltip={"Domain Sessions"} icon="cloud" disabled={disabled}/>
-          <DomainCardButton link="chat" domain={domain} tooltip={"Domain Chat"} icon="message" disabled={disabled}/>
-          <DomainCardButton link="collections" domain={domain} tooltip={"Domain Collections"} icon="folder" disabled={disabled}/>
-          <DomainCardButton link="models" domain={domain} tooltip={"Domain Models"} icon="file" disabled={disabled}/>
-          <DomainCardButton link="settings" domain={domain} tooltip={"Domain Settings"} icon="setting" disabled={disabled}/>
+          <DomainCardButton link="" domain={domain} tooltip={"Dashboard"} icon="dashboard" disabled={disabled} {...props}/>
+          <DomainCardButton link="users" domain={domain} tooltip={"Users"} icon="user" disabled={disabled} {...props}/>
+          <DomainCardButton link="groups" domain={domain} tooltip={"Groups"} icon="team" disabled={disabled} {...props}/>
+          <DomainCardButton link="sessions" domain={domain} tooltip={"Sessions"} icon="cloud" disabled={disabled} {...props}/>
+          <DomainCardButton link="chat" domain={domain} tooltip={"Chat"} icon="message" disabled={disabled} {...props}/>
+          <DomainCardButton link="collections" domain={domain} tooltip={"Collections"} icon="folder"
+                            disabled={disabled} {...this.props}/>
+          <DomainCardButton link="models" domain={domain} tooltip={"Models"} icon="file" disabled={disabled} {...this.props}/>
+          <DomainCardButton link="authentication" domain={domain} tooltip={"Authentication"} icon="lock"
+                            disabled={disabled} {...this.props}/>
+          <DomainCardButton link="settings" domain={domain} tooltip={"Settings"} icon="setting" disabled={disabled} {...this.props}/>
         </div>
       </Card>
     );
   }
 }
 
-function DomainCardButton(props: {
-  domain: DomainDescriptor,
-  icon: string,
-  link: string,
-  tooltip: string,
-  disabled: boolean}) {
-  const {domain, link, tooltip, icon, disabled} = props;
-  const url = toDomainRoute(new DomainId(domain.namespace, domain.id), link)
-  return (
-    <Tooltip title={tooltip} mouseEnterDelay={1}>
-      <DisableableLink to={url} disabled={disabled}>
-        <Button shape="circle" icon={icon} disabled={disabled}/>
-      </DisableableLink>
-    </Tooltip>
-  )
+interface DomainCardButtonProps extends RouteComponentProps {
+  domain: DomainDescriptor
+  icon: string;
+  link: string;
+  tooltip: string;
+  disabled: boolean;
+}
+
+class DomainCardButton extends Component<DomainCardButtonProps, {}> {
+  public render(): ReactNode {
+    const {tooltip, icon, disabled} = this.props;
+    return (
+      <Tooltip title={tooltip} mouseEnterDelay={1}>
+        <Button shape="circle" icon={icon} disabled={disabled} onClick={this._goto}/>
+      </Tooltip>
+    )
+  };
+
+  private _goto = () => {
+    const {domain, link} = this.props;
+    const url = toDomainRoute(new DomainId(domain.namespace, domain.id), link);
+    this.props.history.push(url);
+  }
 }
 
 
 const injections = [SERVICES.CONFIG_SERVICE, STORES.CONFIG_STORE];
-export const DomainCard = injectObserver<DomainCardProps>(injections, DomainCardComponent);
+export const DomainCard = injectObserver<DomainCardProps>(injections, withRouter(DomainCardComponent));
