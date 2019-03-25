@@ -1,7 +1,7 @@
 import React, {ReactNode} from "react";
 import {ToolbarButton} from "../../common/ToolbarButton/";
 import styles from "./styles.module.css";
-import { faSave } from "@fortawesome/free-regular-svg-icons";
+import { faSave, faWindowClose } from "@fortawesome/free-regular-svg-icons";
 
 export interface SourceEditorToolbarProps {
   onSaveSource: (data: {[key: string]: any}) => void;
@@ -21,7 +21,7 @@ export class SourceEditorToolbar extends React.Component<SourceEditorToolbarProp
     return <div className={styles.toolbar}>
       {save}
       <span style={{flex: 1}} />
-      <ToolbarButton icon={faSave} enabled onClick={this.onCancelSource} />
+      <ToolbarButton icon={faWindowClose} enabled onClick={this.onCancelSource} />
     </div>;
   }
 
