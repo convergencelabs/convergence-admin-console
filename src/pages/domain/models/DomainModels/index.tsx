@@ -54,7 +54,6 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
       title: 'Id',
       dataIndex: 'id',
       width: 120,
-      fixed: 'left',
       sorter: (a: Model, b: Model) => (a.id as string).localeCompare(b.id),
       render: this._renderMenu
     }, {
