@@ -360,6 +360,7 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
                   height="300px"
                   highlightActiveLine={true}
                   showPrintMargin={false}
+                  wrapEnabled={true}
                 />
               </div>
             </td>
