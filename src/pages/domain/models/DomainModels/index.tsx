@@ -54,6 +54,7 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
       title: 'Id',
       dataIndex: 'id',
       width: 120,
+      fixed: 'left',
       sorter: (a: Model, b: Model) => (a.id as string).localeCompare(b.id),
       render: this._renderMenu
     }, {
@@ -237,7 +238,7 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
   }
 
   private _renderDataValue = (val: any, record: Model) => {
-    return TypeChecker.switch<string>(val, {
+    const renderedValue = TypeChecker.switch<string>(val, {
       null() {
         return "null";
       },
@@ -275,6 +276,8 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
         }
       ]
     });
+
+    return (<div className={styles.dataValue}>{renderedValue}</div>);
   }
 
   private _onContextDelete = (id: string) => {
