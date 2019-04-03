@@ -41,7 +41,7 @@ class CreateDomainJwtKeyComponent extends React.Component<InjectedProps, {}> {
   public render(): ReactNode {
     return (
       <Page breadcrumbs={this._breadcrumbs}>
-        <Card title={<span><Icon type="team"/> New Group</span>} className={styles.formCard}>
+        <Card title={<span><Icon type="team"/> New JWT Key</span>} className={styles.formCard}>
           <DomainJwtKeyForm
             disableId={false}
             domainId={this.props.domainId}
