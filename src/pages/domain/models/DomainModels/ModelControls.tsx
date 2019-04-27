@@ -67,19 +67,19 @@ class ModelControlsComponent extends React.Component<InjectedProps, {}> {
         <span className={styles.label}>{fieldLabel}:</span>
         {
           mode === ModelSearchMode.BROWSE ?
-            getFieldDecorator('collection')(
+            getFieldDecorator('collection', {initialValue: this.props.initialData})(
               <CollectionAutoComplete initialValue={this.props.initialData} className={styles.collection} domainId={this.props.domainId} />
             ) : null
         }
         {
           mode === ModelSearchMode.QUERY ?
-            getFieldDecorator('query')(
+            getFieldDecorator('query', {initialValue: this.props.initialData})(
               <Input className={styles.query} placeholder="Enter Query"/>
             ) : null
         }
         {
           mode === ModelSearchMode.ID ?
-            getFieldDecorator('id')(
+            getFieldDecorator('id', {initialValue: this.props.initialData})(
               <Input className={styles.id} placeholder="Enter Model Id"/>
             ) : null
         }
