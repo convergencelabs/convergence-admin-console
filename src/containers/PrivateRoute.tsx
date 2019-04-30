@@ -1,6 +1,5 @@
+import React, {ReactNode} from "react";
 import {Redirect, Route, RouteProps} from "react-router";
-import {ReactNode} from "react";
-import React from "react";
 
 export interface PrivateRouteProps extends RouteProps {
   loggedIn: boolean

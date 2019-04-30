@@ -1,43 +1,46 @@
 .loginContainer {
-    margin: 60px auto 0 auto;
-    border: 1px solid lightgray;
-    border-radius: 7px;
-    padding: 15px;
-    background: white;
-    width: 350px;
+  margin: 60px auto 0 auto;
+  border: 1px solid lightgray;
+  border-radius: 7px;
+  padding: 15px;
+  background: white;
+  width: 350px;
 }
 
 .header {
-    margin-top: 20px;
-    margin-bottom: 30px;
-    text-align: center;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  text-align: center;
 }
 
 .logo {
-    height: 75px;
-    margin-right: 10px;
-    margin-bottom: 25px;
+  height: 75px;
+  margin-right: 10px;
+  margin-bottom: 25px;
 }
 
 .title {
-    font-weight: normal;
-    font-size: 28px;
+  font-weight: normal;
+  font-size: 28px;
+  color: #007bc3;
+  font-family: "Century Gothic", sans-serif;
+  text-transform: uppercase;
 }
 
 .loginFormForgot {
-    float: right;
+  float: right;
 }
 
 .loginFormButton {
-    margin-top: 20px;
-    width: 100%;
+  margin-top: 20px;
+  width: 100%;
 }
 
 .error {
-    color: red;
-    text-align: right;
+  color: red;
+  text-align: right;
 }
 
 .error i {
-    margin-right: 10px;
+  margin-right: 10px;
 }

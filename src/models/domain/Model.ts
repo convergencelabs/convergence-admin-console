@@ -4,7 +4,7 @@ export class Model {
               public readonly version: number,
               public readonly created: Date,
               public readonly modified: Date,
-              public readonly data: {[key: string]: any}
+              public readonly data?: {[key: string]: any}
   ) {
     Object.freeze(this);
   }

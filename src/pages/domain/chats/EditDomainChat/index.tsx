@@ -1,23 +1,18 @@
-import * as React from 'react';
+import React, {ChangeEvent, ReactNode} from "react";
 import {Page} from "../../../../components/common/Page/";
-import {ChangeEvent, ReactNode} from "react";
-import {Card, Col, notification, Row, Select} from "antd";
-import {Form, Input, Tooltip, Icon, Button} from 'antd';
+import {Card, Col, notification, Row, Form, Input, Icon, Button} from "antd";
 import {FormComponentProps} from "antd/lib/form";
-import {FormEvent} from "react";
-import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {RestError} from "../../../../services/RestError";
 import {DomainChatService} from "../../../../services/domain/DomainChatService";
-import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
-import {domainUrl, toDomainUrl} from "../../../../utils/domain-url";
+import {toDomainRoute} from "../../../../utils/domain-url";
 import {DomainId} from "../../../../models/DomainId";
-import {Collection} from "../../../../models/domain/Collection";
 import {ChatInfo} from "../../../../models/domain/ChatInfo";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
+import styles from "./styles.module.css";
 
 interface EditDomainChatProps extends RouteComponentProps<{ id: string }> {
   domainId: DomainId;
@@ -34,21 +29,20 @@ export interface EditDomainChatState {
 }
 
 class EditDomainChatComponent extends React.Component<InjectedProps, EditDomainChatState> {
-  private readonly _breadcrumbs: DomainBreadcrumbProducer;
+  private readonly _breadcrumbs = [
+    {title: "Chats", link: toDomainRoute(this.props.domainId, "chats")},
+    {title: "Edit Chat"}
+  ];
   private _chatSubscription: PromiseSubscription | null;
 
   constructor(props: InjectedProps) {
     super(props);
-    this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId, [
-      {title: "Chats", link: toDomainUrl("", this.props.domainId, "chats")},
-      {title: "Edit Chat"}
-    ]);
 
     this.state = {
       initialChat: null,
       name: "",
       topic: ""
-    }
+    };
 
     this._chatSubscription = null;
 

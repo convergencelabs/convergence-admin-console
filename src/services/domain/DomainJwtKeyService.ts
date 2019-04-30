@@ -43,6 +43,11 @@ export class DomainJwtKeyService extends AbstractDomainService {
     const url = this._getDomainUrl(domainId,`jwtKeys/${keyId}`);
     return this._delete<void>(url);
   }
+
+  public generateKey(): Promise<{publicKey: string, privateKey: string}> {
+    const url = "util/keygen";
+    return this._get<any>(url);
+  }
 }
 
 export const domainJwtKeyService = new DomainJwtKeyService();

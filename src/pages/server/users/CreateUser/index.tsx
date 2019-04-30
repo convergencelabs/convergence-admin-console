@@ -1,6 +1,5 @@
 import React, {ReactNode} from "react";
 import {Page} from "../../../../components/common/Page/";
-import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
 import {Card, Col, notification, Row} from "antd";
 import {Form, Input, Tooltip, Icon, Button, Select} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
@@ -28,18 +27,16 @@ export interface CreateUserComponentState {
 }
 
 class CreateUserComponent extends React.Component<InjectedProps, CreateUserComponentState> {
-  private readonly _breadcrumbs:BasicBreadcrumbsProducer;
+  private readonly _breadcrumbs = [
+    {title: "Users", link: "/users"},
+    {title: "New User"}
+  ];
 
   private _configSubscription: PromiseSubscription | null;
   private _passwordValidator = new PasswordFormValidator();
 
   constructor(props: InjectedProps) {
     super(props);
-
-    this._breadcrumbs = new BasicBreadcrumbsProducer([
-      {title: "Users", link: "/users"},
-      {title: "New User"}
-    ]);
 
     this.state = {
       confirmDirty: false,

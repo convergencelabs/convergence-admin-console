@@ -1,10 +1,13 @@
 import React, {ReactNode} from "react";
 import {DropdownMenu} from "../DropdownMenu/";
 import classNames from "classnames";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {IconProp} from "@fortawesome/fontawesome-svg-core";
+import {faChevronDown} from "@fortawesome/free-solid-svg-icons";
 import styles from "./styles.module.css";
 
 export interface MenuButtonProps {
-  icon: string;
+  icon: IconProp;
   enabled: boolean;
 }
 
@@ -47,9 +50,11 @@ export class MenuButton extends React.Component<MenuButtonProps, MenuButtonState
     return (
       <div className={styles.menuButtonWrapper}>
         <div className={menuClasses} onClick={this.showMenu}>
-          <span className={styles.icons}>
-            <i className={`fa fa-${this.props.icon} ${styles.icon}`}/>
-            <i className={`fa fa-chevron-down ${styles.dropDown}`}/>
+          <span className={styles.icon}>
+            <FontAwesomeIcon icon={this.props.icon}/>
+          </span>
+          <span className={styles.dropDown}>
+            <FontAwesomeIcon icon={faChevronDown}/>
           </span>
         </div>
         <div className={styles.menuContainer}>

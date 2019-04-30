@@ -65,7 +65,9 @@ class ModelEditorTabComponent extends React.Component<InjectedProps, ModelEditor
 
   public componentWillUnmount(): void {
     if (this.state.model !== null) {
-      this.state.model.close();
+      if (this.state.model.isOpen()) {
+        this.state.model.close().catch(err => console.error(err));
+      }
     }
   }
 
@@ -133,7 +135,7 @@ class ModelEditorTabComponent extends React.Component<InjectedProps, ModelEditor
   private _confirmDelete = () => {
     return new Promise<boolean>(function(resolve, reject) {
       confirm({
-        title: 'Delete element?',
+        title: 'Delete Element?',
         content: 'Are you sure you want to delete this element?',
         okType: 'danger',
         onOk() {

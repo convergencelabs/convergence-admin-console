@@ -40,14 +40,12 @@ export interface ModelSnapshotPolicyData {
 }
 
 export interface ModelData {
-  metaData: {
-    id: string;
-    collection: string;
-    version: number
-    createdTime: number,
-    modifiedTime: number
-  },
-  data: any
+  id: string;
+  collection: string;
+  version: number
+  createdTime: number,
+  modifiedTime: number
+  data?: {[key: string]: any}
 }
 
 export interface ModelPermissionSummaryData {

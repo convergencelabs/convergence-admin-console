@@ -11,6 +11,15 @@
   cursor: default;
 }
 
+.domainCardDisabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.domainCard.domainCardDisabled:hover {
+  cursor: not-allowed !important;
+}
+
 .title {
   font-size: 24px;
 }

@@ -2,6 +2,7 @@ import {AbstractAuthenticatedService} from "./AbstractAuthenticatedService";
 import {objectToMap} from "../utils/map-utils";
 import {PasswordConfig} from "../models/PasswordConfig";
 import {CONFIG} from "../constants/config";
+import {NamespaceConfig} from "../models/NamespaceConfig";
 
 export class ConfigService extends AbstractAuthenticatedService {
   public getConfig(): Promise<Map<string, any>> {
@@ -37,6 +38,25 @@ export class ConfigService extends AbstractAuthenticatedService {
     body[CONFIG.Passwords.RequireLowerCase] = config.requireLower;
     body[CONFIG.Passwords.RequireNumeric] = config.requireDigit;
     body[CONFIG.Passwords.RequireSpecialCharacters] = config.requireSpecial;
+    return this._post<void>("config", body);
+  }
+
+  public getNamespaceConfig(): Promise<NamespaceConfig> {
+    return this
+      .getAppConfig()
+      .then(configs => {
+        const enabled = configs.get(CONFIG.Namespaces.Enabled) as boolean;
+        const userEnabled = configs.get(CONFIG.Namespaces.UserNamespacesEnabled) as boolean;
+        const defaultNamespace = configs.get(CONFIG.Namespaces.DefaultNamespace) as string;
+        return new NamespaceConfig(enabled, userEnabled, defaultNamespace);
+      });
+  }
+
+  public setNamespaceConfig(config: NamespaceConfig): Promise<void> {
+    const body: any = {};
+    body[CONFIG.Namespaces.Enabled] = config.namespacesEnabled;
+    body[CONFIG.Namespaces.UserNamespacesEnabled] = config.userNamespacesEnabled;
+    body[CONFIG.Namespaces.DefaultNamespace] = config.defaultNamespace;
     return this._post<void>("config", body);
   }
 

@@ -6,6 +6,7 @@ import {FormEvent} from "react";
 import {DomainId} from "../../../../models/DomainId";
 import {DomainJwtKey} from "../../../../models/domain/DomainJwtKey";
 import {FormButtonBar} from "../../../common/FormButtonBar";
+import {GenerateJwtKey} from "../GenerateJwtKey";
 
 export interface DomainJwtKeyFormProps {
   domainId: DomainId;
@@ -22,10 +23,18 @@ interface InjectedProps extends DomainJwtKeyFormProps, FormComponentProps {
 
 }
 
+interface DomainJwtKeyFormState {
+  generateKey: boolean;
+}
 
-class DomainJwtKeyFormComponent extends React.Component<InjectedProps, {}> {
+
+class DomainJwtKeyFormComponent extends React.Component<InjectedProps, DomainJwtKeyFormState> {
   constructor(props: InjectedProps) {
     super(props);
+
+    this.state = {
+      generateKey: false
+    }
   }
 
   public render(): ReactNode {
@@ -45,20 +54,11 @@ class DomainJwtKeyFormComponent extends React.Component<InjectedProps, {}> {
         <Form.Item label="Description">
           {getFieldDecorator('description', {
             initialValue: this.props.initialValue.description,
-            rules: [{required: true, message: 'Please input a Description!', whitespace: true}],
+            rules: [{required: false, message: 'Please input a Description!', whitespace: true}],
           })(
             <Input.TextArea autosize={{minRows: 2, maxRows: 6}}/>
           )}
         </Form.Item>
-        <Form.Item label="Public Key">
-          {getFieldDecorator('key', {
-            initialValue: this.props.initialValue.description,
-            rules: [{required: true, message: 'Please input a Public Key!', whitespace: true}],
-          })(
-            <Input.TextArea autosize={{minRows: 2, maxRows: 6}}/>
-          )}
-        </Form.Item>
-
         {getFieldDecorator('enabled', {
           initialValue: this.props.initialValue.enabled,
           valuePropName: 'checked',
@@ -66,6 +66,20 @@ class DomainJwtKeyFormComponent extends React.Component<InjectedProps, {}> {
         })(
           <Checkbox>Enabled</Checkbox>
         )}
+        <Form.Item label="Public Key">
+          {getFieldDecorator('key', {
+            initialValue: this.props.initialValue.key,
+            rules: [{required: true, message: 'Please input a Public Key!', whitespace: true}],
+          })(
+            <Input.TextArea autosize={{minRows: 6, maxRows: 10}}/>
+          )}
+        </Form.Item>
+
+        <Button htmlType="button" onClick={this._generateKey}>Generate Key</Button>
+        {this.state.generateKey ?
+          (<GenerateJwtKey onCancel={this._onModalCancel} onUse={this._onUseKey}/>)
+          : null
+        }
 
         <Row>
           <Col span={24}>
@@ -77,6 +91,19 @@ class DomainJwtKeyFormComponent extends React.Component<InjectedProps, {}> {
         </Row>
       </Form>
     );
+  }
+
+  private _generateKey = () => {
+    this.setState({generateKey: true});
+  }
+
+  private _onModalCancel = () => {
+    this.setState({generateKey: false});
+  }
+
+  private _onUseKey = (publicKey: string) => {
+    this.setState({generateKey: false});
+    this.props.form.setFieldsValue({key: publicKey});
   }
 
   private _handleCancel = () => {

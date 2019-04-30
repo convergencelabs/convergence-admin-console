@@ -14,6 +14,7 @@ import {authService} from "./services/AuthService";
 import {serverStatusService} from "./services/ServerStatusService";
 import {loggedInUserService} from "./services/LoggedInUserService";
 import {profileStore} from "./stores/ProfileStore";
+import {configStore} from "./stores/ConfigStore";
 import {domainCollectionService} from "./services/domain/DomainCollectionService";
 import {domainModelService} from "./services/domain/DomainModelService";
 import {domainUserService} from "./services/domain/DomainUserService";
@@ -24,6 +25,7 @@ import {domainMemberService} from "./services/domain/DomainMemberService";
 import {domainSessionService} from "./services/domain/DomainSessionService";
 import {domainChatService} from "./services/domain/DomainChatService";
 import {convergenceDomainStore} from "./stores/ConvergenceDomainStore";
+import {breadcrumbsStore} from "./stores/BreacrumsStore";
 import {message, notification} from "antd";
 import {configure} from "mobx"
 
@@ -46,6 +48,8 @@ const stores = {
   authStore,
   profileStore,
   domainStore,
+  configStore,
+  breadcrumbsStore,
 
   convergenceDomainStore
 };
@@ -85,6 +89,10 @@ if (authToken) {
       } else {
         boostrap();
       }
+    })
+    .catch(err => {
+      console.error(err);
+      boostrap();
     });
 } else {
   boostrap();

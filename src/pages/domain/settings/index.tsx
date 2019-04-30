@@ -4,9 +4,8 @@ import {Icon} from 'antd';
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {DomainId} from "../../../models/DomainId";
-import {DomainBreadcrumbProducer} from "../DomainBreadcrumProducer";
 import {Page} from "../../../components/common/Page";
-import {toDomainUrl} from "../../../utils/domain-url";
+import {toDomainRoute} from "../../../utils/domain-url";
 import {DomainGeneralSettingsTab} from "./GeneralSettingsTab";
 import {DomainMembers} from "./MemberSettingsTab";
 import {DangerousSettings} from "./DangerSettingsTab";
@@ -16,19 +15,11 @@ export interface DomainSettingsProps extends RouteComponentProps<{tab: string}> 
 }
 
 export class DomainSettings extends React.Component<DomainSettingsProps, {}> {
-  private readonly _breadcrumbs: DomainBreadcrumbProducer;
-
-  constructor(props: DomainSettingsProps) {
-    super(props);
-
-    this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId, [
-      {title: "Settings"}
-    ]);
-  }
+  private readonly _breadcrumbs =[{title: "Settings"}];
 
   public render(): ReactNode {
     const tab = this.props.match.params.tab || "general";
-    const baseUrl = toDomainUrl("", this.props.domainId, `settings`);
+    const baseUrl = toDomainRoute(this.props.domainId, `settings`);
     return (
       <Page breadcrumbs={this._breadcrumbs}>
         <Card title={ <span><Icon type="setting"/> Settings</span>} className={styles.settingsCard}>

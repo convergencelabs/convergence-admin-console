@@ -1,11 +1,10 @@
-import * as React from 'react';
-import {ReactNode} from "react";
+import React, {ReactNode} from "react";
 import {Route, RouteComponentProps, Switch} from 'react-router';
 import {ServerDashboard} from "../../pages/server/main/ServerDashboard";
 import {Domains} from "../../pages/server/domains/Domains";
 import {NavLayout} from "../../components/common/NavLayout";
 import {ServerSideNavigation} from "../../components/server/ServerSideNavigation";
-import {Settings} from "../../pages/server/main/ServerSettings";
+import {Settings} from "../../pages/server/settings/";
 import {ServerUsers} from "../../pages/server/users/Users";
 import {CreateUser} from "../../pages/server/users/CreateUser";
 import {CreateDomain} from "../../pages/server/domains/CreateDomain";
@@ -16,10 +15,23 @@ import {EditUser} from "../../pages/server/users/EditUser";
 import {SetUserPassword} from "../../pages/server/users/SetUserPassword";
 import {ProfilePage} from "../../pages/server/main/Profile";
 import {PageNotFound} from "../../components/common/PageNotFound";
+import {STORES} from "../../stores/StoreConstants";
+import {injectAs} from "../../utils/mobx-utils";
+import {ConfigStore} from "../../stores/ConfigStore";
 
-export class ServerContainer extends React.Component<RouteComponentProps, {}> {
+interface InjectedProps extends RouteComponentProps {
+  configStore: ConfigStore;
+}
+
+export class ServerContainerComponent extends React.Component<InjectedProps, {}> {
   public render(): ReactNode {
     const {match} = this.props;
+    const namespaces = this.props.configStore.namespacesEnabled ? [
+        <Route exact path={`${match.url}namespaces`} key="0" render={(props) => <Namespaces {...props}/>}/>,
+        <Route exact path={`${match.url}create-namespace`} key="1" render={(props) => <CreateNamespace {...props}/>}/>,
+        <Route exact path={`${match.url}namespaces/:id`} key="2" render={(props) => <EditNamespace {...props}/>}/>
+      ] :
+      [];
     return (
       <NavLayout sideNav={<ServerSideNavigation/>}>
         <Switch>
@@ -27,13 +39,11 @@ export class ServerContainer extends React.Component<RouteComponentProps, {}> {
           <Route exact path={`${match.url}create-user`} render={(props) => <CreateUser {...props}/>}/>
           <Route exact path={`${match.url}users/:username`} render={(props) => <EditUser {...props}/>}/>
           <Route exact path={`${match.url}users/:username/set-password`} render={(props) => <SetUserPassword {...props}/>}/>
-          <Route exact path={`${match.url}namespaces`} render={(props) => <Namespaces {...props}/>}/>
-          <Route exact path={`${match.url}create-namespace`} render={(props) => <CreateNamespace {...props}/>}/>
-          <Route exact path={`${match.url}namespaces/:id`} render={(props) => <EditNamespace {...props}/>}/>
+          {namespaces}
           <Route exact path={`${match.url}domains`} render={(props) => <Domains {...props}/>}/>
           <Route exact path={`${match.url}create-domain`} render={(props) => <CreateDomain {...props}/>}/>
-          <Route exact path={`${match.url}settings`} render={(props) => <Settings />}/>
-          <Route exact path={`${match.url}profile`} render={(props) => <ProfilePage />}/>
+          <Route exact path={`${match.url}settings`} render={(props) => <Settings/>}/>
+          <Route exact path={`${match.url}profile`} render={(props) => <ProfilePage/>}/>
           <Route exact path={`${match.url}`} render={(props) => <ServerDashboard {...props} />}/>
           <Route component={PageNotFound}/>
         </Switch>
@@ -41,3 +51,7 @@ export class ServerContainer extends React.Component<RouteComponentProps, {}> {
     );
   }
 }
+
+const injections = [STORES.CONFIG_STORE];
+export const ServerContainer = injectAs<RouteComponentProps>(injections, ServerContainerComponent);
+

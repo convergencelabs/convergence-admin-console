@@ -1,5 +1,5 @@
 import React, {ReactNode} from "react";
-import {Switch} from 'antd';
+import {Spin, Switch} from 'antd';
 import {DomainId} from "../../../../../models/DomainId";
 import {DescriptionBox} from "../../../../../components/common/DescriptionBox";
 import {makeCancelable, PromiseSubscription} from "../../../../../utils/make-cancelable";
@@ -30,36 +30,41 @@ class AnonymousAuthFormComponent extends React.Component<InjectedProps, Anonymou
     this.state = {
       enabled: null,
       loading: true
-    }
+    };
 
     this._subscription = null;
+  }
 
+  public componentDidMount(): void {
     this._loadAnonymousAuthEnabled();
   }
 
   public componentWillUnmount(): void {
     if (this._subscription !== null) {
       this._subscription.unsubscribe();
+      this._subscription = null
     }
   }
 
   public render(): ReactNode {
     return (
-      <div className={styles.anonymousAuth}>
-        <DescriptionBox>
-          <p>
-            Anonymous authentication allows clients to connect to the system without providing any user credentials.
-            Since the connecting client provides no credentials, the system will not know who the user is. The user will
-            not have a meaningful identity in the system.
-          </p>
-          <span className={styles.warning}>Warning: Enabling anonymous authentication will allow anyone to connect to the system.</span>
-        </DescriptionBox>
-        <div className={styles.controls}>
-          <span className={styles.label}>Anonymous Authentication: </span>
-          <Switch loading={this.state.loading} checked={this.state.enabled!} onChange={this._onChange}/>
-          <span className={styles.enabled}>{this.state.enabled ? "Enabled" : "Disabled"}</span>
+      <Spin spinning={this.state.loading}>
+        <div className={styles.anonymousAuth}>
+          <DescriptionBox>
+            <p>
+              Anonymous authentication allows clients to connect to the system without providing any user credentials.
+              Since the connecting client provides no credentials, the system will not know who the user is. The user
+              will not have a meaningful identity in the system.
+            </p>
+            <span className={styles.warning}>Warning: Enabling anonymous authentication will allow anyone to connect to the system.</span>
+          </DescriptionBox>
+          <div className={styles.controls}>
+            <span className={styles.label}>Anonymous Authentication: </span>
+            <Switch loading={this.state.loading} checked={this.state.enabled!} onChange={this._onChange}/>
+            <span className={styles.enabled}>{this.state.enabled ? "Enabled" : "Disabled"}</span>
+          </div>
         </div>
-      </div>
+      </Spin>
     );
   }
 
@@ -68,7 +73,7 @@ class AnonymousAuthFormComponent extends React.Component<InjectedProps, Anonymou
     const {promise, subscription} = makeCancelable(
       this.props.domainConfigService.setAnonymousAuthEnabled(this.props.domainId, checked));
     this._subscription = subscription;
-    promise.then(enabled => {
+    promise.then(() => {
         this.setState({loading: false});
         this._subscription = null;
       }

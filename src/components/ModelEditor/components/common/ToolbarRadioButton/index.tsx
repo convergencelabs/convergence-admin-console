@@ -1,9 +1,11 @@
 import React, {ReactNode} from "react";
 import classNames from "classnames";
 import styles from "./styles.module.scss";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {IconProp} from "@fortawesome/fontawesome-svg-core";
 
 export interface ToolbarRadioButtonProps {
-  icon: string;
+  icon: IconProp;
   tooltip: string;
   enabled: boolean;
   selected: boolean;
@@ -17,8 +19,6 @@ export class ToolbarRadioButton extends React.Component<ToolbarRadioButtonProps,
   }
 
   public render(): ReactNode {
-
-    const iconClassName = classNames("fa", `fa-${this.props.icon}`);
     const className = classNames(
       styles.toolbarRadioButton,
       this.props.enabled ? styles.enabled : styles.disabled,
@@ -27,7 +27,7 @@ export class ToolbarRadioButton extends React.Component<ToolbarRadioButtonProps,
 
     return (
       <span className={className} onClick={this._onSelect}>
-        <i className={iconClassName} title={this.props.tooltip}/>
+        <FontAwesomeIcon size="sm" icon={this.props.icon}/>
       </span>
     );
   }

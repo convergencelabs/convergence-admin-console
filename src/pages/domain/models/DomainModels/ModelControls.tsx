@@ -10,12 +10,15 @@ import {IReactComponent} from "mobx-react";
 
 const {Option} = Select;
 
-enum SearchMode {
+export enum ModelSearchMode {
   BROWSE = "browse",
   QUERY = "query",
   ID = "id",
 }
+
 interface ModelControlsProps {
+  initialMode?: ModelSearchMode;
+  initialData?: string;
   domainId: DomainId;
   resultsPerPageDefault: number;
   onBrowse(collection: string, perPage: number): void;
@@ -31,19 +34,19 @@ class ModelControlsComponent extends React.Component<InjectedProps, {}> {
 
   public render(): ReactNode {
     const {getFieldDecorator} = this.props.form;
-    const mode = this.props.form.getFieldValue("mode") as SearchMode || SearchMode.BROWSE;
+    const mode = this.props.form.getFieldValue("mode") as ModelSearchMode || ModelSearchMode.BROWSE;
     let fieldLabel = "";
     let buttonLabel = "";
     switch (mode) {
-      case SearchMode.BROWSE:
+      case ModelSearchMode.BROWSE:
         fieldLabel = "Collection";
         buttonLabel = "Browse";
         break;
-      case SearchMode.QUERY:
+      case ModelSearchMode.QUERY:
         fieldLabel = "Query";
         buttonLabel = "Query";
         break;
-      case SearchMode.ID:
+      case ModelSearchMode.ID:
         fieldLabel = "Model Id";
         buttonLabel = "Search";
         break;
@@ -53,29 +56,29 @@ class ModelControlsComponent extends React.Component<InjectedProps, {}> {
       <div className={styles.toolbar}>
         <div className={styles.modeSelector}>
           <span className={styles.label}>Mode:</span>
-          {getFieldDecorator('mode', {initialValue: SearchMode.BROWSE})(
+          {getFieldDecorator('mode', {initialValue: this.props.initialMode || ModelSearchMode.BROWSE})(
             <Select style={{width: 150}}>
-              <Option key={SearchMode.BROWSE} value={SearchMode.BROWSE}>Browse</Option>
-              <Option key={SearchMode.QUERY} value={SearchMode.QUERY}>Query</Option>
-              <Option key={SearchMode.ID} value={SearchMode.ID}>Id Lookup</Option>
+              <Option key={ModelSearchMode.BROWSE} value={ModelSearchMode.BROWSE}>Browse</Option>
+              <Option key={ModelSearchMode.QUERY} value={ModelSearchMode.QUERY}>Query</Option>
+              <Option key={ModelSearchMode.ID} value={ModelSearchMode.ID}>Id Lookup</Option>
             </Select>
           )}
         </div>
         <span className={styles.label}>{fieldLabel}:</span>
         {
-          mode === SearchMode.BROWSE ?
+          mode === ModelSearchMode.BROWSE ?
             getFieldDecorator('collection')(
-              <CollectionAutoComplete className={styles.collection} domainId={this.props.domainId}/>
+              <CollectionAutoComplete initialValue={this.props.initialData} className={styles.collection} domainId={this.props.domainId} />
             ) : null
         }
         {
-          mode === SearchMode.QUERY ?
+          mode === ModelSearchMode.QUERY ?
             getFieldDecorator('query')(
               <Input className={styles.query} placeholder="Enter Query"/>
             ) : null
         }
         {
-          mode === SearchMode.ID ?
+          mode === ModelSearchMode.ID ?
             getFieldDecorator('id')(
               <Input className={styles.id} placeholder="Enter Model Id"/>
             ) : null

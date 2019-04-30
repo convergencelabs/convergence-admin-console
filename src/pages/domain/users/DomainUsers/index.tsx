@@ -11,11 +11,10 @@ import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancel
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {Link} from "react-router-dom";
-import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
 import {DomainId} from "../../../../models/DomainId";
 import {DomainUserService} from "../../../../services/domain/DomainUserService";
 import {DomainUser} from "../../../../models/domain/DomainUser";
-import {toDomainUrl} from "../../../../utils/domain-url";
+import {toDomainRoute} from "../../../../utils/domain-url";
 import {shortDateTime} from "../../../../utils/format-utils";
 
 export interface DomainUsersProps extends RouteComponentProps {
@@ -32,20 +31,18 @@ export interface DomainUsersState {
 }
 
 export class DomainUsersComponent extends React.Component<InjectedProps, DomainUsersState> {
-  private readonly _breadcrumbs: DomainBreadcrumbProducer;
+  private readonly _breadcrumbs = [{title: "Users"}];
   private readonly _userTableColumns: any[];
   private _usersSubscription: PromiseSubscription | null;
 
   constructor(props: InjectedProps) {
     super(props);
 
-    this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId, [{title: "Users"}]);
-
     this._userTableColumns = [{
       title: 'Username',
       dataIndex: 'username',
       sorter: (a: any, b: any) => (a.username as string).localeCompare(b.username),
-      render: (text: string) => <Link to={toDomainUrl("", this.props.domainId,`users/${text}`)}>{text}</Link>
+      render: (text: string) => <Link to={toDomainRoute(this.props.domainId, `users/${text}`)}>{text}</Link>
     }, {
       title: 'Display Name',
       dataIndex: 'displayName',
@@ -113,7 +110,7 @@ export class DomainUsersComponent extends React.Component<InjectedProps, DomainU
   }
 
   private _goToCreate = () => {
-    const url = toDomainUrl("", this.props.domainId, "create-user");
+    const url = toDomainRoute(this.props.domainId, "create-user");
     this.props.history.push(url);
   }
 
@@ -136,12 +133,12 @@ export class DomainUsersComponent extends React.Component<InjectedProps, DomainU
     return (
       <span className={styles.actions}>
         <Tooltip placement="topRight" title="Edit User" mouseEnterDelay={1}>
-          <Link to={toDomainUrl("", this.props.domainId, `users/${value.username}`)}>
+          <Link to={toDomainRoute(this.props.domainId, `users/${value.username}`)}>
             <Button shape="circle" size="small" htmlType="button" icon="edit"/>
           </Link>
         </Tooltip>
         <Tooltip placement="topRight" title="Set Password" mouseEnterDelay={1}>
-          <Link to={toDomainUrl("", this.props.domainId, `users/${value.username}/set-password`)}>
+          <Link to={toDomainRoute(this.props.domainId, `users/${value.username}/set-password`)}>
             <Button shape="circle" size="small" htmlType="button" icon="lock"/>
           </Link>
         </Tooltip>

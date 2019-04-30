@@ -5,15 +5,13 @@ import styles from "./styles.module.css";
 import {SpacedGrid} from "../../../../components/common/SpacedGrid/";
 import {RecentDomains} from "../../../../components/server/FavoriteDomains/";
 import {ServerAlerts} from "../../../../components/server/ServerAlerts/";
-import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
 import {ServerInfo} from "../../../../components/server/ServerInfo";
 
 export class ServerDashboard extends React.Component<{}, {}> {
-  private readonly _breadcrumbs = new BasicBreadcrumbsProducer();
 
-  render(): ReactNode {
+  public render(): ReactNode {
     return (
-      <Page breadcrumbs={this._breadcrumbs}>
+      <Page breadcrumbs={[]}>
         <SpacedGrid>
           <Row gutter={16} type="flex">
             <Col xs={24} sm={24} md={12} lg={12} xl={12} className={styles.col}>

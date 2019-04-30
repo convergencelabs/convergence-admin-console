@@ -11,16 +11,14 @@ import {Page} from "../../../../components/common/Page/";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {RestError} from "../../../../services/RestError";
-import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
 import {DomainCollectionService} from "../../../../services/domain/DomainCollectionService";
 import {Collection} from "../../../../models/domain/Collection";
-import {toDomainUrl} from "../../../../utils/domain-url";
+import {toDomainRoute} from "../../../../utils/domain-url";
 import {DomainId} from "../../../../models/DomainId";
 import {DomainCollectionForm} from "../../../../components/domain/collection/DomainCollectionForm";
-import styles from "./styles.module.css";
 import {CollectionPermissions} from "../../../../models/domain/CollectionPermissions";
 import {ModelSnapshotPolicy} from "../../../../models/domain/ModelSnapshotPolicy";
-
+import styles from "./styles.module.css";
 
 export interface CreateDomainCollectionsProps extends RouteComponentProps {
   domainId: DomainId;
@@ -31,7 +29,10 @@ interface InjectedProps extends CreateDomainCollectionsProps, FormComponentProps
 }
 
 class CreateDomainCollectionComponent extends React.Component<InjectedProps, {}> {
-  private readonly _breadcrumbs: DomainBreadcrumbProducer;
+  private readonly _breadcrumbs = [
+    {title: "Collection", link: "/collections"},
+    {title: "New Collection"}
+  ];
   private readonly _newCollection: Collection;
 
   constructor(props: InjectedProps) {
@@ -53,11 +54,6 @@ class CreateDomainCollectionComponent extends React.Component<InjectedProps, {}>
         false,
         0)
     );
-
-    this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId, [
-      {title: "Collection", link: "/collections"},
-      {title: "New Collection"}
-    ]);
   }
 
   public render(): ReactNode {
@@ -76,7 +72,7 @@ class CreateDomainCollectionComponent extends React.Component<InjectedProps, {}>
   }
 
   private _handleCancel = () => {
-    const url = toDomainUrl("", this.props.domainId, "collections/");
+    const url = toDomainRoute(this.props.domainId, "collections/");
     this.props.history.push(url);
   }
 
@@ -88,7 +84,7 @@ class CreateDomainCollectionComponent extends React.Component<InjectedProps, {}>
           message: 'Collection Created',
           description: `Collection '${collection.id}' successfully created`
         });
-        const url = toDomainUrl("", domainId, "collections/");
+        const url = toDomainRoute(domainId, "collections/");
         this.props.history.push(url);
       }).catch((err) => {
       if (err instanceof RestError) {

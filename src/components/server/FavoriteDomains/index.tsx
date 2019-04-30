@@ -8,6 +8,7 @@ import {SERVICES} from "../../../services/ServiceConstants";
 import {LoggedInUserService} from "../../../services/LoggedInUserService";
 import {Link} from "react-router-dom";
 import styles from "./styles.module.css";
+import {DomainStatus} from "../../../models/DomainStatus";
 
 export interface RecentDomainInjectedProps {
   loggedInUserService: LoggedInUserService
@@ -19,7 +20,8 @@ export interface RecentDomainState {
 }
 
 export class FavoriteDomainsComponent extends React.Component<RecentDomainInjectedProps, RecentDomainState> {
-  private readonly _loadingSubscription: PromiseSubscription;
+  private _loadingSubscription: PromiseSubscription | null;
+  private _reloadInterval: any = null;
 
   constructor(props: RecentDomainInjectedProps) {
     super(props);
@@ -29,20 +31,16 @@ export class FavoriteDomainsComponent extends React.Component<RecentDomainInject
       error: false
     };
 
-    const {promise, subscription} = makeCancelable(this.props.loggedInUserService.getFavoriteDomains());
-    promise
-      .then(domains => {
-        this.setState({domains});
-      })
-      .catch(error => {
-        this.setState({error: true});
-      });
+    this._loadingSubscription = null;
 
-    this._loadingSubscription = subscription;
+    this._loadDomains();
   }
 
   public componentWillUnmount(): void {
-    this._loadingSubscription.unsubscribe();
+    if (this._loadingSubscription !== null) {
+      this._loadingSubscription.unsubscribe();
+      this._loadingSubscription = null;
+    }
   }
 
   public render(): ReactNode {
@@ -68,6 +66,29 @@ export class FavoriteDomainsComponent extends React.Component<RecentDomainInject
         }
       </Card>
     );
+  }
+
+  private _loadDomains = () =>  {
+    const {promise, subscription} = makeCancelable(this.props.loggedInUserService.getFavoriteDomains());
+    this._loadingSubscription = subscription;
+    promise
+      .then(domains => {
+        this.setState({domains});
+
+        this._loadingSubscription = null;
+        if (this._reloadInterval !== null) {
+          clearTimeout(this._reloadInterval);
+          this._reloadInterval = null;
+        }
+
+        if (domains.find(d => d.status === DomainStatus.INITIALIZING || d.status === DomainStatus.DELETING)) {
+          this._reloadInterval = setInterval(this._loadDomains, 5000);
+        }
+      })
+      .catch(error => {
+        this._loadingSubscription = null;
+        this.setState({error: true});
+      });
   }
 }
 

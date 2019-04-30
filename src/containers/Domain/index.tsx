@@ -1,9 +1,9 @@
 import * as React from 'react';
+import {ReactNode} from 'react';
 import {Route, RouteComponentProps, Switch} from 'react-router';
 import {DomainSideNavigation} from "../../components/";
 import {DomainDashboard} from "../../pages/domain/Dashboard/";
 import {DomainDescriptor} from "../../models/DomainDescriptor";
-import {ReactNode} from "react";
 import {DomainService} from "../../services/DomainService";
 import {NavLayout} from "../../components/common/NavLayout";
 import {DomainCollections} from "../../pages/domain/collections/DomainCollections";
@@ -35,6 +35,12 @@ import {EditDomainJwtKey} from "../../pages/domain/auth/jwt/EditDomainJwtKey";
 import {DomainSessions} from "../../pages/domain/sessions/DomainSessions";
 import {PageNotFound} from "../../components/common/PageNotFound";
 import {RestError} from "../../services/RestError";
+import {DomainStatus} from "../../models/DomainStatus";
+import {DomainLoading} from "../../components/domain/common/DomainLoading";
+import {ErrorPage} from "../../components/common/ErrorPage";
+import {DomainInitializing} from "../../components/domain/common/DomainInitializing";
+import {BreadcrumbsStore} from "../../stores/BreacrumsStore";
+import {ConfigStore} from "../../stores/ConfigStore";
 
 export interface DomainRouteParams {
   namespace: string;
@@ -44,6 +50,8 @@ export interface DomainRouteParams {
 interface DomainContainerProps extends RouteComponentProps<DomainRouteParams> {
   domainService: DomainService;
   convergenceDomainStore: ConvergenceDomainStore;
+  breadcrumbsStore: BreadcrumbsStore;
+  configStore: ConfigStore;
 }
 
 interface DomainContainerState {
@@ -53,6 +61,8 @@ interface DomainContainerState {
 }
 
 export class DomainContainerComponent extends React.Component<DomainContainerProps, DomainContainerState> {
+  private _reloadTask: any = null;
+
   constructor(props: DomainContainerProps) {
     super(props);
 
@@ -64,12 +74,14 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
   }
 
   public componentDidMount() {
-    const domainInfo = this._extractNamespaceAndDomain();
-    this._loadDomain(domainInfo);
+    const domainId = this._extractNamespaceAndDomain();
+    this.props.breadcrumbsStore.setDomain(domainId);
+    this._loadDomain(domainId);
   }
 
   public componentWillUnmount() {
     this.props.convergenceDomainStore.disconnect();
+    this.props.breadcrumbsStore.setDomain(null);
   }
 
   public componentDidUpdate(prevProps: Readonly<DomainContainerProps>, prevState: Readonly<DomainContainerState>): void {
@@ -86,10 +98,20 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
 
   public render(): ReactNode {
     const {match} = this.props;
-    const {domainData, convergenceDomain} = this.state;
+    const {domainData, convergenceDomain, error} = this.state;
 
-    if (domainData !== null && convergenceDomain !== null) {
-      const domainId = domainData.toDomainId();
+    if (error !== null) {
+      return (<ErrorPage title="Error Loading Domain" message={error} />);
+    } else if (domainData === null) {
+      return <DomainLoading/>;
+    } else if (domainData!.status === DomainStatus.INITIALIZING) {
+      return <DomainInitializing/>;
+    } else if (domainData!.status === DomainStatus.DELETING) {
+      return (<ErrorPage title="Domain Deleting" message="This domain can not be used because is being deleted." />);
+    } else if (convergenceDomain === null) {
+      return <DomainLoading/>;
+    } else {
+      const domainId = domainData!.toDomainId();
       return (
         <NavLayout sideNav={<DomainSideNavigation domainId={domainId}/>}>
           <Switch>
@@ -132,25 +154,28 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
           </Switch>
         </NavLayout>
       );
-    } else if (this.state.error) {
-      return (<PageNotFound text={this.state.error} />);
-    } else {
-      return null;
     }
   }
 
-  private _loadDomain(domainId: DomainId): void {
+  private _loadDomain = (domainId: DomainId) => {
     this.setState({domainData: null, convergenceDomain: null, error: null});
 
     this.props.domainService
       .getDomain(domainId)
       .then(domainData => {
-        this.setState({ domainData});
-        return this.props.convergenceDomainStore.
-        activateDomain(domainId)
-          .then(() => {
-            this.setState({convergenceDomain: this.props.convergenceDomainStore.domain});
-          })
+        this.setState({domainData});
+
+        if (domainData.status === DomainStatus.INITIALIZING) {
+          if (this._reloadTask !== null) {
+            clearTimeout(this._reloadTask);
+          }
+          this._reloadTask = setTimeout(() => this._loadDomain(domainId), 5000);
+        } else if (domainData.status !== DomainStatus.DELETING) {
+          return this.props.convergenceDomainStore.activateDomain(domainId)
+            .then(() => {
+              this.setState({convergenceDomain: this.props.convergenceDomainStore.domain});
+            });
+        }
       })
       .catch(err => {
         let error = "Unknown error loading domain.";
@@ -174,10 +199,15 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
   }
 
   private _extractNamespaceAndDomain(): DomainId {
-    const {namespace, domainId} = this.props.match.params;
-    return new DomainId(namespace, domainId);
+    if (this.props.configStore.namespacesEnabled) {
+      const {namespace, domainId} = this.props.match.params;
+      return new DomainId(namespace, domainId);
+    } else {
+      const {domainId} = this.props.match.params;
+      return new DomainId(this.props.configStore.defaultNamespace, domainId);
+    }
   }
 }
 
-const INJECTIONS = [SERVICES.DOMAIN_SERVICE, STORES.CONVERGENCE_DOMAIN_STORE];
+const INJECTIONS = [SERVICES.DOMAIN_SERVICE, STORES.CONVERGENCE_DOMAIN_STORE, STORES.BREADCRUMBS_STORE, STORES.CONFIG_STORE];
 export const DomainContainer = injectAs<RouteComponentProps>(INJECTIONS, DomainContainerComponent);

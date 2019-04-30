@@ -1,5 +1,6 @@
-import React from 'react';
-import classNames from 'classnames';
+import React, {ReactNode} from 'react';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faPlusSquare, faMinusSquare} from "@fortawesome/free-regular-svg-icons";
 
 export interface ContainerExpanderProps {
   expanded: boolean,
@@ -7,14 +8,12 @@ export interface ContainerExpanderProps {
 }
 
 export class ContainerExpander extends React.Component<ContainerExpanderProps, any> {
-  render() {
-    let expanderClass = classNames({
-      'expander fa fa-fw': true,
-      'fa-plus-square-o': !this.props.expanded,
-      'fa-minus-square-o': this.props.expanded
-    });
+  public render(): ReactNode {
+    const icon = this.props.expanded ? faMinusSquare : faPlusSquare;
     return (
-      <span className={expanderClass} onClick={this.props.onToggle}/>
+      <span className="expander" onClick={this.props.onToggle}>
+        <FontAwesomeIcon icon={icon} fixedWidth/>
+      </span>
     );
   }
 }

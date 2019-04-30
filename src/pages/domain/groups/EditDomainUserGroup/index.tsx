@@ -1,19 +1,18 @@
-import {Page} from "../../../../components/common/Page/";
 import React, {ReactNode} from "react";
+import {Page} from "../../../../components/common/Page/";
 import {Card, notification, Icon} from "antd";
 import {FormComponentProps} from "antd/lib/form";
-import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
-import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
 import {DomainId} from "../../../../models/DomainId";
-import {toDomainUrl} from "../../../../utils/domain-url";
+import {toDomainRoute} from "../../../../utils/domain-url";
 import {DomainUserGroupForm} from "../../../../components/domain/group/DomainUserGroupForm/";
 import {DomainGroupService} from "../../../../services/domain/DomainGroupService";
 import {DomainUserGroup} from "../../../../models/domain/DomainUserGroup";
 import {RestError} from "../../../../services/RestError";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
+import styles from "./styles.module.css";
 
 export interface EditDomainUserGroupProps extends RouteComponentProps<{id: string}> {
   domainId: DomainId;
@@ -28,16 +27,14 @@ export interface EditDomainUserGroupState {
 }
 
 class EditDomainUserGroupComponent extends React.Component<InjectedProps, EditDomainUserGroupState> {
-  private readonly _breadcrumbs: DomainBreadcrumbProducer;
+  private readonly _breadcrumbs = [
+    {title: "Groups", link: toDomainRoute(this.props.domainId, "groups/")},
+    {title: this.props.match.params.id}
+  ];
   private _groupSubscription: PromiseSubscription | null;
 
   constructor(props: InjectedProps) {
     super(props);
-
-    this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId, [
-      {title: "Groups", link: toDomainUrl("", this.props.domainId, "groups/")},
-      {title: this.props.match.params.id}
-    ]);
 
     this.state = {
       initialGroup: null
@@ -68,7 +65,7 @@ class EditDomainUserGroupComponent extends React.Component<InjectedProps, EditDo
   }
 
   private _handleCancel = () => {
-    const url = toDomainUrl("", this.props.domainId, "groups/");
+    const url = toDomainRoute(this.props.domainId, "groups/");
     this.props.history.push(url);
   }
 
@@ -79,7 +76,7 @@ class EditDomainUserGroupComponent extends React.Component<InjectedProps, EditDo
           message: 'Group Updated',
           description: `Group '${group.id}' successfully created.`
         });
-        const url = toDomainUrl("", this.props.domainId, "groups/");
+        const url = toDomainRoute(this.props.domainId, "groups/");
         this.props.history.push(url);
       }).catch((err) => {
       if (err instanceof RestError) {
@@ -103,9 +100,8 @@ class EditDomainUserGroupComponent extends React.Component<InjectedProps, EditDo
 
     promise.then(group => {
       this.setState({initialGroup: group});
-    })
+    });
   }
-
 }
 
 const injections = [SERVICES.DOMAIN_GROUP_SERVICE];

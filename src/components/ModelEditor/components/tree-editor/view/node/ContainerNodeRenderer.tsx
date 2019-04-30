@@ -8,8 +8,6 @@ import {PropertyValidator, PropertyValidation} from "../../validator/PropertyVal
 import {SapphireEvent} from "../../../../SapphireEvent";
 import {ContainerNode, NewNodeStateEvent, NodeCollapsedEvent, NodeExpandedEvent} from "../../model/ContainerNode";
 
-
-
 export interface ContainerNodeRendererProps extends NodeRendererProps {
   node: ContainerNode<any>;
 }

@@ -13,7 +13,7 @@ export class DomainStatusIcon extends React.Component<DomainStatusIconProps, {}>
     const icon = this._iconType(this.props.status);
     const className = this._className(this.props.status);
     return (
-      <Icon type={icon} className={className}/>
+      <Icon type={icon} className={className} spin={this.props.status === DomainStatus.INITIALIZING}/>
     );
   }
 
@@ -26,7 +26,7 @@ export class DomainStatusIcon extends React.Component<DomainStatusIconProps, {}>
       case DomainStatus.MAINTENANCE:
         return "pause-circle";
       case DomainStatus.INITIALIZING:
-        return "loading";
+        return "sync";
       case DomainStatus.DELETING:
         return "stop";
       case DomainStatus.ERROR:

@@ -1,7 +1,5 @@
-import * as React from 'react';
-import {Page} from "../../../../components/common/Page/index";
-import {ReactNode} from "react";
-import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
+import React, {ReactNode} from "react";
+import {Page} from "../../../../components/common/Page/";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {ProfileStore} from "../../../../stores/ProfileStore";
 import {STORES} from "../../../../stores/StoreConstants";
@@ -13,16 +11,16 @@ interface InjectedProps {
 }
 
 class ProfilePageComponent extends React.Component<InjectedProps, {}> {
-  private readonly _breadcrumbs = new BasicBreadcrumbsProducer([
+  private readonly _breadcrumbs = [
     {title: "Users", link: "/namespaces"},
     {title: "Profile"}
-  ]);
+  ];
 
   public render(): ReactNode {
     return (
       <Page breadcrumbs={this._breadcrumbs}>
-        <ProfileForm username={this.props.profileStore.profile!.username}></ProfileForm>
-        <ChangePasswordForm></ChangePasswordForm>
+        <ProfileForm username={this.props.profileStore.profile!.username}/>
+        <ChangePasswordForm/>
       </Page>
     );
   }

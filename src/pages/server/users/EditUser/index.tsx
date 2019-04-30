@@ -1,11 +1,8 @@
-import React, {ReactNode} from "react";
+import React, {ReactNode, FormEvent} from "react";
 import {Page} from "../../../../components/common/Page/";
-import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
-import {Card, Col, notification, Row} from "antd";
-import {Form, Input, Tooltip, Icon, Button, Select} from 'antd';
+import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
+import {Card, Col, notification, Row, Form, Input, Tooltip, Icon, Button, Select} from "antd";
 import {FormComponentProps} from "antd/lib/form";
-import {FormEvent} from "react";
-import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
 import {UpdateUserData, UserService} from "../../../../services/UserService";
@@ -14,6 +11,7 @@ import {SERVICES} from "../../../../services/ServiceConstants";
 import {RestError} from "../../../../services/RestError";
 import {ConvergenceUser} from "../../../../models/ConvergenceUser";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
+import styles from "./styles.module.css";
 
 interface InjectedProps extends RouteComponentProps<{ username: string }>, FormComponentProps {
   userService: UserService;
@@ -24,17 +22,17 @@ export interface EditUserState {
 }
 
 class EditUserComponent extends React.Component<InjectedProps, EditUserState> {
-  private readonly _breadcrumbs: BasicBreadcrumbsProducer;
+  private readonly _breadcrumbs: IBreadcrumbSegment[];
   private _userSubscription: PromiseSubscription | null;
 
   constructor(props: InjectedProps) {
     super(props);
 
     const username = this.props.match.params.username;
-    this._breadcrumbs = new BasicBreadcrumbsProducer([
+    this._breadcrumbs = [
       {title: "Users", link: "/users/"},
       {title: username}
-    ]);
+    ];
 
     this.state = {
       user: null

@@ -1,7 +1,5 @@
-import * as React from 'react';
+import React, {KeyboardEvent, ReactNode} from 'react';
 import {Page} from "../../../../components/common/Page/";
-import {ReactNode} from "react";
-import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
 import {Button, Card, Icon, Input, notification, Popconfirm, Table} from "antd";
 import styles from "./styles.module.css";
 import {injectAs} from "../../../../utils/mobx-utils";
@@ -12,18 +10,22 @@ import {DomainDescriptor} from "../../../../models/DomainDescriptor";
 import {RouteComponentProps} from "react-router";
 import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
 import Tooltip from "antd/es/tooltip";
-import {KeyboardEvent} from "react";
-import {Link} from "react-router-dom";
 import {NamespaceAutoComplete} from "../../../../components/server/NamespaceAutoComplete";
 import {LoggedInUserService} from "../../../../services/LoggedInUserService";
 import {DomainId} from "../../../../models/DomainId";
 import {formatDomainStatus} from "../../../../utils/format-utils";
 import {DomainStatusIcon} from "../../../../components/common/DomainStatusIcon";
-import {InfoTableRow} from "../../../../components/server/InfoTable";
+import {DomainStatus} from "../../../../models/DomainStatus";
+import {DisableableLink} from "../../../../components/common/DisableableLink";
+import {STORES} from "../../../../stores/StoreConstants";
+import {ConfigStore} from "../../../../stores/ConfigStore";
+import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
+import {toDomainRoute} from "../../../../utils/domain-url";
 
 interface InjectedProps extends RouteComponentProps {
   domainService: DomainService;
   loggedInUserService: LoggedInUserService;
+  configStore: ConfigStore;
 }
 
 export interface DomainsState {
@@ -34,10 +36,11 @@ export interface DomainsState {
 }
 
 export class DomainsComponent extends React.Component<InjectedProps, DomainsState> {
-  private readonly _breadcrumbs = new BasicBreadcrumbsProducer([{title: "Domains"}]);
+  private readonly _breadcrumbs: IBreadcrumbSegment[] = ([{title: "Domains"}]);
   private readonly _domainTableColumns: any[];
   private _domainSubscription: PromiseSubscription | null;
   private _favoritesSubscription: PromiseSubscription | null;
+  private _reloadInterval: any = null;
 
   constructor(props: InjectedProps) {
     super(props);
@@ -46,7 +49,11 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
       title: 'Display Name',
       dataIndex: 'displayName',
       sorter: (a: any, b: any) => (a.displayName as string).localeCompare(b.displayName),
-      render: (text: string, domain: DomainDescriptor) => <Link to={`/domain/${domain.namespace}/${domain.id}/`}>{text}</Link>
+      render: (text: string, domain: DomainDescriptor) => {
+        const disabled = domain.status === DomainStatus.INITIALIZING || domain.status === DomainStatus.DELETING;
+        return <DisableableLink to={toDomainRoute(new DomainId(domain.namespace, domain.id), "")}
+                                disabled={disabled}>{text}</DisableableLink>
+      }
     }, {
       title: 'Namespace',
       dataIndex: 'namespace',
@@ -114,8 +121,9 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
   private _renderToolbar(): ReactNode {
     return (
       <CardTitleToolbar title="Domains" icon="database">
-        <NamespaceAutoComplete placeholder={"Filter Namespace"}
-                               onChange={this._onNamespaceChange}/>
+        {this.props.configStore.namespacesEnabled ?
+          <NamespaceAutoComplete placeholder={"Filter Namespace"} onChange={this._onNamespaceChange}/> : null
+        }
         <span className={styles.search}>
           <Input placeholder="Search Domains" addonAfter={<Icon type="search"/>} onKeyUp={this._onFilterChange}/>
         </span>
@@ -218,7 +226,7 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
         this._loadDomains();
         notification.success({
           message: 'Success',
-          description: `Domain '${namespace}/${id}' deleted.`,
+          description: `Domain '${namespace}/${id}' is marked for deletion.`,
         });
       })
       .catch(err => {
@@ -244,6 +252,14 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
       this._domainSubscription = null;
       const favorites = favs.map(f => f.toDomainId());
       this.setState({domains, favorites});
+      if (this._reloadInterval !== null) {
+        clearTimeout(this._reloadInterval);
+        this._reloadInterval = null;
+      }
+
+      if (domains.find(d => d.status === DomainStatus.INITIALIZING || d.status === DomainStatus.DELETING)) {
+        this._reloadInterval = setInterval(this._loadDomains, 5000);
+      }
     }).catch(err => {
       this._domainSubscription = null;
       this.setState({domains: null});
@@ -251,4 +267,5 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
   }
 }
 
-export const Domains = injectAs<RouteComponentProps>([SERVICES.DOMAIN_SERVICE, SERVICES.LOGGED_IN_USER_SERVICE], DomainsComponent);
+const injections = [SERVICES.DOMAIN_SERVICE, SERVICES.LOGGED_IN_USER_SERVICE, STORES.CONFIG_STORE];
+export const Domains = injectAs<RouteComponentProps>(injections, DomainsComponent);

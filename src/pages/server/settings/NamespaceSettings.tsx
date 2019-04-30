@@ -1,24 +1,32 @@
 import React, {ReactNode} from "react";
-import {Button, Form, Input, Select} from "antd";
-import {FormFieldWithHelp} from "../../../../components/common/FormFieldWithHelp/";
-import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
+import {Button, Form, Input, notification, Select} from "antd";
+import {FormFieldWithHelp} from "../../../components/common/FormFieldWithHelp/";
+import {FormButtonBar} from "../../../components/common/FormButtonBar/";
 import {FormComponentProps} from "antd/lib/form";
 import {FormEvent} from "react";
-import {injectAs} from "../../../../utils/mobx-utils";
-import {SERVICES} from "../../../../services/ServiceConstants";
-import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
-import {ConfigService} from "../../../../services/ConfigService";
-import {CONFIG} from "../../../../constants/config";
+import {injectAs} from "../../../utils/mobx-utils";
+import {SERVICES} from "../../../services/ServiceConstants";
+import {makeCancelable, PromiseSubscription} from "../../../utils/make-cancelable";
+import {ConfigService} from "../../../services/ConfigService";
+import {CONFIG} from "../../../constants/config";
+import {NamespaceConfig} from "../../../models/NamespaceConfig";
+import {STORES} from "../../../stores/StoreConstants";
+import {ConfigStore} from "../../../stores/ConfigStore";
 
 const {Option} = Select;
 
 interface InjectedProps extends FormComponentProps {
   configService: ConfigService;
+  configStore: ConfigStore;
 }
 
 interface NamespaceAndDomainSettingsState {
   configs: Map<string, any> | null;
+  namespacesEnabled: boolean;
 }
+
+const ENABLED = "enabled";
+const DISABLED = "disabled";
 
 class NamespaceSettingsComponent extends React.Component<InjectedProps, NamespaceAndDomainSettingsState> {
 
@@ -30,7 +38,8 @@ class NamespaceSettingsComponent extends React.Component<InjectedProps, Namespac
     this._configSubscription = null;
 
     this.state = {
-      configs: null
+      configs: null,
+      namespacesEnabled: this.props.configStore.namespacesEnabled
     };
 
     this._loadConfig();
@@ -39,11 +48,9 @@ class NamespaceSettingsComponent extends React.Component<InjectedProps, Namespac
   public render(): ReactNode {
     if (this.state.configs !== null) {
       const {getFieldDecorator} = this.props.form;
-      const namespacesEnabled = this.state.configs.get(CONFIG.Namespaces.Enabled) ? "enabled" : "disabled";
-      const userNamespacesEnabled = this.state.configs.get(CONFIG.Namespaces.UserNamespacesEnabled) ? "enabled" : "disabled";
+      const namespacesEnabled = this.state.configs.get(CONFIG.Namespaces.Enabled) ? ENABLED : DISABLED;
+      const userNamespacesEnabled = this.state.configs.get(CONFIG.Namespaces.UserNamespacesEnabled) ? ENABLED : DISABLED;
       const defaultNamespace = this.state.configs.get(CONFIG.Namespaces.DefaultNamespace);
-      const domainMode = this.state.configs.get(CONFIG.Domains.Mode);
-      const defaultDomain = this.state.configs.get(CONFIG.Domains.DefaultDomain);
 
       return (
         <Form onSubmit={this._handleSubmit} layout="horizontal">
@@ -57,9 +64,9 @@ class NamespaceSettingsComponent extends React.Component<InjectedProps, Namespac
               initialValue: namespacesEnabled,
               rules: []
             })(
-              <Select>
-                <Option key="enabled" value="enabled">Enabled</Option>
-                <Option key="disabled" value="disabled">Disabled</Option>
+              <Select onChange={(val: string) => this.setState({namespacesEnabled: val === ENABLED})}>
+                <Option key={ENABLED} value={ENABLED}>Enabled</Option>
+                <Option key={DISABLED} value={DISABLED}>Disabled</Option>
               </Select>
             )}
           </Form.Item>
@@ -76,9 +83,9 @@ class NamespaceSettingsComponent extends React.Component<InjectedProps, Namespac
               initialValue: userNamespacesEnabled,
               rules: []
             })(
-              <Select>
-                <Option key="enabled" value="enabled">Enabled</Option>
-                <Option key="disabled" value="disabled">Disabled</Option>
+              <Select disabled={!this.state.namespacesEnabled}>
+                <Option key={ENABLED} value={ENABLED}>Enabled</Option>
+                <Option key={DISABLED} value={DISABLED}>Disabled</Option>
               </Select>
             )}
           </Form.Item>
@@ -119,7 +126,30 @@ class NamespaceSettingsComponent extends React.Component<InjectedProps, Namespac
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        const {defaultNamespace, namespacesEnabled, userNamespacesEnabled} = values;
+        const config = new NamespaceConfig(
+          namespacesEnabled === ENABLED,
+          userNamespacesEnabled === ENABLED,
+          defaultNamespace
+        );
+        this.props.configService
+          .setNamespaceConfig(config)
+          .then(() => {
+            this.props.configStore.setDefaultNamespace(defaultNamespace);
+            this.props.configStore.setNamespacesEnabled(namespacesEnabled === ENABLED);
+            this.props.configStore.setUserNamespacesEnabled(userNamespacesEnabled === ENABLED);
+            notification.success({
+              message: "Configuration Saved",
+              description: "Namespace configuration successfully saved."
+            })
+          })
+          .catch(err => {
+            console.error(err);
+            notification.error({
+              message: "Configuration Not Saved",
+              description: "Namespace  configuration could not be saved."
+            })
+          });
       }
     });
   }
@@ -137,4 +167,5 @@ class NamespaceSettingsComponent extends React.Component<InjectedProps, Namespac
   }
 }
 
-export const NamespaceAndDomainSettings = injectAs<{}>([SERVICES.CONFIG_SERVICE], Form.create<{}>()(NamespaceSettingsComponent));
+const injections = [SERVICES.CONFIG_SERVICE, STORES.CONFIG_STORE];
+export const NamespaceSettings = injectAs<{}>(injections, Form.create<{}>()(NamespaceSettingsComponent));

@@ -6,7 +6,7 @@ export interface CopyAddonButtonProps {
   copyText: string;
 }
 
-export class CopyAddonButton extends Component<CopyAddonButtonProps, {}> {
+export class CopyAddOnButton extends Component<CopyAddonButtonProps, {}> {
   public render(): ReactNode {
     return (
       <CopyToClipboard text={this.props.copyText}>

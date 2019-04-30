@@ -1,6 +1,8 @@
 import React, {ReactNode} from "react";
 import {Subscription} from "rxjs";
 import {TreeModel} from "../../model/TreeModel";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faTimes, faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
 import styles from "./styles.module.scss";
 
 export interface SearchControlProps {
@@ -112,9 +114,15 @@ export class SearchControl extends React.Component<SearchControlProps, SearchCon
                onChange={() => {}}
                onKeyDown={this.onKeyDown}
                onInput={this.onInput}/>{resultIndicator}
-        <i className={`fa fa-chevron-up ${styles.button}`} onClick={this.onPrev}/>
-        <i className={`fa fa-chevron-down ${styles.button}`} onClick={this.onNext}/>
-        <i className={`fa fa-times ${styles.button}`} onClick={this.onClear}/>
+        <span className={styles.button} onClick={this.onPrev}>
+          <FontAwesomeIcon icon={faChevronUp}/>
+        </span>
+        <span className={styles.button} onClick={this.onNext}>
+          <FontAwesomeIcon icon={faChevronDown}/>
+        </span>
+        <span className={styles.button} onClick={this.onClear}>
+          <FontAwesomeIcon icon={faTimes}/>
+        </span>
       </div>
     );
   }

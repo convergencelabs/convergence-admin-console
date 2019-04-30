@@ -2,7 +2,6 @@ import React, {ReactNode} from 'react';
 import {Page} from "../../../../components/common/Page/";
 import {Card, notification, Tag, Form, Icon} from "antd";
 import {FormComponentProps} from "antd/lib/form";
-import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
@@ -10,8 +9,9 @@ import {SetPasswordForm} from "../../../../components/common/SetPasswordForm/"
 import {RestError} from "../../../../services/RestError";
 import {DomainId} from "../../../../models/DomainId";
 import {DomainUserService} from "../../../../services/domain/DomainUserService";
-import {DomainBreadcrumbProducer} from "../../DomainBreadcrumProducer";
-import {toDomainUrl} from "../../../../utils/domain-url";
+import {toDomainRoute} from "../../../../utils/domain-url";
+import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
+import styles from "./styles.module.css";
 
 export interface SetDomainUserPasswordProps extends RouteComponentProps<{ username: string }> {
   domainId: DomainId;
@@ -22,17 +22,17 @@ interface InjectedProps extends SetDomainUserPasswordProps, FormComponentProps {
 }
 
 class SetDomainUserPasswordComponent extends React.Component<InjectedProps, {}> {
-  private readonly _breadcrumbs: DomainBreadcrumbProducer;
+  private readonly _breadcrumbs: IBreadcrumbSegment[];
 
   constructor(props: InjectedProps) {
     super(props);
 
     const username = this.props.match.params.username;
-    this._breadcrumbs = new DomainBreadcrumbProducer(this.props.domainId, [
-      {title: "Users", link: toDomainUrl("", this.props.domainId, "users")},
-      {title: username, link: toDomainUrl("", this.props.domainId, `users/${username}`)},
+    this._breadcrumbs = [
+      {title: "Users", link: toDomainRoute(this.props.domainId, "users")},
+      {title: username, link: toDomainRoute(this.props.domainId, `users/${username}`)},
       {title: "Set Password"}
-    ]);
+    ];
   }
 
   public render(): ReactNode {
@@ -51,7 +51,7 @@ class SetDomainUserPasswordComponent extends React.Component<InjectedProps, {}> 
   }
 
   private _handleCancel = () => {
-    this.props.history.push(toDomainUrl("", this.props.domainId, "users"));
+    this.props.history.push(toDomainRoute(this.props.domainId, "users"));
   }
 
   private _handleSetPassword = (password: string) => {
@@ -62,7 +62,7 @@ class SetDomainUserPasswordComponent extends React.Component<InjectedProps, {}> 
           message: 'namespaces Created',
           description: `Password for '${username}' successfully set.`
         });
-        this.props.history.push(toDomainUrl("", this.props.domainId, "users"));
+        this.props.history.push(toDomainRoute(this.props.domainId, "users"));
         return true;
       }).catch((err) => {
       console.error(err);

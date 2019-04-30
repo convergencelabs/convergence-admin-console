@@ -74,3 +74,8 @@
 .modelExpanderToolbar :global .ant-btn {
   margin-left: 5px;
 }
+
+.dataValue {
+  max-height: 4em;
+  overflow: auto;
+}

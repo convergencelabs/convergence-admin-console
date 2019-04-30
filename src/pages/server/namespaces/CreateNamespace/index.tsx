@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {Page} from "../../../../components/common/Page/";
 import {ReactNode} from "react";
-import {BasicBreadcrumbsProducer} from "../../../../stores/BreacrumStore";
 import {Card, Col, notification, Row} from "antd";
 import {Form, Input, Tooltip, Icon, Button} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
@@ -19,10 +18,10 @@ interface InjectedProps extends RouteComponentProps, FormComponentProps {
 }
 
 class CreateNamespaceComponent extends React.Component<InjectedProps, {}> {
-  private readonly _breadcrumbs = new BasicBreadcrumbsProducer([
+  private readonly _breadcrumbs = [
     {title: "Namespaces", link: "/namespaces"},
     {title: "New Namespace"}
-  ]);
+  ];
 
   public render(): ReactNode {
     const {getFieldDecorator} = this.props.form;

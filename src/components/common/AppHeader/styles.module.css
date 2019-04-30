@@ -14,9 +14,11 @@
 }
 
 .logoName {
-  color: #3a4554;
   font-size: 24px;
-  font-weight: 700;
+  font-weight: 300;
+  color: #007bc3;
+  font-family: "Century Gothic", sans-serif;
+  text-transform: uppercase;
 }
 
 .slogan {
