@@ -1,8 +1,8 @@
 import * as React from 'react';
+import {ReactNode} from 'react';
 import {Page} from "../../../../components/common/Page/";
-import {ReactNode} from "react";
 import Tooltip from "antd/es/tooltip";
-import {Card, Dropdown, Menu, Table, Icon, notification, Popconfirm} from "antd";
+import {Card, Dropdown, Icon, Menu, notification, Popconfirm, Table} from "antd";
 import styles from "./styles.module.css";
 import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
 import {RouteComponentProps} from "react-router";
@@ -25,6 +25,7 @@ import queryString from "query-string";
 import "brace";
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
+import {PagedData} from "../../../../services/domain/common-rest-data";
 
 export interface DomainModelsProps extends RouteComponentProps {
   domainId: DomainId;
@@ -36,10 +37,12 @@ interface InjectedProps extends DomainModelsProps {
 
 export interface DomainModelsState {
   loading: boolean;
-  models: Model[];
+  models: PagedData<Model>;
+  pageSize: number;
+  page: number;
   columns: any[];
-  initialMode?: ModelSearchMode;
-  initialData?: string;
+  mode?: ModelSearchMode;
+  queryData?: string;
 }
 
 // Fixme this really needs to be broken up into a few classes.
@@ -87,26 +90,30 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
     }
 
     this.state = {
-      models: [],
+      pageSize: 25,
+      page: 1,
+      models: {data: [], startIndex: 0, totalResults: 0},
       columns: [],
       loading: false,
-      initialMode: mode as ModelSearchMode,
-      initialData: data
+      mode: mode as ModelSearchMode,
+      queryData: data
     };
 
   }
 
   public componentDidMount(): void {
-    switch (this.state.initialMode) {
-      case ModelSearchMode.BROWSE:
-        this._browse(this.state.initialData!, 25);
-        break;
-      case ModelSearchMode.ID:
-        this._lookup(this.state.initialData!, 25);
-        break;
-      case ModelSearchMode.QUERY:
-        this._query(this.state.initialData!, 25);
-        break;
+    if (this.state.queryData) {
+      switch (this.state.mode) {
+        case ModelSearchMode.BROWSE:
+          this._browse(this.state.queryData, this.state.pageSize, 1);
+          break;
+        case ModelSearchMode.ID:
+          this._lookup(this.state.queryData);
+          break;
+        case ModelSearchMode.QUERY:
+          this._query(this.state.queryData, this.state.pageSize);
+          break;
+      }
     }
   }
 
@@ -125,59 +132,105 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
   }
 
   public render(): ReactNode {
+    const pagination = this.state.mode === ModelSearchMode.BROWSE ? {
+      pageSize: this.state.pageSize,
+      current: this.state.page,
+      total: this.state.models.totalResults,
+      onChange: this._pageChange
+    } : false;
+
     return (
       <Page breadcrumbs={this._breadcrumbs}>
         <Card title={this._renderToolbar()} className={styles.modelCard}>
           <ModelControls
-            initialData={this.state.initialData}
-            initialMode={this.state.initialMode}
+            initialData={this.state.queryData}
+            initialMode={this.state.mode}
             domainId={this.props.domainId}
             resultsPerPageDefault={25}
             onBrowse={this._browse}
             onQuery={this._query}
             onIdLookup={this._lookup}
+            onModeChange={this._modeChange}
           />
           <Table columns={this.state.columns}
                  size="middle"
                  rowKey="id"
                  bordered={true}
                  loading={this.state.loading}
-                 dataSource={this.state.models}
+                 dataSource={this.state.models.data}
                  expandedRowRender={this._expander}
+                 pagination={pagination}
           />
         </Card>
       </Page>
     );
   }
 
-  private _browse = (collection: string, perPage: number) => {
-    const query = `SELECT FROM ${collection} LIMIT ${perPage} OFFSET ${0}`;
-    this._query(query, perPage);
+  private _pageChange = (page: number, pageSize?: number) => {
+    this.setState({page});
+
+    if (this.state.mode === ModelSearchMode.BROWSE) {
+      this._browse(this.state.queryData!, this.state.pageSize, page)
+    }
   }
 
-  private _query = (query: string, perPage: number) => {
-    if (query.endsWith(";")) {
-      query = query.substring(0, query.length - 1);
+  private _modeChange = (mode: ModelSearchMode) => {
+    this.setState({mode, queryData: "", models: {data: [], totalResults: 0, startIndex: 0}});
+  }
+
+  private _browse = (collection: string, pageSize: number, page?: number) => {
+    if (!collection) {
+      this.setState({loading: false, pageSize, models: {data: [], startIndex: 0, totalResults: 0}});
+      return;
     }
 
-    this.setState({loading: true});
+    if (page === undefined) {
+      page = 1;
+    }
+
+    this.setState({loading: true, queryData: collection, pageSize, page, mode: ModelSearchMode.BROWSE});
+
+    const offset = page === undefined ? 0 : ((page - 1) * pageSize);
+    const query = `SELECT FROM ${collection} LIMIT ${pageSize} OFFSET ${offset}`;
     this.props.domainModelService
       .queryModels(this.props.domainId, query)
       .then(models => this._updateResults(models));
   }
 
-  private _lookup = (id: string, perPage: number) => {
-    this.setState({loading: true});
+  private _query = (query: string, pageSize: number) => {
+    if (!query) {
+      this.setState({loading: false, pageSize, models: {data: [], startIndex: 0, totalResults: 0}});
+      return;
+    }
+
+    if (query.endsWith(";")) {
+      query = query.substring(0, query.length - 1);
+    }
+
+    this.setState({loading: true, pageSize, queryData: query});
+    this.props.domainModelService
+      .queryModels(this.props.domainId, query)
+      .then(models => this._updateResults(models));
+  }
+
+  private _lookup = (id: string) => {
+    if (!id) {
+      this.setState({loading: false, pageSize: 1, models: {data: [], startIndex: 0, totalResults: 0}});
+      return;
+    }
+
+    this.setState({loading: true, pageSize: 1, queryData: id});
     this.props.domainModelService
       .getModelById(this.props.domainId, id)
       .then(model => {
-        this._updateResults([model]);
+        // FIXME check for a null model.
+        this._updateResults({data: [model], totalResults: 1, startIndex: 0});
       });
   }
 
-  private _updateResults(models: Model[]): void {
+  private _updateResults(models: PagedData<Model>): void {
     const dataCols: Map<string, any> = new Map();
-    models.forEach(model => {
+    models.data.forEach(model => {
       const data = model.data!;
       Object.keys(data).forEach(key => {
         dataCols.set(key, typeof data[key]);
@@ -299,7 +352,12 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
             description: `The model '${id}' was deleted.`
           });
 
-          const models = this.state.models.filter((m: Model) => m.id !== id);
+          const data = this.state.models.data.filter((m: Model) => m.id !== id);
+          const models = {
+            data,
+            startIndex: this.state.models.startIndex,
+            totalResults: this.state.models.totalResults
+          };
           this.setState({models});
         }
       )

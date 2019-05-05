@@ -21,6 +21,7 @@ interface ModelControlsProps {
   initialData?: string;
   domainId: DomainId;
   resultsPerPageDefault: number;
+  onModeChange(mode: ModelSearchMode): void;
   onBrowse(collection: string, perPage: number): void;
   onQuery(query: string, perPage: number): void;
   onIdLookup(modelId: string, perPage: number): void;
@@ -57,7 +58,7 @@ class ModelControlsComponent extends React.Component<InjectedProps, {}> {
         <div className={styles.modeSelector}>
           <span className={styles.label}>Mode:</span>
           {getFieldDecorator('mode', {initialValue: this.props.initialMode || ModelSearchMode.BROWSE})(
-            <Select style={{width: 150}}>
+            <Select style={{width: 150}} onChange={this.props.onModeChange}>
               <Option key={ModelSearchMode.BROWSE} value={ModelSearchMode.BROWSE}>Browse</Option>
               <Option key={ModelSearchMode.QUERY} value={ModelSearchMode.QUERY}>Query</Option>
               <Option key={ModelSearchMode.ID} value={ModelSearchMode.ID}>Id Lookup</Option>
@@ -83,10 +84,15 @@ class ModelControlsComponent extends React.Component<InjectedProps, {}> {
               <Input className={styles.id} placeholder="Enter Model Id"/>
             ) : null
         }
-        <span className={styles.label}>Results Per Page:</span>
-        {getFieldDecorator('resultsPerPage', {initialValue: this.props.resultsPerPageDefault || 20})(
-          <InputNumber/>
-        )}
+        {
+          mode === ModelSearchMode.BROWSE ?
+            <span>
+              <span className={styles.label}>Results Per Page:</span>
+              {getFieldDecorator('resultsPerPage', {initialValue: this.props.resultsPerPageDefault || 20})(
+                <InputNumber/>
+              )}
+            </span>: null
+        }
         <Button htmlType="button"
                 type="primary"
                 className={styles.button}
