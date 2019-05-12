@@ -6,13 +6,13 @@
   "homepage": "http://www.convergencelabs.com",
   "repository": {
     "type": "git",
-    "url": "https://gitlab.dev.int.convergencelabs.tech/ui/convergence-admin-console.git"
+    "url": "https://gitlab.dev.convergencelabs.tech/ui/convergence-admin-console.git"
   },
-  "bugs": "https://gitlab.dev.int.convergencelabs.tech/ui/convergence-admin-console/issues",
+  "bugs": "https://gitlab.dev.convergencelabs.tech/ui/convergence-admin-console/issues",
   "scripts": {
   },
   "publishConfig": {
-    "registry": "https://nexus.dev.int.convergencelabs.tech/repository/npm-convergence/"
+    "registry": "https://nexus.dev.convergencelabs.tech/repository/npm-convergence/"
   },
   "dependencies": {},
   "devDependencies": {}
