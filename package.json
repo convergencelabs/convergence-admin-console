@@ -1,6 +1,6 @@
 {
   "name": "@convergence-internal/admin-console",
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0-SNAPSHOT",
   "repository": {
     "type": "git",
     "url": "https://gitlab.dev.int.convergencelabs.tech/ui/convergence-admin-console.git"

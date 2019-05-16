@@ -1,3 +1,9 @@
+export interface PagedData<T> {
+  data: T[];
+  startIndex: number;
+  totalResults: number;
+}
+
 export interface CollectionData {
   id: string;
   description: string;

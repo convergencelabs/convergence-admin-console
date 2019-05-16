@@ -1,6 +1,6 @@
 import {DomainId} from "../../models/DomainId";
 import {AbstractDomainService} from "./AbstractDomainService";
-import {ModelData, ModelPermissionSummaryData} from "./common-rest-data";
+import {ModelData, ModelPermissionSummaryData, PagedData} from "./common-rest-data";
 import {toModel, toModelPermissionSummary} from "./incoming-rest-data-converters";
 import {Model} from "../../models/domain/Model";
 import {ModelPermissionSummary} from "../../models/domain/ModelPermissionsSummary";
@@ -41,11 +41,18 @@ export class DomainModelService extends AbstractDomainService {
       .then(toModel);
   }
 
-  public queryModels(domain: DomainId, query: String): Promise<Model[]> {
+  public queryModels(domain: DomainId, query: String): Promise<PagedData<Model>> {
     const url = this._getDomainUrl(domain, `model-query`);
     return this
-      ._post<ModelData[]>(url, {query})
-      .then(models => models.map(toModel));
+      ._post<PagedData<ModelData>>(url, {query})
+      .then(pagedModels => {
+        const models = pagedModels.data.map(toModel);
+        return {
+          data: models,
+          startIndex: pagedModels.startIndex,
+          totalResults: pagedModels.totalResults
+        };
+      });
   }
 
   public getModelsInCollection(domain: DomainId, collectionId: string): Promise<Model[]> {
