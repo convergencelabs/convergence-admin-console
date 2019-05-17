@@ -8,7 +8,7 @@ This snippet demonstrates connecting to a domain using a reconnect token from a 
 export const ConnectionReconnectSnippet: React.FunctionComponent<{ connectionUrl: string }> = (props) => {
   const code = `
 const url = "${props.connectionUrl}";
-Convergence.reconnect("my-reconnect-token")
+Convergence.reconnect(url, "my-reconnect-token")
   .then((domain) => {
     console.log("Connection success");
   })

@@ -21,19 +21,20 @@ domain.models
       console.log(firstName.value());
     });
 
-    // Listen to course grained events
-    firstName.on("model_changed", evt => {
-      console.log("change");
-    });
-
-    // Set the string
-    firstName.set("Ted"); // "Ted", "change"
+    // Set the string's value
+    firstName.value("Ted"); // "Ted", "change"
 
     // Delete the "T" at index 1
     firstName.remove(0, 1); // "ed", "change"
 
     // Insert an "N" at index 0.
-    firstName.insert("N", 0); // "Ned", "change"
+    firstName.insert(0, "N"); // "Ned", "change"
+
+
+    // Listen to course-grained events on the entire model
+    model.root().on("model_changed", evt => {
+      console.log("change");
+    });
   });`.trim();
 
 export const ModelDataSnippet: React.FunctionComponent<{}> = () => {
