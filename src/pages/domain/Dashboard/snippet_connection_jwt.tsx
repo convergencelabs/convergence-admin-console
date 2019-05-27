@@ -19,7 +19,7 @@ var username = "jdoe";
 var token = gen.generate(username, claims);
 
 var url = "${props.connectionUrl}";
-Convergence.connectJwt(url, "username", "password")
+Convergence.connectWithJwt(url, token)
   .then((domain) => {
     console.log("Connection success");
   })

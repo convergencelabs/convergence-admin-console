@@ -6,8 +6,7 @@ This snippet demonstrates opening or creating a model using the openAutoCreate m
 exists, it will be opened. If the model does not exist it will be created and then opened.
 `.trim();
 
-const CODE = `
-domain.models()
+const CODE = `domain.models()
   .openAutoCreate({
     id: "my-model-id",
     collection: "my-collection",

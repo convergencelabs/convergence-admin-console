@@ -20,8 +20,8 @@
 }
 
 .title {
+  font-weight: normal;
   font-size: 28px;
-  font-weight: 700;
   color: #007bc3;
   font-family: "Century Gothic", sans-serif;
   text-transform: uppercase;
