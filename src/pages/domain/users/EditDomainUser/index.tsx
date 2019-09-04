@@ -130,7 +130,7 @@ class EditDomainUserComponent extends React.Component<InjectedProps, EditDomainU
                       rules: [{
                         type: 'email', message: 'The input is not valid E-mail!',
                       }, {
-                        required: true, message: 'Please input an E-mail!',
+                        required: false, message: 'Please input an E-mail!',
                       }],
                     })(
                       <Input/>
