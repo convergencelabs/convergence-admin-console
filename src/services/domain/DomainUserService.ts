@@ -42,7 +42,7 @@ export class DomainUserService extends AbstractDomainService {
   public setPassword(domainId: DomainId, username: string, password: string): Promise<void> {
     const url = this._getDomainUrl(domainId, `users/${username}/password`);
     return this
-      ._post<void>(url, {password})
+      ._put<void>(url, {password})
       .then(() => undefined);
   }
 }

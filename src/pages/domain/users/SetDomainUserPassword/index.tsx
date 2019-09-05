@@ -59,7 +59,7 @@ class SetDomainUserPasswordComponent extends React.Component<InjectedProps, {}> 
     return this.props.domainUserService.setPassword(this.props.domainId, username, password)
       .then(() => {
         notification["success"]({
-          message: 'namespaces Created',
+          message: 'Password Set',
           description: `Password for '${username}' successfully set.`
         });
         this.props.history.push(toDomainRoute(this.props.domainId, "users"));
@@ -78,5 +78,5 @@ class SetDomainUserPasswordComponent extends React.Component<InjectedProps, {}> 
   }
 }
 
-const injections = [SERVICES.USER_SERVICE];
+const injections = [SERVICES.DOMAIN_USER_SERVICE];
 export const SetDomainUserPassword = injectAs<SetDomainUserPasswordProps>(injections, Form.create<{}>()(SetDomainUserPasswordComponent));
