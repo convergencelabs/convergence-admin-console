@@ -117,7 +117,7 @@ class CreateDomainUserComponent extends React.Component<InjectedProps, CreateDom
                 <Form.Item label="Password">
                   {getFieldDecorator('password', {
                     rules: [{
-                      required: false, message: 'Please input a password!',
+                      required: true, message: 'Please input a password!',
                     }, {
                       validator: this.validateToNextPassword,
                     }],
@@ -130,7 +130,7 @@ class CreateDomainUserComponent extends React.Component<InjectedProps, CreateDom
                 <Form.Item label="Confirm Password">
                   {getFieldDecorator('confirm', {
                     rules: [{
-                      required: false, message: 'Please confirm the password!',
+                      required: true, message: 'Please confirm the password!',
                     }, {
                       validator: this.compareToFirstPassword,
                     }],
