@@ -6,27 +6,23 @@ import {FormComponentProps} from "antd/lib/form";
 import {FormEvent} from "react";
 import {PromiseSubscription} from "../../../utils/make-cancelable";
 import {PasswordFormValidator} from "../../../utils/PasswordFormValidator";
-import {ConfigService} from "../../../services/ConfigService";
 import {PasswordConfig} from "../../../models/PasswordConfig";
-import {injectAs} from "../../../utils/mobx-utils";
-import {FormButtonBar} from "../FormButtonBar/index";
-import {SERVICES} from "../../../services/ServiceConstants";
+import {FormButtonBar} from "../FormButtonBar/";
 
 interface SetPasswordProps {
   onSetPassword(password: string): Promise<boolean>;
-
   onCancel?: () => void;
   showCancel?: boolean;
   okButtonText?: string;
+  passwordConfig: PasswordConfig;
 }
 
 interface InjectedProps extends SetPasswordProps, FormComponentProps {
-  configService: ConfigService;
+
 }
 
 interface ChangePasswordFormState {
   confirmDirty: boolean;
-  passwordConfig: PasswordConfig | null;
 }
 
 class SetPasswordFormComponent extends React.Component<InjectedProps, ChangePasswordFormState> {
@@ -38,65 +34,54 @@ class SetPasswordFormComponent extends React.Component<InjectedProps, ChangePass
     super(props);
 
     this.state = {
-      confirmDirty: false,
-      passwordConfig: null
+      confirmDirty: false
     };
 
     this._configSubscription = null;
-
-    this.props.configService
-      .getPasswordConfig()
-      .then(config => {
-        this.setState({passwordConfig: config});
-      });
   }
 
   public render(): ReactNode {
-    if (this.state.passwordConfig) {
-      const {getFieldDecorator} = this.props.form;
-      return (
-        <Form onSubmit={this._handleSubmit}>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item label="Password">
-                {getFieldDecorator('password', {
-                  rules: [{
-                    required: true, message: 'Please input a password!',
-                  }, {
-                    validator: this._compareToConfirm,
-                  }],
-                })(
-                  <Input type="password"/>
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="Confirm Password">
-                {getFieldDecorator('confirm', {
-                  rules: [{
-                    required: true, message: 'Please confirm the password!',
-                  }, {
-                    validator: this._compareToPassword,
-                  }],
-                })(
-                  <Input type="password" onBlur={this._handleConfirmBlur}/>
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={24}>
-              <FormButtonBar>
-                {this.props.showCancel ? <Button htmlType="button" onClick={this._handleCancel}>Cancel</Button> : null}
-                <Button type="primary" htmlType="submit">Set Password</Button>
-              </FormButtonBar>
-            </Col>
-          </Row>
-        </Form>
-      );
-    } else {
-      return null;
-    }
+    const {getFieldDecorator} = this.props.form;
+    return (
+      <Form onSubmit={this._handleSubmit}>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item label="Password">
+              {getFieldDecorator('password', {
+                rules: [{
+                  required: true, message: 'Please input a password!',
+                }, {
+                  validator: this._compareToConfirm,
+                }],
+              })(
+                <Input type="password"/>
+              )}
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item label="Confirm Password">
+              {getFieldDecorator('confirm', {
+                rules: [{
+                  required: true, message: 'Please confirm the password!',
+                }, {
+                  validator: this._compareToPassword,
+                }],
+              })(
+                <Input type="password" onBlur={this._handleConfirmBlur}/>
+              )}
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24}>
+            <FormButtonBar>
+              {this.props.showCancel ? <Button htmlType="button" onClick={this._handleCancel}>Cancel</Button> : null}
+              <Button type="primary" htmlType="submit">Set Password</Button>
+            </FormButtonBar>
+          </Col>
+        </Row>
+      </Form>
+    );
   }
 
   private _handleCancel = () => {
@@ -137,7 +122,7 @@ class SetPasswordFormComponent extends React.Component<InjectedProps, ChangePass
   }
 
   private _compareToConfirm = (rule: any, value: any, callback: (error?: string) => void) => {
-    if (this._passwordValidator.validatePassword(this.state.passwordConfig!, value, callback)) {
+    if (this._passwordValidator.validatePassword(this.props.passwordConfig, value, callback)) {
       const form = this.props.form;
       if (value && this.state.confirmDirty) {
         form.validateFields(['confirm'], {force: true});
@@ -147,5 +132,4 @@ class SetPasswordFormComponent extends React.Component<InjectedProps, ChangePass
   }
 }
 
-const injections = [SERVICES.CONFIG_SERVICE];
-export const SetPasswordForm = injectAs<SetPasswordProps>(injections, Form.create<{}>()(SetPasswordFormComponent));
+export const SetPasswordForm = Form.create({})(SetPasswordFormComponent);

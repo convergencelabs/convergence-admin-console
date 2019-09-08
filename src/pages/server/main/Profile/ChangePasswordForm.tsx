@@ -7,7 +7,7 @@ import styles from "./styles.module.css";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {LoggedInUserService} from "../../../../services/LoggedInUserService";
-import {SetPasswordForm} from "../../../../components/common/SetPasswordForm/";
+import {ConvergenceUserPasswordForm} from "../../../../components/common/ConvergenceUserPasswordForm/";
 
 interface InjectedProps extends FormComponentProps {
   loggedInUserService: LoggedInUserService;
@@ -18,7 +18,7 @@ class ChangePasswordFormComponent extends React.Component<InjectedProps, {}> {
   public render(): ReactNode {
     return (
       <Card title={<span><Icon type="lock"/> Change Password</span>} className={styles.setPassword}>
-        <SetPasswordForm
+        <ConvergenceUserPasswordForm
           onSetPassword={this._handleSetPassword}
           showCancel={false}
         />
@@ -41,11 +41,12 @@ class ChangePasswordFormComponent extends React.Component<InjectedProps, {}> {
           notification.success({
             message: "Error",
             description: "Your password could not be set."
-          })
+          });
           return false;
         }
       );
   }
 }
 
-export const ChangePasswordForm = injectAs<{}>([SERVICES.LOGGED_IN_USER_SERVICE], ChangePasswordFormComponent);
+const injections = [SERVICES.LOGGED_IN_USER_SERVICE];
+export const ChangePasswordForm = injectAs<{}>(injections, ChangePasswordFormComponent);

@@ -12,6 +12,7 @@ import {DomainUserService} from "../../../../services/domain/DomainUserService";
 import {toDomainRoute} from "../../../../utils/domain-url";
 import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
 import styles from "./styles.module.css";
+import {PasswordConfig} from "../../../../models/PasswordConfig";
 
 export interface SetDomainUserPasswordProps extends RouteComponentProps<{ username: string }> {
   domainId: DomainId;
@@ -41,6 +42,7 @@ class SetDomainUserPasswordComponent extends React.Component<InjectedProps, {}> 
         <Card title={<span><Icon type="user"/> <Tag>{this.props.match.params.username}</Tag> Set Password</span>}
               className={styles.formCard}>
           <SetPasswordForm
+            passwordConfig={PasswordConfig.PERMISSIVE}
             onSetPassword={this._handleSetPassword}
             onCancel={this._handleCancel}
             showCancel={true}
@@ -58,12 +60,12 @@ class SetDomainUserPasswordComponent extends React.Component<InjectedProps, {}> 
     const username = this.props.match.params.username;
     return this.props.domainUserService.setPassword(this.props.domainId, username, password)
       .then(() => {
-        notification["success"]({
-          message: 'Password Set',
+        notification.success({
+          message: 'Password Changed',
           description: `Password for '${username}' successfully set.`
         });
         this.props.history.push(toDomainRoute(this.props.domainId, "users"));
-        return true;
+        return false;
       }).catch((err) => {
       console.error(err);
       if (err instanceof RestError) {

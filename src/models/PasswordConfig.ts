@@ -1,4 +1,7 @@
 export class PasswordConfig {
+  public static PERMISSIVE = new PasswordConfig(
+    0, false, false, false, false) ;
+
   constructor(
     public readonly minLength: number,
     public readonly requireUpper: boolean,

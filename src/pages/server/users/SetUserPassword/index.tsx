@@ -8,7 +8,7 @@ import {RouteComponentProps} from "react-router";
 import {UserService} from "../../../../services/UserService";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
-import {SetPasswordForm} from "../../../../components/common/SetPasswordForm/"
+import {ConvergenceUserPasswordForm} from "../../../../components/common/ConvergenceUserPasswordForm/"
 import {RestError} from "../../../../services/RestError";
 import styles from "./styles.module.css";
 
@@ -39,7 +39,7 @@ class SetUserPasswordComponent extends React.Component<InjectedProps, SetUserPas
       <Page breadcrumbs={this._breadcrumbs}>
         <Card title={<span><Icon type="user"/> <Tag>{this.props.match.params.username}</Tag> Set Password</span>}
               className={styles.formCard}>
-          <SetPasswordForm
+          <ConvergenceUserPasswordForm
             onSetPassword={this._handleSetPassword}
             onCancel={this._handleCancel}
             showCancel={true}
@@ -57,23 +57,22 @@ class SetUserPasswordComponent extends React.Component<InjectedProps, SetUserPas
     const username = this.props.match.params.username;
     return this.props.userService.setPassword(username, password)
       .then(() => {
-        notification["success"]({
-          message: 'namespaces Created',
+        notification.success({
+          message: 'Password Changed',
           description: `Password for '${username}' successfully set.`
         });
         this.props.history.push("/users/");
-        return true;
+        return false;
       }).catch((err) => {
-      console.error(err);
-      if (err instanceof RestError) {
-        notification.error({
-          message: 'Could Not Set Password',
-          description: `The password for ${username} could not be set.`
-        });
-      }
-
-      return false;
-    });
+        console.error(err);
+        if (err instanceof RestError) {
+          notification.error({
+            message: 'Could Not Set Password',
+            description: `The password for ${username} could not be set.`
+          });
+        }
+        return false;
+      });
   }
 }
 
