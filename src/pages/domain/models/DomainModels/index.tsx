@@ -2,7 +2,7 @@ import * as React from 'react';
 import {ReactNode} from 'react';
 import {Page} from "../../../../components/common/Page/";
 import Tooltip from "antd/es/tooltip";
-import {Card, Dropdown, Icon, Menu, notification, Popconfirm, Table} from "antd";
+import {Card, notification, Table} from "antd";
 import styles from "./styles.module.css";
 import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
 import {RouteComponentProps} from "react-router";
@@ -14,18 +14,17 @@ import {ModelControls, ModelSearchMode} from "./ModelControls";
 import {DomainModelService} from "../../../../services/domain/DomainModelService";
 import {Model} from "../../../../models/domain/Model";
 import moment from "moment";
-import AceEditor from "react-ace";
 import {longDateTime, shortDateTime, truncate} from "../../../../utils/format-utils";
 import {Link} from "react-router-dom";
 import {TypeChecker} from "../../../../utils/TypeChecker";
 import {DomainId} from "../../../../models/DomainId";
-import confirm from "antd/lib/modal/confirm";
-import CopyToClipboard from "react-copy-to-clipboard";
 import queryString from "query-string";
 import "brace";
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
 import {PagedData} from "../../../../services/domain/common-rest-data";
+import { ModelDropdownMenu } from './ModelDropdownMenu';
+import { ModelRowExpandedComponent } from './ModelRowExpanded';
 
 export interface DomainModelsProps extends RouteComponentProps {
   domainId: DomainId;
@@ -176,7 +175,10 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
   }
 
   private _modeChange = (mode: ModelSearchMode) => {
-    this.setState({mode, queryData: "", models: {data: [], totalResults: 0, startIndex: 0}});
+    this.props.history.push(this.props.location.pathname, {
+      mode, queryData: "", models: {data: [], totalResults: 0, startIndex: 0}
+    });
+    // this.setState({mode, queryData: "", models: {data: [], totalResults: 0, startIndex: 0}});
   }
 
   private _browse = (collection: string, pageSize: number, page?: number) => {
@@ -250,42 +252,13 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
   }
 
   private _renderMenu = (id: string, record: Model) => {
-    const permission = toDomainRoute(this.props.domainId, `models/${id}/permissions`);
     const data = toDomainRoute(this.props.domainId, `models/${id}`);
-    const menu = (
-      <Menu>
-        <Menu.Item key="copyId">
-          <CopyToClipboard text={id}>
-            <span><Icon type="copy"/> Copy Id</span>
-          </CopyToClipboard>
-        </Menu.Item>
-        <Menu.Item key="copyData">
-          <CopyToClipboard text={JSON.stringify(record.data, null, "  ")}>
-            <span><Icon type="copy"/> Copy Data</span>
-          </CopyToClipboard>
-        </Menu.Item>
-        <Menu.Divider/>
-        <Menu.Item key="edit-data">
-          <Link to={data}><Icon type="edit"/> Edit Model</Link>
-        </Menu.Item>
-        <Menu.Item key="edit-permissions">
-          <Link to={permission}><Icon type="team"/> Edit Permissions</Link>
-        </Menu.Item>
-        <Menu.Divider/>
-        <Menu.Item key="delete">
-          <span onClick={() => this._onContextDelete(id)}><Icon type="delete"/> Delete</span>
-        </Menu.Item>
-      </Menu>
-    );
-
     return (
       <div style={{display: "flex", alignItems: "center"}}>
         <Tooltip title={id}>
           <Link to={data} style={{flex: 1}}>{truncate(id, 10)}</Link>
         </Tooltip>
-        <Dropdown overlay={menu} trigger={['click']}>
-          <Icon type="down-square"/>
-        </Dropdown>
+        <ModelDropdownMenu id={id} record={record} domainId={this.props.domainId} onDeleteConfirm={this._deleteModel} />
       </div>
     );
   }
@@ -333,27 +306,16 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
     return (<div className={styles.dataValue}>{renderedValue}</div>);
   }
 
-  private _onContextDelete = (id: string) => {
-    confirm({
-      title: 'Delete Model?',
-      content: 'Are you sure you want to delete this model?',
-      okType: 'danger',
-      onOk: () => {
-        this._deleteModel(id);
-      }
-    });
-  }
-
-  private _deleteModel = (id: string) => {
+  private _deleteModel = (modelId: string) => {
     this.props.domainModelService
-      .deleteModel(this.props.domainId, id)
+      .deleteModel(this.props.domainId, modelId)
       .then(() => {
           notification.success({
             message: "Model Deleted",
-            description: `The model '${id}' was deleted.`
+            description: `The model '${modelId}' was deleted.`
           });
 
-          const data = this.state.models.data.filter((m: Model) => m.id !== id);
+          const data = this.state.models.data.filter((m: Model) => m.id !== modelId);
           const models = {
             data,
             startIndex: this.state.models.startIndex,
@@ -371,65 +333,8 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
       });
   }
 
-  private _expander = (model: Model, index: number, indent: number, expanded: boolean) => {
-    const permission = toDomainRoute(this.props.domainId, `models/${model.id}/permissions`);
-    const data = toDomainRoute(this.props.domainId, `models/${model.id}`);
-
-    return (
-      <div className={styles.modelExpander}>
-        <div className={styles.modelExpanderToolbar}>
-          <Link to={data}><ToolbarButton icon="edit" tooltip="Edit Model"/></Link>
-          <Link to={permission}><ToolbarButton icon="team" tooltip="Edit Permissions"/></Link>
-          <Popconfirm title="Delete this model?" onConfirm={() => this._deleteModel(model.id)}>
-            <ToolbarButton icon="delete" tooltip="Delete Model"/>
-          </Popconfirm>
-        </div>
-        <table>
-          <tbody>
-          <tr>
-            <td>Id:</td>
-            <td>{model.id}</td>
-          </tr>
-          <tr>
-            <td>Collection:</td>
-            <td>{model.collection}</td>
-          </tr>
-          <tr>
-            <td>Version:</td>
-            <td>{model.version}</td>
-          </tr>
-          <tr>
-            <td>Created Time:</td>
-            <td>{longDateTime(model.created)}</td>
-          </tr>
-          <tr>
-            <td>Modified Time:</td>
-            <td>{longDateTime(model.modified)}</td>
-          </tr>
-          <tr>
-            <td>Data:</td>
-            <td>
-              <div className={styles.editorContainer}>
-                <AceEditor
-                  className={styles.editor}
-                  value={JSON.stringify(model.data, null, "  ")}
-                  readOnly={true}
-                  theme="solarized_dark"
-                  mode="json"
-                  name={"ace_" + model.id}
-                  width="100%"
-                  height="300px"
-                  highlightActiveLine={true}
-                  showPrintMargin={false}
-                  wrapEnabled={true}
-                />
-              </div>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-    );
+  private _expander = (model: Model) => {
+    return <ModelRowExpandedComponent record={model} domainId={this.props.domainId} onDeleteConfirm={this._deleteModel} />;
   }
 }
 

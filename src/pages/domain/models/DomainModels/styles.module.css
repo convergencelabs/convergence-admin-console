@@ -34,47 +34,6 @@
   margin-left: 15px;
 }
 
-.modelExpander {
-  margin-left: 20px;
-  margin-right: 20px;
-}
-
-.modelExpander tr {
-  border-bottom: 1px solid lightgray;
-}
-
-.modelExpander td:first-child {
-  width: 1%;
-  white-space: nowrap;
-  padding-right: 15px;
-  font-weight: bold;
-  vertical-align: top;
-}
-
-.modelExpander td:not(:first-child) {
-  width: 99%;
-}
-
-.editorContainer {
-  border-radius: 4px;
-  margin: 10px 0;
-  padding: 2px;
-  border: 1px solid darkgray;
-}
-
-.editor {
-  border-radius: 4px;
-}
-
-.modelExpanderToolbar {
-  text-align: right;
-  margin-bottom: 10px;
-}
-
-.modelExpanderToolbar :global .ant-btn {
-  margin-left: 5px;
-}
-
 .dataValue {
   max-height: 4em;
   overflow: auto;
