@@ -136,7 +136,8 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
       pageSize: this.state.pageSize,
       current: this.state.page,
       total: this.state.models.totalResults,
-      onChange: this._pageChange
+      onChange: this._pageChange,
+      showTotal: (total: number) => `${total} total results`
     } : false;
 
     return (

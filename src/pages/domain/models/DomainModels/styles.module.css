@@ -79,3 +79,7 @@
   max-height: 4em;
   overflow: auto;
 }
+
+.modelCard :global .ant-table-body {
+  overflow: auto;
+}
