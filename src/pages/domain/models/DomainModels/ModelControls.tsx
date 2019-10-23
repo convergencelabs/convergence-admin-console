@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ReactElement, ReactNode} from "react";
+import {ReactNode} from "react";
 import {Input, InputNumber, Select} from "antd";
 import {Form, Button} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
@@ -7,6 +7,8 @@ import {CollectionAutoComplete} from "../../../../components/domain/collection/C
 import {DomainId} from "../../../../models/DomainId";
 import styles from "./styles.module.css";
 import {IReactComponent} from "mobx-react";
+import { createQueryParamString, appendtoQueryParamString } from '../../../../utils/router-utils';
+import { History } from 'history';
 
 const {Option} = Select;
 
@@ -17,14 +19,11 @@ export enum ModelSearchMode {
 }
 
 interface ModelControlsProps {
-  initialMode?: ModelSearchMode;
-  initialData?: string;
   domainId: DomainId;
-  resultsPerPageDefault: number;
-  onModeChange(mode: ModelSearchMode): void;
-  onBrowse(collection: string, perPage: number): void;
-  onQuery(query: string, perPage: number): void;
-  onIdLookup(modelId: string, perPage: number): void;
+  pageSize: number;
+  history: History;
+  searchMode: ModelSearchMode;
+  submittedQueryInput?: string;
 }
 
 interface InjectedProps extends ModelControlsProps, FormComponentProps {
@@ -35,9 +34,11 @@ class ModelControlsComponent extends React.Component<InjectedProps, {}> {
 
   public render(): ReactNode {
     const {getFieldDecorator} = this.props.form;
-    const mode = this.props.form.getFieldValue("mode") as ModelSearchMode || ModelSearchMode.BROWSE;
+    const mode = this.props.searchMode;
+    const queryInput = this.props.submittedQueryInput || '';
     let fieldLabel = "";
     let buttonLabel = "";
+
     switch (mode) {
       case ModelSearchMode.BROWSE:
         fieldLabel = "Collection";
@@ -57,30 +58,30 @@ class ModelControlsComponent extends React.Component<InjectedProps, {}> {
       <div className={styles.toolbar}>
         <div className={styles.modeSelector}>
           <span className={styles.label}>Mode:</span>
-          {getFieldDecorator('mode', {initialValue: this.props.initialMode || ModelSearchMode.BROWSE})(
-            <Select style={{width: 150}} onChange={this.props.onModeChange}>
+          {
+            <Select style={{width: 150}} onChange={this._handleModeChange} value={mode}>
               <Option key={ModelSearchMode.BROWSE} value={ModelSearchMode.BROWSE}>Browse</Option>
               <Option key={ModelSearchMode.QUERY} value={ModelSearchMode.QUERY}>Query</Option>
               <Option key={ModelSearchMode.ID} value={ModelSearchMode.ID}>Id Lookup</Option>
             </Select>
-          )}
+          }
         </div>
         <span className={styles.label}>{fieldLabel}:</span>
         {
           mode === ModelSearchMode.BROWSE ?
-            getFieldDecorator('collection', {initialValue: this.props.initialData})(
-              <CollectionAutoComplete initialValue={this.props.initialData} className={styles.collection} domainId={this.props.domainId} />
+            getFieldDecorator('collection', {initialValue: queryInput})(
+              <CollectionAutoComplete initialValue={queryInput} className={styles.collection} domainId={this.props.domainId} />
             ) : null
         }
         {
           mode === ModelSearchMode.QUERY ?
-            getFieldDecorator('query', {initialValue: this.props.initialData})(
+            getFieldDecorator('query', {initialValue: queryInput})(
               <Input className={styles.query} placeholder="Enter Query"/>
             ) : null
         }
         {
           mode === ModelSearchMode.ID ?
-            getFieldDecorator('id', {initialValue: this.props.initialData})(
+            getFieldDecorator('id', {initialValue: queryInput})(
               <Input className={styles.id} placeholder="Enter Model Id"/>
             ) : null
         }
@@ -88,7 +89,7 @@ class ModelControlsComponent extends React.Component<InjectedProps, {}> {
           mode === ModelSearchMode.BROWSE ?
             <span>
               <span className={styles.label}>Results Per Page:</span>
-              {getFieldDecorator('resultsPerPage', {initialValue: this.props.resultsPerPageDefault || 20})(
+              {getFieldDecorator('resultsPerPage', {initialValue: this.props.pageSize})(
                 <InputNumber/>
               )}
             </span>: null
@@ -101,20 +102,41 @@ class ModelControlsComponent extends React.Component<InjectedProps, {}> {
     );
   }
 
+  private _handleModeChange = (mode: ModelSearchMode) => {
+    let newUrl = createQueryParamString({mode});
+    this.props.history.push(newUrl);
+  }
+
   private _handleSubmit = () => {
     this.props.form.validateFieldsAndScroll((err: any, values: any) => {
       if (!err) {
-        const {mode, collection, query, id, resultsPerPage} = values;
+        const {collection, id, resultsPerPage} = values;
+        const mode = this.props.searchMode;
+        let newUrl = null;
+
         switch (mode) {
           case "browse":
-            this.props.onBrowse(collection, resultsPerPage);
+            // todo just update the url query params
+            // this.props.onBrowse(collection, resultsPerPage);
+            newUrl = appendtoQueryParamString({
+              collection, pageSize: resultsPerPage
+            });
             break;
-          case "query":
-            this.props.onQuery(query, resultsPerPage);
+          case "query": {
+            let {query} = values;
+            if (query.endsWith(";")) {
+              query = query.substring(0, query.length - 1);
+            }
+            newUrl = appendtoQueryParamString({query});
             break;
+          }
           case "id":
-            this.props.onIdLookup(id, resultsPerPage);
+            newUrl = appendtoQueryParamString({id});
             break;
+        }
+
+        if (newUrl != null) {
+          this.props.history.push(newUrl);
         }
       }
     });

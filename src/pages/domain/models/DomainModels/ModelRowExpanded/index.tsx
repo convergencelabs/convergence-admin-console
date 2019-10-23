@@ -3,6 +3,9 @@ import {ReactNode} from 'react';
 import AceEditor from "react-ace";
 import {Link} from "react-router-dom";
 import { Popconfirm } from 'antd';
+import "brace";
+import 'brace/mode/json';
+import 'brace/theme/solarized_dark';
 import styles from "./styles.module.css";
 import {ToolbarButton} from "../../../../../components/common/ToolbarButton";
 import { Model } from '../../../../../models/domain/Model';
@@ -16,7 +19,7 @@ interface ModelRowExpandedProps {
   onDeleteConfirm: (id: string) => void;
 }
 
-export class ModelRowExpandedComponent extends React.Component<ModelRowExpandedProps, {}> {
+export class ModelRowExpanded extends React.Component<ModelRowExpandedProps, {}> {
 
   public render(): ReactNode {
     const permission = toDomainRoute(this.props.domainId, `models/${this.props.record.id}/permissions`);
