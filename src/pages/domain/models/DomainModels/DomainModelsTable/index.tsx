@@ -15,7 +15,7 @@ import { ModelRowExpanded } from '../ModelRowExpanded';
 import { DomainId } from '../../../../../models/DomainId';
 import { toDomainRoute } from '../../../../../utils/domain-url';
 import { History } from 'history';
-import { createQueryParamString, appendtoQueryParamString } from '../../../../../utils/router-utils';
+import { appendtoQueryParamString } from '../../../../../utils/router-utils';
 
 interface DomainModelsTableProps {
   history: History;
@@ -65,15 +65,17 @@ export class DomainModelsTable extends React.Component<DomainModelsTableProps, {
     const columns = this._buildColumns();
 
     return (
-      <Table columns={columns}
-        size="middle"
-        rowKey="id"
-        bordered={true}
-        loading={this.props.loading}
-        dataSource={this.props.pagedModels.data}
-        expandedRowRender={this._expander}
-        pagination={pagination}
-      />
+      <div className={styles.tableWrapper}>
+        <Table columns={columns}
+          size="middle"
+          rowKey="id"
+          bordered={true}
+          loading={this.props.loading}
+          dataSource={this.props.pagedModels.data}
+          expandedRowRender={this._expander}
+          pagination={pagination}
+        />
+      </div>
     );
   }
 

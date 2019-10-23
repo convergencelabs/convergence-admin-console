@@ -2,7 +2,6 @@ import * as React from 'react';
 import {ReactNode} from 'react';
 import {Page} from "../../../../components/common/Page/";
 import {Card, notification} from "antd";
-import styles from "./styles.module.css";
 import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
 import {RouteComponentProps} from "react-router";
 import {injectAs} from "../../../../utils/mobx-utils";
@@ -16,6 +15,7 @@ import {DomainId} from "../../../../models/DomainId";
 import {PagedData} from "../../../../services/domain/common-rest-data";
 import {DomainModelsTable} from './DomainModelsTable';
 import queryString from 'query-string';
+import { Link } from 'react-router-dom';
 
 const emptyPage: PagedData<Model> = {data: [], startIndex: 0, totalResults: 0};
 
@@ -37,17 +37,14 @@ interface InjectedProps extends DomainModelsProps {
 export interface DomainModelsState {
   loading: boolean;
   models: PagedData<Model>;
-  // pageSize: number;
-  // page: number;
-  // columns: any[];
-  // mode?: ModelSearchMode;
-  // queryData?: string;
 }
 
-// Fixme this really needs to be broken up into a few classes.
 /**
- * Keep this as the container component that renders the proper search mode,
- * then move the state->models into another components
+ * A container component for the model query page.
+ * 
+ * Responsible for translating the query state from the URL search params
+ * into an actual search, then passing the resulting models to the actual
+ * `DomainModelsTable` which renders the results.
  */
 class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsState> {
   private readonly _breadcrumbs = [{title: "Models"}];
@@ -94,7 +91,7 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
 
     return (
       <Page breadcrumbs={this._breadcrumbs}>
-        <Card title={this._renderToolbar()} className={styles.modelCard}>
+        <Card title={this._renderToolbar()}>
           <ModelControls
             history={this.props.history}
             searchMode={searchParams.mode}
@@ -170,7 +167,9 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
   private _renderToolbar(): ReactNode {
     return (
       <CardTitleToolbar title="Models" icon="file">
-        <ToolbarButton icon="plus-circle" tooltip="Create Model" onClick={this._goToCreate}/>
+        <Link to={toDomainRoute(this.props.domainId, "create-model")}>
+          <ToolbarButton icon="plus-circle" tooltip="Create Model" placement="left" />
+        </Link>
       </CardTitleToolbar>
     );
   }
@@ -202,22 +201,7 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
       });
   }
 
-  private _goToCreate = () => {
-    const url = toDomainRoute(this.props.domainId, "create-model");
-    this.props.history.push(url);
-  }
-
-
   private _browse = (collection: string, pageSize: number, page: number) => {
-    // if (!collection) {
-    //   this.setState({loading: false, models: {data: [], startIndex: 0, totalResults: 0}});
-    //   return;
-    // }
-
-    // if (page === undefined) {
-    //   page = 1;
-    // }
-
     this.setState({loading: true});
 
     const offset = page === undefined ? 0 : ((page - 1) * pageSize);

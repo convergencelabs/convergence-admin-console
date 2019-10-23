@@ -33,7 +33,3 @@
 .button {
   margin-left: 15px;
 }
-
-.modelCard :global .ant-table-body {
-  overflow: auto;
-}

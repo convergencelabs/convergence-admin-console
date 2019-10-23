@@ -3,11 +3,11 @@ import {ReactNode} from "react";
 import {Input, InputNumber, Select} from "antd";
 import {Form, Button} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
-import {CollectionAutoComplete} from "../../../../components/domain/collection/CollectionAutoComplete";
-import {DomainId} from "../../../../models/DomainId";
+import {CollectionAutoComplete} from "../../../../../components/domain/collection/CollectionAutoComplete";
+import {DomainId} from "../../../../../models/DomainId";
 import styles from "./styles.module.css";
 import {IReactComponent} from "mobx-react";
-import { createQueryParamString, appendtoQueryParamString } from '../../../../utils/router-utils';
+import { createQueryParamString, appendtoQueryParamString } from '../../../../../utils/router-utils';
 import { History } from 'history';
 
 const {Option} = Select;

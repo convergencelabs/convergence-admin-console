@@ -32,7 +32,7 @@ export interface CreateDomainModelState {
 
 class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDomainModelState> {
   private readonly _breadcrumbs = [
-    {title: "Models", link: "/models"},
+    {title: "Models", link: toDomainRoute(this.props.domainId, "models")},
     {title: "New Model"}
   ];
 

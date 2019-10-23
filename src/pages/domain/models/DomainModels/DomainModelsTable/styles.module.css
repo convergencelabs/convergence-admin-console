@@ -1,4 +1,7 @@
 
+.tableWrapper :global .ant-table-body {
+  overflow: auto;
+}
 
 .dataValue {
   max-height: 4em;
