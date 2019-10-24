@@ -3,26 +3,25 @@ import {Page} from "../../../../components/common/Page/";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {ProfileStore} from "../../../../stores/ProfileStore";
 import {STORES} from "../../../../stores/StoreConstants";
-import {ProfileForm} from "./ProfileForm";
-import {ChangePasswordForm} from "./ChangePasswordForm";
+import {ApiKeys} from "./ApiKeys";
+import {RouteComponentProps} from "react-router";
 
-interface InjectedProps {
+interface InjectedProps extends RouteComponentProps {
   profileStore: ProfileStore;
 }
 
-class ProfilePageComponent extends React.Component<InjectedProps, {}> {
+class AccountSettingsComponent extends React.Component<InjectedProps, {}> {
   private readonly _breadcrumbs = [
-    {title: "Profile"}
+    {title: "Account Settings"}
   ];
 
   public render(): ReactNode {
     return (
       <Page breadcrumbs={this._breadcrumbs}>
-        <ProfileForm username={this.props.profileStore.profile!.username}/>
-        <ChangePasswordForm/>
+        <ApiKeys {...this.props}/>
       </Page>
     );
   }
 }
 
-export const ProfilePage = injectAs<{}>([STORES.PROFILE_STORE], ProfilePageComponent);
+export const AccountSettingsPage = injectAs<RouteComponentProps>([STORES.PROFILE_STORE], AccountSettingsComponent);

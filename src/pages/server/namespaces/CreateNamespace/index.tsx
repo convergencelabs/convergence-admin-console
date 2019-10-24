@@ -97,7 +97,7 @@ class CreateNamespaceComponent extends React.Component<InjectedProps, {}> {
             if (err.code === "duplicate") {
               notification["error"]({
                 message: 'Could Not Create Namespace',
-                description: `A user with the specified ${err.details["field"]} already exists.`,
+                description: `A namespace with the specified ${err.details["field"]} already exists.`,
                 placement: "bottomRight"
               });
             }

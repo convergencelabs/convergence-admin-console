@@ -26,9 +26,9 @@ class AppHeaderComponent extends React.Component<InjectedProps, {}> {
       <Menu.Item key="profile">
         <Link to={"/profile"}><Icon type="profile"/>Profile</Link>
       </Menu.Item>
-      {/*<Menu.Item key="settings">*/}
-        {/*<a><Icon type="setting"/> Settings</a>*/}
-      {/*</Menu.Item>*/}
+      <Menu.Item key="settings">
+        <Link to={"/account-settings"}><Icon type="setting"/>Settings</Link>
+      </Menu.Item>
       <Menu.Divider/>
       <Menu.Item key="logout" onClick={this._logout}><Icon type="logout"/> Logout</Menu.Item>
     </Menu>

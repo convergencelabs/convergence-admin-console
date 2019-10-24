@@ -7,6 +7,7 @@ export const SERVICES = {
   USER_SERVICE: "userService",
   ROLE_SERVICE: "roleService",
   DOMAIN_SERVICE: "domainService",
+  API_KEY_SERVICE: "apiKeyService",
   LOCAL_STORAGE_SERVICE: "localStorageService",
 
   DOMAIN_COLLECTION_SERVICE: "domainCollectionService",

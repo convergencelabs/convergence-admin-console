@@ -15,7 +15,6 @@ export interface DomainDescriptorData {
 
 export class DomainService extends AbstractAuthenticatedService {
   public getDomains(namespace?: string, filter?: string, offset?: number, limit?: number): Promise<DomainDescriptor[]> {
-    const params: any = {};
     return this
       ._get<DomainDescriptorData[]>("domains", this._filterParams({namespace, filter, offset, limit}, [""]))
       .then(domains => domains.map(DomainService._toDomainDescriptor));

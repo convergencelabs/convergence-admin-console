@@ -3,9 +3,9 @@
   "version": "1.0.0-SNAPSHOT",
   "repository": {
     "type": "git",
-    "url": "https://gitlab.dev.int.convergencelabs.tech/ui/convergence-admin-console.git"
+    "url": "https://gitlab.dev.convergencelabs.tech/ui/convergence-admin-console.git"
   },
-  "bugs": "https://gitlab.dev.int.convergencelabs.tech/ui/convergence-admin-console/issues",
+  "bugs": "https://gitlab.dev.convergencelabs.tech/ui/convergence-admin-console/issues",
   "private": true,
   "dependencies": {
     "@types/jest": "23.3.10",
@@ -63,7 +63,7 @@
     "mobx-react-devtools": "6.0.3",
     "moment": "2.24.0",
     "node-mock-server": "0.23.6",
-    "node-sass": "4.11.0",
+    "node-sass": "4.13.0",
     "npm": "6.8.0",
     "query-string": "6.8.3",
     "react-ace": "6.4.0",

@@ -6,6 +6,7 @@ import {authStore} from "./stores/AuthStore";
 import {domainStore} from "./stores/DomainStore";
 import {localStorageService} from "./services/LocalStorageService";
 import {domainService} from "./services/DomainService";
+import {apiKeyService} from "./services/ApiKeyService";
 import {configService} from "./services/ConfigService";
 import {namespaceService} from "./services/NamespaceService";
 import {userService} from "./services/UserService";
@@ -63,6 +64,7 @@ const services = {
   userService,
   roleService,
   serverStatusService,
+  apiKeyService,
 
   domainCollectionService,
   domainModelService,

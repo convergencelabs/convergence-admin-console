@@ -18,6 +18,9 @@ import {PageNotFound} from "../../components/common/PageNotFound";
 import {STORES} from "../../stores/StoreConstants";
 import {injectAs} from "../../utils/mobx-utils";
 import {ConfigStore} from "../../stores/ConfigStore";
+import {AccountSettingsPage} from "../../pages/server/main/AccountSettings";
+import {CreateApiKey} from "../../pages/server/main/AccountSettings/CreateApiKey";
+import {EditApiKey} from "../../pages/server/main/AccountSettings/EditApiKey";
 
 interface InjectedProps extends RouteComponentProps {
   configStore: ConfigStore;
@@ -44,6 +47,9 @@ export class ServerContainerComponent extends React.Component<InjectedProps, {}>
           <Route exact path={`${match.url}create-domain`} render={(props) => <CreateDomain {...props}/>}/>
           <Route exact path={`${match.url}settings`} render={(props) => <Settings/>}/>
           <Route exact path={`${match.url}profile`} render={(props) => <ProfilePage/>}/>
+          <Route exact path={`${match.url}account-settings`} render={(props) => <AccountSettingsPage {...props}/>}/>
+          <Route exact path={`${match.url}create-api-key`} render={(props) => <CreateApiKey {...props}/>}/>
+          <Route exact path={`${match.url}api-keys/:key`} render={(props) => <EditApiKey {...props}/>}/>
           <Route exact path={`${match.url}`} render={(props) => <ServerDashboard {...props} />}/>
           <Route component={PageNotFound}/>
         </Switch>
