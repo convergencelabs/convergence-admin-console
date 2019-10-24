@@ -70,7 +70,12 @@ class ModelControlsComponent extends React.Component<InjectedProps, {}> {
         {
           mode === ModelSearchMode.BROWSE ?
             getFieldDecorator('collection', {initialValue: queryInput})(
-              <CollectionAutoComplete initialValue={queryInput} className={styles.collection} domainId={this.props.domainId} />
+              <CollectionAutoComplete 
+                initialValue={queryInput} 
+                className={styles.collection} 
+                domainId={this.props.domainId} 
+                placeholder="Start typing to search..."
+              />
             ) : null
         }
         {

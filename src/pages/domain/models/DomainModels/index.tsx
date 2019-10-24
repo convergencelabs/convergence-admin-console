@@ -79,7 +79,9 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
       this._performSearch(searchParams);
     }
 
-    if (searchParams.mode != prevSearchParams.mode) {
+    if (
+      (searchParams.queryInput == null || searchParams.mode != prevSearchParams.mode) && this.state.models.totalResults > 0
+    ) {
       this.setState({
         models: {...emptyPage}
       });
