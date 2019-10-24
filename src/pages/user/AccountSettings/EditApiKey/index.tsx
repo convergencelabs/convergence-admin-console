@@ -1,17 +1,17 @@
 import * as React from 'react';
 import {ReactNode} from 'react';
-import {Page} from "../../../../../components/common/Page/";
+import {Page} from "../../../../components/common/Page";
 import {Card, Form, Icon, notification} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
-import {injectAs} from "../../../../../utils/mobx-utils";
-import {SERVICES} from "../../../../../services/ServiceConstants";
-import {RestError} from "../../../../../services/RestError";
-import {ApiKeyService} from "../../../../../services/ApiKeyService";
-import {ApiKeyForm} from "../../../../../components/server/ApiKeyForm";
-import {UserApiKey} from "../../../../../models/UserApiKey";
-import {IBreadcrumbSegment} from "../../../../../stores/BreacrumsStore";
+import {injectAs} from "../../../../utils/mobx-utils";
+import {SERVICES} from "../../../../services/ServiceConstants";
+import {RestError} from "../../../../services/RestError";
+import {ApiKeyService} from "../../../../services/ApiKeyService";
+import {ApiKeyForm} from "../../../../components/user/ApiKeyForm";
+import {UserApiKey} from "../../../../models/UserApiKey";
+import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
 
 interface InjectedProps extends RouteComponentProps, FormComponentProps {
   apiKeyService: ApiKeyService;
@@ -69,7 +69,7 @@ class EditApiKeyComponent extends React.Component<InjectedProps,EditApiKeyState>
       .then(() => {
         notification.success({
           message: 'API Key Updated',
-          description: `API Key '${name}' successfully updated`,
+          description: `API Key '${data.name}' successfully updated`,
           placement: "bottomRight",
           duration: 3
         });

@@ -1,16 +1,16 @@
 import React, {ReactNode} from 'react';
 import {Button, Card, Icon, notification, Popconfirm, Table} from "antd";
 import styles from "./styles.module.css";
-import {injectAs} from "../../../../utils/mobx-utils";
-import {SERVICES} from "../../../../services/ServiceConstants";
-import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
+import {injectAs} from "../../../utils/mobx-utils";
+import {SERVICES} from "../../../services/ServiceConstants";
+import {makeCancelable, PromiseSubscription} from "../../../utils/make-cancelable";
 import {RouteComponentProps} from "react-router";
-import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
+import {CardTitleToolbar} from "../../../components/common/CardTitleToolbar";
 import Tooltip from "antd/es/tooltip";
-import {LoggedInUserService} from "../../../../services/LoggedInUserService";
-import {shortDateTime} from "../../../../utils/format-utils";
-import {ApiKeyService} from "../../../../services/ApiKeyService";
-import {UserApiKey} from "../../../../models/UserApiKey";
+import {LoggedInUserService} from "../../../services/LoggedInUserService";
+import {shortDateTime} from "../../../utils/format-utils";
+import {ApiKeyService} from "../../../services/ApiKeyService";
+import {UserApiKey} from "../../../models/UserApiKey";
 import {Link} from "react-router-dom";
 import CopyToClipboard from "react-copy-to-clipboard";
 

@@ -1,16 +1,16 @@
 import * as React from 'react';
 import {ReactNode} from 'react';
-import {Page} from "../../../../../components/common/Page/";
+import {Page} from "../../../../components/common/Page";
 import {Card, Form, Icon, notification} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
-import {injectAs} from "../../../../../utils/mobx-utils";
-import {SERVICES} from "../../../../../services/ServiceConstants";
-import {RestError} from "../../../../../services/RestError";
-import {ApiKeyService} from "../../../../../services/ApiKeyService";
-import {ApiKeyForm} from "../../../../../components/server/ApiKeyForm";
-import {UserApiKey} from "../../../../../models/UserApiKey";
+import {injectAs} from "../../../../utils/mobx-utils";
+import {SERVICES} from "../../../../services/ServiceConstants";
+import {RestError} from "../../../../services/RestError";
+import {ApiKeyService} from "../../../../services/ApiKeyService";
+import {ApiKeyForm} from "../../../../components/user/ApiKeyForm";
+import {UserApiKey} from "../../../../models/UserApiKey";
 
 interface InjectedProps extends RouteComponentProps, FormComponentProps {
   apiKeyService: ApiKeyService;
@@ -19,7 +19,7 @@ interface InjectedProps extends RouteComponentProps, FormComponentProps {
 class CreateApiKeyComponent extends React.Component<InjectedProps, {}> {
   private readonly _breadcrumbs = [
     {title: "Account Settings", link: "/account-settings"},
-    {title: "Edit API Key"}
+    {title: "Create API Key"}
   ];
 
   public render(): ReactNode {
@@ -43,7 +43,7 @@ class CreateApiKeyComponent extends React.Component<InjectedProps, {}> {
       .then(() => {
         notification.success({
           message: 'API Key Created',
-          description: `API Key '${name}' successfully created`,
+          description: `API Key '${data.name}' successfully created`,
           placement: "bottomRight",
           duration: 3
         });

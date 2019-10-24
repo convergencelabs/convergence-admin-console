@@ -5,12 +5,12 @@ import {Form, Input, Tooltip, Icon, Button} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
 import {FormEvent} from "react";
 import styles from "./styles.module.css";
-import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
-import {LoggedInUserService} from "../../../../services/LoggedInUserService";
-import {UserProfile} from "../../../../models/UserProfile";
-import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
-import {injectAs} from "../../../../utils/mobx-utils";
-import {SERVICES} from "../../../../services/ServiceConstants";
+import {makeCancelable, PromiseSubscription} from "../../../utils/make-cancelable";
+import {LoggedInUserService} from "../../../services/LoggedInUserService";
+import {UserProfile} from "../../../models/UserProfile";
+import {FormButtonBar} from "../../../components/common/FormButtonBar";
+import {injectAs} from "../../../utils/mobx-utils";
+import {SERVICES} from "../../../services/ServiceConstants";
 
 export interface ProfileFormProps {
   username: string;

@@ -41,7 +41,7 @@ class ApiKeyFormComponent extends React.Component<DomainCollectionFormProps & Fo
           </Col>
         </Row>
         <Row gutter={16}>
-          <Col span={4}>
+          <Col span={8}>
             {getFieldDecorator('enabled', {
               initialValue: initialValue.enabled,
               valuePropName: 'checked'

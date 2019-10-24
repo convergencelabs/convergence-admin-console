@@ -4,10 +4,10 @@ import {Card, notification} from "antd";
 import {Icon} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
 import styles from "./styles.module.css";
-import {injectAs} from "../../../../utils/mobx-utils";
-import {SERVICES} from "../../../../services/ServiceConstants";
-import {LoggedInUserService} from "../../../../services/LoggedInUserService";
-import {ConvergenceUserPasswordForm} from "../../../../components/common/ConvergenceUserPasswordForm/";
+import {injectAs} from "../../../utils/mobx-utils";
+import {SERVICES} from "../../../services/ServiceConstants";
+import {LoggedInUserService} from "../../../services/LoggedInUserService";
+import {ConvergenceUserPasswordForm} from "../../../components/common/ConvergenceUserPasswordForm";
 
 interface InjectedProps extends FormComponentProps {
   loggedInUserService: LoggedInUserService;

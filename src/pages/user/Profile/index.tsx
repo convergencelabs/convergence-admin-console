@@ -1,8 +1,8 @@
 import React, {ReactNode} from "react";
-import {Page} from "../../../../components/common/Page/";
-import {injectAs} from "../../../../utils/mobx-utils";
-import {ProfileStore} from "../../../../stores/ProfileStore";
-import {STORES} from "../../../../stores/StoreConstants";
+import {Page} from "../../../components/common/Page";
+import {injectAs} from "../../../utils/mobx-utils";
+import {ProfileStore} from "../../../stores/ProfileStore";
+import {STORES} from "../../../stores/StoreConstants";
 import {ProfileForm} from "./ProfileForm";
 import {ChangePasswordForm} from "./ChangePasswordForm";
 

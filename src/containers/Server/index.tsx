@@ -13,14 +13,14 @@ import {CreateNamespace} from "../../pages/server/namespaces/CreateNamespace";
 import {EditNamespace} from "../../pages/server/namespaces/EditNamespace";
 import {EditUser} from "../../pages/server/users/EditUser";
 import {SetUserPassword} from "../../pages/server/users/SetUserPassword";
-import {ProfilePage} from "../../pages/server/main/Profile";
+import {ProfilePage} from "../../pages/user/Profile";
 import {PageNotFound} from "../../components/common/PageNotFound";
 import {STORES} from "../../stores/StoreConstants";
 import {injectAs} from "../../utils/mobx-utils";
 import {ConfigStore} from "../../stores/ConfigStore";
-import {AccountSettingsPage} from "../../pages/server/main/AccountSettings";
-import {CreateApiKey} from "../../pages/server/main/AccountSettings/CreateApiKey";
-import {EditApiKey} from "../../pages/server/main/AccountSettings/EditApiKey";
+import {AccountSettingsPage} from "../../pages/user/AccountSettings";
+import {CreateApiKey} from "../../pages/user/AccountSettings/CreateApiKey";
+import {EditApiKey} from "../../pages/user/AccountSettings/EditApiKey";
 
 interface InjectedProps extends RouteComponentProps {
   configStore: ConfigStore;
