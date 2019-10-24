@@ -28,7 +28,7 @@ export interface CreateUserComponentState {
 
 class CreateUserComponent extends React.Component<InjectedProps, CreateUserComponentState> {
   private readonly _breadcrumbs = [
-    {title: "Users", link: "/users"},
+    {title: "Convergence Users", link: "/users"},
     {title: "New User"}
   ];
 
@@ -57,7 +57,7 @@ class CreateUserComponent extends React.Component<InjectedProps, CreateUserCompo
     if (this.state.passwordConfig !== null) {
       return (
         <Page breadcrumbs={this._breadcrumbs}>
-          <Card title={<span><Icon type="user"/> New User</span>} className={styles.formCard}>
+          <Card title={<span><Icon type="user"/> New Convergence User</span>} className={styles.formCard}>
             <Form onSubmit={this._handleSubmit}>
               <Row gutter={16}>
                 <Col span={12}>
@@ -205,7 +205,7 @@ class CreateUserComponent extends React.Component<InjectedProps, CreateUserCompo
           .then(() => {
             notification.success({
               message: 'namespaces Created',
-              description: `User '${username}' successfully created`
+              description: `Convergence User '${username}' successfully created`
             });
             this.props.history.push("/users");
           }).catch((err) => {

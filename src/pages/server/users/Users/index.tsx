@@ -27,7 +27,7 @@ export interface ServerUsersState {
 }
 
 class ServerUsersComponent extends React.Component<InjectedProps, ServerUsersState> {
-  private readonly _breadcrumbs = [{title: "Users"}];
+  private readonly _breadcrumbs = [{title: "Convergence Users"}];
   private readonly _userTableColumns: any[];
   private _usersSubscription: PromiseSubscription | null;
 
@@ -87,7 +87,7 @@ class ServerUsersComponent extends React.Component<InjectedProps, ServerUsersSta
 
   private _renderToolbar(): ReactNode {
     return (
-      <CardTitleToolbar title="Users" icon="user">
+      <CardTitleToolbar title="Convergence Users" icon="user">
         <span className={styles.search}>
           <Input placeholder="Search Users" addonAfter={<Icon type="search"/>} onKeyUp={this._onFilterChange}/>
         </span>

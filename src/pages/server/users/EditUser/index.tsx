@@ -30,7 +30,7 @@ class EditUserComponent extends React.Component<InjectedProps, EditUserState> {
 
     const username = this.props.match.params.username;
     this._breadcrumbs = [
-      {title: "Users", link: "/users/"},
+      {title: "Convergence Users", link: "/users/"},
       {title: username}
     ];
 
@@ -56,7 +56,7 @@ class EditUserComponent extends React.Component<InjectedProps, EditUserState> {
       const user = this.state.user;
       return (
         <Page breadcrumbs={this._breadcrumbs}>
-          <Card title={<span><Icon type="user"/> Edit User</span>} className={styles.formCard}>
+          <Card title={<span><Icon type="user"/> Edit Convergence User</span>} className={styles.formCard}>
             <Form onSubmit={this.handleSubmit}>
               <Row gutter={16}>
                 <Col span={12}>
