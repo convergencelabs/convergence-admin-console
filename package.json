@@ -1,5 +1,5 @@
 {
-  "name": "@convergence-internal/admin-console",
+  "name": "@convergence/admin-console",
   "version": "1.0.0-SNAPSHOT",
   "repository": {
     "type": "git",

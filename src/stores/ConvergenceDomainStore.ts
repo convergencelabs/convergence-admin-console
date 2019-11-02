@@ -2,7 +2,7 @@ import {action, decorate, observable} from "mobx";
 import {Convergence, ConvergenceDomain} from "@convergence/convergence";
 import {DomainId} from "../models/DomainId";
 import {domainConvergenceJwtService} from "../services/domain/DomainConvergenceUserJwtService";
-import {domainRealtimeUrl} from "../utils/domain-url";  
+import {domainRealtimeUrl} from "../utils/domain-url";
 
 export class ConvergenceDomainStore {
   public domain: ConvergenceDomain | null = null;
