@@ -17,7 +17,7 @@ import {ConvergenceDomainStore} from "../../stores/ConvergenceDomainStore";
 import {DomainId} from "../../models/DomainId";
 import {SERVICES} from "../../services/ServiceConstants";
 import {STORES} from "../../stores/StoreConstants";
-import {ConvergenceDomain} from "@convergence-internal/convergence";
+import {ConvergenceDomain} from "@convergence/convergence";
 import {DomainUsers} from "../../pages/domain/users/DomainUsers";
 import {CreateDomainUser} from "../../pages/domain/users/CreateDomainUser";
 import {EditDomainUser} from "../../pages/domain/users/EditDomainUser";

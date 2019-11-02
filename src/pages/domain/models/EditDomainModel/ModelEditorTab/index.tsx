@@ -5,7 +5,7 @@ import {DomainModelService} from "../../../../../services/domain/DomainModelServ
 import {SapphireEditor} from "../../../../../components/ModelEditor/";
 import {STORES} from "../../../../../stores/StoreConstants";
 import {ConvergenceDomainStore} from "../../../../../stores/ConvergenceDomainStore";
-import {RealTimeModel} from "@convergence-internal/convergence";
+import {RealTimeModel} from "@convergence/convergence";
 import {Button, Popover} from "antd";
 import styles from "./styles.module.css";
 import {filter} from "rxjs/operators";

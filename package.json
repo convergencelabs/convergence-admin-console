@@ -40,7 +40,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@convergence-internal/convergence": "1.0.0-rc.3",
+    "@convergence/convergence": "1.0.0-rc.3",
     "@convergence/string-change-detector": "0.1.8",
     "@fortawesome/fontawesome-svg-core": "1.2.15",
     "@fortawesome/free-solid-svg-icons": "5.7.2",

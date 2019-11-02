@@ -37,6 +37,8 @@ export class CollectionAutoCompleteComponent extends Component<InjectedProps, Co
       collections: [],
       selectedValue: props.initialValue || ""
     };
+
+    this._onSearch("");
   }
 
   public render(): ReactNode {

@@ -1,6 +1,6 @@
 import {NumberElement} from "../NumberElement";
 import {ModelPathElement} from "../ModelPath";
-import {RealTimeNumber, NumberSetValueEvent, NumberDeltaEvent} from "@convergence-internal/convergence";
+import {RealTimeNumber, NumberSetValueEvent, NumberDeltaEvent} from "@convergence/convergence";
 import {ContainerElement} from "../ContainterElement";
 import {filter} from "rxjs/operators";
 
