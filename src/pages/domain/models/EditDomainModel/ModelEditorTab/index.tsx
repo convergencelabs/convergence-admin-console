@@ -115,11 +115,11 @@ class ModelEditorTabComponent extends React.Component<InjectedProps, ModelEditor
   }
 
   private _buildConnectedUsers(model: RealTimeModel): string[] {
-    const collaborators = model.collaborators().map(collaborator => {
+    const collaborators: string[] = model.collaborators().map(collaborator => {
       return collaborator.user.convergence ?
-        `${collaborator.user.displayName} (Convergence User)` :
-        collaborator.user.displayName;
-    });
+        `${collaborator.user.displayName || collaborator.user.username} (Convergence User)` :
+        collaborator.user.displayName || collaborator.user.username;
+    }).filter(x => x !== undefined);
 
     return Array.from(new Set(collaborators));
   }

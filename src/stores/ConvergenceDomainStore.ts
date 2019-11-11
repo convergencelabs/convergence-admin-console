@@ -20,9 +20,7 @@ export class ConvergenceDomainStore {
   public disconnect(): void {
     if (this.domain !== null) {
       if (this.domain.session().isConnected()) {
-        this.domain.dispose().catch(err => {
-          console.warn(err);
-        });
+        this.domain.dispose();
       }
     }
     this.domain = null;
