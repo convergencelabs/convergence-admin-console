@@ -14,10 +14,6 @@ export interface ToolbarRadioButtonProps {
 
 export class ToolbarRadioButton extends React.Component<ToolbarRadioButtonProps, {}> {
 
-  constructor(props: ToolbarRadioButtonProps, context: any) {
-    super(props, context);
-  }
-
   public render(): ReactNode {
     const className = classNames(
       styles.toolbarRadioButton,

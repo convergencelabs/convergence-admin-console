@@ -1,6 +1,6 @@
 import React, {ChangeEvent, ReactNode} from "react";
 import {Page} from "../../../../components/common/Page/";
-import {Card, Col, notification, Row, Form, Input, Icon, Button} from "antd";
+import {Button, Card, Col, Form, Icon, Input, notification, Row} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
@@ -57,7 +57,6 @@ class EditDomainChatComponent extends React.Component<InjectedProps, EditDomainC
   }
 
   public render(): ReactNode {
-    const {getFieldDecorator} = this.props.form;
     return this.state.initialChat !== null ? (
         <Page breadcrumbs={this._breadcrumbs}>
           <Card title={<span><Icon type="folder"/> Edit Chat</span>} className={styles.formCard}>
@@ -169,4 +168,4 @@ class EditDomainChatComponent extends React.Component<InjectedProps, EditDomainC
 
 const injections = [SERVICES.DOMAIN_CHAT_SERVICE];
 export const EditDomainChat =
-  injectAs<EditDomainChatProps>(injections, Form.create<{}>()(EditDomainChatComponent));
+  injectAs<EditDomainChatProps>(injections, Form.create()(EditDomainChatComponent));

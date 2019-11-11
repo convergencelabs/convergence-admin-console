@@ -95,8 +95,8 @@ export function formatDomainStatus(status: DomainStatus): string {
       return "Initializing";
     case DomainStatus.DELETING:
       return "Deleting";
-    case DomainStatus.ERROR:
-      return "Error";
+    case DomainStatus.MAINTENANCE:
+      return "Maintenance";
     default:
       throw new Error("Unknown domain status: " + status);
   }

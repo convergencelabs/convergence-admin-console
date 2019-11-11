@@ -1,6 +1,5 @@
 import React, {ReactNode} from "react";
-import {Card, Tabs} from "antd";
-import {Icon} from 'antd';
+import {Card, Icon, Tabs} from "antd";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {DomainId} from "../../../models/DomainId";

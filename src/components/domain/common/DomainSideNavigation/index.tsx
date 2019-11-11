@@ -1,6 +1,6 @@
 import * as React from 'react';
+import {ReactNode} from 'react';
 import {SideNavigation, SideNavigationMenuItem} from "../../../common/SideNavigation/";
-import {ReactNode} from "react";
 import {DomainId} from "../../../../models/DomainId";
 import {toDomainRoute} from "../../../../utils/domain-url";
 

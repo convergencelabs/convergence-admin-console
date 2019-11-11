@@ -3,7 +3,7 @@ import classNames from "classnames";
 import {Subscription} from "rxjs";
 import {PropertyEditor} from "../editors/PropertyEditor";
 import {KeySearchResult} from "../../model/search/KeySearchResult";
-import {HighlightRange, Highlighter} from "../highlighter/Highlighter";
+import {Highlighter, HighlightRange} from "../highlighter/Highlighter";
 import {SearchResult} from "../../model/search/SearchResult";
 import {PropertyValidation, PropertyValidator} from "../../validator/PropertyValidator";
 import {TreeNode, TreeNodeActiveSearchResultEvent, TreeNodeSearchResultsEvent} from "../../model/TreeNode";

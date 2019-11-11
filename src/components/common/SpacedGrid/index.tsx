@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Component, ReactNode} from "react";
+import {Component, ReactNode} from 'react';
 import styles from "./styles.module.css";
 
 export class SpacedGrid extends Component<{}, {}> {

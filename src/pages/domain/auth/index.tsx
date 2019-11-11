@@ -1,6 +1,5 @@
 import React, {ReactNode} from "react";
-import {Card, Tabs} from "antd";
-import {Icon} from 'antd';
+import {Card, Icon, Tabs} from "antd";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {DomainId} from "../../../models/DomainId";
@@ -15,10 +14,6 @@ export interface DomainAuthenticationProps extends RouteComponentProps<{tab: str
 
 export class DomainAuthentication extends React.Component<DomainAuthenticationProps, {}> {
   private readonly _breadcrumbs = [{title: "Authentication"}];
-
-  constructor(props: DomainAuthenticationProps) {
-    super(props);
-  }
 
   public render(): ReactNode {
     const tab = this.props.match.params.tab || "jwt";

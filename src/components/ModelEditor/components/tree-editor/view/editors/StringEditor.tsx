@@ -1,4 +1,4 @@
-import React, {ReactNode, KeyboardEvent} from 'react';
+import React, {KeyboardEvent, ReactNode} from 'react';
 import {Subscription} from "rxjs";
 import {StringNode} from "../../model/StringNode";
 import StringChangeDetector from "@convergence/string-change-detector";

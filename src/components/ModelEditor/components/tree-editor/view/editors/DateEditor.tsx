@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react';
+import React from 'react';
 import {DateNode} from "../../model/DateNode";
 import {DateUtils} from "../../../../utils/DateUtils";
 import classNames from "classnames";

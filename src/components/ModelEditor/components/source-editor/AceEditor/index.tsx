@@ -1,6 +1,6 @@
 import React, {ReactNode} from "react";
 import ace from 'brace';
-import 'brace/mode/json' ;
+import 'brace/mode/json';
 import 'brace/theme/xcode';
 
 import styles from "./styles.module.css";

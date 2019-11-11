@@ -15,7 +15,7 @@ import {DomainId} from "../../../../models/DomainId";
 import {PagedData} from "../../../../services/domain/common-rest-data";
 import {DomainModelsTable} from './DomainModelsTable';
 import queryString from 'query-string';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 const emptyPage: PagedData<Model> = {data: [], startIndex: 0, totalResults: 0};
 
@@ -70,17 +70,17 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
     const prevSearchParams = this._parseQueryInput(prevProps.location.search);
 
     if (
-      searchParams.queryInput != null && (
-        (prevSearchParams.queryInput != searchParams.queryInput) ||
-        (searchParams.pageSize != prevSearchParams.pageSize) ||
-        (searchParams.page != prevSearchParams.page)
+      searchParams.queryInput !== null && (
+        (prevSearchParams.queryInput !== searchParams.queryInput) ||
+        (searchParams.pageSize !== prevSearchParams.pageSize) ||
+        (searchParams.page !== prevSearchParams.page)
       )
     ) {
       this._performSearch(searchParams);
     }
 
     if (
-      (searchParams.queryInput == null || searchParams.mode != prevSearchParams.mode) && this.state.models.totalResults > 0
+      (searchParams.queryInput === null || searchParams.mode !== prevSearchParams.mode) && this.state.models.totalResults > 0
     ) {
       this.setState({
         models: {...emptyPage}

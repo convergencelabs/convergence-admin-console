@@ -1,7 +1,6 @@
 import * as React from 'react';
-import {ReactNode} from "react";
-import {Card, notification} from "antd";
-import {Icon} from 'antd';
+import {ReactNode} from 'react';
+import {Card, Icon, notification} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import styles from "./styles.module.css";
 import {injectAs} from "../../../utils/mobx-utils";

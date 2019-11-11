@@ -1,3 +1,9 @@
+import {Subscription} from "rxjs";
+import {TreeNode} from "./TreeNode";
+import {TreeModel, TreeModelCollapseAllEvent, TreeModelExpandAllEvent, TreeModelExpandToEvent} from "./TreeModel";
+import {ModelElement} from "../../../model/ModelElement";
+import {SapphireEvent} from "../../../SapphireEvent";
+
 export class NodeExpandedEvent implements SapphireEvent {
   public static readonly NAME: string = "expanded";
   public name: string = NodeExpandedEvent.NAME;
@@ -100,9 +106,3 @@ export abstract class ContainerNode<T extends ModelElement<any>> extends TreeNod
 
   public abstract removeChild(child: TreeNode<any>): void;
 }
-
-import {Subscription} from "rxjs";
-import {TreeNode} from "./TreeNode";
-import {TreeModel, TreeModelExpandToEvent, TreeModelExpandAllEvent, TreeModelCollapseAllEvent} from "./TreeModel";
-import {ModelElement} from "../../../model/ModelElement";
-import {SapphireEvent} from "../../../SapphireEvent";

@@ -1,5 +1,5 @@
-import React, {ReactNode} from "react";
-import {NodeRendererProps, NodeRendererState, NodeRenderer} from "./NodeRenderer";
+import {ReactNode} from "react";
+import {NodeRenderer, NodeRendererProps, NodeRendererState} from "./NodeRenderer";
 import {SapphireEvent} from "../../../../SapphireEvent";
 import {TreeNodeDataChangedEvent} from "../../model/TreeNode";
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
+import {ReactNode} from 'react';
 import styles from './styles.module.css';
 import {Layout} from "antd";
-import {ReactNode} from "react";
 
 export interface NavLayoutProps {
   sideNav?: ReactNode;

@@ -1,10 +1,5 @@
 import React, {ReactNode} from "react";
-import {
-  Card,
-  notification,
-  Form,
-  Icon
-} from "antd";
+import {Card, Form, Icon, notification} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import {RouteComponentProps} from "react-router";
 import {Page} from "../../../../components/common/Page/";
@@ -100,4 +95,4 @@ class CreateDomainCollectionComponent extends React.Component<InjectedProps, {}>
 }
 
 const injections = [SERVICES.DOMAIN_COLLECTION_SERVICE];
-export const CreateDomainCollection = injectAs<CreateDomainCollectionsProps>(injections, Form.create<{}>()(CreateDomainCollectionComponent));
+export const CreateDomainCollection = injectAs<CreateDomainCollectionsProps>(injections, Form.create()(CreateDomainCollectionComponent));

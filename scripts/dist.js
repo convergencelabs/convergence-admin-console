@@ -24,7 +24,7 @@ if (currentVersion.endsWith("SNAPSHOT")) {
 const opts = {
   str: fs.readFileSync(publishPackageFile, "utf8"),
   version: currentVersion
-}
+};
 
 bump(opts, function (err, res) {
   if (err) {

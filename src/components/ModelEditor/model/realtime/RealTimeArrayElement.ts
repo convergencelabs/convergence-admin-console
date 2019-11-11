@@ -2,8 +2,12 @@ import {ArrayElement} from "../ArrayElement";
 import {ModelElement} from "../ModelElement";
 import {ModelPathElement} from "../ModelPath";
 import {
-  RealTimeArray, ArraySetValueEvent, ArrayInsertEvent, ArrayReorderEvent,
-  ArraySetEvent, ArrayRemoveEvent
+  ArrayInsertEvent,
+  ArrayRemoveEvent,
+  ArrayReorderEvent,
+  ArraySetEvent,
+  ArraySetValueEvent,
+  RealTimeArray
 } from "@convergence/convergence";
 import {createRealTimeModelElement} from "./RealTimeModelElementFactory";
 import {ContainerElement} from "../ContainterElement";

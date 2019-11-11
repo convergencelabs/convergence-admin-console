@@ -1,11 +1,10 @@
 import React, {ReactNode} from "react";
 import classNames from "classnames";
+import styles from "./styles.module.scss";
 
 export type SourceStatus = "error" | "warning";
 export const SOURCE_STATUS_ERROR: SourceStatus = "error";
 export const SOURCE_STATUS_WARNING: SourceStatus = "warning";
-
-import styles from "./styles.module.scss";
 
 export interface SourceEditorStatusBarProps {
   cursor: {row: number, col: number};

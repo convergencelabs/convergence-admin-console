@@ -1,10 +1,11 @@
 import * as React from 'react';
 import * as H from 'history';
+import {UnregisterCallback} from 'history';
 import {Icon, Layout, Menu} from 'antd';
 import styles from './styles.module.css';
 import {matchPath, RouteComponentProps, withRouter} from "react-router";
 import {Link} from "react-router-dom";
-import {UnregisterCallback} from "history";
+
 const {Sider} = Layout;
 
 export interface SideNavigationMenuItem {

@@ -2,7 +2,7 @@ import {TreeNode} from "../TreeNode";
 
 export class SearchResult {
 
-  private _node: TreeNode<any>;
+  private readonly _node: TreeNode<any>;
 
   constructor(node: TreeNode<any>) {
     this._node = node;

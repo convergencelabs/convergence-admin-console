@@ -1,6 +1,6 @@
 import React, {ReactNode} from 'react';
 import {Page} from "../../../../components/common/Page/";
-import {Card, notification, Tag, Form, Icon} from "antd";
+import {Card, Form, Icon, notification, Tag} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import {RouteComponentProps} from "react-router";
 import {injectAs} from "../../../../utils/mobx-utils";
@@ -81,4 +81,4 @@ class SetDomainUserPasswordComponent extends React.Component<InjectedProps, {}> 
 }
 
 const injections = [SERVICES.DOMAIN_USER_SERVICE];
-export const SetDomainUserPassword = injectAs<SetDomainUserPasswordProps>(injections, Form.create<{}>()(SetDomainUserPasswordComponent));
+export const SetDomainUserPassword = injectAs<SetDomainUserPasswordProps>(injections, Form.create()(SetDomainUserPasswordComponent));

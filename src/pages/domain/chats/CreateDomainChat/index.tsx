@@ -1,6 +1,6 @@
-import React, {ReactNode, FormEvent} from "react";
+import React, {FormEvent, ReactNode} from "react";
 import {Page} from "../../../../components/common/Page/";
-import {Card, notification, Select, Form, Input, Icon, Button} from "antd";
+import {Button, Card, Form, Icon, Input, notification, Select} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
@@ -81,7 +81,7 @@ class CreateDomainChatComponent extends React.Component<InjectedProps, {}> {
     this.props.history.push(toDomainRoute(this.props.domainId, "chats"));
   }
 
-  private handleSubmit = (e: FormEvent<HTMLInputElement>) => {
+  private handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values: any) => {
       if (!err) {
@@ -122,4 +122,4 @@ class CreateDomainChatComponent extends React.Component<InjectedProps, {}> {
 
 const injections = [SERVICES.DOMAIN_CHAT_SERVICE];
 export const CreateDomainChat =
-  injectAs<CreateDomainChatProps>(injections, Form.create<{}>()(CreateDomainChatComponent));
+  injectAs<CreateDomainChatProps>(injections, Form.create()(CreateDomainChatComponent));

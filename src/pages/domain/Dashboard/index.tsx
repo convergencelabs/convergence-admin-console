@@ -1,7 +1,7 @@
 import React, {ReactNode} from "react";
 import {RouteComponentProps} from "react-router";
 import {Page} from "../../../components/common/Page";
-import {Row, Col, Card, Tabs, Input, Button, Icon} from 'antd';
+import {Button, Card, Col, Icon, Input, Row, Tabs} from 'antd';
 import CopyToClipboard from "react-copy-to-clipboard";
 import styles from "./styles.module.css";
 import {ConnectionPasswordSnippet} from "./snippet_connection_password";

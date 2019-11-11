@@ -1,10 +1,10 @@
 import React, {ReactElement} from "react";
 import {ObjectNodeRenderer, ObjectNodeRendererProps} from "./ObjectNodeRenderer";
 import {BooleanNodeRenderer, BooleanNodeRendererProps} from "./BooleanNodeRenderer";
-import {StringNodeRendererProps, StringNodeRenderer} from "./StringNodeRenderer";
-import {NumberNodeRendererProps, NumberNodeRenderer} from "./NumberNodeRenderer";
+import {StringNodeRenderer, StringNodeRendererProps} from "./StringNodeRenderer";
+import {NumberNodeRenderer, NumberNodeRendererProps} from "./NumberNodeRenderer";
 import {NullNodeRenderer, NullNodeRendererProps} from "./NullNodeRenderer";
-import {ArrayNodeRendererProps, ArrayNodeRenderer} from "./ArrayNodeRenderer";
+import {ArrayNodeRenderer, ArrayNodeRendererProps} from "./ArrayNodeRenderer";
 import {DateNodeRenderer, DateNodeRendererProps} from "./DateNodeRenderer";
 import {TreeNode} from "../../model/TreeNode";
 import {ObjectNode} from "../../model/ObjectNode";

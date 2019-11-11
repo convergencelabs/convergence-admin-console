@@ -1,6 +1,6 @@
 import * as React from 'react';
+import {ReactNode} from 'react';
 import {SideNavigation, SideNavigationMenuItem} from "../../common/SideNavigation/";
-import {ReactNode} from "react";
 import {STORES} from "../../../stores/StoreConstants";
 import {injectObserver} from "../../../utils/mobx-utils";
 import {ConfigStore} from "../../../stores/ConfigStore";

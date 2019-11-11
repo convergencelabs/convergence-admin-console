@@ -1,9 +1,5 @@
 import React, {ReactNode} from "react";
-import {
-  ContainerNodeRendererProps,
-  ContainerNodeRendererState,
-  ContainerNodeRenderer
-} from "./ContainerNodeRenderer";
+import {ContainerNodeRenderer, ContainerNodeRendererProps, ContainerNodeRendererState} from "./ContainerNodeRenderer";
 import {createNodeRenderer} from "./NodeRendererFactory";
 import {ArrayNode} from "../../model/ArrayNode";
 

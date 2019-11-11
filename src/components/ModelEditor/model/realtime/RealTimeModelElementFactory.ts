@@ -7,8 +7,14 @@ import {RealTimeStringElement} from "./RealTimeStringElement";
 import {RealTimeObjectElement} from "./RealTimeObjectElement";
 import {RealTimeDateElement} from "./RealTimeDateElement";
 import {
-  RealTimeElement, RealTimeArray, RealTimeNull, RealTimeNumber, RealTimeBoolean,
-  RealTimeDate, RealTimeString, RealTimeObject
+  RealTimeArray,
+  RealTimeBoolean,
+  RealTimeDate,
+  RealTimeElement,
+  RealTimeNull,
+  RealTimeNumber,
+  RealTimeObject,
+  RealTimeString
 } from "@convergence/convergence";
 import {ContainerElement} from "../ContainterElement";
 

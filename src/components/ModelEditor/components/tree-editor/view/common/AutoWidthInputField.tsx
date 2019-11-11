@@ -1,4 +1,4 @@
-import React, {MouseEvent, FocusEvent, ReactNode} from 'react';
+import React, {FocusEvent, MouseEvent, ReactNode} from 'react';
 
 export interface AutoWidthInputFieldProps {
   value: string;

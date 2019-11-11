@@ -1,4 +1,4 @@
-import React, {ReactNode, Component} from 'react';
+import React, {Component, ReactNode} from 'react';
 import styles from './styles.module.css';
 import {DomainDescriptor} from "../../../models/DomainDescriptor";
 import {Button, Card, Input, Tooltip} from "antd";

@@ -1,7 +1,7 @@
 import React, {ReactNode} from "react";
 import styles from "./styles.module.css";
 import {Button, Tooltip} from "antd";
-import { TooltipPlacement } from "antd/lib/tooltip";
+import {TooltipPlacement} from "antd/lib/tooltip";
 
 export interface ToolbarButtonProps {
   icon: string;

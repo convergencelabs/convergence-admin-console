@@ -1,11 +1,8 @@
 import React, {ReactNode} from "react";
 import {NumberNode} from "../../model/NumberNode";
 import {NumberEditor} from "../editors/NumberEditor";
-import {
-  EditableNodeRenderer, EditableNodeRendererProps,
-  EditableNodeRendererState
-} from "./EditableNodeRenderer";
-import {HighlightRange, Highlighter} from "../highlighter/Highlighter";
+import {EditableNodeRenderer, EditableNodeRendererProps, EditableNodeRendererState} from "./EditableNodeRenderer";
+import {Highlighter, HighlightRange} from "../highlighter/Highlighter";
 import {NumberSearchResult} from "../../model/search/NumberSearchResult";
 import classNames from "classnames";
 

@@ -1,3 +1,12 @@
+import {ModelElement, ModelElementEvent} from "../../../model/ModelElement";
+import {TreeModel} from "./TreeModel";
+import {Observable, Subject, Subscription} from "rxjs";
+import {SapphireEvent} from "../../../SapphireEvent";
+import {ModelPath, ModelPathElement} from "../../../model/ModelPath";
+import {ContainerNode} from "./ContainerNode";
+import {SearchResult} from "./search/SearchResult";
+import {ModelSubtreeChangedEvent} from "../../../model/ContainterElement";
+
 export interface TreeNodeEvents {
   readonly SELECTION_CHANGED: string;
 }
@@ -67,7 +76,7 @@ export abstract class TreeNode<T extends ModelElement<any>> {
   private _searchResults: SearchResult[];
   private _activeSearchResult: SearchResult | null;
 
-  protected constructor(tree: TreeModel,
+  constructor(tree: TreeModel,
               parent: ContainerNode<any> | null,
               element: T, selected: boolean) {
     this._tree = tree;
@@ -208,12 +217,3 @@ export abstract class TreeNode<T extends ModelElement<any>> {
 
   protected abstract _handleElementEvent(e: ModelElementEvent): void;
 }
-
-import {ModelElement, ModelElementEvent} from "../../../model/ModelElement";
-import {TreeModel} from "./TreeModel";
-import {Subject, Observable, Subscription} from "rxjs";
-import {SapphireEvent} from "../../../SapphireEvent";
-import {ModelPath, ModelPathElement} from "../../../model/ModelPath";
-import {ContainerNode} from "./ContainerNode";
-import {SearchResult} from "./search/SearchResult";
-import {ModelSubtreeChangedEvent} from "../../../model/ContainterElement";

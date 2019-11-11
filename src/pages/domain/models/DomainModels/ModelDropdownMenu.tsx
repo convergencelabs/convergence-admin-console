@@ -1,14 +1,14 @@
 import * as React from 'react';
-import {ReactNode} from "react";
+import {ReactNode} from 'react';
 import confirm from "antd/lib/modal/confirm";
 import {Dropdown, Icon, Menu} from "antd";
 import {Link} from "react-router-dom";
 import CopyToClipboard from "react-copy-to-clipboard";
-import { DomainModelService } from '../../../../services/domain/DomainModelService';
+import {DomainModelService} from '../../../../services/domain/DomainModelService';
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {injectAs} from "../../../../utils/mobx-utils";
-import { DomainId } from '../../../../models/DomainId';
-import { Model } from '../../../../models/domain/Model';
+import {DomainId} from '../../../../models/DomainId';
+import {Model} from '../../../../models/domain/Model';
 import {toDomainRoute} from "../../../../utils/domain-url";
 
 interface ModelDropdownMenuProps {

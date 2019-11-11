@@ -1,10 +1,8 @@
 import * as React from 'react';
+import {FormEvent, ReactNode} from 'react';
 import {Page} from "../../../../components/common/Page/";
-import {ReactNode} from "react";
-import {Card, Col, notification, Row} from "antd";
-import {Form, Input, Tooltip, Icon, Button} from 'antd';
+import {Button, Card, Col, Form, Icon, Input, notification, Row, Tooltip} from "antd";
 import {FormComponentProps} from "antd/lib/form";
-import {FormEvent} from "react";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
@@ -77,7 +75,7 @@ class CreateNamespaceComponent extends React.Component<InjectedProps, {}> {
     this.props.history.push("/namespaces/");
   }
 
-  private handleSubmit = (e: FormEvent<HTMLInputElement>) => {
+  private handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values: any) => {
       if (!err) {
@@ -108,4 +106,4 @@ class CreateNamespaceComponent extends React.Component<InjectedProps, {}> {
   }
 }
 
-export const CreateNamespace = injectAs<RouteComponentProps>([SERVICES.NAMESPACE_SERVICE], Form.create<{}>()(CreateNamespaceComponent));
+export const CreateNamespace = injectAs<RouteComponentProps>([SERVICES.NAMESPACE_SERVICE], Form.create()(CreateNamespaceComponent));

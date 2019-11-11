@@ -1,7 +1,6 @@
 import {Page} from "../../../../components/common/Page/";
 import React, {ReactNode} from "react";
-import {Card, notification, Popconfirm, Tabs} from "antd";
-import {Icon} from 'antd';
+import {Card, Icon, notification, Popconfirm, Tabs} from "antd";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {injectAs} from "../../../../utils/mobx-utils";

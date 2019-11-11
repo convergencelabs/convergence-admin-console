@@ -1,5 +1,5 @@
 import React, {ReactNode} from "react";
-import {ModelRoot, createTreeElementRoot} from "./model/ModelFactory";
+import {createTreeElementRoot, ModelRoot} from "./model/ModelFactory";
 import {createTreeNode} from "./components/tree-editor/model/TreeNodeFactory";
 import {PathControlModel, PathElementSelectionEvent} from "./components/path/PathControlModel";
 import {EditorMode} from "./EditorMode";

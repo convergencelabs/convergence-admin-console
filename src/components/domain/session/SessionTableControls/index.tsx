@@ -1,7 +1,8 @@
 import React, {ReactNode} from "react";
-import {Input, Select, Form, Button, Row, Col} from "antd";
+import {Button, Col, Form, Input, Row, Select} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import styles from "./styles.module.css";
+import {FormCreateOption} from "antd/es/form";
 
 export interface SessionTableFilters {
   sessionId: string;
@@ -10,15 +11,11 @@ export interface SessionTableFilters {
   authMethod: string;
 }
 
-export interface SessionTableControlsProps {
+export interface SessionTableControlsProps extends FormComponentProps{
   onFilter(filters: SessionTableFilters): void;
 }
 
-interface InjectedProps extends SessionTableControlsProps, FormComponentProps {
-
-}
-
-class SessionTableControlsForm extends React.Component<InjectedProps, {}> {
+class SessionTableControlsForm extends React.Component<SessionTableControlsProps, {}> {
 
   public render(): ReactNode {
     const {getFieldDecorator} = this.props.form;
@@ -79,4 +76,5 @@ class SessionTableControlsForm extends React.Component<InjectedProps, {}> {
   }
 }
 
-export const SessionTableControls = Form.create<{}>()(SessionTableControlsForm);
+const formOptions: FormCreateOption<SessionTableControlsProps> = {};
+export const SessionTableControls = Form.create(formOptions)(SessionTableControlsForm);

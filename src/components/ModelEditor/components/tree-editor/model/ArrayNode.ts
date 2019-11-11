@@ -1,3 +1,18 @@
+import {
+  ArrayElement,
+  ArrayInsertEvent,
+  ArrayRemoveEvent,
+  ArrayReorderEvent,
+  ArraySetEvent,
+  ArrayValueEvent
+} from "../../../model/ArrayElement";
+import {ModelElement, ModelElementEvent} from "../../../model/ModelElement";
+import {ModelPath, ModelPathElement} from "../../../model/ModelPath";
+import {TreeModel} from "./TreeModel";
+import {ContainerNode} from "./ContainerNode";
+import {TreeNode} from "./TreeNode";
+import {createTreeNode} from "./TreeNodeFactory";
+
 export class ArrayNode extends ContainerNode<ArrayElement> {
   private _children: Array<TreeNode<any>>;
 
@@ -57,18 +72,3 @@ export class ArrayNode extends ContainerNode<ArrayElement> {
     }
   }
 }
-
-import {
-  ArrayElement,
-  ArrayInsertEvent,
-  ArrayRemoveEvent,
-  ArrayReorderEvent,
-  ArraySetEvent,
-  ArrayValueEvent
-} from "../../../model/ArrayElement";
-import {ModelElement, ModelElementEvent} from "../../../model/ModelElement";
-import {ModelPath, ModelPathElement} from "../../../model/ModelPath";
-import {TreeModel} from "./TreeModel";
-import {ContainerNode} from "./ContainerNode";
-import {TreeNode} from "./TreeNode";
-import {createTreeNode} from "./TreeNodeFactory";

@@ -1,7 +1,6 @@
 import * as React from 'react';
-import {Component, ReactNode} from "react";
-import {AutoComplete} from "antd";
-import {Select} from "antd";
+import {Component, ReactNode} from 'react';
+import {AutoComplete, Select} from "antd";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {Collection} from "../../../../models/domain/Collection";

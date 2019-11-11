@@ -1,11 +1,8 @@
 import React, {ReactNode} from "react";
 import {BooleanNode} from "../../model/BooleanNode";
 import {BooleanEditor} from "../editors/BooleanEditor";
-import {
-  EditableNodeRendererProps, EditableNodeRendererState,
-  EditableNodeRenderer
-} from "./EditableNodeRenderer";
-import {HighlightRange, Highlighter} from "../highlighter/Highlighter";
+import {EditableNodeRenderer, EditableNodeRendererProps, EditableNodeRendererState} from "./EditableNodeRenderer";
+import {Highlighter, HighlightRange} from "../highlighter/Highlighter";
 import {BooleanSearchResult} from "../../model/search/BooleanSearchResult";
 import classNames from "classnames";
 
@@ -21,10 +18,6 @@ export class BooleanNodeRenderer extends EditableNodeRenderer<BooleanNodeRendere
 
   private _span: HTMLSpanElement | null = null;
   private _text: Text | null = null;
-
-  constructor(props: BooleanNodeRendererProps, context: any) {
-    super(props, context);
-  }
 
   public render(): ReactNode {
     return super.render();

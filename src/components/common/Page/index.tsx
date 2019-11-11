@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ReactNode} from "react";
+import {ReactNode} from 'react';
 import styles from './styles.module.css';
 import {BreadcrumbsStore, IBreadcrumbSegment} from "../../../stores/BreacrumsStore";
 import {STORES} from "../../../stores/StoreConstants";

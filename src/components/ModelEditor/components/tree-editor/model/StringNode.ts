@@ -1,8 +1,8 @@
-export class StringNode extends TreeNode<StringElement> {
-  constructor(tree: TreeModel, parent: ContainerNode<any> | null, data: StringElement, selected: boolean) {
-    super(tree, parent, data, selected);
-  }
+import {StringElement, StringInsertEvent, StringRemoveEvent, StringValueEvent} from "../../../model/StringElement";
+import {TreeNode} from "./TreeNode";
+import {ModelElementEvent} from "../../../model/ModelElement";
 
+export class StringNode extends TreeNode<StringElement> {
   protected _handleElementEvent(e: ModelElementEvent): void {
     // FIXME need to emit granular events
     if (e instanceof StringValueEvent) {
@@ -14,9 +14,3 @@ export class StringNode extends TreeNode<StringElement> {
     }
   }
 }
-
-import {StringElement, StringValueEvent, StringInsertEvent, StringRemoveEvent} from "../../../model/StringElement";
-import {TreeModel} from "./TreeModel";
-import {TreeNode} from "./TreeNode";
-import {ContainerNode} from "./ContainerNode";
-import {ModelElementEvent} from "../../../model/ModelElement";

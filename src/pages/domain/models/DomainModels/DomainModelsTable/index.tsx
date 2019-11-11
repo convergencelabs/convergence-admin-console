@@ -1,21 +1,21 @@
 import * as React from 'react';
-import {ReactNode} from "react";
+import {ReactNode} from 'react';
 import moment from "moment";
 import {Table, Tooltip} from "antd";
 import {Link} from "react-router-dom";
 import styles from "./styles.module.css";
-import { Model } from '../../../../../models/domain/Model';
+import {Model} from '../../../../../models/domain/Model';
 import {TypeChecker} from "../../../../../utils/TypeChecker";
 import {longDateTime, shortDateTime, truncate} from "../../../../../utils/format-utils";
-import { PagedData } from '../../../../../services/domain/common-rest-data';
-import { SearchParams } from '../index';
-import { ModelSearchMode } from '../ModelControls';
-import { ModelDropdownMenu } from '../ModelDropdownMenu';
-import { ModelRowExpanded } from '../ModelRowExpanded';
-import { DomainId } from '../../../../../models/DomainId';
-import { toDomainRoute } from '../../../../../utils/domain-url';
-import { History } from 'history';
-import { appendtoQueryParamString } from '../../../../../utils/router-utils';
+import {PagedData} from '../../../../../services/domain/common-rest-data';
+import {SearchParams} from '../index';
+import {ModelSearchMode} from '../ModelControls';
+import {ModelDropdownMenu} from '../ModelDropdownMenu';
+import {ModelRowExpanded} from '../ModelRowExpanded';
+import {DomainId} from '../../../../../models/DomainId';
+import {toDomainRoute} from '../../../../../utils/domain-url';
+import {History} from 'history';
+import {appendToQueryParamString} from '../../../../../utils/router-utils';
 
 interface DomainModelsTableProps {
   history: History;
@@ -166,7 +166,7 @@ export class DomainModelsTable extends React.Component<DomainModelsTableProps, {
   }
 
   private _pageChange = (page: number, pageSize?: number) => {
-    let newUrl = appendtoQueryParamString({page, pageSize});
+    let newUrl = appendToQueryParamString({page, pageSize});
     this.props.history.push(newUrl);
   }
 

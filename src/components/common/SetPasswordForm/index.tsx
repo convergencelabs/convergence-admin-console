@@ -1,20 +1,19 @@
 import * as React from 'react';
-import {ReactNode} from "react";
-import {Col, Row} from "antd";
-import {Form, Input, Button} from 'antd';
+import {FormEvent, ReactNode} from 'react';
+import {Button, Col, Form, Input, Row} from "antd";
 import {FormComponentProps} from "antd/lib/form";
-import {FormEvent} from "react";
 import {PromiseSubscription} from "../../../utils/make-cancelable";
 import {PasswordFormValidator} from "../../../utils/PasswordFormValidator";
 import {PasswordConfig} from "../../../models/PasswordConfig";
 import {FormButtonBar} from "../FormButtonBar/";
+import {FormCreateOption} from "antd/es/form";
 
-interface SetPasswordProps {
+interface SetPasswordProps extends FormComponentProps{
+  passwordConfig: PasswordConfig;
   onSetPassword(password: string): Promise<boolean>;
   onCancel?: () => void;
   showCancel?: boolean;
   okButtonText?: string;
-  passwordConfig: PasswordConfig;
 }
 
 interface InjectedProps extends SetPasswordProps, FormComponentProps {
@@ -90,7 +89,7 @@ class SetPasswordFormComponent extends React.Component<InjectedProps, ChangePass
     }
   }
 
-  private _handleSubmit = (e: FormEvent<HTMLInputElement>) => {
+  private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err: any, values: any) => {
       if (!err) {
@@ -132,4 +131,5 @@ class SetPasswordFormComponent extends React.Component<InjectedProps, ChangePass
   }
 }
 
-export const SetPasswordForm = Form.create({})(SetPasswordFormComponent);
+const formOptions: FormCreateOption<SetPasswordProps> = {};
+export const SetPasswordForm = Form.create(formOptions)(SetPasswordFormComponent);

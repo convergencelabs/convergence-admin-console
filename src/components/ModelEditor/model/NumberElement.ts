@@ -1,6 +1,5 @@
 import {ModelElement, ModelElementMutationEvent} from "./ModelElement";
 import {ModelElementTypes} from "./ModelElementTypes";
-import {ContainerElement} from "./ContainterElement";
 
 export class NumberValueEvent implements ModelElementMutationEvent {
   public static readonly NAME: string = "value";
@@ -22,10 +21,6 @@ export class NumberDeltaEvent implements ModelElementMutationEvent {
 }
 
 export abstract class NumberElement extends ModelElement<number> {
-  constructor(id: string, parent: ContainerElement<any>) {
-    super(id, parent);
-  }
-
   public type(): string {
     return ModelElementTypes.NUMBER;
   }

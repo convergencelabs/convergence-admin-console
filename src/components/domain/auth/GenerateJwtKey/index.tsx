@@ -1,6 +1,5 @@
 import React, {ReactNode} from "react";
-import {Modal, Spin, Tabs} from "antd";
-import {Input, Button} from 'antd';
+import {Button, Input, Modal, Spin, Tabs} from "antd";
 import {FormButtonBar} from "../../../common/FormButtonBar";
 import {DomainJwtKeyService} from "../../../../services/domain/DomainJwtKeyService";
 import {SERVICES} from "../../../../services/ServiceConstants";

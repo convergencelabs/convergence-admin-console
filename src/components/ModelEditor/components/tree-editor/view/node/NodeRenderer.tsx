@@ -4,7 +4,8 @@ import {Subscription} from "rxjs";
 import classNames from "classnames";
 import {SapphireEvent} from "../../../../SapphireEvent";
 import {
-  TreeNode, TreeNodeActiveSearchResultEvent,
+  TreeNode,
+  TreeNodeActiveSearchResultEvent,
   TreeNodeDataChangedEvent,
   TreeNodeSearchResultsEvent,
   TreeNodeSelectionEvent

@@ -1,12 +1,8 @@
 import React, {ReactNode} from "react";
 import {DateNode} from "../../model/DateNode";
-import {
-  EditableNodeRendererProps,
-  EditableNodeRendererState,
-  EditableNodeRenderer
-} from "./EditableNodeRenderer";
+import {EditableNodeRenderer, EditableNodeRendererProps, EditableNodeRendererState} from "./EditableNodeRenderer";
 import {DateEditor} from "../editors/DateEditor";
-import {HighlightRange, Highlighter} from "../highlighter/Highlighter";
+import {Highlighter, HighlightRange} from "../highlighter/Highlighter";
 import {DateSearchResult} from "../../model/search/DateSearchResult";
 import classNames from "classnames";
 import {DateUtils} from "../../../../utils/DateUtils";

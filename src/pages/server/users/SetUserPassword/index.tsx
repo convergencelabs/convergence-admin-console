@@ -1,8 +1,7 @@
 import React, {ReactNode} from "react";
 import {Page} from "../../../../components/common/Page/";
 import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
-import {Card, notification, Tag} from "antd";
-import {Form, Icon} from 'antd';
+import {Card, Form, Icon, notification, Tag} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import {RouteComponentProps} from "react-router";
 import {UserService} from "../../../../services/UserService";
@@ -77,4 +76,4 @@ class SetUserPasswordComponent extends React.Component<InjectedProps, SetUserPas
 }
 
 const injections = [SERVICES.USER_SERVICE];
-export const SetUserPassword = injectAs<RouteComponentProps>(injections, Form.create<{}>()(SetUserPasswordComponent));
+export const SetUserPassword = injectAs<RouteComponentProps>(injections, Form.create()(SetUserPasswordComponent));

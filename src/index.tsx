@@ -86,21 +86,21 @@ if (authToken) {
         loggedInUserService.getProfile()
           .then((profile) => {
             profileStore.setProfile(profile);
-            boostrap();
+            bootstrap();
           })
       } else {
-        boostrap();
+        bootstrap();
       }
     })
     .catch(err => {
       console.error(err);
-      boostrap();
+      bootstrap();
     });
 } else {
-  boostrap();
+  bootstrap();
 }
 
-function boostrap() {
+function bootstrap() {
   ReactDOM.render((
     <Provider {...stores} {...services}>
       <AdminConsole/>

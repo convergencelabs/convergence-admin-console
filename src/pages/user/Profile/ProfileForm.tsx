@@ -1,9 +1,7 @@
 import * as React from 'react';
-import {ReactNode} from "react";
-import {Card, Col, notification, Row} from "antd";
-import {Form, Input, Tooltip, Icon, Button} from 'antd';
+import {FormEvent, ReactNode} from 'react';
+import {Button, Card, Col, Form, Icon, Input, notification, Row, Tooltip} from "antd";
 import {FormComponentProps} from "antd/lib/form";
-import {FormEvent} from "react";
 import styles from "./styles.module.css";
 import {makeCancelable, PromiseSubscription} from "../../../utils/make-cancelable";
 import {LoggedInUserService} from "../../../services/LoggedInUserService";
@@ -153,7 +151,7 @@ class ProfileFormComponent extends React.Component<InjectedProps, EditUserState>
     });
   }
 
-  private handleSubmit = (e: FormEvent<HTMLInputElement>) => {
+  private handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values: any) => {
       if (!err) {
@@ -185,4 +183,4 @@ class ProfileFormComponent extends React.Component<InjectedProps, EditUserState>
   }
 }
 
-export const ProfileForm = injectAs<ProfileFormProps>([SERVICES.LOGGED_IN_USER_SERVICE], Form.create<{}>()(ProfileFormComponent));
+export const ProfileForm = injectAs<ProfileFormProps>([SERVICES.LOGGED_IN_USER_SERVICE], Form.create()(ProfileFormComponent));

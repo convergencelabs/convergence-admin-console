@@ -36,4 +36,4 @@ export class SettingsComponent extends React.Component<FormComponentProps, {}> {
   }
 }
 
-export const Settings = Form.create<{}>()(SettingsComponent);
+export const Settings = Form.create()(SettingsComponent);

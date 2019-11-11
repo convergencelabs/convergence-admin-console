@@ -1,9 +1,8 @@
-import React, {ReactNode} from "react";
+import React, {FormEvent, ReactNode} from "react";
 import {Button, Form, Input, notification, Select} from "antd";
 import {FormFieldWithHelp} from "../../../components/common/FormFieldWithHelp/";
 import {FormButtonBar} from "../../../components/common/FormButtonBar/";
 import {FormComponentProps} from "antd/lib/form";
-import {FormEvent} from "react";
 import {injectAs} from "../../../utils/mobx-utils";
 import {SERVICES} from "../../../services/ServiceConstants";
 import {makeCancelable, PromiseSubscription} from "../../../utils/make-cancelable";
@@ -122,7 +121,7 @@ class NamespaceSettingsComponent extends React.Component<InjectedProps, Namespac
     }
   }
 
-  private _handleSubmit = (e: FormEvent<HTMLInputElement>) => {
+  private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
@@ -168,4 +167,4 @@ class NamespaceSettingsComponent extends React.Component<InjectedProps, Namespac
 }
 
 const injections = [SERVICES.CONFIG_SERVICE, STORES.CONFIG_STORE];
-export const NamespaceSettings = injectAs<{}>(injections, Form.create<{}>()(NamespaceSettingsComponent));
+export const NamespaceSettings = injectAs<{}>(injections, Form.create()(NamespaceSettingsComponent));

@@ -63,4 +63,4 @@ class CreateApiKeyComponent extends React.Component<InjectedProps, {}> {
   }
 }
 
-export const CreateApiKey = injectAs<RouteComponentProps>([SERVICES.API_KEY_SERVICE], Form.create<{}>()(CreateApiKeyComponent));
+export const CreateApiKey = injectAs<RouteComponentProps>([SERVICES.API_KEY_SERVICE], Form.create()(CreateApiKeyComponent));

@@ -2,14 +2,14 @@ import * as React from 'react';
 import {ReactNode} from 'react';
 import AceEditor from "react-ace";
 import {Link} from "react-router-dom";
-import { Popconfirm } from 'antd';
+import {Popconfirm} from 'antd';
 import "brace";
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
 import styles from "./styles.module.css";
 import {ToolbarButton} from "../../../../../components/common/ToolbarButton";
-import { Model } from '../../../../../models/domain/Model';
-import { DomainId } from '../../../../../models/DomainId';
+import {Model} from '../../../../../models/domain/Model';
+import {DomainId} from '../../../../../models/DomainId';
 import {toDomainRoute} from "../../../../../utils/domain-url";
 import {longDateTime} from "../../../../../utils/format-utils";
 

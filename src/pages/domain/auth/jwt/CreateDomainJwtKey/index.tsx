@@ -1,5 +1,5 @@
 import React, {ReactNode} from "react";
-import {Card, notification, Icon} from "antd";
+import {Card, Icon, notification} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import {RouteComponentProps} from "react-router";
 import {DomainId} from "../../../../../models/DomainId";

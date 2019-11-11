@@ -3,8 +3,8 @@ import {StringNode} from "../StringNode";
 
 export class StringSearchResult extends SearchResult {
 
-  private _start: number;
-  private _end: number;
+  private readonly _start: number;
+  private readonly _end: number;
 
   constructor(node: StringNode, start: number, end: number) {
     super(node);

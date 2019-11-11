@@ -1,6 +1,6 @@
 import React, {ReactNode} from "react";
 import {Page} from "../../../../components/common/Page/";
-import {Card, notification, Icon} from "antd";
+import {Card, Icon, notification} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import {RouteComponentProps} from "react-router";
 import {injectAs} from "../../../../utils/mobx-utils";

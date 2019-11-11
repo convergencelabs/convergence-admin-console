@@ -1,10 +1,5 @@
 import React, {Component} from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  RouteComponentProps
-} from "react-router-dom";
+import {BrowserRouter as Router, Route, RouteComponentProps, Switch} from "react-router-dom";
 import {LoginForm} from "./components/common/LoginForm/";
 import {PrivateRoute} from "./containers/PrivateRoute";
 import {Root} from "./containers/Root";

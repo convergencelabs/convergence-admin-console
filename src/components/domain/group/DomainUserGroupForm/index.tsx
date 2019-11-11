@@ -1,14 +1,13 @@
-import React, {ReactNode} from "react";
-import {Col, Row} from "antd";
-import {Form, Input, Button} from 'antd';
+import React, {FormEvent, ReactNode} from "react";
+import {Button, Col, Form, Input, Row} from "antd";
 import {FormComponentProps} from "antd/lib/form";
-import {FormEvent} from "react";
 import {DomainId} from "../../../../models/DomainId";
 import {DomainUserList} from "../../user/DomainUserList/";
 import {DomainUserGroup} from "../../../../models/domain/DomainUserGroup";
 import {FormButtonBar} from "../../../common/FormButtonBar";
+import {FormCreateOption} from "antd/es/form";
 
-export interface DomainUserGroupFormProps {
+export interface DomainUserGroupFormProps extends FormComponentProps{
   domainId: DomainId;
   initialValue: DomainUserGroup;
   saveButtonLabel: string;
@@ -16,16 +15,12 @@ export interface DomainUserGroupFormProps {
   onSave(group: DomainUserGroup): void;
 }
 
-interface InjectedProps extends DomainUserGroupFormProps, FormComponentProps {
-
-}
-
 export interface DomainUserGroupFormState {
   members: string[];
 }
 
-class DomainUserGroupFormComponent extends React.Component<InjectedProps, DomainUserGroupFormState> {
-  constructor(props: InjectedProps) {
+class DomainUserGroupFormComponent extends React.Component<DomainUserGroupFormProps, DomainUserGroupFormState> {
+  constructor(props: DomainUserGroupFormProps) {
     super(props);
 
     this.state = {
@@ -92,7 +87,7 @@ class DomainUserGroupFormComponent extends React.Component<InjectedProps, Domain
    this.props.onCancel();
   }
 
-  private _handleSubmit = (e: FormEvent<HTMLInputElement>) => {
+  private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values: any) => {
       if (!err) {
@@ -104,4 +99,5 @@ class DomainUserGroupFormComponent extends React.Component<InjectedProps, Domain
   }
 }
 
-export const DomainUserGroupForm = Form.create<{}>()(DomainUserGroupFormComponent);
+const formOptions: FormCreateOption<DomainUserGroupFormProps> = {};
+export const DomainUserGroupForm = Form.create(formOptions)(DomainUserGroupFormComponent);

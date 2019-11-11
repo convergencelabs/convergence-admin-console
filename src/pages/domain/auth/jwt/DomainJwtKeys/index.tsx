@@ -87,7 +87,7 @@ class DomainJwtKeysComponent extends React.Component<InjectedProps, DomainJwtKey
           JSON Web Tokens (JWT) provide a mechanism for convergence to trust users authenticated by external systems. If
           you have an external application tht you would like to have manage authentication, you can set up a
           JWT Authentication key so Convergence will trust the authentication performed by the external system. You can
-          read more about JWT at <a href="https://jwt.io/" target="_blank">https://jwt.io/</a>
+          read more about JWT at <a href="https://jwt.io/" target="_blank" rel="noopener noreferrer">https://jwt.io/</a>
         </DescriptionBox>
         <Card className={styles.keysTable}
               title={this._renderToolbar()}

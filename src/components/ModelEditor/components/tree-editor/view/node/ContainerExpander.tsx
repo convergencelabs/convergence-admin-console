@@ -1,6 +1,6 @@
 import React, {ReactNode} from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPlusSquare, faMinusSquare} from "@fortawesome/free-regular-svg-icons";
+import {faMinusSquare, faPlusSquare} from "@fortawesome/free-regular-svg-icons";
 
 export interface ContainerExpanderProps {
   expanded: boolean,

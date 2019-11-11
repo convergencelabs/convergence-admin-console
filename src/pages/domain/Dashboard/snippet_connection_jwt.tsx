@@ -4,8 +4,8 @@ import {CodeSnippet} from "../../../components/domain/common/CodeSnippet";
 const DESCRIPTION = (
   <div>
     This snippet demonstrates connecting to a domain using a trusted JSON Web Token (JWT). It makes use of the
-    <a href="https://www.npmjs.com/package/@convergence/jwt-util" target="_blank"> Convergence Jwt Utility</a> to
-    simplify the creation of appropriate JTWs.
+    <a href="https://www.npmjs.com/package/@convergence/jwt-util" target="_blank" rel="noopener noreferrer">
+      Convergence Jwt Utility</a> to simplify the creation of appropriate JTWs.
   </div>);
 
 export const ConnectionJwtSnippet: React.FunctionComponent<{ connectionUrl: string }> = (props) => {

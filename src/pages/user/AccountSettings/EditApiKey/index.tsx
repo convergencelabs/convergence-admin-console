@@ -21,7 +21,7 @@ interface EditApiKeyState {
   apiKey: UserApiKey | null;
 }
 
-class EditApiKeyComponent extends React.Component<InjectedProps,EditApiKeyState> {
+class EditApiKeyComponent extends React.Component<InjectedProps, EditApiKeyState> {
   private readonly _breadcrumbs: IBreadcrumbSegment[];
 
   constructor(props: InjectedProps) {
@@ -51,8 +51,10 @@ class EditApiKeyComponent extends React.Component<InjectedProps,EditApiKeyState>
       return (
         <Page breadcrumbs={this._breadcrumbs}>
           <Card title={<span><Icon type="key"/> Update API Key</span>} className={styles.formCard}>
-            <ApiKeyForm initialValue={apiKey} saveButtonLabel="Update"
-                        onCancel={this._handleCancel} onSave={this._handleSubmit}
+            <ApiKeyForm initialValue={apiKey}
+                        saveButtonLabel="Update"
+                        onCancel={this._handleCancel}
+                        onSave={this._handleSubmit}
             />
           </Card>
         </Page>
@@ -89,4 +91,4 @@ class EditApiKeyComponent extends React.Component<InjectedProps,EditApiKeyState>
   }
 }
 
-export const EditApiKey = injectAs<RouteComponentProps>([SERVICES.API_KEY_SERVICE], Form.create<{}>()(EditApiKeyComponent));
+export const EditApiKey = injectAs<RouteComponentProps>([SERVICES.API_KEY_SERVICE], Form.create()(EditApiKeyComponent));

@@ -1,3 +1,17 @@
+import {
+  ObjectElement,
+  ObjectElementRemoveEvent,
+  ObjectElementRenameEvent,
+  ObjectElementSetEvent,
+  ObjectElementValueEvent
+} from "../../../model/ObjectElement";
+import {ContainerNode} from "./ContainerNode";
+import {TreeNode} from "./TreeNode";
+import {createTreeNode} from "./TreeNodeFactory";
+import {TreeModel} from "./TreeModel";
+import {ModelElement, ModelElementEvent} from "../../../model/ModelElement";
+import {ModelPath, ModelPathElement} from "../../../model/ModelPath";
+
 export class ObjectNode extends ContainerNode<ObjectElement> {
 
   private _children: Map<string, TreeNode<any>>;
@@ -55,17 +69,3 @@ export class ObjectNode extends ContainerNode<ObjectElement> {
     }
   }
 }
-
-import {
-  ObjectElement,
-  ObjectElementSetEvent,
-  ObjectElementRemoveEvent,
-  ObjectElementRenameEvent,
-  ObjectElementValueEvent
-} from "../../../model/ObjectElement";
-import {ContainerNode} from "./ContainerNode";
-import {TreeNode} from "./TreeNode";
-import {createTreeNode} from "./TreeNodeFactory";
-import {TreeModel} from "./TreeModel";
-import {ModelElement, ModelElementEvent} from "../../../model/ModelElement";
-import {ModelPath, ModelPathElement} from "../../../model/ModelPath";

@@ -1,14 +1,13 @@
 import * as React from 'react';
-import {ReactNode} from "react";
-import {Input, InputNumber, Select} from "antd";
-import {Form, Button} from 'antd';
+import {ReactNode} from 'react';
+import {Button, Form, Input, InputNumber, Select} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import {CollectionAutoComplete} from "../../../../../components/domain/collection/CollectionAutoComplete";
 import {DomainId} from "../../../../../models/DomainId";
 import styles from "./styles.module.css";
-import {IReactComponent} from "mobx-react";
-import { createQueryParamString, appendtoQueryParamString } from '../../../../../utils/router-utils';
-import { History } from 'history';
+import {appendToQueryParamString, createQueryParamString} from '../../../../../utils/router-utils';
+import {History} from 'history';
+import {FormCreateOption} from "antd/es/form";
 
 const {Option} = Select;
 
@@ -18,7 +17,7 @@ export enum ModelSearchMode {
   ID = "id",
 }
 
-interface ModelControlsProps {
+interface ModelControlsProps extends FormComponentProps {
   domainId: DomainId;
   pageSize: number;
   history: History;
@@ -26,11 +25,7 @@ interface ModelControlsProps {
   submittedQueryInput?: string;
 }
 
-interface InjectedProps extends ModelControlsProps, FormComponentProps {
-
-}
-
-class ModelControlsComponent extends React.Component<InjectedProps, {}> {
+class ModelControlsComponent extends React.Component<ModelControlsProps, {}> {
 
   public render(): ReactNode {
     const {getFieldDecorator} = this.props.form;
@@ -70,10 +65,10 @@ class ModelControlsComponent extends React.Component<InjectedProps, {}> {
         {
           mode === ModelSearchMode.BROWSE ?
             getFieldDecorator('collection', {initialValue: queryInput})(
-              <CollectionAutoComplete 
-                initialValue={queryInput} 
-                className={styles.collection} 
-                domainId={this.props.domainId} 
+              <CollectionAutoComplete
+                initialValue={queryInput}
+                className={styles.collection}
+                domainId={this.props.domainId}
                 placeholder="Start typing to search..."
               />
             ) : null
@@ -97,7 +92,7 @@ class ModelControlsComponent extends React.Component<InjectedProps, {}> {
               {getFieldDecorator('resultsPerPage', {initialValue: this.props.pageSize})(
                 <InputNumber/>
               )}
-            </span>: null
+            </span> : null
         }
         <Button htmlType="button"
                 type="primary"
@@ -123,7 +118,7 @@ class ModelControlsComponent extends React.Component<InjectedProps, {}> {
           case "browse":
             // todo just update the url query params
             // this.props.onBrowse(collection, resultsPerPage);
-            newUrl = appendtoQueryParamString({
+            newUrl = appendToQueryParamString({
               collection, pageSize: resultsPerPage
             });
             break;
@@ -132,11 +127,11 @@ class ModelControlsComponent extends React.Component<InjectedProps, {}> {
             if (query.endsWith(";")) {
               query = query.substring(0, query.length - 1);
             }
-            newUrl = appendtoQueryParamString({query});
+            newUrl = appendToQueryParamString({query});
             break;
           }
           case "id":
-            newUrl = appendtoQueryParamString({id});
+            newUrl = appendToQueryParamString({id});
             break;
         }
 
@@ -148,4 +143,5 @@ class ModelControlsComponent extends React.Component<InjectedProps, {}> {
   }
 }
 
-export const ModelControls = Form.create<{}>()(ModelControlsComponent) as IReactComponent<ModelControlsProps>;
+const formOptions: FormCreateOption<ModelControlsProps> = {};
+export const ModelControls = Form.create(formOptions)(ModelControlsComponent);

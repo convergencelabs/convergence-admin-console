@@ -1,9 +1,5 @@
 import {createNodeRenderer} from "./NodeRendererFactory";
-import {
-  ContainerNodeRenderer,
-  ContainerNodeRendererProps,
-  ContainerNodeRendererState
-} from "./ContainerNodeRenderer";
+import {ContainerNodeRenderer, ContainerNodeRendererProps, ContainerNodeRendererState} from "./ContainerNodeRenderer";
 import {ObjectNode} from "../../model/ObjectNode";
 import React, {ReactElement, ReactNode} from "react";
 

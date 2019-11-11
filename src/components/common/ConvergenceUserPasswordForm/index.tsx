@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ReactNode} from "react";
+import {ReactNode} from 'react';
 import {PasswordConfig} from "../../../models/PasswordConfig";
 import {SetPasswordForm} from "../SetPasswordForm/";
 import {SERVICES} from "../../../services/ServiceConstants";

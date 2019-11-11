@@ -1,5 +1,5 @@
 import React, {ReactNode} from 'react';
-import {Avatar, Badge, Dropdown, Icon, Layout, Menu, Popover, Tooltip} from 'antd';
+import {Avatar, Badge, Dropdown, Icon, Layout, Menu, Tooltip} from 'antd';
 import styles from './styles.module.css';
 import logo from '../../../assets/images/logo.png';
 import {authStore} from "../../../stores/AuthStore";
@@ -39,7 +39,7 @@ class AppHeaderComponent extends React.Component<InjectedProps, {}> {
     const emailHash = md5(email);
     return (
       <Layout.Header className={styles.header}>
-        <img src={logo} className={styles.logo}/>
+        <img alt="Convergence Logo" src={logo} className={styles.logo}/>
         <span className={styles.logoName}>Convergence</span>
         <span className={styles.slogan}>Admin Console</span>
         <Badge count={0}>
@@ -48,11 +48,11 @@ class AppHeaderComponent extends React.Component<InjectedProps, {}> {
           </Tooltip>
         </Badge>
         <Dropdown overlay={this._menu} trigger={['click']}>
-          <a className="ant-dropdown-link" href="#">
+          <span className="ant-dropdown-link" style={{cursor: "pointer"}}>
             <span className={styles.username}>{displayName}</span>
             <Avatar src={`https://www.gravatar.com/avatar/${emailHash}?d=mp`}/>
             <Icon className={styles.down} type="down"/>
-          </a>
+          </span>
         </Dropdown>
       </Layout.Header>
     );

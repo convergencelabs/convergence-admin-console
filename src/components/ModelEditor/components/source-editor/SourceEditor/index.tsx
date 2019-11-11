@@ -1,7 +1,7 @@
 import {TreeModel} from "../../tree-editor/model/TreeModel";
 import React, {ReactNode} from "react";
 import {AceEditor, CursorPosition} from "../AceEditor/";
-import {SourceEditorStatusBar, SourceStatus, SOURCE_STATUS_ERROR} from "../SourceEditorStatusBar/";
+import {SOURCE_STATUS_ERROR, SourceEditorStatusBar, SourceStatus} from "../SourceEditorStatusBar/";
 import {SourceEditorToolbar} from "../SourceEditorToolbar/";
 import styles from "./styles.module.css";
 

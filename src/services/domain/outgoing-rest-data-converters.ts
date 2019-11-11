@@ -2,7 +2,8 @@ import {Collection} from "../../models/domain/Collection";
 import {
   CollectionData,
   CollectionPermissionsData,
-  CollectionSummaryData, CollectionUpdateData,
+  CollectionSummaryData,
+  CollectionUpdateData,
   ModelSnapshotPolicyData
 } from "./common-rest-data";
 import {CollectionPermissions} from "../../models/domain/CollectionPermissions";

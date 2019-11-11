@@ -1,9 +1,7 @@
 import {ObjectElement} from "../ObjectElement";
 import {ModelElement} from "../ModelElement";
 import {ModelPathElement} from "../ModelPath";
-import {
-  RealTimeObject, ObjectSetValueEvent, ObjectSetEvent, ObjectRemoveEvent
-} from "@convergence/convergence";
+import {ObjectRemoveEvent, ObjectSetEvent, ObjectSetValueEvent, RealTimeObject} from "@convergence/convergence";
 import {createRealTimeModelElement} from "./RealTimeModelElementFactory";
 import {ContainerElement} from "../ContainterElement";
 import {filter} from "rxjs/operators";

@@ -1,14 +1,13 @@
-import React, {ReactNode} from "react";
-import {Checkbox, Col, Row} from "antd";
-import {Form, Input, Button} from 'antd';
+import React, {FormEvent, ReactNode} from "react";
+import {Button, Checkbox, Col, Form, Input, Row} from "antd";
 import {FormComponentProps} from "antd/lib/form";
-import {FormEvent} from "react";
 import {DomainId} from "../../../../models/DomainId";
 import {DomainJwtKey} from "../../../../models/domain/DomainJwtKey";
 import {FormButtonBar} from "../../../common/FormButtonBar";
 import {GenerateJwtKey} from "../GenerateJwtKey";
+import {FormCreateOption} from "antd/es/form";
 
-export interface DomainJwtKeyFormProps {
+export interface DomainJwtKeyFormProps extends FormComponentProps {
   domainId: DomainId;
   initialValue: DomainJwtKey;
   saveButtonLabel: string;
@@ -19,17 +18,13 @@ export interface DomainJwtKeyFormProps {
   onSave(group: DomainJwtKey): void;
 }
 
-interface InjectedProps extends DomainJwtKeyFormProps, FormComponentProps {
-
-}
-
 interface DomainJwtKeyFormState {
   generateKey: boolean;
 }
 
 
-class DomainJwtKeyFormComponent extends React.Component<InjectedProps, DomainJwtKeyFormState> {
-  constructor(props: InjectedProps) {
+class DomainJwtKeyFormComponent extends React.Component<DomainJwtKeyFormProps, DomainJwtKeyFormState> {
+  constructor(props: DomainJwtKeyFormProps) {
     super(props);
 
     this.state = {
@@ -110,7 +105,7 @@ class DomainJwtKeyFormComponent extends React.Component<InjectedProps, DomainJwt
     this.props.onCancel();
   }
 
-  private _handleSubmit = (e: FormEvent<HTMLInputElement>) => {
+  private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values: any) => {
       if (!err) {
@@ -122,4 +117,5 @@ class DomainJwtKeyFormComponent extends React.Component<InjectedProps, DomainJwt
   }
 }
 
-export const DomainJwtKeyForm = Form.create<{}>()(DomainJwtKeyFormComponent);
+const formOptions: FormCreateOption<DomainJwtKeyFormProps> = {};
+export const DomainJwtKeyForm = Form.create(formOptions)(DomainJwtKeyFormComponent);

@@ -1,6 +1,6 @@
 import React from "react";
 import classNames from "classnames";
-import {PropertyValidation, OK_PROPERTY_VALIDATION} from "../../validator/PropertyValidator";
+import {OK_PROPERTY_VALIDATION, PropertyValidation} from "../../validator/PropertyValidator";
 import {AutoWidthInputField} from "../common/AutoWidthInputField";
 
 export interface PropertyEditorProps {

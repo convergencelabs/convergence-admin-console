@@ -1,8 +1,6 @@
 import React, {Component, FormEvent, ReactNode} from 'react';
 import {Redirect, RouteComponentProps} from "react-router";
-import {
-  Form, Icon, Input, Button, Checkbox,
-} from 'antd';
+import {Button, Checkbox, Form, Icon, Input,} from 'antd';
 import {FormComponentProps} from 'antd/lib/form/Form';
 import styles from "./styles.module.css";
 import logo from "../../../assets/images/logo.png";
@@ -14,6 +12,7 @@ import {STORES} from "../../../stores/StoreConstants";
 import {SERVICES} from "../../../services/ServiceConstants";
 import {LoggedInUserService} from "../../../services/LoggedInUserService";
 import {ProfileStore} from "../../../stores/ProfileStore";
+import {FormCreateOption} from "antd/es/form";
 
 export interface InjectedProps extends RouteComponentProps, FormComponentProps {
   authStore: AuthStore;
@@ -34,7 +33,7 @@ class NormalLoginForm extends Component<InjectedProps, LoginFormState> {
     errorMessage: null
   };
 
-  handleSubmit = (e: FormEvent<HTMLInputElement>) => {
+  handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
@@ -84,7 +83,7 @@ class NormalLoginForm extends Component<InjectedProps, LoginFormState> {
     return (
       <div className={styles.loginContainer}>
         <div className={styles.header}>
-          <img className={styles.logo} src={logo}/>
+          <img alt="Convergence Logo" className={styles.logo} src={logo}/>
           <div className={styles.title}>Convergence</div>
         </div>
         <Form onSubmit={this.handleSubmit} className={styles.loginForm}>
@@ -122,4 +121,5 @@ class NormalLoginForm extends Component<InjectedProps, LoginFormState> {
 }
 
 const injections = [STORES.AUTH_STORE, STORES.PROFILE_STORE, SERVICES.AUTH_SERVICE, SERVICES.LOGGED_IN_USER_SERVICE];
-export const LoginForm = injectAs<RouteComponentProps>(injections, Form.create<{}>()(NormalLoginForm));
+const formOptions: FormCreateOption<InjectedProps> = {};
+export const LoginForm = injectAs<RouteComponentProps>(injections, Form.create(formOptions)(NormalLoginForm));

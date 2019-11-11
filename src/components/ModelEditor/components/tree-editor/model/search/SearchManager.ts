@@ -1,4 +1,24 @@
 import {ModelElementTypes} from "../../../../model/ModelElementTypes";
+import {SearchResult} from "./SearchResult";
+import {KeySearchResult} from "./KeySearchResult";
+import {StringSearchResult} from "./StringSearchResult";
+import {ObjectNode} from "../ObjectNode";
+import {TreeNode} from "../TreeNode";
+import {ArrayNode} from "../ArrayNode";
+import {NullSearchResult} from "./NullSearchResult";
+import {NullNode} from "../NullNode";
+import {StringNode} from "../StringNode";
+import {NumberNode} from "../NumberNode";
+import {BooleanNode} from "../BooleanNode";
+import {DateNode} from "../DateNode";
+import {TreeModel} from "../TreeModel";
+import {PathUtils} from "../../../../utils/PathUtils";
+import {DateUtils} from "../../../../utils/DateUtils";
+import {BooleanSearchResult} from "./BooleanSearchResult";
+import {NumberSearchResult} from "./NumberSearchResult";
+import {DateSearchResult} from "./DateSearchResult";
+import {Observable, Subject} from "rxjs";
+import {SapphireEvent} from "../../../../SapphireEvent";
 
 export interface SearchManagerOptions {
   caseSensitive: boolean;
@@ -32,7 +52,7 @@ export class SearchManager {
     this._terms = null;
     this._subject = new Subject<SapphireEvent>();
 
-    this._options = options || <SearchManagerOptions>{};
+    this._options = options || {} as SearchManagerOptions;
 
     if (this._options.caseSensitive === undefined) {
       this._options.caseSensitive = false;
@@ -162,9 +182,6 @@ export class SearchManager {
       let key: string = node.relativePathFromParent() as string;
       if (!this._options.caseSensitive) {
         key = key.toLowerCase();
-      } else {
-        // FIXME this is not needed?
-        key = key;
       }
 
       let pos: number = key.indexOf(terms);
@@ -237,8 +254,6 @@ export class SearchManager {
         value = value.toLowerCase();
       }
 
-      const matches: any[] = [];
-
       let pos: number = value.indexOf(terms);
       while (pos !== -1) {
         results.push(new StringSearchResult(node, pos, pos + terms.length));
@@ -269,7 +284,7 @@ export class SearchManager {
   private processBooleanNode(terms: string, node: BooleanNode): SearchResult[] {
     const results: SearchResult[] = [];
     const value = node.element().value();
-    if (terms === "false" && !value || terms === "true" && value) {
+    if ((terms === "false" && !value) || (terms === "true" && value)) {
       results.push(new BooleanSearchResult(node));
     }
     return results;
@@ -295,24 +310,3 @@ export class SearchManager {
     }
   }
 }
-
-import {SearchResult} from "./SearchResult";
-import {KeySearchResult} from "./KeySearchResult";
-import {StringSearchResult} from "./StringSearchResult";
-import {ObjectNode} from "../ObjectNode";
-import {TreeNode} from "../TreeNode";
-import {ArrayNode} from "../ArrayNode";
-import {NullSearchResult} from "./NullSearchResult";
-import {NullNode} from "../NullNode";
-import {StringNode} from "../StringNode";
-import {NumberNode} from "../NumberNode";
-import {BooleanNode} from "../BooleanNode";
-import {DateNode} from "../DateNode";
-import {TreeModel} from "../TreeModel";
-import {PathUtils} from "../../../../utils/PathUtils";
-import {DateUtils} from "../../../../utils/DateUtils";
-import {BooleanSearchResult} from "./BooleanSearchResult";
-import {NumberSearchResult} from "./NumberSearchResult";
-import {DateSearchResult} from "./DateSearchResult";
-import {Subject, Observable} from "rxjs";
-import {SapphireEvent} from "../../../../SapphireEvent";

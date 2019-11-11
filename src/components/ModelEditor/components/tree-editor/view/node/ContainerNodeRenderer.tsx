@@ -4,7 +4,7 @@ import {ContainerExpander} from "./ContainerExpander";
 import {ChildCount} from "./ChildCount";
 import {NodeRenderer, NodeRendererProps, NodeRendererState} from "./NodeRenderer";
 import {NewNode} from "../new/NewNode";
-import {PropertyValidator, PropertyValidation} from "../../validator/PropertyValidator";
+import {PropertyValidation, PropertyValidator} from "../../validator/PropertyValidator";
 import {SapphireEvent} from "../../../../SapphireEvent";
 import {ContainerNode, NewNodeStateEvent, NodeCollapsedEvent, NodeExpandedEvent} from "../../model/ContainerNode";
 

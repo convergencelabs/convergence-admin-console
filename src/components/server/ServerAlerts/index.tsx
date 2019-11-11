@@ -1,8 +1,7 @@
 import * as React from 'react';
-import {Component, ReactNode} from "react";
+import {Component, ReactNode} from 'react';
 import styles from "./styles.module.css";
 import {Button, Card, Icon, Table} from "antd";
-import moment from "moment";
 import {shortDateTime} from "../../../utils/format-utils";
 
 

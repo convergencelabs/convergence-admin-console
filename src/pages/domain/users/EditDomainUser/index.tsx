@@ -1,6 +1,6 @@
-import React, {ReactNode, FormEvent} from 'react';
+import React, {FormEvent, ReactNode} from 'react';
 import {Page} from "../../../../components/common/Page/";
-import {Card, Col, notification, Row, Form, Input, Tooltip, Icon, Button, Select} from "antd";
+import {Button, Card, Col, Form, Icon, Input, notification, Row, Select, Tooltip} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
@@ -59,7 +59,7 @@ class EditDomainUserComponent extends React.Component<InjectedProps, EditDomainU
   }
 
   public render(): ReactNode {
-    const {getFieldDecorator, getFieldValue} = this.props.form;
+    const {getFieldDecorator} = this.props.form;
     if (this.state.user !== null) {
       const user = this.state.user;
       return (
@@ -191,7 +191,7 @@ class EditDomainUserComponent extends React.Component<InjectedProps, EditDomainU
     this.props.history.push(usersUrl);
   }
 
-  private handleSubmit = (e: FormEvent<HTMLInputElement>) => {
+  private handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values: any) => {
       if (!err) {
@@ -229,4 +229,4 @@ class EditDomainUserComponent extends React.Component<InjectedProps, EditDomainU
 }
 
 const injections = [SERVICES.DOMAIN_USER_SERVICE];
-export const EditDomainUser = injectAs<EditDomainUserProps>(injections, Form.create<{}>()(EditDomainUserComponent));
+export const EditDomainUser = injectAs<EditDomainUserProps>(injections, Form.create()(EditDomainUserComponent));

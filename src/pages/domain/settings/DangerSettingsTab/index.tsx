@@ -1,9 +1,9 @@
-import React, {ChangeEvent, FormEvent, ReactNode} from "react";
+import React, {ChangeEvent, ReactNode} from "react";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {DomainId} from "../../../../models/DomainId";
 import {DomainService} from "../../../../services/DomainService";
-import {Button, Card, Input, notification, Tag} from "antd";
+import {Button, Card, Input, notification} from "antd";
 import {DescriptionBox} from "../../../../components/common/DescriptionBox";
 import styles from "./styles.module.css";
 import FormItem from "antd/es/form/FormItem";

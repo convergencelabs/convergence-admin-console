@@ -1,7 +1,7 @@
-import React, {ReactNode, FormEvent} from "react";
+import React, {FormEvent, ReactNode} from "react";
 import {Page} from "../../../../components/common/Page/";
 import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
-import {Card, Col, notification, Row, Form, Input, Tooltip, Icon, Button, Select} from "antd";
+import {Button, Card, Col, Form, Icon, Input, notification, Row, Select, Tooltip} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
@@ -175,7 +175,7 @@ class EditUserComponent extends React.Component<InjectedProps, EditUserState> {
     this.props.history.push("/users/");
   }
 
-  private handleSubmit = (e: FormEvent<HTMLInputElement>) => {
+  private handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values: any) => {
       if (!err) {
@@ -210,4 +210,4 @@ class EditUserComponent extends React.Component<InjectedProps, EditUserState> {
   }
 }
 const injections = [SERVICES.USER_SERVICE];
-export const EditUser = injectAs<RouteComponentProps>(injections, Form.create<{}>()(EditUserComponent));
+export const EditUser = injectAs<RouteComponentProps>(injections, Form.create()(EditUserComponent));

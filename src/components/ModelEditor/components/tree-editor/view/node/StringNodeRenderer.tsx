@@ -1,10 +1,7 @@
 import React, {ReactNode} from "react";
 import {StringNode} from "../../model/StringNode";
 import {StringEditor} from "../editors/StringEditor";
-import {
-  EditableNodeRenderer, EditableNodeRendererProps,
-  EditableNodeRendererState
-} from "./EditableNodeRenderer";
+import {EditableNodeRenderer, EditableNodeRendererProps, EditableNodeRendererState} from "./EditableNodeRenderer";
 import {Highlighter, HighlightRange} from "../highlighter/Highlighter";
 import {StringSearchResult} from "../../model/search/StringSearchResult";
 

@@ -1,7 +1,7 @@
 import React, {ReactNode} from "react";
 import {ToolbarButton} from "../../common/ToolbarButton/";
 import styles from "./styles.module.css";
-import { faSave, faWindowClose } from "@fortawesome/free-regular-svg-icons";
+import {faSave, faWindowClose} from "@fortawesome/free-regular-svg-icons";
 
 export interface SourceEditorToolbarProps {
   onSaveSource: (data: {[key: string]: any}) => void;

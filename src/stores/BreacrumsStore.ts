@@ -1,7 +1,6 @@
 import {action, decorate, observable} from "mobx";
 import {ReactNode} from "react";
 import {DomainId} from "../models/DomainId";
-import {configStore} from "./ConfigStore";
 
 export interface IBreadcrumbSegment {
   title?: string;

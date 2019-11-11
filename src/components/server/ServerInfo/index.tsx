@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Component, ReactNode} from "react";
+import {Component, ReactNode} from 'react';
 import styles from "./styles.module.css";
 import {Card, Icon} from "antd";
 import {InfoTable, InfoTableRow} from "../InfoTable";
@@ -8,7 +8,6 @@ import {makeCancelable, PromiseSubscription} from "../../../utils/make-cancelabl
 import {ServerStatusService} from "../../../services/ServerStatusService";
 import {SERVICES} from "../../../services/ServiceConstants";
 import {injectAs} from "../../../utils/mobx-utils";
-import {DomainUserGroupsProps} from "../../../pages/domain/groups/DomainUserGroups";
 
 export interface InjectedProps {
   serverStatusService: ServerStatusService;

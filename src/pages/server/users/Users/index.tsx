@@ -1,6 +1,5 @@
 import React, {KeyboardEvent, ReactNode} from 'react';
 import {Page} from "../../../../components/common/Page/";
-import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
 import Tooltip from "antd/es/tooltip";
 import {Button, Card, Icon, Input, message, notification, Popconfirm, Table, Tag} from "antd";
 import styles from "./styles.module.css";

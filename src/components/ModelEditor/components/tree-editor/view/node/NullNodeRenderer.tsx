@@ -2,7 +2,7 @@ import React, {ReactNode} from "react";
 import {NullNode} from "../../model/NullNode";
 import {NodeRenderer, NodeRendererProps, NodeRendererState} from "./NodeRenderer";
 import classNames from "classnames";
-import {HighlightRange, Highlighter} from "../highlighter/Highlighter";
+import {Highlighter, HighlightRange} from "../highlighter/Highlighter";
 import {NullSearchResult} from "../../model/search/NullSearchResult";
 
 

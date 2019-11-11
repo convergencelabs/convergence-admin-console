@@ -1,5 +1,4 @@
-import React from "react";
-import {ReactNode} from "react";
+import React, {ReactNode} from "react";
 import {ToolbarButton} from "../../common/ToolbarButton/";
 import {ToolbarRadioButton} from "../../common/ToolbarRadioButton/";
 import {SearchControl} from "./SearchControl/";
@@ -9,7 +8,7 @@ import {Spacer} from "../../common/Spacer/";
 import {EditorMode} from "../../../EditorMode";
 import {TreeModel} from "../model/TreeModel";
 import styles from "./styles.module.css";
-import {faEye, faEdit, faPlusSquare, faMinusSquare, faFileCode, faTrashAlt} from "@fortawesome/free-regular-svg-icons";
+import {faEdit, faEye, faFileCode, faMinusSquare, faPlusSquare, faTrashAlt} from "@fortawesome/free-regular-svg-icons";
 
 export interface TreeEditorToolbarProps {
   treeModel: TreeModel;

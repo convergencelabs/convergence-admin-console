@@ -1,6 +1,6 @@
 import React, {ReactNode} from "react";
 import {Page} from "../../../../components/common/Page/";
-import {Card, Table, Switch} from "antd";
+import {Card, Switch, Table} from "antd";
 import {RouteComponentProps} from "react-router";
 import {formatDomainUserId, longDateTime, shortDateTime} from "../../../../utils/format-utils";
 import {DomainSession} from "../../../../models/domain/DomainSession";

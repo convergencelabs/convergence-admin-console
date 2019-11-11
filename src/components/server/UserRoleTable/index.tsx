@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Component, ReactNode} from "react";
+import {Component, ReactNode} from 'react';
 import styles from "./styles.module.css";
 import {Button, Icon, Popconfirm, Select, Table} from "antd";
 import Tooltip from "antd/es/tooltip";
@@ -81,10 +81,9 @@ export class UserRoleTable extends Component<UserRoleTableProps,{}> {
     return (
       <Select style={{width: "100%"}}
               defaultValue={text}
-              onChange={(role, option) => this.props.onChangeRole(username, role)}>
+              onChange={(role: string, _: any) => this.props.onChangeRole(username, role)}>
         {this.props.roles.map(role => <Option key={role}>{role}</Option>)}
       </Select>
     );
   }
 }
-

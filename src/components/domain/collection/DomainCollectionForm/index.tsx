@@ -1,21 +1,14 @@
-import React, {ReactNode, FormEvent} from "react";
-import {
-  Col,
-  Row,
-  Form,
-  Input,
-  Button,
-  Checkbox,
-  Divider
-} from "antd";
+import React, {FormEvent, ReactNode} from "react";
+import {Button, Checkbox, Col, Divider, Form, Input, Row} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import {FormButtonBar} from "../../../common/FormButtonBar/";
 import {ModelSnapshotPolicyFormFragment} from "../../common/ModelSnapshotPolicyFormFragment";
 import {CollectionPermissions} from "../../../../models/domain/CollectionPermissions";
 import {ModelSnapshotPolicy} from "../../../../models/domain/ModelSnapshotPolicy";
 import {Collection} from "../../../../models/domain/Collection";
+import {FormCreateOption} from "antd/es/form";
 
-interface DomainCollectionFormProps {
+interface DomainCollectionFormProps extends FormComponentProps {
   initialValue: Collection;
   disableId?: boolean;
   saveButtonLabel: string;
@@ -25,7 +18,7 @@ interface DomainCollectionFormProps {
   onSave(collection: Collection): void;
 }
 
-class DomainCollectionFormComponent extends React.Component<DomainCollectionFormProps & FormComponentProps, {}> {
+class DomainCollectionFormComponent extends React.Component<DomainCollectionFormProps, {}> {
   public render(): ReactNode {
     const {getFieldDecorator} = this.props.form;
 
@@ -126,7 +119,7 @@ class DomainCollectionFormComponent extends React.Component<DomainCollectionForm
     this.props.onCancel();
   }
 
-  private _handleSubmit = (e: FormEvent<HTMLInputElement>) => {
+  private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values: any) => {
       if (!err) {
@@ -168,4 +161,5 @@ class DomainCollectionFormComponent extends React.Component<DomainCollectionForm
   }
 }
 
-export const DomainCollectionForm = Form.create<{}>()(DomainCollectionFormComponent)
+const formOptions: FormCreateOption<DomainCollectionFormProps> = { };
+export const DomainCollectionForm = Form.create(formOptions)(DomainCollectionFormComponent);

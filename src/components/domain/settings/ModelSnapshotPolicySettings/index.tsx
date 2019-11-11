@@ -1,5 +1,5 @@
-import React, {ReactNode, FormEvent} from "react";
-import {Col, notification, Row, Form, Button} from "antd";
+import React, {FormEvent, ReactNode} from "react";
+import {Button, Col, Form, notification, Row} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
@@ -64,7 +64,7 @@ class ModelSnapshotPolicySettingsComponent extends React.Component<InjectedProps
   }
 
 
-  private _handleSubmit = (e: FormEvent<HTMLInputElement>) => {
+  private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values: any) => {
       if (!err) {
@@ -126,4 +126,4 @@ class ModelSnapshotPolicySettingsComponent extends React.Component<InjectedProps
 }
 
 const injections = [SERVICES.DOMAIN_CONFIG_SERVICE];
-export const ModelSnapshotPolicySettings = injectAs<ModelSnapshotPolicySettingsProps>(injections, Form.create<{}>()(ModelSnapshotPolicySettingsComponent));
+export const ModelSnapshotPolicySettings = injectAs<ModelSnapshotPolicySettingsProps>(injections, Form.create()(ModelSnapshotPolicySettingsComponent));

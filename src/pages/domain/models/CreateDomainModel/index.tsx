@@ -1,6 +1,6 @@
-import React, {ReactNode, FormEvent} from "react";
+import React, {FormEvent, ReactNode} from "react";
 import {Page} from "../../../../components/common/Page/";
-import {Form, Input, Icon, Button, Select, Card, notification} from 'antd';
+import {Button, Card, Form, Icon, Input, notification, Select} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
@@ -119,7 +119,7 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
     this.props.history.push(url);
   }
 
-  private _handleSubmit = (e: FormEvent<HTMLInputElement>) => {
+  private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values: any) => {
       if (!err) {
@@ -159,4 +159,4 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
 }
 
 const injections = [SERVICES.DOMAIN_MODEL_SERVICE];
-export const CreateDomainModel = injectAs<CreateDomainModelProps>(injections, Form.create<{}>()(CreateDomainModelComponent));
+export const CreateDomainModel = injectAs<CreateDomainModelProps>(injections, Form.create()(CreateDomainModelComponent));

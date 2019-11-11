@@ -1,15 +1,13 @@
-import React, {ReactNode, FormEvent} from "react";
-import {Col, notification, Row, Form, Button, Input} from "antd";
+import React, {FormEvent, ReactNode} from "react";
+import {Button, Col, Form, Input, notification, Row} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {DomainId} from "../../../../models/DomainId";
-import styles from "./styles.module.css";
 import {FormButtonBar} from "../../../common/FormButtonBar";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
 import {DomainService} from "../../../../services/DomainService";
 import {DomainDescriptor} from "../../../../models/DomainDescriptor";
-import {RestError} from "../../../../services/RestError";
 
 export interface DomainBasicSettingsFormProps {
   domainId: DomainId;
@@ -75,7 +73,7 @@ class DomainBasicSettingsForm extends React.Component<InjectedProps, DomainBasic
     }
   }
 
-  private _handleSubmit = (e: FormEvent<HTMLInputElement>) => {
+  private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values: any) => {
       if (!err) {
@@ -110,4 +108,4 @@ class DomainBasicSettingsForm extends React.Component<InjectedProps, DomainBasic
 }
 
 const injections = [SERVICES.DOMAIN_SERVICE];
-export const DomainBasicSettings = injectAs<DomainBasicSettingsFormProps>(injections, Form.create<{}>()(DomainBasicSettingsForm));
+export const DomainBasicSettings = injectAs<DomainBasicSettingsFormProps>(injections, Form.create()(DomainBasicSettingsForm));

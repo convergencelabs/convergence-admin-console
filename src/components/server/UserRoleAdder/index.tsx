@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {Component, ReactNode} from "react";
+import {Component, MouseEvent, ReactNode} from 'react';
 import styles from "./styles.module.css";
 import {UsernameAutoComplete} from "../UsernameAutoComplete/index";
 import {Button, Select} from "antd";
-import {MouseEvent} from "react";
+
 const {Option} = Select;
 
 export interface UserRoleAdderProps {

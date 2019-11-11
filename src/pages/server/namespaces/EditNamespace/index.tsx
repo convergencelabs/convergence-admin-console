@@ -1,8 +1,7 @@
-import React, {ReactNode, FormEvent} from "react";
+import React, {FormEvent, ReactNode} from "react";
 import {Page} from "../../../../components/common/Page/";
 import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
-import {Card, Col, notification, Row} from "antd";
-import {Form, Input, Icon, Button} from 'antd';
+import {Button, Card, Col, Form, Icon, Input, notification, Row} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
@@ -159,7 +158,7 @@ class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespac
     this.props.history.push("/namespaces/");
   }
 
-  private handleSubmit = (e: FormEvent<HTMLInputElement>) => {
+  private handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values: any) => {
       if (!err) {
@@ -188,4 +187,4 @@ class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespac
 }
 
 const injections = [SERVICES.NAMESPACE_SERVICE, SERVICES.ROLE_SERVICE];
-export const EditNamespace = injectAs<RouteComponentProps>(injections, Form.create<{}>()(EditNamespaceComponent));
+export const EditNamespace = injectAs<RouteComponentProps>(injections, Form.create()(EditNamespaceComponent));

@@ -1,13 +1,11 @@
-import React, {ReactNode} from "react";
+import React, {FormEvent, ReactNode} from "react";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, InputNumber, notification} from "antd";
 import {FormButtonBar} from "../../../components/common/FormButtonBar/index";
-import {FormEvent} from "react";
 import {injectAs} from "../../../utils/mobx-utils";
 import {SERVICES} from "../../../services/ServiceConstants";
 import {ConfigService} from "../../../services/ConfigService";
 import {makeCancelable, PromiseSubscription} from "../../../utils/make-cancelable";
-import styles from "./styles.module.css";
 
 export interface InjectedProps extends FormComponentProps {
   configService: ConfigService;
@@ -58,7 +56,7 @@ class SessionTimeoutComponent extends React.Component<InjectedProps, SessionTime
     }
   }
 
-  private _handleSubmit = (e: FormEvent<HTMLInputElement>) => {
+  private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
@@ -95,4 +93,4 @@ class SessionTimeoutComponent extends React.Component<InjectedProps, SessionTime
   }
 }
 
-export const SessionTimeout = injectAs<{}>([SERVICES.CONFIG_SERVICE], Form.create<{}>()(SessionTimeoutComponent));
+export const SessionTimeout = injectAs<{}>([SERVICES.CONFIG_SERVICE], Form.create()(SessionTimeoutComponent));

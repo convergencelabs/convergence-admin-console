@@ -1,6 +1,6 @@
 import {Observable, Subject} from "rxjs";
 import {SapphireEvent} from "../SapphireEvent";
-import {ModelPathElement, ModelPath} from "./ModelPath";
+import {ModelPath, ModelPathElement} from "./ModelPath";
 import {ContainerElement} from "./ContainterElement";
 
 export abstract class ModelElement<T> {

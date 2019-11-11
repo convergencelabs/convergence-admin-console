@@ -1,5 +1,5 @@
 import React, {ReactNode} from "react";
-import {Col, InputNumber, Row, Form, Checkbox} from "antd";
+import {Checkbox, Col, Form, InputNumber, Row} from "antd";
 import {ModelSnapshotPolicy} from "../../../../models/domain/ModelSnapshotPolicy";
 import {WrappedFormUtils} from "antd/lib/form/Form";
 

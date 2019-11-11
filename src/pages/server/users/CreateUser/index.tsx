@@ -1,9 +1,7 @@
-import React, {ReactNode} from "react";
+import React, {FormEvent, ReactNode} from "react";
 import {Page} from "../../../../components/common/Page/";
-import {Card, Col, notification, Row} from "antd";
-import {Form, Input, Tooltip, Icon, Button, Select} from 'antd';
+import {Button, Card, Col, Form, Icon, Input, notification, Row, Select, Tooltip} from "antd";
 import {FormComponentProps} from "antd/lib/form";
-import {FormEvent} from "react";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
@@ -187,7 +185,7 @@ class CreateUserComponent extends React.Component<InjectedProps, CreateUserCompo
     this.props.history.push("/users/");
   }
 
-  private _handleSubmit = (e: FormEvent<HTMLInputElement>) => {
+  private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values: any) => {
       if (!err) {
@@ -255,4 +253,4 @@ class CreateUserComponent extends React.Component<InjectedProps, CreateUserCompo
 }
 
 const injections = [SERVICES.USER_SERVICE, SERVICES.CONFIG_SERVICE];
-export const CreateUser = injectAs<RouteComponentProps>(injections, Form.create<{}>()(CreateUserComponent));
+export const CreateUser = injectAs<RouteComponentProps>(injections, Form.create()(CreateUserComponent));

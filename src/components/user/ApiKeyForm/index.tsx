@@ -1,17 +1,11 @@
-import React, {ReactNode, FormEvent} from "react";
-import {
-  Col,
-  Row,
-  Form,
-  Input,
-  Button,
-  Checkbox,
-} from "antd";
+import React, {FormEvent, ReactNode} from "react";
+import {Button, Checkbox, Col, Form, Input, Row,} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import {UserApiKey} from "../../../models/UserApiKey";
 import {FormButtonBar} from "../../common/FormButtonBar";
+import {FormCreateOption} from "antd/es/form";
 
-interface DomainCollectionFormProps {
+interface DomainCollectionFormProps extends FormComponentProps {
   initialValue: UserApiKey;
   saveButtonLabel: string;
 
@@ -20,7 +14,7 @@ interface DomainCollectionFormProps {
   onSave(data: {name: string, enabled: boolean}): void;
 }
 
-class ApiKeyFormComponent extends React.Component<DomainCollectionFormProps & FormComponentProps, {}> {
+class ApiKeyFormComponent extends React.Component<DomainCollectionFormProps, {}> {
   public render(): ReactNode {
     const {getFieldDecorator} = this.props.form;
     const {initialValue} = this.props;
@@ -65,7 +59,7 @@ class ApiKeyFormComponent extends React.Component<DomainCollectionFormProps & Fo
     this.props.onCancel();
   }
 
-  private _handleSubmit = (e: FormEvent<HTMLInputElement>) => {
+  private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values: any) => {
       if (!err) {
@@ -76,4 +70,5 @@ class ApiKeyFormComponent extends React.Component<DomainCollectionFormProps & Fo
   }
 }
 
-export const ApiKeyForm = Form.create<{}>()(ApiKeyFormComponent)
+const formOptions: FormCreateOption<DomainCollectionFormProps> = {};
+export const ApiKeyForm = Form.create(formOptions)(ApiKeyFormComponent);

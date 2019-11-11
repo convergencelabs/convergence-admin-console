@@ -1,7 +1,5 @@
 import {StringElement} from "../StringElement";
-import {
-  RealTimeString, StringSetValueEvent, StringInsertEvent, StringRemoveEvent
-} from "@convergence/convergence";
+import {RealTimeString, StringInsertEvent, StringRemoveEvent, StringSetValueEvent} from "@convergence/convergence";
 import {ModelPathElement} from "../ModelPath";
 import {ContainerElement} from "../ContainterElement";
 import {filter} from "rxjs/operators";

@@ -1,3 +1,11 @@
+import {SapphireEvent} from "../../../SapphireEvent";
+import {Observable, Subject} from "rxjs";
+import {SubtreeChangedEvent, TreeNode} from "./TreeNode";
+import {ModelPath, ModelPathElement} from "../../../model/ModelPath";
+import {ContainerNode} from "./ContainerNode";
+import {ObjectNode} from "./ObjectNode";
+import {SearchManager} from "./search/SearchManager";
+
 export interface TreeEvents {
   readonly SELECTION_CHANGED: string;
   readonly EXPAND_ALL: string;
@@ -295,11 +303,3 @@ export class TreeModel {
     return this._eventSubject.asObservable();
   }
 }
-
-import {SapphireEvent} from "../../../SapphireEvent";
-import {Observable, Subject} from "rxjs";
-import {TreeNode, SubtreeChangedEvent} from "./TreeNode";
-import {ModelPath, ModelPathElement} from "../../../model/ModelPath";
-import {ContainerNode} from "./ContainerNode";
-import {ObjectNode} from "./ObjectNode";
-import {SearchManager} from "./search/SearchManager";

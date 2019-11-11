@@ -1,8 +1,7 @@
-import React, {ReactNode} from "react";
+import React, {FormEvent, ReactNode} from "react";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Select, Form, InputNumber, notification} from "antd";
+import {Button, Form, InputNumber, notification, Select} from "antd";
 import {FormButtonBar} from "../../../components/common/FormButtonBar/index";
-import {FormEvent} from "react";
 import styles from "./styles.module.css";
 import {injectAs} from "../../../utils/mobx-utils";
 import {SERVICES} from "../../../services/ServiceConstants";
@@ -89,7 +88,7 @@ class PasswordPolicyComponent extends React.Component<InjectedProps, PasswordPol
     );
   }
 
-  private _handleSubmit = (e: FormEvent<HTMLInputElement>) => {
+  private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
@@ -132,4 +131,4 @@ class PasswordPolicyComponent extends React.Component<InjectedProps, PasswordPol
   }
 }
 
-export const PasswordPolicy = injectAs<{}>([SERVICES.CONFIG_SERVICE], Form.create<{}>()(PasswordPolicyComponent));
+export const PasswordPolicy = injectAs<{}>([SERVICES.CONFIG_SERVICE], Form.create()(PasswordPolicyComponent));

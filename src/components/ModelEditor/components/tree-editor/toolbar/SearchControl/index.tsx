@@ -2,7 +2,7 @@ import React, {ReactNode} from "react";
 import {Subscription} from "rxjs";
 import {TreeModel} from "../../model/TreeModel";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faTimes, faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
+import {faChevronDown, faChevronUp, faTimes} from "@fortawesome/free-solid-svg-icons";
 import styles from "./styles.module.scss";
 
 export interface SearchControlProps {

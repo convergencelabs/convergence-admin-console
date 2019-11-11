@@ -1,6 +1,5 @@
 import {ModelElement, ModelElementMutationEvent} from "./ModelElement";
 import {ModelElementTypes} from "./ModelElementTypes";
-import {ContainerElement} from "./ContainterElement";
 
 export class StringInsertEvent implements ModelElementMutationEvent {
   public static readonly NAME: string = "insert";
@@ -34,10 +33,6 @@ export class StringValueEvent implements ModelElementMutationEvent {
 }
 
 export abstract class StringElement extends ModelElement<string> {
-  constructor(id: string, parent: ContainerElement<any>) {
-    super(id, parent);
-  }
-
   public type(): string {
     return ModelElementTypes.STRING;
   }
