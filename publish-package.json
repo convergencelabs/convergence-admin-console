@@ -1,18 +1,20 @@
 {
   "name": "@convergence/admin-console",
   "version": "0.0.0",
-  "description": "The Convergence Admin Console.",
-  "author": "Convergence Labs, Inc.",
-  "homepage": "http://www.convergencelabs.com",
+  "description": "Convergence Admin Console",
+  "author": {
+    "name": "Convergence Labs, Inc.",
+    "email": "info@convergencelabs.com",
+    "url": "https://convergencelabs.com"
+  },
+  "homepage": "http://convergence.io",
   "repository": {
     "type": "git",
-    "url": "https://gitlab.dev.convergencelabs.tech/ui/convergence-admin-console.git"
+    "url": "https://github.com/convergencelabs/convergence-admin-console.git"
   },
-  "bugs": "https://gitlab.dev.convergencelabs.tech/ui/convergence-admin-console/issues",
+  "bugs": "https://github.com/convergencelabs/convergence-admin-console/issues",
+  "license": "GPL-3.0",
   "scripts": {
-  },
-  "publishConfig": {
-    "registry": "https://nexus.dev.convergencelabs.tech/repository/npm-convergence/"
   },
   "dependencies": {},
   "devDependencies": {}

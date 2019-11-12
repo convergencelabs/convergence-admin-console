@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2019 - Convergence Labs, Inc.
+ *
+ * This file is subject to the terms and conditions defined in
+ * file 'LICENSE.txt', which is part of this source code package.
+ */
+
 import React, {FormEvent, ReactNode} from "react";
 import {Button, Checkbox, Col, Divider, Form, Input, Row} from "antd";
 import {FormComponentProps} from "antd/lib/form";

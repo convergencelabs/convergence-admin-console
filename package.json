@@ -1,17 +1,21 @@
 {
   "name": "@convergence/admin-console",
   "version": "1.0.0-SNAPSHOT",
+  "author": {
+    "name": "Convergence Labs, Inc.",
+    "email": "info@convergencelabs.com",
+    "url": "https://convergencelabs.com"
+  },
   "repository": {
     "type": "git",
-    "url": "https://gitlab.dev.convergencelabs.tech/ui/convergence-admin-console.git"
+    "url": "https://github.com/convergencelabs/convergence-admin-console.git"
   },
-  "bugs": "https://gitlab.dev.convergencelabs.tech/ui/convergence-admin-console/issues",
+  "bugs": "https://github.com/convergencelabs/convergence-admin-console/issues",
   "private": true,
-  "license": "GPL-3.0-only",
+  "license": "GPL-3.0",
   "scripts": {
     "dist": "node scripts/dist.js",
-    "docker-prep": "node scripts/docker-prep.js",
-    "clean": "rm -rf build dist docker-build",
+    "clean": "rm -rf build dist",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

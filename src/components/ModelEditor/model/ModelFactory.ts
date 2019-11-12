@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2019 - Convergence Labs, Inc.
+ *
+ * This file is subject to the terms and conditions defined in
+ * file 'LICENSE.txt', which is part of this source code package.
+ */
+
 import {RealTimeObject} from "@convergence/convergence";
 import {ObjectElement} from "./ObjectElement";
 import {LocalObjectElement} from "./local/LocalObjectElement";

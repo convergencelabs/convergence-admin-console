@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2019 - Convergence Labs, Inc.
+ *
+ * This file is subject to the terms and conditions defined in
+ * file 'LICENSE.txt', which is part of this source code package.
+ */
+
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Route, RouteComponentProps, Switch} from "react-router-dom";
 import {LoginForm} from "./components/common/LoginForm/";

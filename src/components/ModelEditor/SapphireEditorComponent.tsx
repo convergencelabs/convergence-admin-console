@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2019 - Convergence Labs, Inc.
+ *
+ * This file is subject to the terms and conditions defined in
+ * file 'LICENSE.txt', which is part of this source code package.
+ */
+
 import React, {ReactNode} from "react";
 import {TreeModel} from "./components/tree-editor/model/TreeModel";
 import {PathControlModel} from "./components/path/PathControlModel";

@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2019 - Convergence Labs, Inc.
+ *
+ * This file is subject to the terms and conditions defined in
+ * file 'LICENSE.txt', which is part of this source code package.
+ */
+
 import React from "react";
 import classNames from "classnames";
 import {OK_PROPERTY_VALIDATION, PropertyValidation} from "../../validator/PropertyValidator";

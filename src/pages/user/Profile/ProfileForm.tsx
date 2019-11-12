@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2019 - Convergence Labs, Inc.
+ *
+ * This file is subject to the terms and conditions defined in
+ * file 'LICENSE.txt', which is part of this source code package.
+ */
+
 import * as React from 'react';
 import {FormEvent, ReactNode} from 'react';
 import {Button, Card, Col, Form, Icon, Input, notification, Row, Tooltip} from "antd";
