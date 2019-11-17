@@ -40,6 +40,6 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 - Email <support@convergencelabs.com> for all other inquiries.
 
 ## License
-The Convergence Admin Console is licensed under the [GNU Public License v3](LICENSE) (GPLv3) license. Refer to the [LICENSE.txt](LICENSE) for the specific terms and conditions of the license.
+The Convergence Admin Console is licensed under the [GNU Public License v3](LICENSE) (GPLv3) license. Refer to the [LICENSE](LICENSE) for the specific terms and conditions of the license.
 
 The Convergence Admin Console is also available under a Commercial License. If you are interested in a non-open source license please contact us at [Convergence Labs](https://convergencelabs.com).
