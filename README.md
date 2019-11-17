@@ -5,6 +5,9 @@
 # Convergence Admin Console
 This project contains the Convergence Admin Console user interface. The project uses [React](https://reactjs.org/) as the main UI framework and is implemented using [Typescript](https://www.typescriptlang.org/). The project was created with [Create React App](https://github.com/facebook/create-react-app) and uses the build infrastructure provided by Create React App.
 
+## Issue Reporting
+The core Convergence capability is composed of multiple individual projects that are released together. To simplify things, there is a central project that is used for issues, project planning, and road mapping.  To report an issue please use the [convergence-project](https://github.com/convergencelabs/convergence-project) repository.
+
 ## Available Scripts
 In the project directory, you can run:
 
