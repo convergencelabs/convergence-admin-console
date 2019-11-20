@@ -25,6 +25,16 @@ import {CollectionSummary} from "../../../../models/domain/CollectionSummary";
 import {ToolbarButton} from "../../../../components/common/ToolbarButton";
 import {toDomainRoute} from "../../../../utils/domain-url";
 import styles from "./styles.module.css";
+import {PagedData} from "../../../../models/PagedData";
+import {PaginationConfig} from "antd/lib/pagination";
+import {appendToQueryParamString} from "../../../../utils/router-utils";
+import queryString from "query-string";
+
+export interface SearchParams {
+  filter?: string;
+  pageSize: number;
+  page: number;
+}
 
 export interface DomainCollectionsProps extends RouteComponentProps {
   domainId: DomainId;
@@ -35,8 +45,7 @@ interface InjectedProps extends DomainCollectionsProps {
 }
 
 export interface DomainCollectionsState {
-  collections: CollectionSummary[] | null;
-  collectionFilter: string;
+  collections: PagedData<CollectionSummary>;
 }
 
 class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCollectionsState> {
@@ -71,10 +80,11 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
     this._collectionsSubscription = null;
 
     this.state = {
-      collections: null,
-      collectionFilter: ""
+      collections: new PagedData<CollectionSummary>([], 0, 0),
     };
+  }
 
+  public componentDidMount(): void {
     this._loadCollections();
   }
 
@@ -85,11 +95,27 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
     }
   }
 
+  public componentDidUpdate(prevProps: InjectedProps): void {
+    // check to see if the any of the searchParams changed, and perform a search if so
+    const searchParams = this._parseQueryInput(this.props.location.search);
+    const prevSearchParams = this._parseQueryInput(prevProps.location.search);
+
+    if (searchParams.filter !== null &&
+      ((prevSearchParams.filter !== searchParams.filter) ||
+        (searchParams.pageSize !== prevSearchParams.pageSize) ||
+        (searchParams.page !== prevSearchParams.page))
+    ) {
+      this._loadCollections();
+    }
+  }
+
   private _renderToolbar(): ReactNode {
     return (
       <CardTitleToolbar title="Collections" icon="folder">
         <span className={styles.search}>
-          <Input placeholder="Search Collections" addonAfter={<Icon type="search"/>} onKeyUp={this._onFilterChange}/>
+          <Input placeholder="Search Collections"
+                 addonAfter={<Icon type="search"/>}
+                 onKeyUp={this._onFilterChange}/>
         </span>
         <ToolbarButton icon="plus-circle" tooltip="Create Collection" onClick={this._goToCreate}/>
         <ToolbarButton icon="reload" tooltip="Reload Collections" onClick={this._loadCollections}/>
@@ -97,16 +123,17 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
     )
   }
 
-  private _onFilterChange = (event: KeyboardEvent<HTMLInputElement>) => {
-    this.setState({collectionFilter: (event.target as HTMLInputElement).value}, this._loadCollections);
-  }
-
-  private _goToCreate = () => {
-    const url = toDomainRoute(this.props.domainId, "create-collection");
-    this.props.history.push(url);
-  }
-
   public render(): ReactNode {
+    const searchParams = this._parseQueryInput(this.props.location.search);
+
+    const pagination: PaginationConfig  = {
+      pageSize: searchParams.pageSize,
+      current: searchParams.page,
+      total: this.state.collections.totalResults,
+      onChange: this._pageChange,
+      showTotal: (total: number) => `${total} total results`
+    };
+
     return (
       <Page breadcrumbs={this._breadcrumbs}>
         <Card title={this._renderToolbar()}>
@@ -114,7 +141,8 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
                  size="middle"
                  rowKey="id"
                  columns={this._collectionTableColumns}
-                 dataSource={this.state.collections || []}
+                 dataSource={this.state.collections.data}
+                 pagination={pagination}
           />
         </Card>
       </Page>
@@ -168,9 +196,12 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
   }
 
   private _loadCollections = () => {
+    const searchParams = this._parseQueryInput(this.props.location.search);
     const domainId = this.props.domainId;
-    const filter = this.state.collectionFilter !== "" ? this.state.collectionFilter : undefined;
-    const {promise, subscription} = makeCancelable(this.props.domainCollectionService.getCollectionSummaries(domainId, filter));
+    const filter = searchParams.filter !== "" ? searchParams.filter : undefined;
+    const offset = searchParams.page === undefined ? 0 : ((searchParams.page - 1) * searchParams.pageSize);
+    const {promise, subscription} = makeCancelable(
+      this.props.domainCollectionService.getCollectionSummaries(domainId, filter, offset, searchParams.pageSize));
     this._collectionsSubscription = subscription;
     promise.then(collections => {
       this._collectionsSubscription = null;
@@ -178,8 +209,43 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
     }).catch(err => {
       console.error(err);
       this._collectionsSubscription = null;
-      this.setState({collections: null});
+      this.setState({collections: new PagedData<CollectionSummary>([], 0, 0)});
     });
+  }
+
+  private _onFilterChange = (event: KeyboardEvent<HTMLInputElement>) => {
+    let {
+      pageSize
+    } = queryString.parse(this.props.location.search, {parseNumbers: true});
+
+    // todo debounce
+    const filter = (event.target as HTMLInputElement).value;
+    let newUrl = appendToQueryParamString({filter, page: 1, pageSize: pageSize as string});
+    this.props.history.push(newUrl);
+  }
+
+  private _goToCreate = () => {
+    const url = toDomainRoute(this.props.domainId, "create-collection");
+    this.props.history.push(url);
+  }
+
+  private _pageChange = (page: number, pageSize?: number) => {
+    let newUrl = appendToQueryParamString({page, pageSize});
+    this.props.history.push(newUrl);
+  }
+
+  private _parseQueryInput(urlQueryParams: string): SearchParams {
+    let {
+      filter,
+      pageSize,
+      page
+    } = queryString.parse(urlQueryParams, {parseNumbers: true});
+
+    return {
+      filter: filter ? filter + "" : undefined,
+      pageSize: pageSize as number || 25,
+      page: page as number || 1
+    };
   }
 }
 

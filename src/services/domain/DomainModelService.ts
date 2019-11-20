@@ -11,12 +11,13 @@
 
 import {DomainId} from "../../models/DomainId";
 import {AbstractDomainService} from "./AbstractDomainService";
-import {ModelData, ModelPermissionSummaryData, PagedData} from "./common-rest-data";
+import {ModelData, ModelPermissionSummaryData, PagedRestData} from "./common-rest-data";
 import {toModel, toModelPermissionSummary} from "./incoming-rest-data-converters";
 import {Model} from "../../models/domain/Model";
 import {ModelPermissionSummary} from "../../models/domain/ModelPermissionsSummary";
 import {ModelPermissions} from "../../models/domain/ModelPermissions";
 import {ModelUserPermissions} from "../../models/domain/ModelUserPermissions";
+import {PagedData} from "../../models/PagedData";
 
 export class DomainModelService extends AbstractDomainService {
 
@@ -55,14 +56,14 @@ export class DomainModelService extends AbstractDomainService {
   public queryModels(domain: DomainId, query: String): Promise<PagedData<Model>> {
     const url = this._getDomainUrl(domain, `model-query`);
     return this
-      ._post<PagedData<ModelData>>(url, {query})
+      ._post<PagedRestData<ModelData>>(url, {query})
       .then(pagedModels => {
         const models = pagedModels.data.map(toModel);
-        return {
-          data: models,
-          startIndex: pagedModels.startIndex,
-          totalResults: pagedModels.totalResults
-        };
+        return new PagedData(
+          models,
+          pagedModels.startIndex,
+          pagedModels.totalResults
+        );
       });
   }
 

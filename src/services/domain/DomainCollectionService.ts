@@ -11,11 +11,12 @@
 
 import {DomainId} from "../../models/DomainId";
 import {AbstractDomainService} from "./AbstractDomainService";
-import {CollectionSummary} from "../../models/domain/CollectionSummary";
 import {Collection} from "../../models/domain/Collection";
-import {CollectionData, CollectionSummaryData, CollectionUpdateData} from "./common-rest-data";
+import {CollectionData, CollectionSummaryData, CollectionUpdateData, PagedRestData} from "./common-rest-data";
 import {toCollection, toCollectionSummary} from "./incoming-rest-data-converters";
 import {toCollectionData, toCollectionUpdateData} from "./outgoing-rest-data-converters";
+import {PagedData} from "../../models/PagedData";
+import {CollectionSummary} from "../../models/domain/CollectionSummary";
 
 export class DomainCollectionService extends AbstractDomainService {
 
@@ -43,18 +44,24 @@ export class DomainCollectionService extends AbstractDomainService {
       .then(toCollection);
   }
 
-  public getCollectionSummaries(domain: DomainId, filter?: String, offset: number = 0, limit: number = 10): Promise<CollectionSummary[]> {
+  public getCollectionSummaries(domain: DomainId, filter?: String, offset: number = 0, limit: number = 25): Promise<PagedData<CollectionSummary>> {
     const url = this._getDomainUrl(domain, "collectionSummary");
     return this
-      ._get<CollectionSummaryData[]>(url, {filter, offset, limit})
-      .then(summaries => summaries.map(toCollectionSummary));
+      ._get<PagedRestData<CollectionSummaryData>>(url, {filter, offset, limit})
+      .then(result => {
+        const data = result.data.map(toCollectionSummary);
+        return new PagedData(data, result.startIndex, result.totalResults);
+      });
   }
 
-  public getCollections(domain: DomainId, filter?: String, offset: number = 0, limit: number = 10): Promise<Collection[]> {
+  public getCollections(domain: DomainId, filter?: String, offset: number = 0, limit: number = 25): Promise<PagedData<Collection>> {
     const url = this._getDomainUrl(domain, "collections");
     return this
-      ._get<CollectionData[]>(url, {filter, offset, limit})
-      .then(summaries => summaries.map(toCollection));
+      ._get<PagedRestData<CollectionData>>(url, {filter, offset, limit})
+      .then(results => {
+        const data = results.data.map(toCollection);
+        return new PagedData(data, results.startIndex, results.totalResults);
+      });
   }
 }
 

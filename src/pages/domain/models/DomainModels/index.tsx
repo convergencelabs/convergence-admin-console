@@ -23,12 +23,13 @@ import {ModelControls, ModelSearchMode} from "./ModelControls";
 import {DomainModelService} from "../../../../services/domain/DomainModelService";
 import {Model} from "../../../../models/domain/Model";
 import {DomainId} from "../../../../models/DomainId";
-import {PagedData} from "../../../../services/domain/common-rest-data";
+import {PagedRestData} from "../../../../services/domain/common-rest-data";
 import {DomainModelsTable} from './DomainModelsTable';
 import queryString from 'query-string';
 import {Link} from 'react-router-dom';
+import {PagedData} from "../../../../models/PagedData";
 
-const emptyPage: PagedData<Model> = {data: [], startIndex: 0, totalResults: 0};
+const emptyPage: PagedRestData<Model> = {data: [], startIndex: 0, totalResults: 0};
 
 export interface SearchParams {
   queryInput?: string;
@@ -52,7 +53,7 @@ export interface DomainModelsState {
 
 /**
  * A container component for the model query page.
- * 
+ *
  * Responsible for translating the query state from the URL search params
  * into an actual search, then passing the resulting models to the actual
  * `DomainModelsTable` which renders the results.
@@ -80,19 +81,16 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
     const searchParams = this._parseQueryInput(this.props.location.search);
     const prevSearchParams = this._parseQueryInput(prevProps.location.search);
 
-    if (
-      searchParams.queryInput !== null && (
-        (prevSearchParams.queryInput !== searchParams.queryInput) ||
+    if (searchParams.queryInput !== null &&
+      ((prevSearchParams.queryInput !== searchParams.queryInput) ||
         (searchParams.pageSize !== prevSearchParams.pageSize) ||
-        (searchParams.page !== prevSearchParams.page)
-      )
+        (searchParams.page !== prevSearchParams.page))
     ) {
       this._performSearch(searchParams);
     }
 
-    if (
-      (searchParams.queryInput === null || searchParams.mode !== prevSearchParams.mode) && this.state.models.totalResults > 0
-    ) {
+    if ((searchParams.queryInput === null || searchParams.mode !== prevSearchParams.mode) &&
+      this.state.models.totalResults > 0) {
       this.setState({
         models: {...emptyPage}
       });
@@ -144,9 +142,9 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
 
   private _parseQueryInput(urlQueryParams: string): SearchParams {
     let {
-      mode, 
-      query, 
-      collection, 
+      mode,
+      query,
+      collection,
       id,
       pageSize,
       page
@@ -170,9 +168,9 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
     }
 
     return {
-      queryInput, 
-      mode: mode as ModelSearchMode, 
-      pageSize: pageSize as number || 25, 
+      queryInput,
+      mode: mode as ModelSearchMode,
+      pageSize: pageSize as number || 25,
       page: page as number || 1
     };
   }
@@ -181,7 +179,7 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
     return (
       <CardTitleToolbar title="Models" icon="file">
         <Link to={toDomainRoute(this.props.domainId, "create-model")}>
-          <ToolbarButton icon="plus-circle" tooltip="Create Model" placement="left" />
+          <ToolbarButton icon="plus-circle" tooltip="Create Model" placement="left"/>
         </Link>
       </CardTitleToolbar>
     );

@@ -86,8 +86,8 @@ export class CollectionAutoCompleteComponent extends Component<InjectedProps, Co
   private _onSearch = (value: string) => {
     this.props.domainCollectionService
       .getCollections(this.props.domainId, value, 0, 10)
-      .then(collections => {
-        this.setState({collections});
+      .then(results => {
+        this.setState({collections: results.data});
       });
   }
 }

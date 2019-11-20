@@ -18,7 +18,7 @@ import styles from "./styles.module.css";
 import {Model} from '../../../../../models/domain/Model';
 import {TypeChecker} from "../../../../../utils/TypeChecker";
 import {longDateTime, shortDateTime, truncate} from "../../../../../utils/format-utils";
-import {PagedData} from '../../../../../services/domain/common-rest-data';
+import {PagedRestData} from '../../../../../services/domain/common-rest-data';
 import {SearchParams} from '../index';
 import {ModelSearchMode} from '../ModelControls';
 import {ModelDropdownMenu} from '../ModelDropdownMenu';
@@ -27,10 +27,11 @@ import {DomainId} from '../../../../../models/DomainId';
 import {toDomainRoute} from '../../../../../utils/domain-url';
 import {History} from 'history';
 import {appendToQueryParamString} from '../../../../../utils/router-utils';
+import {PaginationConfig} from "antd/lib/pagination";
 
 interface DomainModelsTableProps {
   history: History;
-  pagedModels: PagedData<Model>;
+  pagedModels: PagedRestData<Model>;
   searchParams: SearchParams;
   loading: boolean;
   domainId: DomainId;
@@ -65,7 +66,7 @@ export class DomainModelsTable extends React.Component<DomainModelsTableProps, {
   }
 
   public render(): ReactNode {
-    const pagination = this.props.searchParams.mode === ModelSearchMode.BROWSE ? {
+    const pagination: PaginationConfig | false = this.props.searchParams.mode === ModelSearchMode.BROWSE ? {
       pageSize: this.props.searchParams.pageSize,
       current: this.props.searchParams.page,
       total: this.props.pagedModels.totalResults,
@@ -180,5 +181,4 @@ export class DomainModelsTable extends React.Component<DomainModelsTableProps, {
     let newUrl = appendToQueryParamString({page, pageSize});
     this.props.history.push(newUrl);
   }
-
 }

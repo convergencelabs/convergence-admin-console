@@ -9,7 +9,7 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-export interface PagedData<T> {
+export interface PagedRestData<T> {
   data: T[];
   startIndex: number;
   totalResults: number;
