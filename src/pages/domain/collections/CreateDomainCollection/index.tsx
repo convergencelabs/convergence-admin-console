@@ -36,7 +36,7 @@ interface InjectedProps extends CreateDomainCollectionsProps, FormComponentProps
 
 class CreateDomainCollectionComponent extends React.Component<InjectedProps, {}> {
   private readonly _breadcrumbs = [
-    {title: "Collection", link: "/collections"},
+    {title: "Collection", link: toDomainRoute(this.props.domainId, "collections")},
     {title: "New Collection"}
   ];
   private readonly _newCollection: Collection;

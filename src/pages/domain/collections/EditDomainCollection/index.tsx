@@ -39,9 +39,10 @@ export interface EditDomainCollectionState {
 
 class EditDomainCollectionComponent extends React.Component<InjectedProps, EditDomainCollectionState> {
   private readonly _breadcrumbs = [
-    {title: "Collection", link: "/collections"},
+    {title: "Collection", link: toDomainRoute(this.props.domainId, "collections")},
     {title: this.props.match.params.id}
   ];
+
   private _collectionSubscription: PromiseSubscription | null;
 
   constructor(props: InjectedProps) {
