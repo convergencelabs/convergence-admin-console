@@ -46,10 +46,11 @@ interface InjectedProps extends DomainCollectionsProps {
 
 export interface DomainCollectionsState {
   collections: PagedData<CollectionSummary>;
+  searchParams: SearchParams;
 }
 
 class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCollectionsState> {
-  private readonly _breadcrumbs =[{title: "Collections"}];
+  private readonly _breadcrumbs = [{title: "Collections"}];
   private readonly _collectionTableColumns: any[];
   private _collectionsSubscription: PromiseSubscription | null;
 
@@ -79,8 +80,11 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
 
     this._collectionsSubscription = null;
 
+    const searchParams = this._parseQueryInput(this.props.location.search);
+
     this.state = {
       collections: new PagedData<CollectionSummary>([], 0, 0),
+      searchParams
     };
   }
 
@@ -95,40 +99,19 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
     }
   }
 
-  public componentDidUpdate(prevProps: InjectedProps): void {
+  public componentDidUpdate(prevProps: InjectedProps, prevState: DomainCollectionsState): void {
     // check to see if the any of the searchParams changed, and perform a search if so
-    const searchParams = this._parseQueryInput(this.props.location.search);
-    const prevSearchParams = this._parseQueryInput(prevProps.location.search);
-
-    if (searchParams.filter !== null &&
-      ((prevSearchParams.filter !== searchParams.filter) ||
-        (searchParams.pageSize !== prevSearchParams.pageSize) ||
-        (searchParams.page !== prevSearchParams.page))
-    ) {
+    if (prevState.searchParams.filter !== this.state.searchParams.filter ||
+      prevState.searchParams.pageSize !== this.state.searchParams.pageSize ||
+      prevState.searchParams.page !== this.state.searchParams.page) {
       this._loadCollections();
     }
   }
 
-  private _renderToolbar(): ReactNode {
-    return (
-      <CardTitleToolbar title="Collections" icon="folder">
-        <span className={styles.search}>
-          <Input placeholder="Search Collections"
-                 addonAfter={<Icon type="search"/>}
-                 onKeyUp={this._onFilterChange}/>
-        </span>
-        <ToolbarButton icon="plus-circle" tooltip="Create Collection" onClick={this._goToCreate}/>
-        <ToolbarButton icon="reload" tooltip="Reload Collections" onClick={this._loadCollections}/>
-      </CardTitleToolbar>
-    )
-  }
-
   public render(): ReactNode {
-    const searchParams = this._parseQueryInput(this.props.location.search);
-
-    const pagination: PaginationConfig  = {
-      pageSize: searchParams.pageSize,
-      current: searchParams.page,
+    const pagination: PaginationConfig = {
+      pageSize: this.state.searchParams.pageSize,
+      current: this.state.searchParams.page,
       total: this.state.collections.totalResults,
       onChange: this._pageChange,
       showTotal: (total: number) => `${total} total results`
@@ -147,6 +130,22 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
         </Card>
       </Page>
     );
+  }
+
+  private _renderToolbar(): ReactNode {
+    return (
+      <CardTitleToolbar title="Collections" icon="folder">
+        <span className={styles.search}>
+          <Input placeholder="Search Collections"
+                 addonAfter={<Icon type="search"/>}
+                 onInput={this._onFilterChange}
+                 value={this.state.searchParams.filter}
+          />
+        </span>
+        <ToolbarButton icon="plus-circle" tooltip="Create Collection" onClick={this._goToCreate}/>
+        <ToolbarButton icon="reload" tooltip="Reload Collections" onClick={this._loadCollections}/>
+      </CardTitleToolbar>
+    )
   }
 
   private _renderActions = (_: undefined, record: CollectionSummary) => {
@@ -196,12 +195,11 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
   }
 
   private _loadCollections = () => {
-    const searchParams = this._parseQueryInput(this.props.location.search);
     const domainId = this.props.domainId;
-    const filter = searchParams.filter !== "" ? searchParams.filter : undefined;
-    const offset = searchParams.page === undefined ? 0 : ((searchParams.page - 1) * searchParams.pageSize);
+    const filter = this.state.searchParams.filter !== "" ? this.state.searchParams.filter : undefined;
+    const offset = this.state.searchParams.page === undefined ? 0 : ((this.state.searchParams.page - 1) * this.state.searchParams.pageSize);
     const {promise, subscription} = makeCancelable(
-      this.props.domainCollectionService.getCollectionSummaries(domainId, filter, offset, searchParams.pageSize));
+      this.props.domainCollectionService.getCollectionSummaries(domainId, filter, offset, this.state.searchParams.pageSize));
     this._collectionsSubscription = subscription;
     promise.then(collections => {
       this._collectionsSubscription = null;
@@ -210,6 +208,23 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
       console.error(err);
       this._collectionsSubscription = null;
       this.setState({collections: new PagedData<CollectionSummary>([], 0, 0)});
+    });
+  }
+
+  private _goToCreate = () => {
+    const url = toDomainRoute(this.props.domainId, "create-collection");
+    this.props.history.push(url);
+  }
+
+  private _pageChange = (page: number, pageSize?: number) => {
+    let newUrl = appendToQueryParamString({page, pageSize});
+    this.props.history.push(newUrl);
+    this.setState({
+      searchParams: {
+        filter: this.state.searchParams.filter,
+        page,
+        pageSize: pageSize || 1
+      }
     });
   }
 
@@ -222,16 +237,13 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
     const filter = (event.target as HTMLInputElement).value;
     let newUrl = appendToQueryParamString({filter, page: 1, pageSize: pageSize as string});
     this.props.history.push(newUrl);
-  }
-
-  private _goToCreate = () => {
-    const url = toDomainRoute(this.props.domainId, "create-collection");
-    this.props.history.push(url);
-  }
-
-  private _pageChange = (page: number, pageSize?: number) => {
-    let newUrl = appendToQueryParamString({page, pageSize});
-    this.props.history.push(newUrl);
+    this.setState({
+      searchParams: {
+        filter,
+        page: 1,
+        pageSize: this.state.searchParams.pageSize
+      }
+    });
   }
 
   private _parseQueryInput(urlQueryParams: string): SearchParams {
@@ -251,4 +263,3 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
 
 const injections = [SERVICES.DOMAIN_COLLECTION_SERVICE];
 export const DomainCollections = injectAs<DomainCollectionsProps>(injections, DomainCollectionsComponent);
-
