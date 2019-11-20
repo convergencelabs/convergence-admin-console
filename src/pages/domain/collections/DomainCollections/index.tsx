@@ -100,8 +100,14 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
   }
 
   public componentDidUpdate(prevProps: InjectedProps, prevState: DomainCollectionsState): void {
-    // check to see if the any of the searchParams changed, and perform a search if so
-    if (prevState.searchParams.filter !== this.state.searchParams.filter ||
+    // First see if the route has changes, If so we set the current state.
+    // then later we see if that changed our actual params we care about.
+    if (prevProps.location.search !== this.props.location.search) {
+      const searchParams = this._parseQueryInput(this.props.location.search);
+      this.setState({
+        searchParams
+      });
+    } else if (prevState.searchParams.filter !== this.state.searchParams.filter ||
       prevState.searchParams.pageSize !== this.state.searchParams.pageSize ||
       prevState.searchParams.page !== this.state.searchParams.page) {
       this._loadCollections();
