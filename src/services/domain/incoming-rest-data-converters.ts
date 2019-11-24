@@ -124,6 +124,7 @@ export function toDomainUser(data: DomainUserData): DomainUser {
     data.firstName,
     data.lastName,
     data.email,
+    new Date(data.lastLogin),
     data.disabled);
 }
 

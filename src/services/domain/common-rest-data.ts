@@ -89,6 +89,7 @@ export interface DomainUserData {
   firstName: string;
   lastName: string;
   email: string;
+  lastLogin: number;
   disabled: boolean;
 }
 

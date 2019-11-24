@@ -43,8 +43,8 @@
   overflow: auto;
 }
 
-.tabs:global(.ant-tabs .ant-tabs-content .ant-tabs-tabpane) {
-  height: 100%;
+.tabs:global(.ant-tabs .ant-tabs-content .ant-tabs-tabpane.ant-tabs-tabpane-active) {
+  flex: 1;
 }
 
 .tabs:global(.ant-tabs .ant-tabs-content .sapphire-editor) {

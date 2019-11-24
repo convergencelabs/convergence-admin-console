@@ -52,25 +52,25 @@ export class DomainUsersComponent extends React.Component<InjectedProps, DomainU
     this._userTableColumns = [{
       title: 'Username',
       dataIndex: 'username',
-      sorter: (a: any, b: any) => (a.username as string).localeCompare(b.username),
-      render: (text: string) => <Link to={toDomainRoute(this.props.domainId, `users/${text}`)}>{text}</Link>
+      sorter: (a: DomainUser, b: DomainUser) => (a.username as string).localeCompare(b.username),
+      render: (username: string) => <Link to={toDomainRoute(this.props.domainId, `users/${username}`)}>{username}</Link>
     }, {
       title: 'Display Name',
       dataIndex: 'displayName',
-      sorter: (a: any, b: any) => (a.displayName as string).localeCompare(b.displayName)
+      sorter: (a: DomainUser, b: DomainUser) => (a.displayName as string).localeCompare(b.displayName)
     }, {
       title: 'Email',
       dataIndex: 'email',
-      sorter: (a: any, b: any) => (a.email as string).localeCompare(b.email)
+      sorter: (a: DomainUser, b: DomainUser) => (a.email as string).localeCompare(b.email)
     }, {
       title: 'Last Login',
       dataIndex: 'lastLogin',
       align: 'left',
-      render: (value: any, record: any) => record.lastLogin ? shortDateTime(record.lastLogin) : "Never"
+      render: (lastLogin: Date) => lastLogin ? shortDateTime(lastLogin) : "Never"
     }, {
       title: 'Status',
       dataIndex: 'disabled',
-      render: (disabled: boolean, record: DomainUser) => disabled ? "Disabled" : "Enabled"
+      render: (disabled: boolean) => disabled ? "Disabled" : "Enabled"
     }, {
       title: '',
       align: 'right',
