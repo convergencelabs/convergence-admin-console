@@ -1,14 +1,3 @@
-/*
- * Copyright (c) 2019 - Convergence Labs, Inc.
- *
- * This file is part of the Convergence Server, which is released under
- * the terms of the GNU General Public License version 3 (GPLv3). A copy
- * of the GPLv3 should have been provided along with this file, typically
- * located in the "LICENSE" file, which is part of this source code package.
- * Alternatively, see <https://www.gnu.org/licenses/gpl-3.0.html> for the
- * full text of the GPLv3 license, if it was not provided.
- */
-
 import * as React from 'react';
 import {ReactNode} from 'react';
 import {Page} from "../../../../components/common/Page/";
@@ -19,23 +8,20 @@ import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {ToolbarButton} from "../../../../components/common/ToolbarButton";
 import {toDomainRoute} from "../../../../utils/domain-url";
-import {ModelControls, ModelSearchMode} from "./ModelControls";
+import {ModelControls} from "./ModelControls";
 import {DomainModelService} from "../../../../services/domain/DomainModelService";
 import {Model} from "../../../../models/domain/Model";
 import {DomainId} from "../../../../models/DomainId";
-import {PagedRestData} from "../../../../services/domain/common-rest-data";
 import {DomainModelsTable} from './DomainModelsTable';
 import queryString from 'query-string';
-import {Link} from 'react-router-dom';
 import {PagedData} from "../../../../models/PagedData";
-
-const emptyPage: PagedRestData<Model> = {data: [], startIndex: 0, totalResults: 0};
+import {ModelSearchMode} from "./ModelSearchMode";
 
 export interface SearchParams {
+  mode: ModelSearchMode;
   queryInput?: string;
   pageSize: number;
   page: number;
-  mode: ModelSearchMode;
 }
 
 export interface DomainModelsProps extends RouteComponentProps {
@@ -49,14 +35,14 @@ interface InjectedProps extends DomainModelsProps {
 export interface DomainModelsState {
   loading: boolean;
   models: PagedData<Model>;
+  searchParams: SearchParams;
 }
 
+const EMPTY_DATA = new PagedData<Model>([], 0, 0);
+
 /**
- * A container component for the model query page.
- *
- * Responsible for translating the query state from the URL search params
- * into an actual search, then passing the resulting models to the actual
- * `DomainModelsTable` which renders the results.
+ * Keep this as the container component that renders the proper search mode,
+ * then move the state->models into another components
  */
 class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsState> {
   private readonly _breadcrumbs = [{title: "Models"}];
@@ -64,58 +50,56 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
   constructor(props: InjectedProps) {
     super(props);
 
-    this.state = {
-      models: {...emptyPage},
-      loading: false,
-    };
+    const searchParams = this._parseQueryInput(this.props.location.search);
 
+    this.state = {
+      models: EMPTY_DATA,
+      loading: false,
+      searchParams
+    };
   }
 
   public componentDidMount(): void {
-    const searchParams = this._parseQueryInput(this.props.location.search);
-    this._performSearch(searchParams);
+    this._performSearch();
   }
 
-  public componentDidUpdate(prevProps: InjectedProps): void {
-    // check to see if the any of the searchParams changed, and perform a search if so
-    const searchParams = this._parseQueryInput(this.props.location.search);
-    const prevSearchParams = this._parseQueryInput(prevProps.location.search);
-
-    if (searchParams.queryInput !== null &&
-      ((prevSearchParams.queryInput !== searchParams.queryInput) ||
-        (searchParams.pageSize !== prevSearchParams.pageSize) ||
-        (searchParams.page !== prevSearchParams.page))
-    ) {
-      this._performSearch(searchParams);
-    }
-
-    if ((searchParams.queryInput === null || searchParams.mode !== prevSearchParams.mode) &&
-      this.state.models.totalResults > 0) {
-      this.setState({
-        models: {...emptyPage}
-      });
+  public componentDidUpdate(prevProps: InjectedProps, prevState: DomainModelsState): void {
+    // Detect if the location changed. If so parse the url params and see if
+    // we have different search state. If we do, then we set the state and
+    // perform a search.
+    if (prevProps.location.search !== this.props.location.search) {
+      const searchParams = this._parseQueryInput(this.props.location.search);
+      if (searchParams.mode !== this.state.searchParams.mode ||
+        searchParams.pageSize !== this.state.searchParams.pageSize ||
+        searchParams.page !== this.state.searchParams.page ||
+        searchParams.queryInput !== this.state.searchParams.queryInput) {
+        this.setState({searchParams}, () => this._performSearch());
+      }
     }
   }
 
   public render(): ReactNode {
-    const searchParams = this._parseQueryInput(this.props.location.search);
-
     return (
       <Page breadcrumbs={this._breadcrumbs}>
         <Card title={this._renderToolbar()}>
           <ModelControls
-            history={this.props.history}
-            searchMode={searchParams.mode}
-            submittedQueryInput={searchParams.queryInput}
+            initialData={this.state.searchParams.queryInput}
+            initialMode={this.state.searchParams.mode}
             domainId={this.props.domainId}
-            pageSize={searchParams.pageSize}
+            resultsPerPageDefault={25}
+            onBrowse={this._onBrowse}
+            onQuery={this._onQuery}
+            onIdLookup={this._onLookup}
+            onModeChange={this._onModeChange}
           />
           <DomainModelsTable
-            history={this.props.history}
             domainId={this.props.domainId}
             pagedModels={this.state.models}
-            searchParams={searchParams}
+            pagination={this.state.searchParams.mode === ModelSearchMode.BROWSE}
+            page={this.state.searchParams.page}
+            pageSize={this.state.searchParams.pageSize}
             loading={this.state.loading}
+            onPageChange={this._onPageChange}
             onDeleteConfirm={this._deleteModel}
           />
         </Card>
@@ -123,64 +107,10 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
     );
   }
 
-
-  private _performSearch(searchParams: SearchParams): void {
-    if (searchParams.queryInput) {
-      switch (searchParams.mode) {
-        case ModelSearchMode.BROWSE:
-          this._browse(searchParams.queryInput, searchParams.pageSize, searchParams.page);
-          break;
-        case ModelSearchMode.ID:
-          this._lookup(searchParams.queryInput);
-          break;
-        case ModelSearchMode.QUERY:
-          this._query(searchParams.queryInput, searchParams.pageSize);
-          break;
-      }
-    }
-  }
-
-  private _parseQueryInput(urlQueryParams: string): SearchParams {
-    let {
-      mode,
-      query,
-      collection,
-      id,
-      pageSize,
-      page
-    } = queryString.parse(urlQueryParams, {parseNumbers: true});
-    let queryInput: string | undefined;
-    if (mode !== undefined) {
-      switch (mode) {
-        case ModelSearchMode.BROWSE:
-          queryInput = collection as string;
-          break;
-        case ModelSearchMode.ID:
-          queryInput = id as string;
-          break;
-        case ModelSearchMode.QUERY:
-          queryInput = query as string;
-          break;
-      }
-    } else {
-      mode = ModelSearchMode.BROWSE;
-      queryInput = collection as string;
-    }
-
-    return {
-      queryInput,
-      mode: mode as ModelSearchMode,
-      pageSize: pageSize as number || 25,
-      page: page as number || 1
-    };
-  }
-
   private _renderToolbar(): ReactNode {
     return (
       <CardTitleToolbar title="Models" icon="file">
-        <Link to={toDomainRoute(this.props.domainId, "create-model")}>
-          <ToolbarButton icon="plus-circle" tooltip="Create Model" placement="left"/>
-        </Link>
+        <ToolbarButton icon="plus-circle" tooltip="Create Model" onClick={this._goToCreate}/>
       </CardTitleToolbar>
     );
   }
@@ -212,26 +142,186 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
       });
   }
 
-  private _browse = (collection: string, pageSize: number, page: number) => {
-    this.setState({loading: true});
+  private _goToCreate = () => {
+    const url = toDomainRoute(this.props.domainId, "create-model");
+    this.props.history.push(url);
+  }
+
+  //
+  // URL Management
+  //
+
+  private _parseQueryInput(urlQueryParams: string): SearchParams {
+    let {
+      mode,
+      query,
+      collection,
+      id,
+      pageSize,
+      page
+    } = queryString.parse(urlQueryParams, {parseNumbers: true});
+    let queryInput: string | undefined;
+    if (mode !== undefined) {
+      switch (mode) {
+        case ModelSearchMode.BROWSE:
+          queryInput = collection as string;
+          break;
+        case ModelSearchMode.ID:
+          queryInput = id as string;
+          break;
+        case ModelSearchMode.QUERY:
+          queryInput = query as string;
+          break;
+      }
+    } else {
+      mode = ModelSearchMode.BROWSE;
+      queryInput = collection as string;
+    }
+
+    return {
+      queryInput,
+      mode: mode as ModelSearchMode || ModelSearchMode.BROWSE,
+      pageSize: pageSize as number || 25,
+      page: page as number || 1
+    };
+  }
+
+  private _pushUrl(searchParams: SearchParams): void {
+    const {mode, queryInput, pageSize, page} = searchParams;
+    const urlParams = new URLSearchParams();
+    urlParams.set("mode", mode);
+    if (queryInput) {
+      switch (mode) {
+        case ModelSearchMode.BROWSE:
+          urlParams.set("collection", queryInput);
+          if (pageSize) {
+            urlParams.set("pageSize", "" + pageSize);
+          }
+          if (page) {
+            urlParams.set("page", "" + page);
+          }
+          break;
+        case ModelSearchMode.QUERY:
+          urlParams.set("query", queryInput);
+          break;
+        case ModelSearchMode.ID:
+          urlParams.set("id", queryInput);
+          break;
+      }
+    }
+
+    this.props.history.push("?" + urlParams);
+  }
+
+  private _onModeChange = (mode: ModelSearchMode) => {
+    const searchParams = {...this.state.searchParams};
+    delete searchParams.queryInput;
+
+    this.setState({models: EMPTY_DATA, searchParams}, () => {
+      const urlParams = new URLSearchParams();
+      urlParams.set("mode", "" + mode);
+      this.props.history.push("?" + urlParams);
+      this._performSearch();
+    });
+  }
+
+  private _onPageChange = (page: number) => {
+    const searchParams = {...this.state.searchParams, page};
+    this.setState({searchParams}, () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      urlParams.set("page", "" + page);
+      this.props.history.push("?" + urlParams);
+      this._performSearch();
+    })
+  }
+
+  private _onBrowse = (collection: string, pageSize: number) => {
+    const searchParams: SearchParams = {
+      mode: ModelSearchMode.BROWSE,
+      queryInput: collection,
+      pageSize: pageSize,
+      page: 1
+    };
+
+    this.setState({searchParams}, () => {
+      this._pushUrl(searchParams);
+      this._performSearch();
+    });
+  }
+
+  private _onQuery = (query: string) => {
+    const searchParams: SearchParams = {
+      mode: ModelSearchMode.QUERY,
+      queryInput: query,
+      pageSize: 25,
+      page: 1
+    };
+
+    this.setState({searchParams}, () => {
+      this._pushUrl(searchParams);
+      this._performSearch();
+    });
+  }
+
+  private _onLookup = (id: string) => {
+    const searchParams: SearchParams = {
+      mode: ModelSearchMode.ID,
+      queryInput: id,
+      pageSize: 25,
+      page: 1
+    };
+
+    this.setState({searchParams}, () => {
+      this._pushUrl(searchParams);
+      this._performSearch();
+    });
+  }
+
+  //
+  // Search Execution
+  //
+
+  private _performSearch(): void {
+    if (this.state.searchParams.queryInput) {
+      this.setState({loading: true});
+
+      switch (this.state.searchParams.mode) {
+        case ModelSearchMode.BROWSE:
+          this._browse();
+          break;
+        case ModelSearchMode.ID:
+          this._lookup();
+          break;
+        case ModelSearchMode.QUERY:
+          this._query();
+          break;
+      }
+    } else {
+      this.setState({loading: false, models: EMPTY_DATA});
+    }
+  }
+
+  private _browse(): void {
+    const {page, queryInput, pageSize} = this.state.searchParams;
+    const collection = queryInput!;
 
     const offset = page === undefined ? 0 : ((page - 1) * pageSize);
     const query = `SELECT FROM ${collection} LIMIT ${pageSize} OFFSET ${offset}`;
+    const searchParams = {...this.state.searchParams, pageSize};
+    this.props.domainModelService
+      .queryModels(this.props.domainId, query)
+      .then(models => this.setState({models, loading: false, searchParams}));
+  }
+
+  private _query(): void {
+    const query = this.state.searchParams.queryInput!;
     this.props.domainModelService
       .queryModels(this.props.domainId, query)
       .then(models => this.setState({models, loading: false}));
   }
 
-  private _query = (query: string, pageSize: number) => {
-    this.setState({loading: true});
-
-    this.props.domainModelService
-      .queryModels(this.props.domainId, query)
-      .then(models => this.setState({models, loading: false}));
-  }
-
-  private _lookup = (id: string) => {
-    this.setState({loading: true});
+  private _lookup(): void {
+    const id = this.state.searchParams.queryInput!;
 
     this.props.domainModelService
       .getModelById(this.props.domainId, id)
@@ -240,14 +330,14 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
           models: {data: [model], totalResults: 1, startIndex: 0},
           loading: false
         });
-      }, err => {
+      })
+      .catch(err => {
         this.setState({
-          models: {...emptyPage},
+          models: EMPTY_DATA,
           loading: false
         })
       });
   }
-
 }
 
 const injections = [SERVICES.DOMAIN_MODEL_SERVICE];

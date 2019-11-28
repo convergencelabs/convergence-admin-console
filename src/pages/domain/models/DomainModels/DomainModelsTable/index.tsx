@@ -19,23 +19,21 @@ import {Model} from '../../../../../models/domain/Model';
 import {TypeChecker} from "../../../../../utils/TypeChecker";
 import {longDateTime, shortDateTime, truncate} from "../../../../../utils/format-utils";
 import {PagedRestData} from '../../../../../services/domain/common-rest-data';
-import {SearchParams} from '../index';
-import {ModelSearchMode} from '../ModelControls';
 import {ModelDropdownMenu} from '../ModelDropdownMenu';
 import {ModelRowExpanded} from '../ModelRowExpanded';
 import {DomainId} from '../../../../../models/DomainId';
 import {toDomainRoute} from '../../../../../utils/domain-url';
-import {History} from 'history';
-import {appendToQueryParamString} from '../../../../../utils/router-utils';
 import {PaginationConfig} from "antd/lib/pagination";
 
 interface DomainModelsTableProps {
-  history: History;
   pagedModels: PagedRestData<Model>;
-  searchParams: SearchParams;
+  pagination: boolean
+  pageSize?: number;
+  page?: number;
   loading: boolean;
   domainId: DomainId;
   onDeleteConfirm: (modelId: string) => void;
+  onPageChange: (page: number) => void;
 }
 
 export class DomainModelsTable extends React.Component<DomainModelsTableProps, {}> {
@@ -60,15 +58,15 @@ export class DomainModelsTable extends React.Component<DomainModelsTableProps, {
       title: 'Modified',
       dataIndex: 'modified',
       width: 180,
-      render: (val: Date, record: Model) => shortDateTime(val),
+      render: (val: Date, _: Model) => shortDateTime(val),
       sorter: (a: Model, b: Model) => a.modified.getTime() - b.modified.getTime()
     }];
   }
 
   public render(): ReactNode {
-    const pagination: PaginationConfig | false = this.props.searchParams.mode === ModelSearchMode.BROWSE ? {
-      pageSize: this.props.searchParams.pageSize,
-      current: this.props.searchParams.page,
+    const pagination: PaginationConfig | false = this.props.pagination ? {
+      pageSize: this.props.pageSize,
+      current: this.props.page,
       total: this.props.pagedModels.totalResults,
       onChange: this._pageChange,
       showTotal: (total: number) => `${total} total results`
@@ -112,7 +110,7 @@ export class DomainModelsTable extends React.Component<DomainModelsTableProps, {
     return columns;
   }
 
-  private _renderDataValue = (val: any, record: Model) => {
+  private _renderDataValue = (val: any, _: Model) => {
     const renderedValue = TypeChecker.switch<string>(val, {
       null() {
         return "null";
@@ -178,7 +176,6 @@ export class DomainModelsTable extends React.Component<DomainModelsTableProps, {
   }
 
   private _pageChange = (page: number, pageSize?: number) => {
-    let newUrl = appendToQueryParamString({page, pageSize});
-    this.props.history.push(newUrl);
+    this.props.onPageChange(page);
   }
 }
