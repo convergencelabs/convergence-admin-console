@@ -19,7 +19,7 @@ import {Model} from '../../../../../models/domain/Model';
 import {TypeChecker} from "../../../../../utils/TypeChecker";
 import {longDateTime, shortDateTime, truncate} from "../../../../../utils/format-utils";
 import {PagedRestData} from '../../../../../services/domain/common-rest-data';
-import {ModelDropdownMenu} from '../ModelDropdownMenu';
+import {ModelDropdownMenu} from '../ModelDropDownMenu/';
 import {ModelRowExpanded} from '../ModelRowExpanded';
 import {DomainId} from '../../../../../models/DomainId';
 import {toDomainRoute} from '../../../../../utils/domain-url';

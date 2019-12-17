@@ -15,12 +15,14 @@ import confirm from "antd/lib/modal/confirm";
 import {Dropdown, Icon, Menu} from "antd";
 import {Link} from "react-router-dom";
 import CopyToClipboard from "react-copy-to-clipboard";
-import {DomainModelService} from '../../../../services/domain/DomainModelService';
-import {SERVICES} from "../../../../services/ServiceConstants";
-import {injectAs} from "../../../../utils/mobx-utils";
-import {DomainId} from '../../../../models/DomainId';
-import {Model} from '../../../../models/domain/Model';
-import {toDomainRoute} from "../../../../utils/domain-url";
+import {DomainModelService} from '../../../../../services/domain/DomainModelService';
+import {SERVICES} from "../../../../../services/ServiceConstants";
+import {injectAs} from "../../../../../utils/mobx-utils";
+import {DomainId} from '../../../../../models/DomainId';
+import {Model} from '../../../../../models/domain/Model';
+import {toDomainRoute} from "../../../../../utils/domain-url";
+
+import styles from "./styles.module.css";
 
 interface ModelDropdownMenuProps {
   id: string;
@@ -42,12 +44,12 @@ class ModelDropdownMenuComponent extends React.Component<InjectedProps, {}> {
       <Menu>
         <Menu.Item key="copyId">
           <CopyToClipboard text={this.props.id}>
-            <span><Icon type="copy"/> Copy Id</span>
+            <div className={styles.copyItem}><Icon type="copy"/> Copy Id</div>
           </CopyToClipboard>
         </Menu.Item>
         <Menu.Item key="copyData">
           <CopyToClipboard text={JSON.stringify(this.props.record.data, null, "  ")}>
-            <span><Icon type="copy"/> Copy Data</span>
+            <div className={styles.copyItem}><Icon type="copy"/> Copy Data</div>
           </CopyToClipboard>
         </Menu.Item>
         <Menu.Divider/>
@@ -58,8 +60,8 @@ class ModelDropdownMenuComponent extends React.Component<InjectedProps, {}> {
           <Link to={permission}><Icon type="team"/> Edit Permissions</Link>
         </Menu.Item>
         <Menu.Divider/>
-        <Menu.Item key="delete">
-          <span onClick={() => this._onContextDelete()}><Icon type="delete"/> Delete</span>
+        <Menu.Item key="delete" onClick={() => this._onContextDelete()}>
+          <span><Icon type="delete"/> Delete</span>
         </Menu.Item>
       </Menu>
     );
