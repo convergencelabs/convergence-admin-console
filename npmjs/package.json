@@ -2,6 +2,12 @@
   "name": "@convergence/admin-console",
   "version": "0.0.0",
   "description": "Convergence Admin Console",
+  "keywords": [
+    "convergence",
+    "admin",
+    "console",
+    "collaboration"
+  ],
   "author": {
     "name": "Convergence Labs, Inc.",
     "email": "info@convergencelabs.com",
@@ -14,8 +20,7 @@
   },
   "bugs": "https://github.com/convergencelabs/convergence-admin-console/issues",
   "license": "GPL-3.0",
-  "scripts": {
-  },
+  "scripts": {},
   "dependencies": {},
   "devDependencies": {}
 }
