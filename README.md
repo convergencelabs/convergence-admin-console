@@ -3,6 +3,8 @@
 </div>
 
 # Convergence Admin Console
+[![Build Status](https://travis-ci.org/convergencelabs/convergence-admin-console.svg?branch=master)](https://travis-ci.org/convergencelabs/convergence-admin-console)
+
 This project contains the Convergence Admin Console user interface. The project uses [React](https://reactjs.org/) as the main UI framework and is implemented using [Typescript](https://www.typescriptlang.org/). The project was created with [Create React App](https://github.com/facebook/create-react-app) and uses the build infrastructure provided by Create React App.
 
 ## Issue Reporting
