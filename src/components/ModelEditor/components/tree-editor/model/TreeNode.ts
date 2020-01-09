@@ -176,7 +176,7 @@ export abstract class TreeNode<T extends ModelElement<any>> {
     return this.element().relativePathFromParent();
   }
 
-  public get(key: string): TreeNode<any> | null {
+  public get(key: ModelPathElement): TreeNode<any> | null {
     const path = this.path().slice(0);
     path.push(key);
     return this._tree.getNodeAtPath(path);

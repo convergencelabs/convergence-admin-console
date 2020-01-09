@@ -67,6 +67,7 @@ export class ObjectNodeRenderer extends ContainerNodeRenderer<ObjectNodeRenderer
 
   protected _addChild(key: any, value: any): void {
     this.props.node.element().set(key + "", value);
+    this.props.node.tree().selectNode(this.props.node.get(key));
   }
 
   protected _propertyPattern(): RegExp {

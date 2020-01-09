@@ -68,6 +68,7 @@ export class ArrayNodeRenderer extends ContainerNodeRenderer<ArrayNodeRendererPr
       index = Math.min(Number(key), this.props.node.size());
     }
     this.props.node.element().insert(index, value);
+    this.props.node.tree().selectNode(this.props.node.get(index));
   }
 
   protected _propertyPattern(): RegExp {
