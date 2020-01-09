@@ -13,7 +13,7 @@ import React, {ReactNode} from "react";
 import {TreeModel} from "./components/tree-editor/model/TreeModel";
 import {PathControlModel} from "./components/path/PathControlModel";
 import {EditorMode, ViewType} from "./EditorMode";
-import {SourceEditor} from "./components/source-editor/SourceEditor/index";
+import {SourceEditor} from "./components/source-editor/SourceEditor/";
 import {TreeEditor} from "./components/tree-editor/TreeEditor";
 
 export interface SapphireEditorComponentProps {
@@ -25,6 +25,7 @@ export interface SapphireEditorComponentProps {
 
 export interface SapphireEditorComponentState {
   viewType: ViewType;
+  editMode: EditorMode;
 }
 
 export class SapphireEditorComponent extends React.Component<SapphireEditorComponentProps, SapphireEditorComponentState> {
@@ -32,23 +33,25 @@ export class SapphireEditorComponent extends React.Component<SapphireEditorCompo
   constructor(props: SapphireEditorComponentProps, context: any) {
     super(props, context);
     this.state = {
-      viewType: this.props.defaultView
+      viewType: this.props.defaultView,
+      editMode: this.props.defaultMode
     };
 
     this._onEditSource = this._onEditSource.bind(this);
     this._onEditTree = this._onEditTree.bind(this);
+    this._onModeChanged = this._onModeChanged.bind(this);
   }
 
   private _onEditSource(): void {
-    this.setState({
-      viewType: "source"
-    } as SapphireEditorComponentState);
+    this.setState({viewType: "source"});
   }
 
   private _onEditTree(): void {
-    this.setState({
-      viewType: "tree"
-    } as SapphireEditorComponentState);
+    this.setState({viewType: "tree"});
+  }
+
+  private _onModeChanged(mode: EditorMode): void {
+    this.setState({editMode: mode});
   }
 
   public render(): ReactNode {
@@ -61,8 +64,9 @@ export class SapphireEditorComponent extends React.Component<SapphireEditorCompo
       :
       <TreeEditor treeModel={this.props.treeModel}
                   pathModel={this.props.pathModel}
-                  defaultMode={this.props.defaultMode}
+                  editMode={this.state.editMode}
                   onEditSource={this._onEditSource}
+                  onModeChanged={this._onModeChanged}
       />;
 
       return <div className="sapphire-editor">{editor}</div>
