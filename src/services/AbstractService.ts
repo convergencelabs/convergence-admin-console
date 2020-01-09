@@ -58,7 +58,7 @@ export abstract class AbstractService {
     return `${AppConfig.restApiUrl}${relPath}`;
   }
 
-  protected _processResponse(httpResponse: Response) {
+  protected _processResponse(httpResponse: Response): Promise<any> {
     const body = httpResponse.body;
     if (body === null) {
       return Promise.reject(new Error("The response from the server had no body."));

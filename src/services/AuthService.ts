@@ -26,6 +26,7 @@ export interface ValidateResponse {
   valid: boolean;
   username?: string;
   expiresAt?: Date;
+  expiresIn?: number;
 }
 
 export class AuthService extends AbstractService {
@@ -41,7 +42,8 @@ export class AuthService extends AbstractService {
         return {
           valid,
           username,
-          expiresAt: expiresIn !== undefined ? new Date(Date.now() + expiresIn) : undefined
+          expiresAt: expiresIn !== undefined ? new Date(Date.now() + expiresIn) : undefined,
+          expiresIn
         }
       });
   }

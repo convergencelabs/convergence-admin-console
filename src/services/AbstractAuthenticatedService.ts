@@ -15,10 +15,11 @@ import {Response, SuperAgentRequest} from "superagent";
 
 export abstract class AbstractAuthenticatedService extends AbstractService {
 
-  protected _processResponse(httpResponse: Response) {
+  protected _processResponse(httpResponse: Response): Promise<any> {
     if (httpResponse.status === 401) {
       authStore.logout();
     }
+
     return super._processResponse(httpResponse);
   };
 
