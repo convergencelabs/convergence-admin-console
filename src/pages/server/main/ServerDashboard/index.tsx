@@ -14,7 +14,7 @@ import {Page} from "../../../../components/common/Page/";
 import {Col, Row} from "antd";
 import styles from "./styles.module.css";
 import {SpacedGrid} from "../../../../components/common/SpacedGrid/";
-import {RecentDomains} from "../../../../components/server/FavoriteDomains/";
+import {FavoriteDomains} from "../../../../components/server/FavoriteDomains/";
 import {ServerAlerts} from "../../../../components/server/ServerAlerts/";
 import {ServerInfo} from "../../../../components/server/ServerInfo";
 
@@ -34,7 +34,7 @@ export class ServerDashboard extends React.Component<{}, {}> {
           </Row>
           <Row gutter={16}>
             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-              <RecentDomains/>
+              <FavoriteDomains/>
             </Col>
           </Row>
         </SpacedGrid>

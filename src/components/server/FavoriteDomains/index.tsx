@@ -103,4 +103,4 @@ export class FavoriteDomainsComponent extends React.Component<RecentDomainInject
   }
 }
 
-export const RecentDomains = injectAs<{}>([SERVICES.LOGGED_IN_USER_SERVICE], FavoriteDomainsComponent);
+export const FavoriteDomains = injectAs<{}>([SERVICES.LOGGED_IN_USER_SERVICE], FavoriteDomainsComponent);
