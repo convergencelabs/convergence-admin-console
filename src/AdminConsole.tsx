@@ -19,6 +19,8 @@ import {AuthStore} from "./stores/AuthStore";
 import {injectObserver} from "./utils/mobx-utils";
 import {AppConfig} from "./stores/AppConfig";
 import {STORES} from "./stores/StoreConstants";
+import {LoggedOut} from "./components/common/LoggedOut";
+import {Redirect} from "react-router";
 
 interface InjectedStores {
   authStore: AuthStore;
@@ -26,16 +28,32 @@ interface InjectedStores {
 
 class App extends Component<InjectedStores, {}> {
   render() {
+    let content = null;
+    if (this.props.authStore.timedOut) {
+      // Todo Figure out a better way to do this.
+      setTimeout(() => this.props.authStore.clearTimedOut());
+      content = (
+        <Redirect push to={{pathname: "/logged-out"}}/>
+      )
+    } else {
+      content = (
+        <Switch>
+          <Route
+            path="/login"
+            render={(props: RouteComponentProps) => (<LoginForm {...props}/>)}
+          />
+          <Route
+            path="/logged-out"
+            render={(props: RouteComponentProps) => (<LoggedOut {...props}/>)}
+          />
+          <PrivateRoute loggedIn={this.props.authStore.authenticated} path="/" component={MainLayout}/>
+        </Switch>
+      );
+    }
     return (
       <Root>
         <Router basename={AppConfig.baseUrl}>
-          <Switch>
-            <Route
-              path="/login"
-              render={(props: RouteComponentProps) => (<LoginForm {...props}/>)}
-            />
-            <PrivateRoute loggedIn={this.props.authStore.authenticated} path="/" component={MainLayout}/>
-          </Switch>
+          {content}
         </Router>
       </Root>
     );

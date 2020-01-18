@@ -11,12 +11,14 @@
 
 import {action, decorate, observable} from "mobx";
 import {authService} from "../services/AuthService";
+import {localStorageService} from "../services/LocalStorageService";
 
 // We will check for logout 30 seconds before the token expires.
 const SESSION_CHECK_PADDING = 30 * 1000;
 
 export class AuthStore {
   public authenticated: boolean = false;
+  public timedOut: boolean = false;
   public authToken: string | null = null;
   private _validationTimeout: any | null = null;
 
@@ -33,6 +35,16 @@ export class AuthStore {
       clearTimeout(this._validationTimeout);
       this._validationTimeout = null;
     }
+    localStorageService.clearAuthToken();
+  }
+
+  public timeOut(): void {
+    this.timedOut = true;
+    this.logout();
+  }
+
+  public clearTimedOut(): void {
+    this.timedOut = false;
   }
 
   private _logoutCheck(): void {
@@ -40,11 +52,11 @@ export class AuthStore {
       authService.validateToken(this.authToken).then((resp) => {
         const {valid, expiresIn} = resp;
         if (!valid) {
-          this.logout();
+          this.timeOut();
         } else {
           const remaining = (expiresIn || 0) - SESSION_CHECK_PADDING;
           if (remaining <= 0) {
-            this.logout();
+            this.timeOut();
           } else {
             this._validationTimeout = setTimeout(() => this._logoutCheck(), remaining);
           }
@@ -57,8 +69,11 @@ export class AuthStore {
 decorate(AuthStore, {
   authenticated: observable,
   authToken: observable,
+  timedOut: observable,
   setAuthenticated: action,
-  logout: action
+  logout: action,
+  timeOut: action,
+  clearTimedOut: action
 });
 
 export const authStore = new AuthStore();

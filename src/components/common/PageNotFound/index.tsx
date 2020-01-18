@@ -24,7 +24,7 @@ export class PageNotFound extends React.Component<PageNotFoundProps, {}> {
       <MessagePage>
           <Icon type="frown" className={styles.icon}/>
           <div className={styles.title}>Page Not Found</div>
-          <div className={styles.text}>{this.props.text || "Unfortunately no page exists at this url."}</div>
+          <div className={styles.text}>{this.props.text || "Unfortunately, no page exists at this url."}</div>
       </MessagePage>
     );
   }
