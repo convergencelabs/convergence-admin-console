@@ -232,7 +232,7 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
       urlParams.set("page", "" + page);
       this.props.history.push("?" + urlParams);
       this._performSearch();
-    })
+    });
   }
 
   private _onBrowse = (collection: string, pageSize: number) => {
