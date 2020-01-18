@@ -10,6 +10,8 @@
  */
 
 export class PagedData<T> {
+  public static EMTPY: PagedData<any> = new PagedData<any>([], 0, 0);
+
   constructor(public data: T[], public startIndex: number, public totalResults: number) {
     Object.freeze(this);
   }

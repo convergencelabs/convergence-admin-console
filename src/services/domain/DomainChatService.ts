@@ -11,16 +11,21 @@
 
 import {DomainId} from "../../models/DomainId";
 import {AbstractDomainService} from "./AbstractDomainService";
-import {ChatInfoData, CreateChatData} from "./common-rest-data";
+import {ChatInfoData, CreateChatData, PagedRestData} from "./common-rest-data";
 import {ChatInfo} from "../../models/domain/ChatInfo";
 import {toChatInfo} from "./incoming-rest-data-converters";
+import {PagedData} from "../../models/PagedData";
 
 export class DomainChatService extends AbstractDomainService {
 
-  public getChats(domain: DomainId, filter?: String, offset: number = 0, limit: number = 10): Promise<ChatInfo[]> {
+  public getChats(domain: DomainId, filter?: String, offset: number = 0, limit: number = 10): Promise<PagedData<ChatInfo>> {
     const url = this._getDomainUrl(domain, "chats");
-    return this._get<ChatInfoData[]>(url, {filter, offset, limit})
-      .then(info => info.map(toChatInfo))
+    return this
+      ._get<PagedRestData<ChatInfoData>>(url, {filter, offset, limit})
+      .then(result => {
+        const data = result.data.map(toChatInfo);
+        return new PagedData(data, result.startIndex, result.totalResults)
+      })
   }
 
   public getChat(domain: DomainId, chatId: string): Promise<ChatInfo> {
@@ -40,7 +45,7 @@ export class DomainChatService extends AbstractDomainService {
 
   public deleteChat(domain: DomainId, chatId: string): Promise<void> {
     const url = this._getDomainUrl(domain, `chats/${chatId}`);
-   return this._delete<void>(url);
+    return this._delete<void>(url);
   }
 
   public createChat(domain: DomainId, data: CreateChatData): Promise<void> {
