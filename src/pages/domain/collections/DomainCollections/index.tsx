@@ -223,33 +223,16 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
   }
 
   private _pageChange = (page: number, pageSize?: number) => {
+    pageSize = pageSize || this.state.searchParams.pageSize;
     let newUrl = appendToQueryParamString({page, pageSize});
     this.props.history.push(newUrl);
-    this.setState({
-      searchParams: {
-        filter: this.state.searchParams.filter,
-        page,
-        pageSize: pageSize || 1
-      }
-    });
   }
 
   private _onFilterChange = (event: KeyboardEvent<HTMLInputElement>) => {
-    let {
-      pageSize
-    } = queryString.parse(this.props.location.search, {parseNumbers: true});
-
     // todo debounce
     const filter = (event.target as HTMLInputElement).value;
-    let newUrl = appendToQueryParamString({filter, page: 1, pageSize: pageSize as string});
+    let newUrl = appendToQueryParamString({filter, page: 1, pageSize: this.state.searchParams.pageSize});
     this.props.history.push(newUrl);
-    this.setState({
-      searchParams: {
-        filter,
-        page: 1,
-        pageSize: this.state.searchParams.pageSize
-      }
-    });
   }
 
   private _parseQueryInput(urlQueryParams: string): SearchParams {
