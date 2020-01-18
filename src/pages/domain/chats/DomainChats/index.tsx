@@ -49,7 +49,7 @@ class DomainChatComponent extends React.Component<InjectedProps, DomainChatState
     this._chatTableColumns = [{
       title: 'Id',
       dataIndex: 'chatId',
-      sorter: (a: any, b: any) => (a.id as string).localeCompare(b.id),
+      sorter: (a: ChatInfo, b: ChatInfo) => a.chatId.localeCompare(b.chatId),
       render: (text: string) => <Link to={toDomainRoute(this.props.domainId, `chats/${text}`)}>{text}</Link>
     }, {
       title: 'Name',
