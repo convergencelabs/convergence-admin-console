@@ -1,7 +1,7 @@
 {
   "name": "@convergence/admin-console",
   "description": "The Convergence Admin Console",
-  "version": "1.0.0-rc.4",
+  "version": "1.0.0-rc.5",
   "author": {
     "name": "Convergence Labs, Inc.",
     "email": "info@convergencelabs.com",
@@ -46,12 +46,12 @@
     "typescript": "3.7.2"
   },
   "devDependencies": {
-    "@convergence/convergence": "1.0.0-rc.4",
+    "@convergence/convergence": "1.0.0-rc.5",
     "@convergence/string-change-detector": "0.1.8",
     "@fortawesome/fontawesome-svg-core": "1.2.15",
+    "@fortawesome/free-regular-svg-icons": "5.7.2",
     "@fortawesome/free-solid-svg-icons": "5.7.2",
     "@fortawesome/react-fontawesome": "0.1.4",
-    "@fortawesome/free-regular-svg-icons": "5.7.2",
     "@types/classnames": "2.2.7",
     "@types/md5": "2.1.33",
     "@types/react-copy-to-clipboard": "4.2.6",
@@ -67,7 +67,7 @@
     "mobx": "5.15.0",
     "mobx-react": "6.1.4",
     "moment": "2.24.0",
-    "node-sass": "4.13.0",
+    "node-sass": "^4.13.1",
     "query-string": "6.8.3",
     "react-ace": "6.4.0",
     "react-copy-to-clipboard": "5.0.1",
