@@ -72,7 +72,7 @@ export class DomainCardComponent extends Component<InjectedProps, {}> {
           <DomainCardButton link="users" domain={domain} tooltip={"Users"} icon="user" disabled={disabled} {...props}/>
           <DomainCardButton link="groups" domain={domain} tooltip={"Groups"} icon="team" disabled={disabled} {...props}/>
           <DomainCardButton link="sessions" domain={domain} tooltip={"Sessions"} icon="cloud" disabled={disabled} {...props}/>
-          <DomainCardButton link="chat" domain={domain} tooltip={"Chat"} icon="message" disabled={disabled} {...props}/>
+          <DomainCardButton link="chats" domain={domain} tooltip={"Chat"} icon="message" disabled={disabled} {...props}/>
           <DomainCardButton link="collections" domain={domain} tooltip={"Collections"} icon="folder"
                             disabled={disabled} {...this.props}/>
           <DomainCardButton link="models" domain={domain} tooltip={"Models"} icon="file" disabled={disabled} {...this.props}/>
