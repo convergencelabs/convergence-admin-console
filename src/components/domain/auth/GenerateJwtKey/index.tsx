@@ -60,7 +60,7 @@ class GenerateJwtKeyModal extends React.Component<InjectedProps, GenerateJwtKeyM
           <Spin spinning={this.state.loading}>
             <Tabs className={styles.tabs}>
               <Tabs.TabPane tab="Private Key" key="private">
-                <Input.TextArea autosize={{minRows: 6, maxRows: 10}}
+                <Input.TextArea autoSize={{minRows: 6, maxRows: 10}}
                                 readOnly={true}
                                 value={this.state.privateKey}/>
                 <CopyToClipboard text={this.state.privateKey}>
@@ -68,7 +68,7 @@ class GenerateJwtKeyModal extends React.Component<InjectedProps, GenerateJwtKeyM
                 </CopyToClipboard>
               </Tabs.TabPane>
               <Tabs.TabPane tab="Public Key" key="public">
-                <Input.TextArea autosize={{minRows: 6, maxRows: 10}}
+                <Input.TextArea autoSize={{minRows: 6, maxRows: 10}}
                                 readOnly={true}
                                 value={this.state.publicKey}/>
               </Tabs.TabPane>

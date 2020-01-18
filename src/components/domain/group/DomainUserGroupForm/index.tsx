@@ -64,7 +64,7 @@ class DomainUserGroupFormComponent extends React.Component<DomainUserGroupFormPr
                 initialValue: this.props.initialValue.description,
                 rules: [{required: true, message: 'Please input a Description!', whitespace: true}],
               })(
-                <Input.TextArea autosize={{minRows: 2, maxRows: 6}}/>
+                <Input.TextArea autoSize={{minRows: 2, maxRows: 6}}/>
               )}
             </Form.Item>
           </Col>

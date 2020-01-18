@@ -62,7 +62,7 @@ class DomainJwtKeyFormComponent extends React.Component<DomainJwtKeyFormProps, D
             initialValue: this.props.initialValue.description,
             rules: [{required: false, message: 'Please input a Description!', whitespace: true}],
           })(
-            <Input.TextArea autosize={{minRows: 2, maxRows: 6}}/>
+            <Input.TextArea autoSize={{minRows: 2, maxRows: 6}}/>
           )}
         </Form.Item>
         {getFieldDecorator('enabled', {
@@ -77,7 +77,7 @@ class DomainJwtKeyFormComponent extends React.Component<DomainJwtKeyFormProps, D
             initialValue: this.props.initialValue.key,
             rules: [{required: true, message: 'Please input a Public Key!', whitespace: true}],
           })(
-            <Input.TextArea autosize={{minRows: 6, maxRows: 10}}/>
+            <Input.TextArea autoSize={{minRows: 6, maxRows: 10}}/>
           )}
         </Form.Item>
 

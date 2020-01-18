@@ -58,7 +58,7 @@ class DomainCollectionFormComponent extends React.Component<DomainCollectionForm
                 initialValue: initialValue.description,
                 rules: [{required: false, message: 'Please input a Description!', whitespace: true}],
               })(
-                <Input.TextArea autosize={{minRows: 2, maxRows: 6}}/>
+                <Input.TextArea autoSize={{minRows: 2, maxRows: 6}}/>
               )}
             </Form.Item>
           </Col>
