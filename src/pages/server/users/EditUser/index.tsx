@@ -202,7 +202,7 @@ class EditUserComponent extends React.Component<InjectedProps, EditUserState> {
           .then(() => {
             notification.success({
               message: 'User Updated',
-              description: `User '${username}' successfully updated`
+              description: `User '${username}' successfully updated.`
             });
             this.props.history.push("./");
           }).catch((err) => {

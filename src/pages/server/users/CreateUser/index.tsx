@@ -213,15 +213,15 @@ class CreateUserComponent extends React.Component<InjectedProps, CreateUserCompo
         this.props.userService.createUser(userData)
           .then(() => {
             notification.success({
-              message: 'namespaces Created',
-              description: `Convergence User '${username}' successfully created`
+              message: 'User Created',
+              description: `Convergence User '${username}' successfully created.`
             });
             this.props.history.push("/users");
           }).catch((err) => {
           if (err instanceof RestError) {
             if (err.code === "duplicate") {
               notification.error({
-                message: 'Could Not Create namespaces',
+                message: 'Could Not Create User',
                 description: `A user with the specified ${err.details["field"]} already exists.`
               });
             }
