@@ -22,6 +22,7 @@ import {NamespaceAndDomains} from "../../../../models/NamespaceAndDomains";
 import {NamespaceService} from "../../../../services/NamespaceService";
 import {Link} from "react-router-dom";
 import styles from "./styles.module.css";
+import {loggedInUserStore} from "../../../../stores/LoggedInUserStore";
 
 export interface InjectedProps extends RouteComponentProps {
   namespaceService: NamespaceService;
@@ -42,25 +43,34 @@ class NamespacesComponent extends React.Component<InjectedProps, NamespacesState
     this._namespaceTableColumns = [{
       title: 'Id',
       dataIndex: 'id',
+      key: 'id',
       sorter: (a: any, b: any) => (a.id as string).localeCompare(b.id),
       render: (text: string) => <Link to={`/namespaces/${text}`}>{text}</Link>
     }, {
       title: 'Display Name',
       dataIndex: 'displayName',
+      key: 'displayName',
       sorter: (a: any, b: any) => (a.displayName as string).localeCompare(b.displayName),
     }, {
       title: 'Domains',
       dataIndex: 'domains',
+      key: 'domains',
       sorter: (a: any, b: any) => (a.id as string).localeCompare(b.id),
       render: (text: string, record: any) => record.domains.length
     }, {
       title: '',
       dataIndex: '',
+      key: 'actions',
       width: '50px',
       render: this._renderActions
     }];
 
     this._namepsacesSubscription = null;
+
+    if (!loggedInUserStore.isServerAdmin() && !loggedInUserStore.isDomainAdmin()) {
+      const actionsIndex = this._namespaceTableColumns.findIndex(k => k.key === "actions");
+      this._namespaceTableColumns.splice(actionsIndex, 1);
+    }
 
     this.state = {
       namespaces: null
@@ -96,12 +106,16 @@ class NamespacesComponent extends React.Component<InjectedProps, NamespacesState
         <span className={styles.search}>
           <Input placeholder="Search Namespaces" addonAfter={<Icon type="search"/>}/>
         </span>
-        <Tooltip placement="topRight" title="Create Namespace" mouseEnterDelay={1}>
-          <Button className={styles.iconButton} shape="circle" size="small" htmlType="button"
-                  onClick={this._goToCreate}>
-            <Icon type="plus-circle"/>
-          </Button>
-        </Tooltip>
+        {loggedInUserStore.isServerAdmin() || loggedInUserStore.isDomainAdmin() ?
+          <Tooltip placement="topRight" title="Create Namespace" mouseEnterDelay={1}>
+            <Button className={styles.iconButton} shape="circle" size="small" htmlType="button"
+                    onClick={this._goToCreate}>
+              <Icon type="plus-circle"/>
+            </Button>
+          </Tooltip>
+          :
+          null
+        }
         <Tooltip placement="topRight" title="Reload Namespaces" mouseEnterDelay={1}>
           <Button className={styles.iconButton} shape="circle" size="small" htmlType="button"
                   onClick={this._loadNamespaces}>

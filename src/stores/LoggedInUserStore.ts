@@ -23,6 +23,14 @@ export class LoggedInUserStore {
     return this.loggedInUser !== null && this.loggedInUser.serverRole === "Server Admin";
   }
 
+  public isDomainAdmin(): boolean {
+    return this.loggedInUser !== null && this.loggedInUser.serverRole === "Domain Admin";
+  }
+
+  public isDeveloper(): boolean {
+    return this.loggedInUser !== null && this.loggedInUser.serverRole === "Developer";
+  }
+
   public logout(): void {
     this.loggedInUser = null;
   }
