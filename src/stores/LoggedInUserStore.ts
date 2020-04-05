@@ -10,24 +10,28 @@
  */
 
 import {action, decorate, observable} from "mobx";
-import {UserProfile} from "../models/UserProfile";
+import {LoggedInUser} from "../models/LoggedInUser";
 
-export class ProfileStore {
-  public profile: UserProfile | null = null;
+export class LoggedInUserStore {
+  public loggedInUser: LoggedInUser | null = null;
 
-  public setProfile(profile: UserProfile): void {
-    this.profile = profile;
+  public setLoggedInUser(loggedInUser: LoggedInUser): void {
+    this.loggedInUser = loggedInUser;
+  }
+
+  public isServerAdmin(): boolean {
+    return this.loggedInUser !== null && this.loggedInUser.serverRole === "Server Admin";
   }
 
   public logout(): void {
-    this.profile = null;
+    this.loggedInUser = null;
   }
 }
 
-decorate(ProfileStore, {
-  profile: observable,
-  setProfile: action,
+decorate(LoggedInUserStore, {
+  loggedInUser: observable,
+  setLoggedInUser: action,
   logout: action
 });
 
-export const profileStore = new ProfileStore();
+export const loggedInUserStore = new LoggedInUserStore();

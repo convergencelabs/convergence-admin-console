@@ -12,13 +12,13 @@
 import React, {ReactNode} from "react";
 import {Page} from "../../../components/common/Page";
 import {injectAs} from "../../../utils/mobx-utils";
-import {ProfileStore} from "../../../stores/ProfileStore";
+import {LoggedInUserStore} from "../../../stores/LoggedInUserStore";
 import {STORES} from "../../../stores/StoreConstants";
 import {ProfileForm} from "./ProfileForm";
 import {ChangePasswordForm} from "./ChangePasswordForm";
 
 interface InjectedProps {
-  profileStore: ProfileStore;
+  profileStore: LoggedInUserStore;
 }
 
 class ProfilePageComponent extends React.Component<InjectedProps, {}> {
@@ -29,7 +29,7 @@ class ProfilePageComponent extends React.Component<InjectedProps, {}> {
   public render(): ReactNode {
     return (
       <Page breadcrumbs={this._breadcrumbs}>
-        <ProfileForm username={this.props.profileStore.profile!.username}/>
+        <ProfileForm username={this.props.profileStore.loggedInUser!.username}/>
         <ChangePasswordForm/>
       </Page>
     );

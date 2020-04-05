@@ -22,14 +22,14 @@ import {injectAs} from "../../../utils/mobx-utils";
 import {STORES} from "../../../stores/StoreConstants";
 import {SERVICES} from "../../../services/ServiceConstants";
 import {LoggedInUserService} from "../../../services/LoggedInUserService";
-import {ProfileStore} from "../../../stores/ProfileStore";
+import {LoggedInUserStore} from "../../../stores/LoggedInUserStore";
 import {FormCreateOption} from "antd/es/form";
 
 export interface InjectedProps extends RouteComponentProps, FormComponentProps {
   authStore: AuthStore;
   authService: AuthService;
   loggedInUserService: LoggedInUserService;
-  profileStore: ProfileStore;
+  profileStore: LoggedInUserStore;
 }
 
 export interface LoginFormState {
@@ -55,10 +55,10 @@ class NormalLoginForm extends Component<InjectedProps, LoginFormState> {
             const expiresAt = new Date(Date.now() + expiresIn).getTime();
             this.props.authStore.setAuthenticated(resp.token);
             localStorageService.setAuthToken({token, expiresAt});
-            return this.props.loggedInUserService.getProfile();
+            return this.props.loggedInUserService.getLoggedInUser();
           })
           .then((profile) => {
-            this.props.profileStore.setProfile(profile);
+            this.props.profileStore.setLoggedInUser(profile);
             this.setState({
               redirectToReferrer: true,
               errorMessage: null

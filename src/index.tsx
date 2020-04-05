@@ -25,7 +25,7 @@ import {roleService} from "./services/RoleService";
 import {authService} from "./services/AuthService";
 import {serverStatusService} from "./services/ServerStatusService";
 import {loggedInUserService} from "./services/LoggedInUserService";
-import {profileStore} from "./stores/ProfileStore";
+import {loggedInUserStore} from "./stores/LoggedInUserStore";
 import {configStore} from "./stores/ConfigStore";
 import {domainCollectionService} from "./services/domain/DomainCollectionService";
 import {domainModelService} from "./services/domain/DomainModelService";
@@ -58,7 +58,7 @@ notification.config({
 
 const stores = {
   authStore,
-  profileStore,
+  profileStore: loggedInUserStore,
   domainStore,
   configStore,
   breadcrumbsStore,
@@ -94,9 +94,9 @@ if (authToken) {
     .then(resp => {
       if (resp.valid) {
         authStore.setAuthenticated(authToken.token);
-        loggedInUserService.getProfile()
+        loggedInUserService.getLoggedInUser()
           .then((profile) => {
-            profileStore.setProfile(profile);
+            loggedInUserStore.setLoggedInUser(profile);
             bootstrap();
           })
       } else {

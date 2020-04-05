@@ -12,13 +12,13 @@
 import React, {ReactNode} from "react";
 import {Page} from "../../../components/common/Page";
 import {injectAs} from "../../../utils/mobx-utils";
-import {ProfileStore} from "../../../stores/ProfileStore";
+import {LoggedInUserStore} from "../../../stores/LoggedInUserStore";
 import {STORES} from "../../../stores/StoreConstants";
 import {ApiKeys} from "./ApiKeys";
 import {RouteComponentProps} from "react-router";
 
 interface InjectedProps extends RouteComponentProps {
-  profileStore: ProfileStore;
+  profileStore: LoggedInUserStore;
 }
 
 class AccountSettingsComponent extends React.Component<InjectedProps, {}> {

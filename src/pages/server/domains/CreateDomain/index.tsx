@@ -21,7 +21,7 @@ import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {DomainService} from "../../../../services/DomainService";
 import RadioGroup from "antd/es/radio/group";
-import {ProfileStore} from "../../../../stores/ProfileStore";
+import {LoggedInUserStore} from "../../../../stores/LoggedInUserStore";
 import {STORES} from "../../../../stores/StoreConstants";
 import {RestError} from "../../../../services/RestError";
 import {DomainId} from "../../../../models/DomainId";
@@ -34,7 +34,7 @@ export interface CreateDomainState {
 }
 
 interface InjectedProps extends RouteComponentProps, FormComponentProps {
-  profileStore: ProfileStore;
+  profileStore: LoggedInUserStore;
   domainService: DomainService;
   configStore: ConfigStore;
 }
@@ -160,7 +160,7 @@ class CreateDomainComponent extends React.Component<InjectedProps, CreateDomainS
 
         if (this.props.configStore.namespacesEnabled) {
           ns = namespaceType === USER ?
-            "~" + this.props.profileStore.profile!.username :
+            "~" + this.props.profileStore.loggedInUser!.username :
             namespace;
         } else {
           ns = this.props.configStore.defaultNamespace;

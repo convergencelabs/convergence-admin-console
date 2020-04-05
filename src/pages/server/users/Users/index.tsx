@@ -23,12 +23,12 @@ import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import moment from "moment";
 import {STORES} from "../../../../stores/StoreConstants";
-import {ProfileStore} from "../../../../stores/ProfileStore";
+import {loggedInUserStore, LoggedInUserStore} from "../../../../stores/LoggedInUserStore";
 import {Link} from "react-router-dom";
 
 interface InjectedProps extends RouteComponentProps {
   userService: UserService;
-  profileStore: ProfileStore;
+  profileStore: LoggedInUserStore;
 }
 
 export interface ServerUsersState {
@@ -80,6 +80,18 @@ class ServerUsersComponent extends React.Component<InjectedProps, ServerUsersSta
 
     this._usersSubscription = null;
 
+    // here we remove some columns if the user does not have the server admin role.
+    if (!loggedInUserStore.isServerAdmin()) {
+      const emailIndex = this._userTableColumns.findIndex(k => k.key === "email");
+      this._userTableColumns.splice(emailIndex, 1);
+
+      const loginIndex = this._userTableColumns.findIndex(k => k.key === "lastLogin");
+      this._userTableColumns.splice(loginIndex, 1);
+
+      const actionsIndex = this._userTableColumns.findIndex(k => k.key === "actions");
+      this._userTableColumns.splice(actionsIndex, 1);
+    }
+
     this.state = {
       users: null,
       userFilter: ""
@@ -101,12 +113,17 @@ class ServerUsersComponent extends React.Component<InjectedProps, ServerUsersSta
         <span className={styles.search}>
           <Input placeholder="Search Users" addonAfter={<Icon type="search"/>} onKeyUp={this._onFilterChange}/>
         </span>
-        <Tooltip placement="topRight" title="Create User" mouseEnterDelay={1}>
-          <Button className={styles.iconButton} shape="circle" size="small" htmlType="button"
-                  onClick={this._goToCreate}>
-            <Icon type="plus-circle"/>
-          </Button>
-        </Tooltip>
+        {
+          loggedInUserStore.isServerAdmin() ?
+          <Tooltip placement="topRight" title="Create User" mouseEnterDelay={1}>
+            <Button className={styles.iconButton} shape="circle" size="small" htmlType="button"
+                    onClick={this._goToCreate}>
+              <Icon type="plus-circle"/>
+            </Button>
+          </Tooltip>
+            :
+            null
+        }
         <Tooltip placement="topRight" title="Reload Users" mouseEnterDelay={1}>
           <Button className={styles.iconButton} shape="circle" size="small" htmlType="button"
                   onClick={this._loadUsers}>
@@ -141,7 +158,7 @@ class ServerUsersComponent extends React.Component<InjectedProps, ServerUsersSta
   }
 
   private _renderActions = (value: ConvergenceUser, record: any) => {
-    const profile = this.props.profileStore.profile;
+    const profile = this.props.profileStore.loggedInUser;
     const deleteDisabled = profile!.username === record.username;
     const deleteButton = <Button shape="circle" size="small" htmlType="button" disabled={deleteDisabled}><Icon
       type="delete"/></Button>;

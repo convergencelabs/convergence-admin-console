@@ -151,7 +151,7 @@ class ProfileFormComponent extends React.Component<InjectedProps, EditUserState>
   }
 
   private _loadProfile(): void {
-    const {promise, subscription} = makeCancelable(this.props.loggedInUserService.getProfile());
+    const {promise, subscription} = makeCancelable(this.props.loggedInUserService.getLoggedInUser());
     this._profileSubscription = subscription;
     promise.then(profile => {
       this._profileSubscription = null;

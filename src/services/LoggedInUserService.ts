@@ -14,6 +14,7 @@ import {UserProfile} from "../models/UserProfile";
 import {DomainDescriptorData, DomainService} from "./DomainService";
 import {DomainDescriptor} from "../models/DomainDescriptor";
 import {DomainId} from "../models/DomainId";
+import {LoggedInUser} from "../models/LoggedInUser";
 
 interface UserProfileData {
   username: string;
@@ -21,19 +22,21 @@ interface UserProfileData {
   firstName: string;
   lastName: string;
   email: string;
+  serverRole: string;
 }
 
 export class LoggedInUserService extends AbstractAuthenticatedService {
-  public getProfile(): Promise<UserProfile> {
+  public getLoggedInUser(): Promise<LoggedInUser> {
     return this
       ._get<UserProfileData>("user/profile")
       .then(profile => {
-        return new UserProfile(
+        return new LoggedInUser(
           profile.username,
           profile.displayName,
           profile.firstName,
           profile.lastName,
-          profile.email
+          profile.email,
+          profile.serverRole
         );
       });
   }

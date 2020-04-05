@@ -17,12 +17,12 @@ import {authStore} from "../../../stores/AuthStore";
 import {localStorageService} from "../../../services/LocalStorageService";
 import {injectAs} from "../../../utils/mobx-utils";
 import {STORES} from "../../../stores/StoreConstants";
-import {ProfileStore} from "../../../stores/ProfileStore";
+import {LoggedInUserStore} from "../../../stores/LoggedInUserStore";
 import {Link} from "react-router-dom";
 import md5 from "md5";
 
 interface InjectedProps {
-  profileStore: ProfileStore;
+  profileStore: LoggedInUserStore;
 }
 
 class AppHeaderComponent extends React.Component<InjectedProps, {}> {
@@ -46,7 +46,7 @@ class AppHeaderComponent extends React.Component<InjectedProps, {}> {
   );
 
   public render(): ReactNode {
-    const {displayName, email} = this.props.profileStore.profile!;
+    const {displayName, email} = this.props.profileStore.loggedInUser!;
     const emailHash = md5(email);
     return (
       <Layout.Header className={styles.header}>
