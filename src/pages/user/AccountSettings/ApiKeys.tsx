@@ -174,7 +174,7 @@ export class ApiKeysComponent extends React.Component<InjectedProps, ApiKeysStat
       .then(() => {
         this._loadApiKeys();
         notification.success({
-          message: 'Success',
+          message: 'API Key Deleted',
           description: `API Key '${name}' was deleted.`,
         });
       })

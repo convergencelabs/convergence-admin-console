@@ -22,30 +22,30 @@ export interface UserApiKeyData {
 export class ApiKeyService extends AbstractAuthenticatedService {
   public getApiKeys(): Promise<UserApiKey[]> {
     return this
-      ._get<UserApiKeyData[]>("apiKeys")
+      ._get<UserApiKeyData[]>("user/apiKeys")
       .then(domains => domains.map(ApiKeyService._toUserApiKey));
   }
 
   public getApiKey(keyId: string): Promise<UserApiKey> {
     return this
-      ._get<UserApiKeyData>(`apiKeys/${keyId}`)
+      ._get<UserApiKeyData>(`user/apiKeys/${keyId}`)
       .then(ApiKeyService._toUserApiKey);
   }
 
   public createUserApiKey(name: string, enabled: boolean): Promise<void> {
     const data = {name, enabled};
-    return this._post<void>("apiKeys", data);
+    return this._post<void>("user/apiKeys", data);
   }
 
   public updateUserApiKey(key: string, name: string, enabled: boolean): Promise<UserApiKey> {
     const data = {key, name, enabled};
     return this
-      ._put<UserApiKeyData>(`apiKeys/${key}`, data)
+      ._put<UserApiKeyData>(`user/apiKeys/${key}`, data)
       .then(ApiKeyService._toUserApiKey);
   }
 
   public deleteUserApiKey(key: string): Promise<void> {
-    return this._delete<void>(`apiKeys/${key}`);
+    return this._delete<void>(`user/apiKeys/${key}`);
   }
 
   public static _toUserApiKey(data: UserApiKeyData): UserApiKey {
