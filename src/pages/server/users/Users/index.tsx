@@ -48,7 +48,13 @@ class ServerUsersComponent extends React.Component<InjectedProps, ServerUsersSta
       dataIndex: 'username',
       key: 'username',
       sorter: (a: any, b: any) => (a.username as string).localeCompare(b.username),
-      render: (text: string) => <Link to={`/users/${text}`}>{text}</Link>
+      render: (text: string) => {
+        if (loggedInUserStore.isServerAdmin()) {
+          return (<Link to={`/users/${text}`}>{text}</Link>);
+        } else {
+          return text;
+        }
+      }
     }, {
       title: 'Display Name',
       dataIndex: 'displayName',
