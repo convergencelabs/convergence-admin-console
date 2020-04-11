@@ -23,6 +23,7 @@ import {RestError} from "../../../../services/RestError";
 import {ConvergenceUser} from "../../../../models/ConvergenceUser";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
 import styles from "./styles.module.css";
+import {loggedInUserStore} from "../../../../stores/LoggedInUserStore";
 
 interface InjectedProps extends RouteComponentProps<{ username: string }>, FormComponentProps {
   userService: UserService;
@@ -146,7 +147,7 @@ class EditUserComponent extends React.Component<InjectedProps, EditUserState> {
                   initialValue: user.serverRole,
                   rules: [{type: 'string', required: true, message: 'Please select a role!'}],
                 })(
-                  <Select>
+                  <Select disabled={user.username === loggedInUserStore.loggedInUser?.username!}>
                     <Select.Option value="Developer">Developer</Select.Option>
                     <Select.Option value="Domain Admin">Domain Admin</Select.Option>
                     <Select.Option value="Server Admin">Server Admin</Select.Option>
@@ -210,7 +211,7 @@ class EditUserComponent extends React.Component<InjectedProps, EditUserState> {
             console.log(JSON.stringify(err));
             if (err.code === "duplicate") {
               notification.error({
-                message: 'Could Not Create User',
+                message: 'Could Not Update User',
                 description: `A user with the specified ${err.details["field"]} already exists.`
               });
             }
