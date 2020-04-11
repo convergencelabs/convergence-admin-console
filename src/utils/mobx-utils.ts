@@ -10,7 +10,8 @@
  */
 
 import React from "react";
-import {inject, IReactComponent, observer} from "mobx-react";
+import {inject, observer} from "mobx-react";
+import {IReactComponent} from "mobx-react/dist/types/IReactComponent";
 
 export function injectObserver<T>(injections: string[], comp: React.ComponentClass<any>): IReactComponent<T> {
   return inject(...injections)(observer(comp));

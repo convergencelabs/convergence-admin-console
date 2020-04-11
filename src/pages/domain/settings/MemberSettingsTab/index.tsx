@@ -20,6 +20,7 @@ import {DomainId} from "../../../../models/DomainId";
 import {DomainMemberService} from "../../../../services/domain/DomainMemberService";
 import {DomainMember} from "../../../../models/domain/DomainMember";
 import {AddDomainMemberControl} from "../../../../components/domain/settings/AddDomainMemberControl";
+import {loggedInUserStore} from "../../../../stores/LoggedInUserStore";
 
 export interface DomainMemberSettingsProps {
   domainId: DomainId;
@@ -76,7 +77,11 @@ class DomainMemberSettingsComponent extends React.Component<InjectedProps, Domai
   public render(): ReactNode {
     return (
       <div className={styles.members}>
-        <AddDomainMemberControl domainId={this.props.domainId} onAdd={this._onAdd}/>
+        <AddDomainMemberControl
+          domainId={this.props.domainId}
+          onAdd={this._onAdd}
+          user={loggedInUserStore.loggedInUser?.username!}
+        />
         <Table className={styles.memberTable}
                size="middle"
                rowKey="id"
@@ -88,6 +93,8 @@ class DomainMemberSettingsComponent extends React.Component<InjectedProps, Domai
   }
 
   private _renderActions = (_: undefined, record: DomainMember) => {
+    const disabled = record.username === loggedInUserStore.loggedInUser?.username;
+
     return (
       <span className={styles.actions}>
         <Popconfirm title="Are you sure you want to remove this member?"
@@ -95,10 +102,11 @@ class DomainMemberSettingsComponent extends React.Component<InjectedProps, Domai
                     onConfirm={() => this._onDeleteMember(record.username)}
                     okText="Yes"
                     cancelText="No"
+                    disabled={disabled}
                     icon={<Icon type="question-circle-o" style={{color: 'red'}}/>}
         >
         <Tooltip placement="topRight" title="Remove Member" mouseEnterDelay={2}>
-          <Button shape="circle" size="small" htmlType="button" icon="delete"/>
+          <Button shape="circle" size="small" htmlType="button" icon="delete" disabled={disabled}/>
         </Tooltip>
       </Popconfirm>
     </span>
@@ -126,7 +134,7 @@ class DomainMemberSettingsComponent extends React.Component<InjectedProps, Domai
       .then(() => {
         this._loadMembers();
         notification.success({
-          message: 'User Removed',
+          message: 'Member Removed',
           description: `The member '${username}' was removed from this domain.`,
         });
       })

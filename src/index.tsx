@@ -39,7 +39,11 @@ import {domainChatService} from "./services/domain/DomainChatService";
 import {convergenceDomainStore} from "./stores/ConvergenceDomainStore";
 import {breadcrumbsStore} from "./stores/BreacrumsStore";
 import {message, notification} from "antd";
-import {configure} from "mobx"
+import {configure} from "mobx";
+
+import "ace-builds/src-noconflict/mode-json";
+import "ace-builds/src-noconflict/theme-xcode";
+import "ace-builds/src-noconflict/theme-solarized_dark";
 
 import './index.css';
 

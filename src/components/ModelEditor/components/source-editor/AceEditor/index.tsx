@@ -10,9 +10,7 @@
  */
 
 import React, {ReactNode} from "react";
-import ace from 'brace';
-import 'brace/mode/json';
-import 'brace/theme/xcode';
+import {Ace, edit} from 'ace-builds';
 
 import styles from "./styles.module.css";
 
@@ -31,17 +29,17 @@ export interface AceEditorProps {
 export class AceEditor extends React.Component<AceEditorProps, {}> {
 
   private _container: HTMLDivElement | null = null;
-  private _editor: ace.Editor | null = null;
+  private _editor: Ace.Editor | null = null;
 
   componentDidMount() {
     this.initEditor();
   }
 
   initEditor() {
-    this._editor = ace.edit(this._container!);
+    this._editor = edit(this._container!);
     this._editor.setTheme("ace/theme/xcode");
     this._editor.setReadOnly(!this.props.editable);
-    this._editor.$blockScrolling = Infinity;
+    (this._editor as any).$blockScrolling = Infinity;
 
     const session = this._editor.getSession();
     session.setMode("ace/mode/json");
@@ -49,7 +47,7 @@ export class AceEditor extends React.Component<AceEditorProps, {}> {
     session.setTabSize(2);
     session.setUseSoftTabs(true);
 
-    session.on("change", (event) => {
+    this._editor.on("change", (_) => {
       const value = this._editor!.getSession().getDocument().getValue();
       this.props.onValueChange(value);
     });

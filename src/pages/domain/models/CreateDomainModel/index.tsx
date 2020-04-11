@@ -25,10 +25,6 @@ import {DomainModelService} from "../../../../services/domain/DomainModelService
 import {DomainId} from "../../../../models/DomainId";
 import styles from "./styles.module.css";
 
-import 'brace';
-import 'brace/mode/javascript';
-import 'brace/theme/solarized_dark';
-
 export interface CreateDomainModelProps extends RouteComponentProps {
   domainId: DomainId;
 }

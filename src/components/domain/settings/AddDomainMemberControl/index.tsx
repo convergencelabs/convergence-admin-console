@@ -17,6 +17,7 @@ import {UsernameAutoComplete} from "../../../server/UsernameAutoComplete";
 import styles from "./styles.module.css";
 
 interface AddDomainMemberControlProps {
+  user: string;
   domainId: DomainId;
   onAdd(member: DomainMember): Promise<boolean>;
 }
@@ -48,6 +49,7 @@ export class AddDomainMemberControl extends React.Component<AddDomainMemberContr
           value={this.state.username}
           onChange={this._onUsernameChanged}
           placeholder="Select User"
+          exclude={[this.props.user]}
         />
         <Select className={styles.role} value={this.state.role} onChange={this._onRoleChanged}>
           <Select.Option value="Developer">Developer</Select.Option>

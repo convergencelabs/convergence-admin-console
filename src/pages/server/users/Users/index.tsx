@@ -115,7 +115,7 @@ class ServerUsersComponent extends React.Component<InjectedProps, ServerUsersSta
 
   private _renderToolbar(): ReactNode {
     return (
-      <CardTitleToolbar title="Convergence Users" icon="user">
+      <CardTitleToolbar title="Users" icon="user">
         <span className={styles.search}>
           <Input placeholder="Search Users" addonAfter={<Icon type="search"/>} onKeyUp={this._onFilterChange}/>
         </span>

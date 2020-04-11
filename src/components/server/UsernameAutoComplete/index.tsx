@@ -24,9 +24,10 @@ export interface UserAutoCompleteProps {
   onChange: (username: string) => void;
   placeholder?: string;
   value?: string;
+  exclude?: string[];
 }
 
-export interface InjectedProps extends UserAutoCompleteProps{
+export interface InjectedProps extends UserAutoCompleteProps {
   userService: UserService;
 }
 
@@ -44,14 +45,16 @@ export class UsernameAutoCompleteComponent extends Component<InjectedProps, User
   public render(): ReactNode {
     const {users} = this.state;
     const {className, placeholder, value} = this.props;
-    const inputValue = value !== undefined ? value: this.state.selectedValue;
-
-    const children = users.map((user: ConvergenceUser) =>
-      <Option
-        key={user.username}
-        value={user.username}
-        title={user.username}>{user.displayName} ({user.username})
-      </Option>);
+    const inputValue = value !== undefined ? value : this.state.selectedValue;
+    const exclude = this.props.exclude || [];
+    const children = users
+      .filter((user: ConvergenceUser) => !exclude.includes(user.username))
+      .map((user: ConvergenceUser) =>
+        <Option
+          key={user.username}
+          value={user.username}
+          title={user.username}>{user.displayName} ({user.username})
+        </Option>);
     return (
       <AutoComplete
         className={className}
