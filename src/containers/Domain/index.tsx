@@ -52,6 +52,7 @@ import {ErrorPage} from "../../components/common/ErrorPage";
 import {DomainInitializing} from "../../components/domain/common/DomainInitializing";
 import {BreadcrumbsStore} from "../../stores/BreacrumsStore";
 import {ConfigStore} from "../../stores/ConfigStore";
+import {ViewChat} from "../../pages/domain/chats/ViewChat";
 
 export interface DomainRouteParams {
   namespace: string;
@@ -150,7 +151,8 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
             <Route exact path={`${match.url}/create-model`} render={(props) => <CreateDomainModel {...props} domainId={domainId}/>} />
 
             <Route exact path={`${match.url}/chats`} render={(props) => <DomainChats {...props} domainId={domainId}/>} />
-            <Route exact path={`${match.url}/chats/:id`} render={(props) => <EditDomainChat {...props} domainId={domainId}/>} />
+            <Route exact path={`${match.url}/chats/:id`} render={(props) => <ViewChat {...props} domainId={domainId}/>} />
+            <Route exact path={`${match.url}/chats/:id/edit`} render={(props) => <EditDomainChat {...props} domainId={domainId}/>} />
             <Route exact path={`${match.url}/create-chat`} render={(props) => <CreateDomainChat {...props} domainId={domainId}/>} />
 
             <Route exact path={`${match.url}/authentication/:tab/`} render={(props) => <DomainAuthentication {...props} domainId={domainId}/>}/>

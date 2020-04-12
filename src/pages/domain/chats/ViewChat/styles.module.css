@@ -9,10 +9,18 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-.formCard {
-  width: 600px;
+.actions button {
+  margin-right: 5px;
 }
 
-.done {
-  margin-top: 20px;
+.search {
+  width: 400px;
+}
+
+.iconButton {
+  margin-left: 10px;
+}
+
+.events {
+  margin-top: 20px !important;
 }

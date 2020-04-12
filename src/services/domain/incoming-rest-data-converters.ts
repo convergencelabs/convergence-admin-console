@@ -43,6 +43,14 @@ import {DomainUserGroupSummary} from "../../models/domain/DomainUserGroupSummary
 import {DomainJwtKey} from "../../models/domain/DomainJwtKey";
 import {DomainSession} from "../../models/domain/DomainSession";
 import {ChatInfo} from "../../models/domain/ChatInfo";
+import {
+  ChatCreatedEvent,
+  ChatEvent,
+  ChatMessageEvent, ChatNameChangedEvent, ChatTopicChangedEvent, ChatUserAddedEvent,
+  ChatUserJoinedEvent,
+  ChatUserLeftEvent, ChatUserRemovedEvent
+} from "../../models/domain/ChatEvent";
+import {ConvergenceError} from "@convergence/convergence";
 
 export function toCollection(data: CollectionData): Collection {
   return new Collection(
@@ -129,7 +137,7 @@ export function toDomainUser(data: DomainUserData): DomainUser {
 }
 
 export function toDomainUserId(data: DomainUserIdData): DomainUserId {
-  return new DomainUserId(data.type as DomainUserType, data.username);
+  return new DomainUserId(data.userType as DomainUserType, data.username);
 }
 
 export function toDomainUserGroup(data: DomainUserGroupData): DomainUserGroup {
@@ -185,4 +193,68 @@ export function toChatInfo(data: ChatInfoData): ChatInfo {
     data.topic,
     data.members
   );
+}
+
+export function toChatEvent(event: any): ChatEvent {
+  switch (event.type) {
+    case "created":
+      const members = event.members || [];
+      return new ChatCreatedEvent(
+        event.eventNumber,
+        event.id,
+        toDomainUserId(event.user),
+        new Date(event.timestamp),
+        event.name,
+        event.topic,
+        members.map((m: DomainUserIdData) => toDomainUserId(m)));
+    case "message":
+      return new ChatMessageEvent(
+        event.eventNumber,
+        event.id,
+        toDomainUserId(event.user),
+        new Date(event.timestamp),
+        event.message);
+    case "user_joined":
+      return new ChatUserJoinedEvent(
+        event.eventNumber,
+        event.id,
+        toDomainUserId(event.user),
+        new Date(event.timestamp));
+    case "user_left":
+      return new ChatUserLeftEvent(
+        event.eventNumber,
+        event.id,
+        toDomainUserId(event.user),
+        new Date(event.timestamp));
+    case "user_added":
+      return new ChatUserAddedEvent(
+        event.eventNumber,
+        event.id,
+        toDomainUserId(event.user),
+        new Date(event.timestamp),
+        toDomainUserId(event.userAdded));
+    case "user_removed":
+      return new ChatUserRemovedEvent(
+        event.eventNumber,
+        event.id,
+        toDomainUserId(event.user),
+        new Date(event.timestamp),
+        toDomainUserId(event.userRemoved));
+    case "name_changed":
+      return new ChatNameChangedEvent(
+        event.eventNumber,
+        event.id,
+        toDomainUserId(event.user),
+        new Date(event.timestamp),
+        event.name);
+    case "topic_changed":
+      return new ChatTopicChangedEvent(
+        event.eventNumber,
+        event.id,
+        toDomainUserId(event.user),
+        new Date(event.timestamp),
+        event.topic);
+    default:
+      throw new ConvergenceError(`Invalid chat event type: ${event.type}`);
+  }
 }

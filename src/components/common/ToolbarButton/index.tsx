@@ -19,6 +19,7 @@ export interface ToolbarButtonProps {
   tooltip: string;
   placement?: TooltipPlacement;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
 export class ToolbarButton extends React.Component<ToolbarButtonProps, {}> {
@@ -33,6 +34,7 @@ export class ToolbarButton extends React.Component<ToolbarButtonProps, {}> {
                 shape="circle"
                 size="small"
                 htmlType="button"
+                disabled={this.props.disabled}
                 icon={this.props.icon}
                 onClick={this._onClick}/>
       </Tooltip>

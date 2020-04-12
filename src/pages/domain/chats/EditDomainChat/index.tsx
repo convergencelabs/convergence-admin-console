@@ -42,7 +42,11 @@ export interface EditDomainChatState {
 class EditDomainChatComponent extends React.Component<InjectedProps, EditDomainChatState> {
   private readonly _breadcrumbs = [
     {title: "Chats", link: toDomainRoute(this.props.domainId, "chats")},
-    {title: "Edit Chat"}
+    {
+      title: this.props.match.params.id,
+      link: toDomainRoute(this.props.domainId, "chats/" + this.props.match.params.id)
+    },
+    {title: "Edit"}
   ];
   private _chatSubscription: PromiseSubscription | null;
 
@@ -103,6 +107,11 @@ class EditDomainChatComponent extends React.Component<InjectedProps, EditDomainC
                 <Button htmlType="button" type="primary" onClick={this._onSetTopic}>Update</Button>
               </FormButtonBar>
             </Card>
+            <div className={styles.done}>
+              <FormButtonBar>
+                <Button htmlType="button" type="primary" onClick={this._gotoChat}>Done</Button>
+              </FormButtonBar>
+            </div>
           </Card>
         </Page>
       ) :
@@ -174,6 +183,10 @@ class EditDomainChatComponent extends React.Component<InjectedProps, EditDomainC
         topic: chat.topic
       });
     })
+  }
+
+  private _gotoChat = () => {
+    this.props.history.push(toDomainRoute(this.props.domainId, `chats/${this.state.initialChat?.chatId}`));
   }
 }
 

@@ -111,7 +111,7 @@ export interface UpdateDomainUserData {
 }
 
 export interface DomainUserIdData {
-  type: string;
+  userType: string;
   username: string;
 }
 

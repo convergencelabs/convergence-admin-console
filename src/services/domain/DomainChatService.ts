@@ -13,8 +13,9 @@ import {DomainId} from "../../models/DomainId";
 import {AbstractDomainService} from "./AbstractDomainService";
 import {ChatInfoData, CreateChatData, PagedRestData} from "./common-rest-data";
 import {ChatInfo} from "../../models/domain/ChatInfo";
-import {toChatInfo} from "./incoming-rest-data-converters";
+import {toChatEvent, toChatInfo} from "./incoming-rest-data-converters";
 import {PagedData} from "../../models/PagedData";
+import {ChatEvent} from "../../models/domain/ChatEvent";
 
 export class DomainChatService extends AbstractDomainService {
 
@@ -51,6 +52,16 @@ export class DomainChatService extends AbstractDomainService {
   public createChat(domain: DomainId, data: CreateChatData): Promise<void> {
     const url = this._getDomainUrl(domain, "chats");
     return this._post<void>(url, data);
+  }
+
+  public getChatEvents(domain: DomainId, chatId: string, offset?: number, limit?: number, filter?: string): Promise<PagedData<ChatEvent>> {
+    const url = this._getDomainUrl(domain, `chats/${chatId}/events`);
+    const params = {filter, offset, limit};
+    return this
+      ._get<PagedRestData<any>>(url, params)
+      .then(result => {
+        return new PagedData<ChatEvent>(result.data.map(toChatEvent), result.startIndex, result.totalResults)
+      });
   }
 }
 

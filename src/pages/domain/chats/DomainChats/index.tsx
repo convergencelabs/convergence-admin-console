@@ -219,7 +219,7 @@ class DomainChatComponent extends React.Component<InjectedProps, DomainChatState
   }
 
   private _pageChange = (page: number, pageSize?: number) => {
-    pageSize = pageSize || 25
+    pageSize = pageSize || 25;
     let newUrl = appendToQueryParamString({page, pageSize});
     this.props.history.push(newUrl);
   }
