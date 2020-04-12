@@ -168,6 +168,9 @@ export interface ChatInfoData {
   name: string;
   topic: string;
   members: DomainUserIdData[];
+  created: number;
+  lastEventNumber: number;
+  lastEventTimestamp: number;
 }
 
 export interface CreateChatData {

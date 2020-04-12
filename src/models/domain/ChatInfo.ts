@@ -17,7 +17,10 @@ export class ChatInfo {
               public readonly membership: string,
               public readonly name: string,
               public readonly topic: string,
-              public readonly members: DomainUserId[]
+              public readonly members: DomainUserId[],
+              public readonly created: Date,
+              public readonly lastEventNumber: number,
+              public readonly lastEventTimestamp: Date
   ) {
     Object.freeze(this);
   }

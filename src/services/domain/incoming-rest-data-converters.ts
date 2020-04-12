@@ -191,7 +191,10 @@ export function toChatInfo(data: ChatInfoData): ChatInfo {
     data.membership,
     data.name,
     data.topic,
-    (data.members || []).map((m: DomainUserIdData) => toDomainUserId(m))
+    (data.members || []).map((m: DomainUserIdData) => toDomainUserId(m)),
+    new Date(data.created),
+    data.lastEventNumber,
+    new Date(data.lastEventTimestamp)
   );
 }
 

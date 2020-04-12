@@ -24,3 +24,31 @@
 .events {
   margin-top: 20px !important;
 }
+
+.messageEventText {
+  color: #1890ff;
+  background: #e6f7ff;
+  border: 1px solid #91d5ff;
+  padding: 5px;
+  border-radius: 2px;
+}
+
+.messageType {
+  color: #1890ff !important;
+}
+
+.joinedType {
+  color: #52c41a !important;
+}
+
+.leftType {
+  color: #f5222d !important;
+}
+
+.createdType {
+  color: #fa8c16 !important;
+}
+
+.membersHeader {
+  font-weight: bold;
+}

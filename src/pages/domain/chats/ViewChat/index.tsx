@@ -11,7 +11,7 @@
 
 import React, {KeyboardEvent, ReactNode} from "react";
 import {Page} from "../../../../components/common/Page/";
-import {Card, Icon, Input, List, Table, Tabs} from "antd";
+import {Card, Col, Icon, Input, List, Row, Table} from "antd";
 import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
 import {RouteComponentProps} from "react-router";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
@@ -64,7 +64,7 @@ export interface ViewChatState {
 
 class ViewChatEventsComponent extends React.Component<InjectedProps, ViewChatState> {
   private readonly _breadcrumbs: IBreadcrumbSegment[] = [
-    {title: "Chats", link: toDomainRoute(this.props.domainId, "chats/") },
+    {title: "Chats", link: toDomainRoute(this.props.domainId, "chats/")},
     {title: this.props.match.params.id}
   ];
   private readonly _chatEventTableColumns: any[];
@@ -73,52 +73,19 @@ class ViewChatEventsComponent extends React.Component<InjectedProps, ViewChatSta
 
   constructor(props: InjectedProps) {
     super(props);
-    const renderEventData = (data: any) => {
-      const content = JSON.stringify(data, null, "  ");
-      return content;
-    };
-
-
 
     this._chatEventTableColumns = [{
       title: 'Event No',
       dataIndex: 'eventNumber',
       sorter: (a: ChatEvent, b: ChatEvent) => a.eventNumber - b.eventNumber,
     }, {
+      title: 'Type',
+      dataIndex: 'type',
+      render: this._renderEventType
+    }, {
       title: 'Timestamp',
       dataIndex: 'timestamp',
       render: (d: Date) => shortDateTime(d)
-    }, {
-      title: 'Type',
-      dataIndex: 'type',
-      render: (type: string) => {
-        switch (type) {
-          case "created": {
-            return <span><Icon type="file-add"/> Created</span>;
-          }
-          case "message": {
-            return <span><Icon type="message"/> Message</span>;
-          }
-          case "user_joined": {
-            return <span><Icon type="login"/> User Joined</span>;
-          }
-          case "user_left": {
-            return <span><Icon type="logout"/> User Left</span>;
-          }
-          case "user_added": {
-            return <span><Icon type="user-add"/> User Added</span>;
-          }
-          case "user_removed": {
-            return <span><Icon type="user-delete"/> User Removed</span>;
-          }
-          case "name_changed": {
-            return <span><Icon type="file-text"/> Name Changed</span>;
-          }
-          case "topic_changed": {
-            return <span><Icon type="file-text"/> Topic Changed</span>;
-          }
-        }
-      }
     }, {
       title: 'User',
       dataIndex: 'userId',
@@ -126,55 +93,7 @@ class ViewChatEventsComponent extends React.Component<InjectedProps, ViewChatSta
 
     }, {
       title: 'Data',
-      render: (_: any, event: ChatEvent) => {
-        switch (event.type) {
-          case "created": {
-            const createdEvent = event as ChatCreatedEvent;
-            return renderEventData({
-              members: JSON.stringify(createdEvent.members),
-              name: createdEvent.name,
-              topic: createdEvent.topic
-            });
-          }
-          case "message": {
-            const messageEvent = event as ChatMessageEvent;
-            return renderEventData({
-              message: messageEvent.message
-            });
-          }
-          case "user_joined": {
-            return renderEventData({});
-          }
-          case "user_left": {
-            return renderEventData({});
-          }
-          case "user_added": {
-            const addedEvent = event as ChatUserAddedEvent;
-            return renderEventData({
-              addedUser: this._renderUsername(addedEvent.addedUserId)
-            });
-          }
-          case "user_removed": {
-            const removedEvent = event as ChatUserRemovedEvent;
-            return renderEventData({
-              addedUser: this._renderUsername(removedEvent.removedUserId)
-            });
-          }
-          case "name_changed": {
-            const nameEvent = event as ChatNameChangedEvent;
-            return renderEventData({
-              name: nameEvent.name
-            });
-          }
-          case "topic_changed": {
-            const topicEvent = event as ChatTopicChangedEvent;
-            return renderEventData({
-              topic: topicEvent.topic
-            });
-          }
-        }
-        return;
-      }
+      render: this._renderEventData
     }];
 
 
@@ -234,25 +153,29 @@ class ViewChatEventsComponent extends React.Component<InjectedProps, ViewChatSta
     let chat = null;
     if (this.state.chatInfo) {
       chat =
-        <Tabs>
-          <Tabs.TabPane key="info" tab="Info">
+        <Row gutter={16}>
+          <Col xs={24} sm={24} md={12} lg={12} xl={12}>
             <InfoTable>
               <InfoTableRow label="Id">{this.props.match.params.id}</InfoTableRow>
               <InfoTableRow label="Type">{this.state.chatInfo?.type}</InfoTableRow>
               <InfoTableRow label="Membership">{this.state.chatInfo?.membership}</InfoTableRow>
               <InfoTableRow label="Name">{this.state.chatInfo?.name}</InfoTableRow>
-              <InfoTableRow label="Topic">{this.state.chatInfo?.name}</InfoTableRow>
-              <InfoTableRow label="Members">{this.state.chatInfo?.members.length}</InfoTableRow>
+              <InfoTableRow label="Topic">{this.state.chatInfo?.topic}</InfoTableRow>
+              <InfoTableRow label="Created At">{shortDateTime(this.state.chatInfo?.created)}</InfoTableRow>
+              <InfoTableRow label="Number of Events">{this.state.chatInfo?.lastEventNumber + 1}</InfoTableRow>
+              <InfoTableRow label="Last Event Time">{shortDateTime(this.state.chatInfo?.lastEventTimestamp)}</InfoTableRow>
             </InfoTable>
-          </Tabs.TabPane>
-          <Tabs.TabPane key="members" tab="Members">
+          </Col>
+          <Col xs={24} sm={24} md={12} lg={12} xl={12}>
             <List
+              size="small"
               bordered
+              header={<span className={styles.membersHeader}>Members ({this.state.chatInfo?.members.length})</span>}
               dataSource={this.state.chatInfo?.members}
               renderItem={member => <List.Item>{this._renderUsername(member)}</List.Item>}
             />
-          </Tabs.TabPane>
-        </Tabs>;
+          </Col>
+        </Row>;
     }
 
     return (
@@ -285,9 +208,10 @@ class ViewChatEventsComponent extends React.Component<InjectedProps, ViewChatSta
     return (
       <CardTitleToolbar title="Chat Events" icon="table">
         <span className={styles.search}>
-          <Input placeholder="Search Chat" addonAfter={<Icon type="search"/>} onKeyUp={this._onFilterChange}/>
+          <Input placeholder="Search Messages" addonAfter={<Icon type="search"/>} onKeyUp={this._onFilterChange}/>
         </span>
-        <ToolbarButton icon="reload" tooltip="Reload Chats" onClick={this._loadChatEvents}/>
+        <ToolbarButton icon="reload" tooltip="Reload Events
+        " onClick={this._loadChatEvents}/>
       </CardTitleToolbar>
     )
   }
@@ -327,7 +251,7 @@ class ViewChatEventsComponent extends React.Component<InjectedProps, ViewChatSta
   }
 
   private _pageChange = (page: number, pageSize?: number) => {
-    pageSize = pageSize || 25;
+    pageSize = pageSize || 20;
     let newUrl = appendToQueryParamString({page, pageSize});
     this.props.history.push(newUrl);
   }
@@ -351,7 +275,7 @@ class ViewChatEventsComponent extends React.Component<InjectedProps, ViewChatSta
 
     return {
       filter: filter ? filter + "" : undefined,
-      pageSize: pageSize as number || 25,
+      pageSize: pageSize as number || 20,
       page: page as number || 1
     };
   }
@@ -368,7 +292,81 @@ class ViewChatEventsComponent extends React.Component<InjectedProps, ViewChatSta
     } else {
       return userId.username;
     }
-  }
+  };
+
+  private _renderEventType = (type: string) => {
+    switch (type) {
+      case "created": {
+        return <span><Icon className={styles.createdType} type="file-add"/> Created</span>;
+      }
+      case "message": {
+        return <span><Icon className={styles.messageType} type="message"/> Message</span>;
+      }
+      case "user_joined": {
+        return <span><Icon className={styles.joinedType} type="login"/> User Joined</span>;
+      }
+      case "user_left": {
+        return <span><Icon className={styles.leftType} type="logout"/> User Left</span>;
+      }
+      case "user_added": {
+        return <span><Icon className={styles.joinedType} type="user-add"/> User Added</span>;
+      }
+      case "user_removed": {
+        return <span><Icon className={styles.leftType} type="user-delete"/> User Removed</span>;
+      }
+      case "name_changed": {
+        return <span><Icon className={styles.createdType} type="file-text"/> Name Changed</span>;
+      }
+      case "topic_changed": {
+        return <span><Icon  className={styles.createdType} type="file-text"/> Topic Changed</span>;
+      }
+    }
+  };
+
+  private _renderEventData = (_: any, event: ChatEvent) => {
+    const render = (data: any) => {
+      const content = JSON.stringify(data, null, "  ");
+      return content;
+    };
+
+    switch (event.type) {
+      case "created": {
+        const createdEvent = event as ChatCreatedEvent;
+        return render({
+          members: JSON.stringify(createdEvent.members),
+          name: createdEvent.name,
+          topic: createdEvent.topic
+        });
+      }
+      case "message": {
+        const messageEvent = event as ChatMessageEvent;
+        return <span className={styles.messageEventText}>{messageEvent.message}</span>;
+      }
+      case "user_joined": {
+        return "";
+      }
+      case "user_left": {
+        return "";
+      }
+      case "user_added": {
+        const addedEvent = event as ChatUserAddedEvent;
+        return this._renderUsername(addedEvent.addedUserId);
+      }
+      case "user_removed": {
+        const removedEvent = event as ChatUserRemovedEvent;
+        return this._renderUsername(removedEvent.removedUserId);
+      }
+      case "name_changed": {
+        const nameEvent = event as ChatNameChangedEvent;
+        return nameEvent.name;
+      }
+      case "topic_changed": {
+        const topicEvent = event as ChatTopicChangedEvent;
+        return topicEvent.topic;
+      }
+    }
+    return;
+  };
 }
 
 const injections = [SERVICES.DOMAIN_CHAT_SERVICE];

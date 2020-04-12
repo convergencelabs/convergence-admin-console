@@ -54,9 +54,9 @@ export class DomainChatService extends AbstractDomainService {
     return this._post<void>(url, data);
   }
 
-  public getChatEvents(domain: DomainId, chatId: string, offset?: number, limit?: number, filter?: string): Promise<PagedData<ChatEvent>> {
+  public getChatEvents(domain: DomainId, chatId: string, offset?: number, limit?: number, messageFilter?: string): Promise<PagedData<ChatEvent>> {
     const url = this._getDomainUrl(domain, `chats/${chatId}/events`);
-    const params = {filter, offset, limit};
+    const params = {messageFilter, offset, limit};
     return this
       ._get<PagedRestData<any>>(url, params)
       .then(result => {
