@@ -191,7 +191,7 @@ export function toChatInfo(data: ChatInfoData): ChatInfo {
     data.membership,
     data.name,
     data.topic,
-    data.members
+    (data.members || []).map((m: DomainUserIdData) => toDomainUserId(m))
   );
 }
 

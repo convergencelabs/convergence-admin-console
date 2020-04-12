@@ -11,7 +11,7 @@
 
 import React, {KeyboardEvent, ReactNode} from "react";
 import {Page} from "../../../../components/common/Page/";
-import {Card, Icon, Input, Table, Tabs} from "antd";
+import {Card, Icon, Input, List, Table, Tabs} from "antd";
 import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
 import {RouteComponentProps} from "react-router";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
@@ -78,15 +78,7 @@ class ViewChatEventsComponent extends React.Component<InjectedProps, ViewChatSta
       return content;
     };
 
-    const renderUsername = (userId: DomainUserId) => {
-      if (userId.type === DomainUserType.ANONYMOUS) {
-        return `${userId.username} (Anonymous)`;
-      } else if (userId.type === DomainUserType.CONVERGENCE) {
-        return `${userId.username} (Convergence)`;
-      } else {
-        return userId.username;
-      }
-    }
+
 
     this._chatEventTableColumns = [{
       title: 'Event No',
@@ -130,7 +122,7 @@ class ViewChatEventsComponent extends React.Component<InjectedProps, ViewChatSta
     }, {
       title: 'User',
       dataIndex: 'userId',
-      render: renderUsername
+      render: this._renderUsername
 
     }, {
       title: 'Data',
@@ -159,13 +151,13 @@ class ViewChatEventsComponent extends React.Component<InjectedProps, ViewChatSta
           case "user_added": {
             const addedEvent = event as ChatUserAddedEvent;
             return renderEventData({
-              addedUser: renderUsername(addedEvent.addedUserId)
+              addedUser: this._renderUsername(addedEvent.addedUserId)
             });
           }
           case "user_removed": {
             const removedEvent = event as ChatUserRemovedEvent;
             return renderEventData({
-              addedUser: renderUsername(removedEvent.removedUserId)
+              addedUser: this._renderUsername(removedEvent.removedUserId)
             });
           }
           case "name_changed": {
@@ -254,7 +246,11 @@ class ViewChatEventsComponent extends React.Component<InjectedProps, ViewChatSta
             </InfoTable>
           </Tabs.TabPane>
           <Tabs.TabPane key="members" tab="Members">
-
+            <List
+              bordered
+              dataSource={this.state.chatInfo?.members}
+              renderItem={member => <List.Item>{this._renderUsername(member)}</List.Item>}
+            />
           </Tabs.TabPane>
         </Tabs>;
     }
@@ -362,6 +358,16 @@ class ViewChatEventsComponent extends React.Component<InjectedProps, ViewChatSta
 
   private _gotoEdit = () => {
     this.props.history.push(`${this.state.chatInfo?.chatId}/edit`);
+  }
+
+  private _renderUsername = (userId: DomainUserId) => {
+    if (userId.type === DomainUserType.ANONYMOUS) {
+      return `${userId.username} (Anonymous)`;
+    } else if (userId.type === DomainUserType.CONVERGENCE) {
+      return `${userId.username} (Convergence)`;
+    } else {
+      return userId.username;
+    }
   }
 }
 

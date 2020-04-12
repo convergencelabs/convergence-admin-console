@@ -9,13 +9,15 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
+import {DomainUserId} from "./DomainUserId";
+
 export class ChatInfo {
   constructor(public readonly chatId: string,
               public readonly type: string,
               public readonly membership: string,
               public readonly name: string,
               public readonly topic: string,
-              public readonly members: string[]
+              public readonly members: DomainUserId[]
   ) {
     Object.freeze(this);
   }

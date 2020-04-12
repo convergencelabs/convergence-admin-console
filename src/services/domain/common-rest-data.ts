@@ -167,7 +167,7 @@ export interface ChatInfoData {
   membership: string;
   name: string;
   topic: string;
-  members: string[];
+  members: DomainUserIdData[];
 }
 
 export interface CreateChatData {
