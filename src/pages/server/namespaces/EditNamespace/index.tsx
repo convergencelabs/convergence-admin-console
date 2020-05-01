@@ -144,7 +144,7 @@ class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespac
           description: `Could not delete role for the user.`,
         });
       });
-  }
+  };
 
   private _setUserRole = (username: string, role: string) => {
     this.props.roleService
@@ -162,35 +162,37 @@ class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespac
           description: `Could not set role for the user.`,
         });
       });
-
-  }
+  };
 
   private _handleCancel = () => {
     this.props.history.push("/namespaces/");
-  }
+  };
 
   private handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values: any) => {
       if (!err) {
         const {id, displayName} = values;
-        this.props.namespaceService.createNamespace(id, displayName)
+        this.props.namespaceService.updateNamespace(id, displayName)
           .then(() => {
             notification.success({
-              message: 'Namespace Created',
-              description: `Namespace '${id}' successfully created`,
+              message: 'Namespace Updated',
+              description: `Namespace '${id}' successfully updated`,
             });
             this.props.history.push("./");
           })
           .catch((err) => {
+            let description = "Unknown error updating namespace.";
             if (err instanceof RestError) {
               if (err.code === "duplicate") {
-                notification.error({
-                  message: 'Could Not Update Namespace',
-                  description: `A namespace with the specified ${err.details["field"]} already exists.`,
-                });
+                description = `A namespace with the specified ${err.details["field"]} already exists.`;
               }
             }
+
+            notification.error({
+              message: 'Could Not Update Namespace',
+              description
+            });
           });
       }
     });

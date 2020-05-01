@@ -42,6 +42,10 @@ export class NamespaceService extends AbstractAuthenticatedService {
     return this._post<void>("namespaces", {id, displayName});
   }
 
+  public updateNamespace(id: string, displayName: string): Promise<void> {
+    return this._put<void>(`namespaces/${id}`, {displayName});
+  }
+
   public deleteNamespace(id: string): Promise<void> {
     return this._delete<void>(`namespaces/${id}`);
   }
