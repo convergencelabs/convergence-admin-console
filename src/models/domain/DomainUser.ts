@@ -15,7 +15,7 @@ export class DomainUser {
               public firstName: string,
               public lastName: string,
               public email: string,
-              public lastLogin: Date,
+              public lastLogin: Date | undefined,
               public disabled: boolean) {
     Object.freeze(this);
   }
