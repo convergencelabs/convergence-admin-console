@@ -46,7 +46,7 @@
     "typescript": "3.8.3"
   },
   "devDependencies": {
-    "@convergence/convergence": "1.0.0-rc.5",
+    "@convergence/convergence": "1.0.0-rc.6",
     "@convergence/string-change-detector": "0.1.8",
     "@fortawesome/fontawesome-svg-core": "1.2.15",
     "@fortawesome/free-regular-svg-icons": "5.7.2",
