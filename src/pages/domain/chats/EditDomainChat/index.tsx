@@ -44,7 +44,7 @@ class EditDomainChatComponent extends React.Component<InjectedProps, EditDomainC
     {title: "Chats", link: toDomainRoute(this.props.domainId, "chats")},
     {
       title: this.props.match.params.id,
-      link: toDomainRoute(this.props.domainId, "chats/" + this.props.match.params.id)
+      link: toDomainRoute(this.props.domainId, "chats/" + decodeURIComponent(this.props.match.params.id))
     },
     {title: "Edit"}
   ];
@@ -75,7 +75,6 @@ class EditDomainChatComponent extends React.Component<InjectedProps, EditDomainC
     return this.state.initialChat !== null ? (
         <Page breadcrumbs={this._breadcrumbs}>
           <Card title={<span><Icon type="folder"/> Edit Chat</span>} className={styles.formCard}>
-
             <Form.Item label="Chat Id">
               <Input disabled={true} value={this.state.initialChat.chatId}/>
             </Form.Item>
@@ -121,12 +120,12 @@ class EditDomainChatComponent extends React.Component<InjectedProps, EditDomainC
   private _onNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
     this.setState({name});
-  }
+  };
 
   private _onTopicChange = (e: ChangeEvent<HTMLInputElement>) => {
     const topic = e.target.value;
     this.setState({topic});
-  }
+  };
 
   private _onSetName = () => {
     const {domainId, match: {params: {id}}} = this.props;
@@ -135,7 +134,7 @@ class EditDomainChatComponent extends React.Component<InjectedProps, EditDomainC
       .then(() => {
         notification.success({
           message: 'Chat Updated',
-          description: `The name was successfully set for Chat '${id}'.`,
+          description: `The name was successfully set for Chat '${decodeURIComponent(id)}'.`,
         });
       }).catch((err) => {
       if (err instanceof RestError) {
@@ -155,7 +154,7 @@ class EditDomainChatComponent extends React.Component<InjectedProps, EditDomainC
       .then(() => {
         notification.success({
           message: 'Chat Updated',
-          description: `The topic was successfully set for Chat '${id}'.`,
+          description: `The topic was successfully set for Chat '${decodeURIComponent(id)}'.`,
         });
       }).catch((err) => {
       if (err instanceof RestError) {

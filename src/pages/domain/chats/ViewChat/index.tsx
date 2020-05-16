@@ -65,7 +65,7 @@ export interface ViewChatState {
 class ViewChatEventsComponent extends React.Component<InjectedProps, ViewChatState> {
   private readonly _breadcrumbs: IBreadcrumbSegment[] = [
     {title: "Chats", link: toDomainRoute(this.props.domainId, "chats/")},
-    {title: this.props.match.params.id}
+    {title: decodeURIComponent(this.props.match.params.id)}
   ];
   private readonly _chatEventTableColumns: any[];
   private _chatsSubscription: PromiseSubscription | null;
@@ -281,8 +281,8 @@ class ViewChatEventsComponent extends React.Component<InjectedProps, ViewChatSta
   }
 
   private _gotoEdit = () => {
-    this.props.history.push(`${this.state.chatInfo?.chatId}/edit`);
-  }
+    this.props.history.push(`${encodeURIComponent(this.state.chatInfo!.chatId)}/edit`);
+  };
 
   private _renderUsername = (userId: DomainUserId) => {
     if (userId.type === DomainUserType.ANONYMOUS) {

@@ -61,7 +61,7 @@ class DomainChatComponent extends React.Component<InjectedProps, DomainChatState
       title: 'Id',
       dataIndex: 'chatId',
       sorter: (a: ChatInfo, b: ChatInfo) => a.chatId.localeCompare(b.chatId),
-      render: (text: string) => <Link to={toDomainRoute(this.props.domainId, `chats/${text}`)}>{text}</Link>
+      render: (text: string) => <Link to={toDomainRoute(this.props.domainId, `chats/${encodeURIComponent(text)}`)}>{text}</Link>
     }, {
       title: 'Name',
       dataIndex: 'name',
@@ -78,7 +78,7 @@ class DomainChatComponent extends React.Component<InjectedProps, DomainChatState
     }, {
       title: '',
       align: 'right',
-      width: 80,
+      width: 110,
       render: this._renderActions
     }];
 
@@ -104,7 +104,6 @@ class DomainChatComponent extends React.Component<InjectedProps, DomainChatState
   }
 
   public componentDidUpdate(prevProps: InjectedProps, prevState: DomainChatState): void {
-
     // First see if the route has changes, If so we set the current state.
     // then later we see if that changed our actual params we care about.
     if (prevProps.location.search !== this.props.location.search) {
@@ -163,8 +162,13 @@ class DomainChatComponent extends React.Component<InjectedProps, DomainChatState
   private _renderActions = (_: undefined, record: ChatInfo) => {
     return (
       <span className={styles.actions}>
+        <Tooltip placement="topRight" title="View Chat" mouseEnterDelay={1}>
+          <Link to={toDomainRoute(this.props.domainId, `chats/${encodeURIComponent(record.chatId)}`)}>
+            <Button shape="circle" size="small" htmlType="button" icon="eye"/>
+          </Link>
+        </Tooltip>
         <Tooltip placement="topRight" title="Edit Chat" mouseEnterDelay={1}>
-          <Link to={toDomainRoute(this.props.domainId, `chats/${record.chatId}`)}>
+          <Link to={toDomainRoute(this.props.domainId, `chats/${encodeURIComponent(record.chatId)}/edit`)}>
             <Button shape="circle" size="small" htmlType="button" icon="edit"/>
           </Link>
         </Tooltip>
