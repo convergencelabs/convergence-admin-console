@@ -76,7 +76,7 @@ class ModelEditorTabComponent extends React.Component<InjectedProps, ModelEditor
               event.name === RealTimeModel.Events.COLLABORATOR_CLOSED ||
               event.name === RealTimeModel.Events.COLLABORATOR_OPENED
             ))
-            .subscribe(this._onUsersChangeed);
+            .subscribe(this._onUsersChanged);
           model.emitLocalEvents(true);
         } else {
           model.close().catch(err => console.error(err));
@@ -140,7 +140,7 @@ class ModelEditorTabComponent extends React.Component<InjectedProps, ModelEditor
     )
   }
 
-  private _onUsersChangeed = () => {
+  private _onUsersChanged = () => {
     const connectedUsers = this._buildConnectedUsers(this.state.model!);
     this.setState({connectedUsers});
   }
@@ -164,7 +164,7 @@ class ModelEditorTabComponent extends React.Component<InjectedProps, ModelEditor
   }
 
   private _confirmDelete = () => {
-    return new Promise<boolean>(function(resolve, reject) {
+    return new Promise<boolean>((resolve, _) => {
       confirm({
         title: 'Delete Element?',
         content: 'Are you sure you want to delete this element?',
