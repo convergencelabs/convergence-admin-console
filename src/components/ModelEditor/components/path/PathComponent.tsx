@@ -39,7 +39,7 @@ export class PathComponent extends React.Component<PathComponentProps, PathCompo
     this._modelSubscription = null;
   }
 
-  public componentWillMount(): void {
+  public componentDidMount(): void {
     this._registerModel();
   }
 

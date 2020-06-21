@@ -38,7 +38,7 @@ export class NewNodeButton extends React.Component<NewNodeButtonProps, NewNodeBu
     this._treeSubscription = null;
   }
 
-  public componentWillMount(): void {
+  public componentDidMount(): void {
     this._treeSubscription = this.props.treeModel.events().subscribe(() => {
       this.setState({ enabled: this._isEnabled()});
     });

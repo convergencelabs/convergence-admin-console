@@ -44,7 +44,7 @@ export class SearchControl extends React.Component<SearchControlProps, SearchCon
     };
   }
 
-  public componentWillMount(): void {
+  public componentDidMount(): void {
     this._subscription = this.props.treeModel.getSearchManager()
       .events()
       .subscribe(() => {

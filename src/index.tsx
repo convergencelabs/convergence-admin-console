@@ -47,6 +47,8 @@ import "ace-builds/src-noconflict/theme-solarized_dark";
 
 import './index.css';
 
+import 'mobx-react-lite/batchingForReactDom'
+
 configure({enforceActions: "always"});
 
 message.config({

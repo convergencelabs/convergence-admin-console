@@ -30,7 +30,7 @@ export class TreeView extends React.Component<TreeViewProps, {}> {
     this._treeSubscription = null;
   }
 
-  public componentWillMount(): void {
+  public componentDidMount(): void {
     this._treeSubscription = this.props.model.events()
       .subscribe(() => {
         this.forceUpdate();

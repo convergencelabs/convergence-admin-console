@@ -68,17 +68,15 @@ export class DomainCardComponent extends Component<InjectedProps, {}> {
           addonAfter={<CopyAddOnButton copyText={url}/>}
         />
         <div className={styles.buttons}>
-          <DomainCardButton link="" domain={domain} tooltip={"Dashboard"} icon="dashboard" disabled={disabled} {...props}/>
-          <DomainCardButton link="users" domain={domain} tooltip={"Users"} icon="user" disabled={disabled} {...props}/>
-          <DomainCardButton link="groups" domain={domain} tooltip={"Groups"} icon="team" disabled={disabled} {...props}/>
-          <DomainCardButton link="sessions" domain={domain} tooltip={"Sessions"} icon="cloud" disabled={disabled} {...props}/>
-          <DomainCardButton link="chats" domain={domain} tooltip={"Chat"} icon="message" disabled={disabled} {...props}/>
-          <DomainCardButton link="collections" domain={domain} tooltip={"Collections"} icon="folder"
-                            disabled={disabled} {...this.props}/>
-          <DomainCardButton link="models" domain={domain} tooltip={"Models"} icon="file" disabled={disabled} {...this.props}/>
-          <DomainCardButton link="authentication" domain={domain} tooltip={"Authentication"} icon="lock"
-                            disabled={disabled} {...this.props}/>
-          <DomainCardButton link="settings" domain={domain} tooltip={"Settings"} icon="setting" disabled={disabled} {...this.props}/>
+          <DomainCardButton link="" tooltip={"Dashboard"} icon="dashboard" disabled={disabled} {...props}/>
+          <DomainCardButton link="users" tooltip={"Users"} icon="user" disabled={disabled} {...props}/>
+          <DomainCardButton link="groups" tooltip={"Groups"} icon="team" disabled={disabled} {...props}/>
+          <DomainCardButton link="sessions" tooltip={"Sessions"} icon="cloud" disabled={disabled} {...props}/>
+          <DomainCardButton link="chats"  tooltip={"Chat"} icon="message" disabled={disabled} {...props}/>
+          <DomainCardButton link="collections"  tooltip={"Collections"} icon="folder" disabled={disabled} {...props}/>
+          <DomainCardButton link="models"  tooltip={"Models"} icon="file" disabled={disabled} {...props}/>
+          <DomainCardButton link="authentication" tooltip={"Authentication"} icon="lock" disabled={disabled} {...props}/>
+          <DomainCardButton link="settings" tooltip={"Settings"} icon="setting" disabled={disabled} {...props}/>
         </div>
       </Card>
     );

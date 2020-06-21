@@ -53,7 +53,7 @@ export class NodeLabel extends React.Component<NodeLabelProps, NodeLabelState> {
     this._setSpan = this._setSpan.bind(this);
   }
 
-  public componentWillMount(): void {
+  public componentDidMount(): void {
     this._subscription = this.props.node.events().subscribe(e => {
       if (e instanceof TreeNodeActiveSearchResultEvent) {
         if (this._labelSpan) {

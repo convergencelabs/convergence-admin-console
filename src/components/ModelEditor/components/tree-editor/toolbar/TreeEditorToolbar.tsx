@@ -36,7 +36,7 @@ export class TreeEditorToolbar extends React.Component<TreeEditorToolbarProps, {
     this._treeSubscription = null;
   }
 
-  public componentWillMount(): void {
+  public componentDidMount(): void {
     this._treeSubscription = this.props.treeModel.events().subscribe(() => {
       this.forceUpdate();
     })

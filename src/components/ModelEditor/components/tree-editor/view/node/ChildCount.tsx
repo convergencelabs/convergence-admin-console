@@ -32,8 +32,7 @@ export class ChildCount extends React.Component<ChildCountProps, ChildCountState
     };
   }
 
-  // FIXME old react method.
-  public componentWillReceiveProps(props: ChildCountProps): void {
+  public componentDidUpdate(props: ChildCountProps): void {
     if (props.count !== this.props.count) {
       this.setState({
         increased: props.count > this.props.count,
