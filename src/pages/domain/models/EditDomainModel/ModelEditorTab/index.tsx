@@ -22,6 +22,7 @@ import styles from "./styles.module.css";
 import {filter} from "rxjs/operators";
 import {longDateTime} from "../../../../../utils/format-utils";
 import confirm from "antd/lib/modal/confirm";
+import {Subscription} from "rxjs";
 
 export interface ModelEditorTabProps {
   modelId: string;
@@ -40,6 +41,11 @@ export interface ModelEditorTabState {
 }
 
 class ModelEditorTabComponent extends React.Component<InjectedProps, ModelEditorTabState> {
+  private _versionSubscription: Subscription | null = null;
+  private _userChangedSubscription: Subscription | null = null;
+
+  private _mounted = false;
+
   constructor(props: InjectedProps) {
     super(props);
 
@@ -52,25 +58,29 @@ class ModelEditorTabComponent extends React.Component<InjectedProps, ModelEditor
   }
 
   public componentDidMount(): void {
-    // TODO if we unmounted before we loaded, we need to close the model after it is opened.
+    this._mounted = true;
     this.props.convergenceDomainStore.domain!
       .models()
       .open(this.props.modelId)
       .then(model => {
-        const version = model.version();
-        const lastModified = model.maxTime();
-        const connectedUsers = this._buildConnectedUsers(model);
-        this.setState({model, version, lastModified, connectedUsers});
-        // FIXME unsubscribe
-        model.root().events().subscribe(this._onVersionChanged);
-        model
-          .events()
-          .pipe(filter(event =>
-            event.name === RealTimeModel.Events.COLLABORATOR_CLOSED ||
-            event.name === RealTimeModel.Events.COLLABORATOR_OPENED
-          ))
-          .subscribe(this._onUsersChangeed);
-        model.emitLocalEvents(true);
+        if (this._mounted) {
+          const version = model.version();
+          const lastModified = model.maxTime();
+          const connectedUsers = this._buildConnectedUsers(model);
+          this.setState({model, version, lastModified, connectedUsers});
+
+          this._versionSubscription = model.root().events().subscribe(this._onVersionChanged);
+          this._userChangedSubscription = model
+            .events()
+            .pipe(filter(event =>
+              event.name === RealTimeModel.Events.COLLABORATOR_CLOSED ||
+              event.name === RealTimeModel.Events.COLLABORATOR_OPENED
+            ))
+            .subscribe(this._onUsersChangeed);
+          model.emitLocalEvents(true);
+        } else {
+          model.close().catch(err => console.error(err));
+        }
       });
   }
 
@@ -80,6 +90,16 @@ class ModelEditorTabComponent extends React.Component<InjectedProps, ModelEditor
         this.state.model.close().catch(err => console.error(err));
       }
     }
+
+    if (this._userChangedSubscription !== null) {
+      this._userChangedSubscription.unsubscribe()
+    }
+
+    if (this._versionSubscription !== null) {
+      this._versionSubscription.unsubscribe()
+    }
+
+    this._mounted = false;
   }
 
   public render(): ReactNode {
