@@ -16,7 +16,7 @@ import {DomainModelService} from "../../../../../services/domain/DomainModelServ
 import {SapphireEditor} from "../../../../../components/ModelEditor/";
 import {STORES} from "../../../../../stores/StoreConstants";
 import {ConvergenceDomainStore} from "../../../../../stores/ConvergenceDomainStore";
-import {RealTimeModel} from "@convergence/convergence";
+import {IConvergenceEvent, RealTimeModel, VersionChangedEvent} from "@convergence/convergence";
 import {Button, Popover} from "antd";
 import styles from "./styles.module.css";
 import {filter} from "rxjs/operators";
@@ -69,7 +69,11 @@ class ModelEditorTabComponent extends React.Component<InjectedProps, ModelEditor
           const connectedUsers = this._buildConnectedUsers(model);
           this.setState({model, version, lastModified, connectedUsers});
 
-          this._versionSubscription = model.root().events().subscribe(this._onVersionChanged);
+          this._versionSubscription = model
+            .events()
+            .pipe(filter(e => e.name === VersionChangedEvent.NAME))
+            .subscribe(this._onVersionChanged);
+
           this._userChangedSubscription = model
             .events()
             .pipe(filter(event =>
@@ -155,11 +159,10 @@ class ModelEditorTabComponent extends React.Component<InjectedProps, ModelEditor
     return Array.from(new Set(collaborators));
   }
 
-  private _onVersionChanged = () => {
+  private _onVersionChanged = (e: IConvergenceEvent) => {
     const model = this.state.model!;
     const version = model.version();
     const lastModified = model.maxTime();
-
     this.setState({version, lastModified});
   }
 
