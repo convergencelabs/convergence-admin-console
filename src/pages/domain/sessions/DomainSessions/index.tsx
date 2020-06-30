@@ -189,9 +189,11 @@ class DomainSessionsComponent extends React.Component<InjectedProps, DomainSessi
     const {promise, subscription} = makeCancelable(this.props.domainSessionService.getSessions(this.props.domainId, this.state.filter));
     this._sessionsSubscription = subscription;
     promise.then(sessions => {
+      console.log(sessions);
       this._sessionsSubscription = null;
-      this.setState({sessions});
+      this.setState({sessions: sessions.data});
     }).catch(err => {
+      console.log(err);
       this._sessionsSubscription = null;
       this.setState({sessions: null});
     });

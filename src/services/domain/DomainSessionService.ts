@@ -10,10 +10,11 @@
  */
 
 import {DomainId} from "../../models/DomainId";
-import {DomainSessionData} from "./common-rest-data";
+import {DomainSessionData, PagedRestData} from "./common-rest-data";
 import {AbstractDomainService} from "./AbstractDomainService";
 import {toDomainSession} from "./incoming-rest-data-converters";
 import {DomainSession} from "../../models/domain/DomainSession";
+import {PagedData} from "../../models/PagedData";
 
 export interface DomainSessionFilter {
   sessionId?: string;
@@ -30,12 +31,15 @@ export class DomainSessionService extends AbstractDomainService {
     domainId: DomainId,
     filter: DomainSessionFilter = {},
     offset: number = 0,
-    limit: number = 20,): Promise<DomainSession[]> {
+    limit: number = 20,): Promise<PagedData<DomainSession>> {
 
     const params = {limit, offset, ...filter};
     const url = this._getDomainUrl(domainId, "sessions");
-    return this._get<DomainSessionData[]>(url, params)
-      .then(sessions => sessions.map(toDomainSession));
+    return this._get<PagedRestData<DomainSessionData>>(url, params)
+      .then(data => {
+        const sessions = data.data.map(toDomainSession)
+        return new PagedData(sessions, data.startIndex, data.totalResults);
+      });
   }
 }
 

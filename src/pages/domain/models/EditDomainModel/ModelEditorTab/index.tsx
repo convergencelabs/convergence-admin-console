@@ -16,7 +16,7 @@ import {DomainModelService} from "../../../../../services/domain/DomainModelServ
 import {SapphireEditor} from "../../../../../components/ModelEditor/";
 import {STORES} from "../../../../../stores/StoreConstants";
 import {ConvergenceDomainStore} from "../../../../../stores/ConvergenceDomainStore";
-import {IConvergenceEvent, RealTimeModel, VersionChangedEvent} from "@convergence/convergence";
+import {RealTimeModel, VersionChangedEvent} from "@convergence/convergence";
 import {Button, Popover} from "antd";
 import styles from "./styles.module.css";
 import {filter} from "rxjs/operators";
@@ -159,7 +159,7 @@ class ModelEditorTabComponent extends React.Component<InjectedProps, ModelEditor
     return Array.from(new Set(collaborators));
   }
 
-  private _onVersionChanged = (e: IConvergenceEvent) => {
+  private _onVersionChanged = () => {
     const model = this.state.model!;
     const version = model.version();
     const lastModified = model.maxTime();
