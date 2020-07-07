@@ -84,7 +84,7 @@ class DomainMemberSettingsComponent extends React.Component<InjectedProps, Domai
         />
         <Table className={styles.memberTable}
                size="middle"
-               rowKey="id"
+               rowKey="username"
                columns={this._memberTableColumns}
                dataSource={this.state.members || []}
         />
