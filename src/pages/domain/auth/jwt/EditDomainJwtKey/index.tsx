@@ -90,7 +90,7 @@ class EditDomainJwtKeyComponent extends React.Component<InjectedProps, EditDomai
       .then(() => {
         notification.success({
           message: 'Key Updated',
-          description: `Key '${key.id}' successfully created.`
+          description: `Key '${key.id}' successfully updated.`
         });
         const url = toDomainRoute(this.props.domainId, "authentication/jwt");
         this.props.history.push(url);
@@ -98,7 +98,7 @@ class EditDomainJwtKeyComponent extends React.Component<InjectedProps, EditDomai
       if (err instanceof RestError) {
         if (err.code === "duplicate") {
           notification.error({
-            message: 'Could Not Edit Key',
+            message: 'Could Not Update Key',
             description: `A key with the specified ${err.details["field"]} already exists.`
           });
         }
