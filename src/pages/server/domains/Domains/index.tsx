@@ -105,12 +105,19 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
   }
 
   public componentWillUnmount(): void {
-    if (this._domainSubscription) {
+    if (this._domainSubscription !== null) {
       this._domainSubscription.unsubscribe();
+      this._domainSubscription = null;
     }
 
-    if (this._favoritesSubscription) {
+    if (this._favoritesSubscription !== null) {
       this._favoritesSubscription.unsubscribe();
+      this._favoritesSubscription = null;
+    }
+
+    if (this._reloadInterval !== null) {
+      clearTimeout(this._reloadInterval);
+      this._reloadInterval = null;
     }
   }
 
@@ -249,6 +256,14 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
   }
 
   private _loadDomains = () => {
+    if (this._domainSubscription !== null) {
+      this._domainSubscription.unsubscribe();
+    }
+
+    if (this._favoritesSubscription !== null) {
+      this._favoritesSubscription.unsubscribe();
+    }
+
     const domainsFilter = this.state.domainsFilter !== "" ? this.state.domainsFilter : undefined;
     const namespace = this.state.namespace !== null ? this.state.namespace : undefined;
     const {promise, subscription} =
@@ -273,6 +288,7 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
       }
     }).catch(err => {
       this._domainSubscription = null;
+      this._favoritesSubscription = null
       this.setState({domains: null});
     });
   }
