@@ -85,7 +85,7 @@ class EditDomainUserGroupComponent extends React.Component<InjectedProps, EditDo
       .then(() => {
         notification.success({
           message: 'Group Updated',
-          description: `Group '${group.id}' successfully created.`
+          description: `Group '${group.id}' successfully update.`
         });
         const url = toDomainRoute(this.props.domainId, "groups/");
         this.props.history.push(url);
@@ -93,7 +93,7 @@ class EditDomainUserGroupComponent extends React.Component<InjectedProps, EditDo
       if (err instanceof RestError) {
         if (err.code === "duplicate") {
           notification.error({
-            message: 'Could Not Edit Group',
+            message: 'Could Not Update Group',
             description: `A group with the specified ${err.details["field"]} already exists.`
           });
         }
