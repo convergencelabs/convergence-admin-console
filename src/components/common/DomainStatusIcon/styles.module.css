@@ -9,15 +9,15 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-.error {
+:global(.anticon).error {
   color: red;
 }
 
-.online {
+:global(.anticon).online {
   color: green;
 }
 
-.initializing {
+:global(.anticon).initializing {
   color: darkgrey;
   border-radius: 50%;
   cursor: pointer;
@@ -52,15 +52,15 @@
   }
 }
 
-.offline {
+:global(.anticon).offline {
   color: darkgrey;
 }
 
-.maintenance {
+:global(.anticon).maintenance {
   color: darkgrey;
 }
 
-.deleting {
+:global(.anticon).deleting {
   color: orange;
   border-radius: 50%;
   cursor: pointer;
