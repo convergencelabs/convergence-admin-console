@@ -16,6 +16,7 @@ export class DomainDescriptor {
   constructor(public namespace: string,
               public id: string,
               public displayName: string,
+              public schemaVersion: string | null,
               public status: DomainStatus
   ) {
     Object.freeze(this);

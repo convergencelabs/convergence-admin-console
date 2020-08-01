@@ -65,6 +65,7 @@ export class DomainInfoComponent extends React.Component<InjectedProps, DomainIn
           <InfoTableRow label="Display Name">{domain.displayName}</InfoTableRow>
           <InfoTableRow label="Namespace">{domain.namespace}</InfoTableRow>
           <InfoTableRow label="Id">{domain.id}</InfoTableRow>
+          <InfoTableRow label="Schema Version">{domain.schemaVersion}</InfoTableRow>
           <InfoTableRow label="Status">
             <span style={{marginRight: 10}}>{formatDomainStatus(domain.status)}</span>
             <DomainStatusIcon status={domain.status}/>

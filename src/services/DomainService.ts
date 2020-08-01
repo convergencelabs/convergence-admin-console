@@ -21,6 +21,7 @@ export interface DomainDescriptorData {
   domainId: string;
   displayName: string;
   owner: string;
+  schemaVersion?: string;
   status: string;
 }
 
@@ -94,6 +95,7 @@ export class DomainService extends AbstractAuthenticatedService {
       data.namespace,
       data.domainId,
       data.displayName,
+      data.schemaVersion || null,
       status!);
   }
 }

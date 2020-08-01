@@ -20,7 +20,7 @@ export class ServerStatusService extends AbstractAuthenticatedService {
       ._get<ServerStatusData>("status")
       .then(status => new ServerStatus(
         status.version,
-        status.distribution,
+        status.schemaVersion,
         status.status,
         status.namespaces,
         status.domains

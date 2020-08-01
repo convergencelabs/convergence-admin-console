@@ -57,7 +57,7 @@ export class ServerInfoComponent extends Component<InjectedProps, ServerInfoStat
       (
         <InfoTable>
           <InfoTableRow label="Version">{serverStatus.version}</InfoTableRow>
-          <InfoTableRow label="Edition">{serverStatus.distribution}</InfoTableRow>
+          <InfoTableRow label="Schema Version">{serverStatus.schemaVersion}</InfoTableRow>
           <InfoTableRow label="Namespaces">{serverStatus.namespaces}</InfoTableRow>
           <InfoTableRow label="Domains">{serverStatus.domains}</InfoTableRow>
           <InfoTableRow label="Status">Healthy <Icon type="check-circle" style={{color: "green"}}/></InfoTableRow>

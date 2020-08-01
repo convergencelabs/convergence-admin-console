@@ -11,7 +11,7 @@
 
 export interface ServerStatusData {
   version: string;
-  distribution: string;
+  schemaVersion: string;
   status: string;
   namespaces: number;
   domains: number;
