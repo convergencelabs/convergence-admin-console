@@ -10,7 +10,7 @@
  */
 
 import React, {FormEvent, ReactNode} from "react";
-import {Page} from "../../../../components/common/Page/";
+import {Page} from "../../../../components";
 import {Button, Card, Form, Icon, Input, notification, Select} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
 import {RouteComponentProps} from "react-router";
@@ -70,7 +70,7 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
             <Form.Item label="Model Id">
               {getFieldDecorator('idMode', {
                 initialValue: "auto",
-                rules: [{required: false, message: 'Please input a Display Name!', whitespace: true}],
+                rules: [{required: false, message: 'Please select a model id strategy!', whitespace: true}],
               })(
                 <Select>
                   <Select.Option key="auto">Auto Generated</Select.Option>
@@ -82,7 +82,7 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
               this.props.form.getFieldValue("idMode") === "manual" ?
                 <Form.Item label="Id">
                   {getFieldDecorator('id', {
-                    rules: [{required: false, message: 'Please input a Display Name!', whitespace: true}],
+                    rules: [{required: true, message: 'Please input a model id!', whitespace: true}],
                   })(
                     <Input/>
                   )}
