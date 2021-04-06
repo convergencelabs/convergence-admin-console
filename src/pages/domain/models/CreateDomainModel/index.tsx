@@ -34,7 +34,7 @@ interface InjectedProps extends CreateDomainModelProps, FormComponentProps {
 }
 
 export interface CreateDomainModelState {
-  data: string;
+
 }
 
 class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDomainModelState> {
@@ -42,14 +42,6 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
     {title: "Models", link: toDomainRoute(this.props.domainId, "models")},
     {title: "New Model"}
   ];
-
-  constructor(props: InjectedProps) {
-    super(props);
-
-    this.state = {
-      data: "{\n\n}"
-    }
-  }
 
   public render(): ReactNode {
     const {getFieldDecorator} = this.props.form;
@@ -90,22 +82,27 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
                 null
             }
             <Form.Item label="Data">
-              <AceEditor
-                className={styles.data}
-                width={"100%"}
-                height="300px"
-                mode="json"
-                theme="solarized_dark"
-                value={this.state.data}
-                onChange={this._onDataChange}
-                name="create-model-data-editor"
-                fontSize={12}
-                defaultValue={`{\n\n}`}
-                showPrintMargin={true}
-                showGutter={true}
-                highlightActiveLine={true}
-                editorProps={{$blockScrolling: true}}
-              />
+              {getFieldDecorator('data', {
+                initialValue: "{\n\n}",
+                rules: [
+                  {required: true, validator: this._validateData}
+                ],
+              })(
+                <AceEditor
+                  className={styles.data}
+                  width={"100%"}
+                  height="300px"
+                  mode="json"
+                  theme="solarized_dark"
+
+                  name="create-model-data-editor"
+                  fontSize={12}
+                  showPrintMargin={true}
+                  showGutter={true}
+                  highlightActiveLine={true}
+                  editorProps={{$blockScrolling: true}}
+                />
+              )}
             </Form.Item>
             <FormButtonBar>
               <Button htmlType="button" onClick={this._handleCancel}>Cancel</Button>
@@ -117,21 +114,26 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
     );
   }
 
-  private _onDataChange = (newValue: string) => {
-    this.setState({data: newValue});
-  }
-
   private _handleCancel = () => {
     const url = toDomainRoute(this.props.domainId, "models");
     this.props.history.push(url);
   }
 
+  private _validateData = (rule: any, value: any, callback: any) => {
+    try {
+      JSON.parse(value);
+      callback();
+    } catch (e) {
+      callback("JSON Data is Invalid: '" + e.message + "'");
+    }
+  }
+
   private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     this.props.form.validateFieldsAndScroll((err, values: any) => {
       if (!err) {
-        const {collection, idMode, id} = values;
-        const {data} = this.state;
+        const {collection, idMode, id, data} = values;
 
         try {
           const dataObj = JSON.parse(data);
@@ -150,14 +152,13 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
             if (err instanceof RestError) {
               if (err.code === "duplicate") {
                 notification.error({
-                  message: 'Could Not Create Collection',
-                  description: `A collection with the specified ${err.details["field"]} already exists.`
+                  message: 'Could Not Create Model',
+                  description: `A model with the specified ${err.details["field"]} already exists.`
                 });
               }
             }
           });
-        }
-        catch (parseErr) {
+        } catch (parseErr) {
           console.error(parseErr)
         }
       }
