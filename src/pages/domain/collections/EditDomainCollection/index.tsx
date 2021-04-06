@@ -68,7 +68,7 @@ class EditDomainCollectionComponent extends React.Component<InjectedProps, EditD
     if (initialCollection !== null) {
       return (
         <Page breadcrumbs={this._breadcrumbs}>
-          <Card title={<span><Icon type="folder"/> New Collection</span>} className={styles.formCard}>
+          <Card title={<span><Icon type="folder"/> Edit Collection</span>} className={styles.formCard}>
             <DomainCollectionForm
               initialValue={initialCollection}
               saveButtonLabel="Save"
