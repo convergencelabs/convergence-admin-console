@@ -13,7 +13,7 @@ import React, {ReactNode} from "react";
 import {Card, Form, Icon, notification} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import {RouteComponentProps} from "react-router";
-import {Page} from "../../../../components/common/Page/";
+import {Page} from "../../../../components";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {RestError} from "../../../../services/RestError";
@@ -70,6 +70,7 @@ class EditDomainCollectionComponent extends React.Component<InjectedProps, EditD
         <Page breadcrumbs={this._breadcrumbs}>
           <Card title={<span><Icon type="folder"/> Edit Collection</span>} className={styles.formCard}>
             <DomainCollectionForm
+              domainId={this.props.domainId}
               initialValue={initialCollection}
               saveButtonLabel="Save"
               disableId={true}

@@ -9,18 +9,20 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import {ModelSnapshotPolicy} from "./ModelSnapshotPolicy";
+import {DomainUserId} from "./DomainUserId";
+import {getOrDefault} from "../../utils/copy-utils";
 import {CollectionPermissions} from "./CollectionPermissions";
-import {CollectionUserPermissions} from "./CollectionUserPermissions";
 
-export class Collection {
-  constructor(public readonly id: string,
-              public readonly description: string,
-              public readonly worldPermissions: CollectionPermissions,
-              public readonly userPermissions: CollectionUserPermissions[],
-              public readonly overrideSnapshotPolicy: boolean,
-              public readonly snapshotPolicy: ModelSnapshotPolicy
-  ) {
+export class CollectionUserPermissions {
+  constructor(
+    public readonly userId: DomainUserId,
+    public readonly permissions: CollectionPermissions) {
     Object.freeze(this);
+  }
+
+  public copy(modifications: {userId?: DomainUserId, permissions?: CollectionPermissions} = {}): CollectionUserPermissions {
+    return new CollectionUserPermissions(
+      getOrDefault(modifications.userId, this.userId),
+      getOrDefault(modifications.permissions, this.permissions));
   }
 }

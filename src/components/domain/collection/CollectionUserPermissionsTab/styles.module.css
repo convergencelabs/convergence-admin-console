@@ -9,34 +9,41 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
+
+
 .userPermissions:global(.ant-card) {
-    margin-top: 15px;
+  margin-top: 15px;
 }
 
 .userPermissionsContainer {
-    width: 800px;
+  width: 800px;
 }
 
 .description {
-    font-size: 14px;
-    color: #6e6e6e;
-    margin-bottom: 15px;
+  font-size: 14px;
+  color: #6e6e6e;
+  margin-bottom: 15px;
 }
 
 .row {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .addControl {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .addControl :global(.ant-input) {
-    flex: 1;
+  flex: 1;
 }
 
 .addControl :global(.ant-btn) {
-    margin-left: 15px;
+  margin-left: 15px;
+}
+
+.username:global(.ant-select-auto-complete) {
+  flex: 1;
+  margin-right: 15px;
 }

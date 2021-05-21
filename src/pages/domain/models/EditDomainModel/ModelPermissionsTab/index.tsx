@@ -144,12 +144,7 @@ class ModelPermissionsTabComponent extends React.Component<InjectedProps, ModelP
 
   private _renderPermissions = (permissions: ModelPermissions, record: ModelUserPermissions) => {
     return (
-      <ModelUserPermissionsEditor
-        domainId={this.props.domainId}
-        modelId={this.props.modelId}
-        value={record}
-        onChange={this._onSetUserModelPermissions}
-      />
+      <ModelUserPermissionsEditor value={record} onChange={this._onSetUserModelPermissions}/>
     )
   }
 

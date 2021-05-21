@@ -48,6 +48,7 @@ class CreateDomainCollectionComponent extends React.Component<InjectedProps, {}>
       "",
       "",
       new CollectionPermissions(true, true, true, true, false),
+      [],
       false,
       new ModelSnapshotPolicy(
         false,
@@ -67,6 +68,7 @@ class CreateDomainCollectionComponent extends React.Component<InjectedProps, {}>
       <Page breadcrumbs={this._breadcrumbs}>
         <Card title={<span><Icon type="folder"/> New Collection</span>} className={styles.formCard}>
           <DomainCollectionForm
+            domainId={this.props.domainId}
             saveButtonLabel="Create"
             initialValue={this._newCollection}
             onCancel={this._handleCancel}

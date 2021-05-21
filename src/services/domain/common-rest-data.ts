@@ -19,6 +19,7 @@ export interface CollectionData {
   id: string;
   description: string;
   worldPermissions: CollectionPermissionsData;
+  userPermissions: {[key: string]: CollectionPermissionsData};
   overrideSnapshotPolicy: boolean;
   snapshotPolicy: ModelSnapshotPolicyData;
 }
@@ -26,6 +27,7 @@ export interface CollectionData {
 export interface CollectionUpdateData {
   description: string;
   worldPermissions: CollectionPermissionsData;
+  userPermissions: {[key: string]: CollectionPermissionsData};
   overrideSnapshotPolicy: boolean;
   snapshotPolicy?: ModelSnapshotPolicyData;
 }

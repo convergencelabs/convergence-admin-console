@@ -9,6 +9,8 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
+import {getOrDefault} from "../../utils/copy-utils";
+
 export class CollectionPermissions {
   constructor(public readonly read: boolean,
               public readonly write: boolean,
@@ -17,5 +19,21 @@ export class CollectionPermissions {
               public readonly manage: boolean
   ) {
     Object.freeze(this);
+  }
+
+  public copy(modifications: {
+    read?: boolean,
+    write?: boolean,
+    create?: boolean,
+    remove?: boolean,
+    manage?: boolean} = {}): CollectionPermissions {
+
+    return new CollectionPermissions(
+        getOrDefault(modifications.read, this.read),
+        getOrDefault(modifications.write, this.write),
+        getOrDefault(modifications.create, this.create),
+        getOrDefault(modifications.remove, this.remove),
+        getOrDefault(modifications.manage, this.manage)
+    )
   }
 }

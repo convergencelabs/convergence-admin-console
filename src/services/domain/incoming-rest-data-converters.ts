@@ -46,17 +46,29 @@ import {ChatInfo} from "../../models/domain/ChatInfo";
 import {
   ChatCreatedEvent,
   ChatEvent,
-  ChatMessageEvent, ChatNameChangedEvent, ChatTopicChangedEvent, ChatUserAddedEvent,
+  ChatMessageEvent,
+  ChatNameChangedEvent,
+  ChatTopicChangedEvent,
+  ChatUserAddedEvent,
   ChatUserJoinedEvent,
-  ChatUserLeftEvent, ChatUserRemovedEvent
+  ChatUserLeftEvent,
+  ChatUserRemovedEvent
 } from "../../models/domain/ChatEvent";
 import {ConvergenceError} from "@convergence/convergence";
+import {CollectionUserPermissions} from "../../models/domain/CollectionUserPermissions";
 
 export function toCollection(data: CollectionData): Collection {
+  const userPermissions = Object.keys(data.userPermissions).map(username => {
+    return new CollectionUserPermissions(
+        new DomainUserId(DomainUserType.NORMAL, username),
+        toCollectionPermissions(data.userPermissions[username])
+    );
+  })
   return new Collection(
     data.id,
     data.description,
     toCollectionPermissions(data.worldPermissions),
+    userPermissions,
     data.overrideSnapshotPolicy,
     toModelSnapshotPolicy(data.snapshotPolicy));
 }

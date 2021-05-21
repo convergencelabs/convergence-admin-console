@@ -20,4 +20,13 @@ export class DomainUserId {
               public username: string) {
     Object.freeze(this);
   }
+
+  public equals(other: DomainUserId): boolean {
+    if (!other) {
+      return false;
+    }
+
+    return other.type === this.type &&
+        other.username === this.username;
+  }
 }
