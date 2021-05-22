@@ -11,7 +11,7 @@
 
 import * as React from 'react';
 import {Component, ReactNode} from 'react';
-import {AutoComplete, Select} from "antd";
+import {Select} from "antd";
 import {injectAs} from "../../../utils/mobx-utils";
 import {SERVICES} from "../../../services/ServiceConstants";
 import {NamespaceService} from "../../../services/NamespaceService";
@@ -33,14 +33,20 @@ export interface InjectedProps extends NamespaceAutoCompleteProps{
 
 export interface NamespaceAutoCompleteState {
   namespaces: NamespaceAndDomains[];
-  selectedValue: string;
+  selectedValue?: string;
 }
 
 export class NamespaceAutoCompleteComponent extends Component<InjectedProps, NamespaceAutoCompleteState> {
-  state = {
-    namespaces: [],
-    selectedValue: ""
-  };
+  constructor(props: InjectedProps) {
+    super(props);
+    this.state = {
+      namespaces: [],
+      selectedValue: undefined
+    };
+
+    this._onSearch("");
+  }
+
 
   public render(): ReactNode {
     const {namespaces} = this.state;
@@ -54,7 +60,9 @@ export class NamespaceAutoCompleteComponent extends Component<InjectedProps, Nam
         title={namespace.id}>{namespace.displayName} ({namespace.id})
       </Option>);
     return (
-      <AutoComplete
+      <Select
+        showSearch={true}
+        showArrow={false}
         className={className}
         disabled={this.props.disabled}
         onSearch={this._onSearch}
@@ -64,7 +72,7 @@ export class NamespaceAutoCompleteComponent extends Component<InjectedProps, Nam
         placeholder={placeholder || "Select Namespace"}
       >
         {children}
-      </AutoComplete>
+      </Select>
     );
   }
 
