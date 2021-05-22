@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 - Convergence Labs, Inc.
+ * Copyright (c) 2021 - Convergence Labs, Inc.
  *
  * This file is part of the Convergence Server, which is released under
  * the terms of the GNU General Public License version 3 (GPLv3). A copy
@@ -19,14 +19,14 @@ import {CollectionPermissionsControl} from "../CollectionPermissionsControl";
 import {DomainUsernameAutoComplete} from "../../user/DomainUsernameAutoComplete";
 import styles from "./styles.module.css";
 
-interface SetCollectionUserPermissionControlProps {
+export interface SetCollectionUserPermissionControlProps {
   domainId: DomainId;
 
   onSetPermissions(userPermissions: CollectionUserPermissions): void;
 }
 
-interface AddCollectionUserPermissionControlState {
-  username: string;
+export interface AddCollectionUserPermissionControlState {
+  username?: string;
   permissions: CollectionPermissions;
 }
 
@@ -39,15 +39,15 @@ export class AddCollectionUserPermissionControl extends React.Component<SetColle
     this._defaultPermissions = new CollectionPermissions(false, false, false, false, false);
 
     this.state = {
-      username: "",
+      username: undefined,
       permissions: this._defaultPermissions
     }
   }
 
   public render(): ReactNode {
-    const disabled = this.state.username === "";
+    const disabled = this.state.username === "" || this.state.username === undefined;
     return (
-        <div className={styles.addControl}>
+        <div className={styles.container}>
           <DomainUsernameAutoComplete
               domainId={this.props.domainId}
               className={styles.username}
@@ -60,6 +60,7 @@ export class AddCollectionUserPermissionControl extends React.Component<SetColle
               onChange={this._onPermissionsChanged}
           />
           <Button
+              className={styles.addButton}
               htmlType="button"
               type="primary"
               onClick={this._onAdd}
@@ -78,13 +79,17 @@ export class AddCollectionUserPermissionControl extends React.Component<SetColle
   }
 
   private _onAdd = () => {
+    if (!this.state.username) {
+      return;
+    }
+
     this.props.onSetPermissions(new CollectionUserPermissions(
-                new DomainUserId(DomainUserType.NORMAL, this.state.username),
-                this.state.permissions
+        new DomainUserId(DomainUserType.NORMAL, this.state.username),
+        this.state.permissions
     ));
 
     this.setState({
-      username: "",
+      username: undefined,
       permissions: this._defaultPermissions
     });
   }

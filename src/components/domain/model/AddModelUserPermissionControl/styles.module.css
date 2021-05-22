@@ -9,17 +9,17 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-.addControl {
+.container {
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
-.addControl :global(.ant-select-auto-complete ) {
+.username:global(.ant-select) {
     flex: 1;
     margin-right: 15px;
 }
 
-.addControl :global(.ant-btn) {
+.addButton {
     margin-left: 15px;
 }

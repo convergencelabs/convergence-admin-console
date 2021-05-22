@@ -10,7 +10,7 @@
  */
 
 import React, {ReactNode} from 'react';
-import {Button, Popconfirm, Table} from "antd";
+import {Button, Popconfirm, Row, Table} from "antd";
 import {ColumnProps} from "antd/lib/table";
 import {CollectionUserPermissionsEditor} from "../CollectionUserPermissionsEditor";
 import {CollectionUserPermissions} from "../../../../models/domain/CollectionUserPermissions";
@@ -61,20 +61,21 @@ export class CollectionPermissionsTab extends React.Component<CollectionPermissi
   public render(): ReactNode {
     const {permissions} = this.props;
     return (
-        <div className={styles.userPermissionsContainer}>
-          <div className={styles.row}>
+        <div>
+          <Row>
             <AddCollectionUserPermissionControl
                 domainId={this.props.domainId}
                 onSetPermissions={this._onSetUserCollectionPermissions}
             />
-          </div>
-          <div>
-            <Table dataSource={permissions}
+          </Row>
+          <Row>
+            <Table className={styles.table}
+                   dataSource={permissions}
                    columns={this._columns}
                    rowKey={(record: CollectionUserPermissions) => record.userId.type + ":" + record.userId.username}
                    pagination={false}
                    size="middle"/>
-          </div>
+          </Row>
         </div>
     );
   }

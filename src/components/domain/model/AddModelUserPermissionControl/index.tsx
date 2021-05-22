@@ -25,7 +25,7 @@ interface AddModelUserPermissionControlProps {
 }
 
 interface AddModelUserPermissionControlState {
-  username: string;
+  username?: string;
   permissions: ModelPermissions;
 }
 
@@ -38,15 +38,15 @@ export class AddModelUserPermissionControl extends React.Component<AddModelUserP
     this._defaultPermissions = new ModelPermissions(false, false, false, false);
 
     this.state = {
-      username: "",
+      username: undefined,
       permissions: this._defaultPermissions
     }
   }
 
   public render(): ReactNode {
-    const disabled = this.state.username === "";
+    const disabled = this.state.username === "" || this.state.username === undefined;
     return (
-      <div className={styles.addControl}>
+      <div className={styles.container}>
         <DomainUsernameAutoComplete
           domainId={this.props.domainId}
           className={styles.username}
@@ -59,6 +59,7 @@ export class AddModelUserPermissionControl extends React.Component<AddModelUserP
           onChange={this._onPermissionsChanged}
         />
         <Button
+          className={styles.addButton}
           htmlType="button"
           type="primary"
           onClick={this._onAdd}
@@ -77,11 +78,15 @@ export class AddModelUserPermissionControl extends React.Component<AddModelUserP
   }
 
   private _onAdd = () => {
+    if (!this.state.username || this.state.username === "") {
+      return;
+    }
+
     this.props
       .onAdd(new ModelUserPermissions(new DomainUserId(DomainUserType.NORMAL, this.state.username), this.state.permissions))
       .then(() => {
         this.setState({
-          username: "",
+          username: undefined,
           permissions: this._defaultPermissions
         })
       });

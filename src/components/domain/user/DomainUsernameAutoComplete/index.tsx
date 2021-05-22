@@ -11,7 +11,7 @@
 
 import * as React from 'react';
 import {Component, ReactNode} from 'react';
-import {AutoComplete, Select} from "antd";
+import {Select} from "antd";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {DomainUserService} from "../../../../services/domain/DomainUserService";
@@ -34,13 +34,13 @@ export interface InjectedProps extends UserAutoCompleteProps{
 
 export interface UsernameAutoCompleteState {
   users: DomainUser[];
-  selectedValue: string;
+  selectedValue?: string;
 }
 
 class DomainUsernameAutoCompleteComponent extends Component<InjectedProps, UsernameAutoCompleteState> {
   state = {
     users: [],
-    selectedValue: ""
+    selectedValue: undefined
   };
 
   public render(): ReactNode {
@@ -55,16 +55,20 @@ class DomainUsernameAutoCompleteComponent extends Component<InjectedProps, Usern
         title={user.username}>{user.displayName} ({user.username})
       </Option>);
     return (
-      <AutoComplete
+      <Select
+        showSearch={true}
         className={className}
         onSearch={this._onSearch}
         onChange={this._onChange}
         value={inputValue}
         optionLabelProp="value"
         placeholder={placeholder || "Select User"}
+        notFoundContent={null}
+        filterOption={false}
+        showArrow={false}
       >
         {children}
-      </AutoComplete>
+      </Select>
     );
   }
 
@@ -76,7 +80,6 @@ class DomainUsernameAutoCompleteComponent extends Component<InjectedProps, Usern
   private _onSearch = (value: string) => {
     this.props.domainUserService.getUsers(this.props.domainId, value, 0, 10).then(users => {
       this.setState({users});
-
     });
   }
 }
