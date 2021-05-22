@@ -163,6 +163,7 @@ class DomainCollectionFormComponent extends React.Component<DomainCollectionForm
   private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values: any) => {
+      console.log(values);
       if (!err) {
         const {
           id,
@@ -193,12 +194,23 @@ class DomainCollectionFormComponent extends React.Component<DomainCollectionForm
 
         const userPermissions = this.state.userPermissions.slice(0);
 
-        const snapshotPolicy = new ModelSnapshotPolicy(snapshotsEnabled,
-            triggerByVersion, maximumVersion, limitByVersion, minimumVersion,
-            triggerByTime, maximumTime, limitByTime, minimumTime);
+        // We have to or the values here in case the tab was never show, these will be
+        // all undefined, however in that case it means they were not edited and
+        // we can use what was passed in.
+        const snapshotPolicy = new ModelSnapshotPolicy(
+            snapshotsEnabled || this.props.initialValue.snapshotPolicy.snapshotsEnabled,
+            triggerByVersion || this.props.initialValue.snapshotPolicy.triggerByVersion,
+            maximumVersion || this.props.initialValue.snapshotPolicy.maximumVersionInterval,
+            limitByVersion || this.props.initialValue.snapshotPolicy.limitByVersion,
+            minimumVersion || this.props.initialValue.snapshotPolicy.minimumVersionInterval,
+            triggerByTime || this.props.initialValue.snapshotPolicy.triggerByTime,
+            maximumTime || this.props.initialValue.snapshotPolicy.maximumTimeInterval,
+            limitByTime || this.props.initialValue.snapshotPolicy.limitByTime,
+            minimumTime || this.props.initialValue.snapshotPolicy.minimumTimeInterval);
 
         const collection = new Collection(
             id, description, worldPermissions, userPermissions, overrideSnapshotPolicy, snapshotPolicy);
+
         this.props.onSave(collection);
       }
     });
