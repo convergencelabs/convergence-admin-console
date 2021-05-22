@@ -10,7 +10,7 @@
  */
 
 import React, {FormEvent, ReactNode} from "react";
-import {Button, Checkbox, Col, Form, Input, Row, Tabs} from "antd";
+import {Button, Checkbox, Col, Divider, Form, Input, Row, Tabs} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import {FormButtonBar} from "../../../common/FormButtonBar/";
 import {ModelSnapshotPolicyFormFragment} from "../../common/ModelSnapshotPolicyFormFragment";
@@ -21,6 +21,8 @@ import {FormCreateOption} from "antd/es/form";
 import {CollectionPermissionsTab} from "../CollectionUserPermissionsTab";
 import {DomainId} from "../../../../models/DomainId";
 import {CollectionUserPermissions} from "../../../../models/domain/CollectionUserPermissions";
+import {DescriptionBox} from "../../../common/DescriptionBox";
+import styles from "./styles.module.css";
 
 export interface DomainCollectionFormProps extends FormComponentProps {
   domainId: DomainId;
@@ -49,12 +51,11 @@ class DomainCollectionFormComponent extends React.Component<DomainCollectionForm
 
   public render(): ReactNode {
     const {getFieldDecorator} = this.props.form;
-
     const {initialValue, disableId} = this.props;
 
     return (
         <Form onSubmit={this._handleSubmit}>
-          <Row gutter={16}>
+          <Row>
             <Col span={24}>
               <Form.Item label="Id">
                 {getFieldDecorator('id', {
@@ -83,6 +84,13 @@ class DomainCollectionFormComponent extends React.Component<DomainCollectionForm
           <Row>
             <Tabs>
               <Tabs.TabPane tab="World Permissions" key="world_permissions">
+                <div className={styles.description}>
+                  <DescriptionBox>
+                    These permissions apply to all users and all models in this
+                    collection unless the user has specific permissions on this
+                    collection, or on a particular model within the collection.
+                  </DescriptionBox>
+                </div>
                 <Row>
                   <Col span={4}>
                     {getFieldDecorator('readPermission', {
@@ -124,6 +132,12 @@ class DomainCollectionFormComponent extends React.Component<DomainCollectionForm
                 </Row>
               </Tabs.TabPane>
               <Tabs.TabPane tab="User Permissions" key="user_permissions">
+                <div className={styles.description}>
+                  <DescriptionBox>
+                    These permissions apply to specific users accessing all models in the
+                    collection unless the user has specific permissions on a particular model.
+                  </DescriptionBox>
+                </div>
                 <CollectionPermissionsTab
                     domainId={this.props.domainId}
                     permissions={this.state.userPermissions}
@@ -131,6 +145,9 @@ class DomainCollectionFormComponent extends React.Component<DomainCollectionForm
                 />
               </Tabs.TabPane>
               <Tabs.TabPane tab="Model Snapshot Policy" key="snapshot_policy">
+                <Row className={styles.description}>
+                  <DescriptionBox>The collection may override the domain level model snapshot policy.</DescriptionBox>
+                </Row>
                 <Row>
                   <Col span={24}>
                     {getFieldDecorator('overrideSnapshotPolicy', {
@@ -144,6 +161,7 @@ class DomainCollectionFormComponent extends React.Component<DomainCollectionForm
               </Tabs.TabPane>
             </Tabs>
           </Row>
+          <Divider/>
           <Row>
             <Col span={24}>
               <FormButtonBar>

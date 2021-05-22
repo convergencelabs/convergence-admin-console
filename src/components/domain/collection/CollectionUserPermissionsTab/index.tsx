@@ -11,7 +11,6 @@
 
 import React, {ReactNode} from 'react';
 import {Button, Popconfirm, Table} from "antd";
-import styles from "./styles.module.css";
 import {ColumnProps} from "antd/lib/table";
 import {CollectionUserPermissionsEditor} from "../CollectionUserPermissionsEditor";
 import {CollectionUserPermissions} from "../../../../models/domain/CollectionUserPermissions";
@@ -19,10 +18,12 @@ import {AddCollectionUserPermissionControl} from "../AddCollectionUserPermission
 import {DomainId} from "../../../../models/DomainId";
 import {CollectionPermissions} from "../../../../models/domain/CollectionPermissions";
 import {DomainUserId} from "../../../../models/domain/DomainUserId";
+import styles from "./styles.module.css";
 
 export interface CollectionPermissionsProps {
   domainId: DomainId;
   permissions: CollectionUserPermissions[];
+
   onUserPermissionsChanged(permissions: CollectionUserPermissions[]): void;
 }
 
@@ -50,38 +51,37 @@ export class CollectionPermissionsTab extends React.Component<CollectionPermissi
       align: "right",
       width: 50,
       render: (_: any, record: CollectionUserPermissions) => (
-        <Popconfirm title="Delete user permissions?" onConfirm={() => this._deleteUserPermission(record.userId)}>
-          <Button shape="circle" size="small" icon="delete"/>
-        </Popconfirm>
+          <Popconfirm title="Delete user permissions?" onConfirm={() => this._deleteUserPermission(record.userId)}>
+            <Button shape="circle" size="small" icon="delete"/>
+          </Popconfirm>
       )
     }];
   }
 
   public render(): ReactNode {
     const {permissions} = this.props;
-      return (
-            <div className={styles.userPermissionsContainer}>
-              <div className={styles.description}>These permissions apply to specific users accessing the model.</div>
-              <div className={styles.row}>
-                <AddCollectionUserPermissionControl
-                  domainId={this.props.domainId}
-                  onSetPermissions={this._onSetUserCollectionPermissions}
-                />
-              </div>
-              <div>
-                <Table dataSource={permissions}
-                       columns={this._columns}
-                       rowKey={(record: CollectionUserPermissions) => record.userId.type + ":" + record.userId.username}
-                       pagination={false}
-                       size="middle"/>
-              </div>
-            </div>
-      );
+    return (
+        <div className={styles.userPermissionsContainer}>
+          <div className={styles.row}>
+            <AddCollectionUserPermissionControl
+                domainId={this.props.domainId}
+                onSetPermissions={this._onSetUserCollectionPermissions}
+            />
+          </div>
+          <div>
+            <Table dataSource={permissions}
+                   columns={this._columns}
+                   rowKey={(record: CollectionUserPermissions) => record.userId.type + ":" + record.userId.username}
+                   pagination={false}
+                   size="middle"/>
+          </div>
+        </div>
+    );
   }
 
   private _renderPermissions = (permissions: CollectionPermissions, record: CollectionUserPermissions) => {
     return (
-      <CollectionUserPermissionsEditor value={record} onChange={this._onSetUserCollectionPermissions}/>
+        <CollectionUserPermissionsEditor value={record} onChange={this._onSetUserCollectionPermissions}/>
     )
   }
 
