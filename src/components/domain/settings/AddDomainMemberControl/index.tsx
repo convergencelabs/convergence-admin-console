@@ -23,7 +23,7 @@ interface AddDomainMemberControlProps {
 }
 
 interface AddDomainMemberControlState {
-  username: string;
+  username?: string;
   role: string;
 }
 
@@ -35,15 +35,15 @@ export class AddDomainMemberControl extends React.Component<AddDomainMemberContr
     super(props);
 
     this.state = {
-      username: "",
+      username: undefined,
       role: this._defaultRole
     }
   }
 
   public render(): ReactNode {
-    const disabled = this.state.username === "";
+    const disabled = !this.state.username;
     return (
-      <div className={styles.addControl}>
+      <div className={styles.container}>
         <UsernameAutoComplete
           className={styles.username}
           value={this.state.username}
@@ -57,6 +57,7 @@ export class AddDomainMemberControl extends React.Component<AddDomainMemberContr
           <Select.Option value="Owner">Owner</Select.Option>
         </Select>
         <Button
+          className={styles.addButton}
           htmlType="button"
           type="primary"
           onClick={this._onAdd}
@@ -75,6 +76,10 @@ export class AddDomainMemberControl extends React.Component<AddDomainMemberContr
   }
 
   private _onAdd = () => {
+    if (!this.state.username) {
+      return;
+    }
+
     this.props
       .onAdd(new DomainMember(this.state.username, this.state.role))
       .then(() => {

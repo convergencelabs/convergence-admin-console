@@ -11,7 +11,7 @@
 
 import * as React from 'react';
 import {Component, ReactNode} from 'react';
-import {AutoComplete, Select} from "antd";
+import {Select} from "antd";
 import {injectAs} from "../../../utils/mobx-utils";
 import {SERVICES} from "../../../services/ServiceConstants";
 import {UserService} from "../../../services/UserService";
@@ -33,13 +33,13 @@ export interface InjectedProps extends UserAutoCompleteProps {
 
 export interface UsernameAutoCompleteState {
   users: ConvergenceUser[];
-  selectedValue: string;
+  selectedValue?: string;
 }
 
 export class UsernameAutoCompleteComponent extends Component<InjectedProps, UsernameAutoCompleteState> {
   state = {
     users: [],
-    selectedValue: ""
+    selectedValue: undefined
   };
 
   public render(): ReactNode {
@@ -56,8 +56,10 @@ export class UsernameAutoCompleteComponent extends Component<InjectedProps, User
           title={user.username}>{user.displayName} ({user.username})
         </Option>);
     return (
-      <AutoComplete
+      <Select
         className={className}
+        showSearch={true}
+        showArrow={false}
         onSearch={this._onSearch}
         onChange={this._onChange}
         value={inputValue}
@@ -65,7 +67,7 @@ export class UsernameAutoCompleteComponent extends Component<InjectedProps, User
         placeholder={placeholder || "Select User"}
       >
         {children}
-      </AutoComplete>
+      </Select>
     );
   }
 
