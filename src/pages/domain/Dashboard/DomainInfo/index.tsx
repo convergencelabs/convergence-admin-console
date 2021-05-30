@@ -17,10 +17,11 @@ import {DomainId} from "../../../../models/DomainId";
 import {InfoTable, InfoTableRow} from "../../../../components/server/InfoTable";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
-import {formatDomainStatus} from "../../../../utils/format-utils";
+import {formatDomainAvailability, formatDomainStatus} from "../../../../utils/format-utils";
 import {DomainStatusIcon} from "../../../../components/common/DomainStatusIcon";
 import {STORES} from "../../../../stores/StoreConstants";
 import {ConfigStore} from "../../../../stores/ConfigStore";
+import {DomainAvailabilityIcon} from "../../../../components/common/DomainAvailabilityIcon";
 
 export interface DomainInfoProps {
   domainId: DomainId;
@@ -66,7 +67,10 @@ export class DomainInfoComponent extends React.Component<InjectedProps, DomainIn
           <InfoTableRow label="Namespace">{domain.namespace}</InfoTableRow>
           <InfoTableRow label="Id">{domain.id}</InfoTableRow>
           <InfoTableRow label="Schema Version">{domain.schemaVersion}</InfoTableRow>
-          <InfoTableRow label="Status">
+          <InfoTableRow label="Availability / Status">
+            <span style={{marginRight: 10}}>{formatDomainAvailability(domain.availability)}</span>
+            <DomainAvailabilityIcon availability={domain.availability}/>
+            <span> / </span>
             <span style={{marginRight: 10}}>{formatDomainStatus(domain.status)}</span>
             <DomainStatusIcon status={domain.status}/>
           </InfoTableRow>

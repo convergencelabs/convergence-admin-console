@@ -12,6 +12,7 @@
 import moment from "moment";
 import {DomainUserId, DomainUserType} from "../models/domain/DomainUserId";
 import {DomainStatus} from "../models/DomainStatus";
+import {DomainAvailability} from "../models/DomainAvailability";
 
 export function shortDateTime(time: Date | number): string {
   return moment(time).format("MM/DD @ hh:mma")
@@ -106,5 +107,18 @@ export function formatDomainStatus(status: DomainStatus): string {
       return "Ready";
     default:
       throw new Error("Unknown domain status: " + status);
+  }
+}
+
+export function formatDomainAvailability(availability: DomainAvailability): string {
+  switch (availability) {
+    case DomainAvailability.ONLINE:
+      return "Online";
+    case DomainAvailability.OFFLINE:
+      return "Offline";
+    case DomainAvailability.MAINTENANCE:
+      return "Maintenance";
+    default:
+      throw new Error("Unknown domain availability: " + availability);
   }
 }

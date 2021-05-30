@@ -24,7 +24,7 @@ import Tooltip from "antd/es/tooltip";
 import {NamespaceAutoComplete} from "../../../../components/server/NamespaceAutoComplete";
 import {LoggedInUserService} from "../../../../services/LoggedInUserService";
 import {DomainId} from "../../../../models/DomainId";
-import {formatDomainStatus} from "../../../../utils/format-utils";
+import {formatDomainAvailability, formatDomainStatus} from "../../../../utils/format-utils";
 import {DomainStatusIcon} from "../../../../components/common/DomainStatusIcon";
 import {DomainStatus} from "../../../../models/DomainStatus";
 import {DisableableLink} from "../../../../components/common/DisableableLink";
@@ -32,6 +32,7 @@ import {STORES} from "../../../../stores/StoreConstants";
 import {ConfigStore} from "../../../../stores/ConfigStore";
 import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
 import {toDomainRoute} from "../../../../utils/domain-url";
+import {DomainAvailabilityIcon} from "../../../../components/common/DomainAvailabilityIcon";
 
 interface InjectedProps extends RouteComponentProps {
   domainService: DomainService;
@@ -74,6 +75,16 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
       dataIndex: 'id',
       sorter: (a: any, b: any) => (a.id as string).localeCompare(b.id)
     }, {
+      title: 'Availability',
+      dataIndex: 'availability',
+      align: 'left',
+      render: (val: any, domain: DomainDescriptor) => (
+          <span>
+          <DomainAvailabilityIcon availability={domain.availability}/>
+          <span style={{marginLeft: 10}}>{formatDomainAvailability(domain.availability)}</span>
+        </span>
+      )
+    }, {
       title: 'Status',
       dataIndex: 'status',
       align: 'left',
@@ -84,7 +95,7 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
         </span>
       )
     }, {
-      title: '',
+      title: 'Actions',
       dataIndex: '',
       width: '100px',
       align: 'right',

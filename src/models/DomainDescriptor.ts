@@ -11,12 +11,14 @@
 
 import {DomainStatus} from "./DomainStatus";
 import {DomainId} from "./DomainId";
+import {DomainAvailability} from "./DomainAvailability";
 
 export class DomainDescriptor {
   constructor(public namespace: string,
               public id: string,
               public displayName: string,
               public schemaVersion: string | null,
+              public availability: DomainAvailability,
               public status: DomainStatus
   ) {
     Object.freeze(this);

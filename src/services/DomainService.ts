@@ -15,6 +15,7 @@ import {DomainStatus} from "../models/DomainStatus";
 import {DomainId} from "../models/DomainId";
 import {DomainStatistics} from "../models/domain/DomainStatistics";
 import {DomainStatisticsData} from "./domain/common-rest-data";
+import {DomainAvailability} from "../models/DomainAvailability";
 
 export interface DomainDescriptorData {
   namespace: string;
@@ -22,26 +23,27 @@ export interface DomainDescriptorData {
   displayName: string;
   owner: string;
   schemaVersion?: string;
+  availability: string;
   status: string;
 }
 
 export class DomainService extends AbstractAuthenticatedService {
   public getDomains(namespace?: string, filter?: string, offset?: number, limit?: number): Promise<DomainDescriptor[]> {
     return this
-      ._get<DomainDescriptorData[]>("domains", this._filterParams({namespace, filter, offset, limit}, [""]))
-      .then(domains => domains.map(DomainService._toDomainDescriptor));
+        ._get<DomainDescriptorData[]>("domains", this._filterParams({namespace, filter, offset, limit}, [""]))
+        .then(domains => domains.map(DomainService._toDomainDescriptor));
   }
 
   public getDomain(domainId: DomainId): Promise<DomainDescriptor> {
     return this
-      ._get<DomainDescriptorData>(`domains/${domainId.namespace}/${domainId.id}`)
-      .then(DomainService._toDomainDescriptor);
+        ._get<DomainDescriptorData>(`domains/${domainId.namespace}/${domainId.id}`)
+        .then(DomainService._toDomainDescriptor);
   }
 
   public getDomainStats(domainId: DomainId): Promise<DomainStatistics> {
     return this
-      ._get<DomainStatisticsData>(`domains/${domainId.namespace}/${domainId.id}/stats`)
-      .then(DomainService._toDomainStatistics);
+        ._get<DomainStatisticsData>(`domains/${domainId.namespace}/${domainId.id}/stats`)
+        .then(DomainService._toDomainStatistics);
   }
 
   public createDomain(domainId: DomainId, displayName: string): Promise<void> {
@@ -52,8 +54,8 @@ export class DomainService extends AbstractAuthenticatedService {
   public updateDomain(domainId: DomainId, displayName: string): Promise<DomainDescriptor> {
     const data = {displayName};
     return this
-      ._put<DomainDescriptorData>(`domains/${domainId.namespace}/${domainId.id}`, data)
-      .then(DomainService._toDomainDescriptor);
+        ._put<DomainDescriptorData>(`domains/${domainId.namespace}/${domainId.id}`, data)
+        .then(DomainService._toDomainDescriptor);
   }
 
   public deleteDomain(domainId: DomainId): Promise<void> {
@@ -62,10 +64,10 @@ export class DomainService extends AbstractAuthenticatedService {
 
   public static _toDomainStatistics(data: DomainStatisticsData): DomainStatistics {
     return new DomainStatistics(
-      data.activeSessionCount,
-      data.userCount,
-      data.modelCount,
-      data.dbSize
+        data.activeSessionCount,
+        data.userCount,
+        data.modelCount,
+        data.dbSize
     );
   }
 
@@ -85,12 +87,26 @@ export class DomainService extends AbstractAuthenticatedService {
         status = DomainStatus.DELETING;
         break;
     }
+
+    let availability: DomainAvailability = DomainAvailability.ONLINE;
+    switch (data.availability) {
+      case DomainAvailability.ONLINE:
+        availability = DomainAvailability.ONLINE;
+        break;
+      case DomainAvailability.MAINTENANCE:
+        availability = DomainAvailability.MAINTENANCE;
+        break;
+      case DomainAvailability.OFFLINE:
+        availability = DomainAvailability.OFFLINE;
+        break;
+    }
     return new DomainDescriptor(
-      data.namespace,
-      data.domainId,
-      data.displayName,
-      data.schemaVersion || null,
-      status!);
+        data.namespace,
+        data.domainId,
+        data.displayName,
+        data.schemaVersion || null,
+        availability,
+        status!);
   }
 }
 

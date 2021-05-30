@@ -19,7 +19,7 @@ import {injectObserver} from "../../../utils/mobx-utils";
 import {domainRealtimeUrl, toDomainRoute} from "../../../utils/domain-url";
 import {CopyAddOnButton} from "../../common/CopyAddonButton/";
 import {DomainStatusIcon} from "../../common/DomainStatusIcon";
-import {formatDomainStatus} from "../../../utils/format-utils";
+import {formatDomainAvailability, formatDomainStatus} from "../../../utils/format-utils";
 import {DomainStatus} from "../../../models/DomainStatus";
 import {DisableableLink} from "../../common/DisableableLink"
 import classNames from "classnames";
@@ -27,6 +27,7 @@ import {STORES} from "../../../stores/StoreConstants";
 import {ConfigStore} from "../../../stores/ConfigStore";
 import {DomainId} from "../../../models/DomainId";
 import {RouteComponentProps, withRouter} from "react-router";
+import {DomainAvailabilityIcon} from "../../common/DomainAvailabilityIcon";
 
 export interface DomainCardProps {
   domain: DomainDescriptor
@@ -59,6 +60,11 @@ export class DomainCardComponent extends Component<InjectedProps, {}> {
         <span className={styles.status}>
           <Tooltip title={formatDomainStatus(domain.status)}>
             <span><DomainStatusIcon status={domain.status}/></span>
+          </Tooltip>
+        </span>
+        <span className={styles.status}>
+          <Tooltip title={formatDomainAvailability(domain.availability)}>
+            <span><DomainAvailabilityIcon availability={domain.availability}/></span>
           </Tooltip>
         </span>
         <div className={styles.nsid}>{domain.namespace} / {domain.id}</div>
