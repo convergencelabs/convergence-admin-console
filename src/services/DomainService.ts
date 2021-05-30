@@ -72,11 +72,8 @@ export class DomainService extends AbstractAuthenticatedService {
   public static _toDomainDescriptor(data: DomainDescriptorData): DomainDescriptor {
     let status: DomainStatus;
     switch (data.status) {
-      case DomainStatus.ONLINE:
-        status = DomainStatus.ONLINE;
-        break;
-      case DomainStatus.OFFLINE:
-        status = DomainStatus.OFFLINE;
+      case DomainStatus.READY:
+        status = DomainStatus.READY;
         break;
       case DomainStatus.INITIALIZING:
         status = DomainStatus.INITIALIZING;
@@ -86,9 +83,6 @@ export class DomainService extends AbstractAuthenticatedService {
         break;
       case DomainStatus.DELETING:
         status = DomainStatus.DELETING;
-        break;
-      case DomainStatus.MAINTENANCE:
-        status = DomainStatus.MAINTENANCE;
         break;
     }
     return new DomainDescriptor(

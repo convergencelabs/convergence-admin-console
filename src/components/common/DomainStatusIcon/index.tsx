@@ -30,12 +30,8 @@ export class DomainStatusIcon extends React.Component<DomainStatusIconProps, {}>
 
   private _iconType(status: DomainStatus): string {
     switch (status) {
-      case DomainStatus.ONLINE:
+      case DomainStatus.READY:
         return "check-circle";
-      case DomainStatus.OFFLINE:
-        return "disconnect";
-      case DomainStatus.MAINTENANCE:
-        return "pause-circle";
       case DomainStatus.INITIALIZING:
         return "sync";
       case DomainStatus.DELETING:
@@ -49,12 +45,8 @@ export class DomainStatusIcon extends React.Component<DomainStatusIconProps, {}>
 
   private _className(status: DomainStatus): string {
     switch (status) {
-      case DomainStatus.ONLINE:
-        return styles.online;
-      case DomainStatus.OFFLINE:
-        return styles.offline;
-      case DomainStatus.MAINTENANCE:
-        return styles.maintenance;
+      case DomainStatus.READY:
+        return styles.ready;
       case DomainStatus.INITIALIZING:
         return styles.initializing;
       case DomainStatus.DELETING:

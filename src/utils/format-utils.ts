@@ -96,18 +96,14 @@ export function formatBytes(bytes: number, decimals: number) {
 
 export function formatDomainStatus(status: DomainStatus): string {
   switch (status) {
-    case DomainStatus.ONLINE:
-      return "Online";
-    case DomainStatus.OFFLINE:
-      return "Offline";
     case DomainStatus.ERROR:
       return "Error";
     case DomainStatus.INITIALIZING:
       return "Initializing";
     case DomainStatus.DELETING:
       return "Deleting";
-    case DomainStatus.MAINTENANCE:
-      return "Maintenance";
+    case DomainStatus.READY:
+      return "Ready";
     default:
       throw new Error("Unknown domain status: " + status);
   }

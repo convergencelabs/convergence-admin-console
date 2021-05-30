@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 - Convergence Labs, Inc.
+ * Copyright (c) 2020 - Convergence Labs, Inc.
  *
  * This file is part of the Convergence Server, which is released under
  * the terms of the GNU General Public License version 3 (GPLv3). A copy
@@ -9,9 +9,8 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-export enum DomainStatus {
-  READY = "ready",
-  INITIALIZING = "initializing",
-  ERROR = "error",
-  DELETING = "deleting"
+export enum DomainAvailability {
+  ONLINE = "online",
+  OFFLINE = "offline",
+  MAINTENANCE = "maintenance"
 }

@@ -13,7 +13,7 @@
   color: red;
 }
 
-:global(.anticon).ready {
+:global(.anticon).online {
   color: green;
 }
 
