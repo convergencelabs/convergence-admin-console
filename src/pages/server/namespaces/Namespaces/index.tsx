@@ -9,7 +9,7 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import React, {ReactNode} from "react";
+import React, {KeyboardEvent, ReactNode} from "react";
 import {Page} from "../../../../components";
 import {
   DeleteOutlined, FolderOutlined,
@@ -37,6 +37,7 @@ export interface InjectedProps extends RouteComponentProps {
 
 interface NamespacesState {
   namespaces: NamespaceAndDomains[] | null;
+  namespaceFilter: string | undefined
 }
 
 class NamespacesComponent extends React.Component<InjectedProps, NamespacesState> {
@@ -80,7 +81,8 @@ class NamespacesComponent extends React.Component<InjectedProps, NamespacesState
     }
 
     this.state = {
-      namespaces: null
+      namespaces: null,
+      namespaceFilter: ""
     };
 
     this._loadNamespaces();
@@ -111,7 +113,7 @@ class NamespacesComponent extends React.Component<InjectedProps, NamespacesState
     return (
       <CardTitleToolbar title="Namespaces" icon={<FolderOutlined />}>
         <span className={styles.search}>
-          <Input placeholder="Search Namespaces" addonAfter={<SearchOutlined />}/>
+          <Input placeholder="Search Namespaces" addonAfter={<SearchOutlined />} onKeyUp={this._onFilterChange}/>
         </span>
         {loggedInUserStore.isServerAdmin() || loggedInUserStore.isDomainAdmin() ?
           <Tooltip placement="topRight" title="Create Namespace" mouseEnterDelay={1}>
@@ -156,7 +158,6 @@ class NamespacesComponent extends React.Component<InjectedProps, NamespacesState
     return (<span className={styles.actions}>{deleteComponent}</span>);
   }
 
-
   private _onDeleteNamespace = (namespaceId: string) => {
     this.props.namespaceService.deleteNamespace(namespaceId)
       .then(() => {
@@ -178,13 +179,21 @@ class NamespacesComponent extends React.Component<InjectedProps, NamespacesState
     this.props.history.push("/create-namespace");
   }
 
+  private _onFilterChange = (event: KeyboardEvent<HTMLInputElement>) => {
+    this.setState({namespaceFilter: (event.target as HTMLInputElement).value}, this._loadNamespaces);
+  }
+
   private _loadNamespaces = () => {
-    const {promise, subscription} = makeCancelable(this.props.namespaceService.getNamespaces());
+    if (this._namepsacesSubscription !== null) {
+      this._namepsacesSubscription.unsubscribe();
+    }
+    const {promise, subscription} = makeCancelable(this.props.namespaceService.getNamespaces(this.state.namespaceFilter));
     this._namepsacesSubscription = subscription;
     promise.then(namespaces => {
       this._namepsacesSubscription = null;
       this.setState({namespaces});
     }).catch(err => {
+      console.error(err);
       this._namepsacesSubscription = null;
       this.setState({namespaces: null});
     });
