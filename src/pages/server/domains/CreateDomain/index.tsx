@@ -12,7 +12,7 @@
 import React, {ReactNode} from "react";
 import {Page} from "../../../../components";
 import {DatabaseOutlined} from '@ant-design/icons';
-import {Button, Card, Col, Form, FormInstance, Input, notification, Radio, Row} from "antd";
+import {Button, Card, Col, Form, Input, notification, Radio, Row} from "antd";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
 import {NamespaceAutoComplete} from "../../../../components/server/NamespaceAutoComplete";
@@ -47,8 +47,6 @@ class CreateDomainComponent extends React.Component<InjectedProps, CreateDomainS
     {title: "New Domain"}
   ];
 
-  private _formRef = React.createRef<FormInstance>();
-
   state = {
     confirmDirty: false,
     namespaceType: this.props.configStore.userNamespacesEnabled ? USER : SHARED
@@ -58,9 +56,7 @@ class CreateDomainComponent extends React.Component<InjectedProps, CreateDomainS
     return (
         <Page breadcrumbs={this._breadcrumbs}>
           <Card title={<span><DatabaseOutlined/> New Domain</span>} className={styles.formCard}>
-            <Form ref={this._formRef}
-                  layout="vertical"
-                  onFinish={this._handleSubmit}>
+            <Form layout="vertical" onFinish={this._handleSubmit}>
               {
                 this.props.configStore.namespacesEnabled && this.props.configStore.userNamespacesEnabled ?
                     <Row gutter={16}>
@@ -138,41 +134,39 @@ class CreateDomainComponent extends React.Component<InjectedProps, CreateDomainS
     this.props.history.push("/domains/");
   }
 
-  private _handleSubmit = () => {
-    this._formRef.current!.validateFields().then(values => {
-      const {namespace, id, displayName, namespaceType} = values;
-      let ns: string;
+  private _handleSubmit = (values: any) => {
+    const {namespace, id, displayName, namespaceType} = values;
+    let ns: string;
 
-      if (this.props.configStore.namespacesEnabled) {
-        ns = namespaceType === USER ?
-            "~" + this.props.profileStore.loggedInUser!.username :
-            namespace;
-      } else {
-        ns = this.props.configStore.defaultNamespace;
-      }
+    if (this.props.configStore.namespacesEnabled) {
+      ns = namespaceType === USER ?
+          "~" + this.props.profileStore.loggedInUser!.username :
+          namespace;
+    } else {
+      ns = this.props.configStore.defaultNamespace;
+    }
 
-      this.props.domainService
-          .createDomain(new DomainId(ns, id), displayName)
-          .then(() => {
-            notification.success({
-              message: "Domain Created",
-              description: `The domain '${ns}/${id}' was successfully created.`
-            });
-            this.props.history.push("/domains/");
-          })
-          .catch(err => {
-            let message;
-            if (err instanceof RestError && err.code === "namespace_not_found") {
-              message = `The domain could not be created because the namespace '${err.details['namespace']}' does not exist`;
-            } else {
-              message = "The domain could not be created."
-            }
-            notification.error({
-              message: "Domain Not Created",
-              description: message
-            });
+    this.props.domainService
+        .createDomain(new DomainId(ns, id), displayName)
+        .then(() => {
+          notification.success({
+            message: "Domain Created",
+            description: `The domain '${ns}/${id}' was successfully created.`
           });
-    });
+          this.props.history.push("/domains/");
+        })
+        .catch(err => {
+          let message;
+          if (err instanceof RestError && err.code === "namespace_not_found") {
+            message = `The domain could not be created because the namespace '${err.details['namespace']}' does not exist`;
+          } else {
+            message = "The domain could not be created."
+          }
+          notification.error({
+            message: "Domain Not Created",
+            description: message
+          });
+        });
   }
 }
 

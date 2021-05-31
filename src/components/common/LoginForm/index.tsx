@@ -12,7 +12,7 @@
 import React, {Component, ReactNode} from 'react';
 import {Redirect, RouteComponentProps, StaticContext} from "react-router";
 import {LockOutlined, UserOutlined, WarningOutlined} from '@ant-design/icons';
-import {Button, Checkbox, Form, FormInstance, Input} from 'antd';
+import {Button, Checkbox, Form, Input} from 'antd';
 import styles from "./styles.module.css";
 import logo from "../../../assets/images/logo.png";
 import {AuthService} from "../../../services/AuthService";
@@ -31,7 +31,7 @@ export interface LoginFormLocation {
 }
 
 
-export interface InjectedProps extends RouteComponentProps<{ }, StaticContext, LoginFormLocation> {
+export interface InjectedProps extends RouteComponentProps<{}, StaticContext, LoginFormLocation> {
   authStore: AuthStore;
   authService: AuthService;
   loggedInUserService: LoggedInUserService;
@@ -49,33 +49,30 @@ class NormalLoginForm extends Component<InjectedProps, LoginFormState> {
     errorMessage: null
   };
 
-  private _formRef = React.createRef<FormInstance>();
 
-  handleSubmit = () => {
-    this._formRef.current!.validateFields().then(values => {
-      const {username, password} = values;
-      this.props.authService.login(username, password)
-          .then(resp => {
-            const {token, expiresIn} = resp;
-            const expiresAt = new Date(Date.now() + expiresIn).getTime();
-            this.props.authStore.setAuthenticated(resp.token);
-            localStorageService.setAuthToken({token, expiresAt});
-            return this.props.loggedInUserService.getLoggedInUser();
-          })
-          .then((profile) => {
-            this.props.profileStore.setLoggedInUser(profile);
-            this.setState({
-              redirectToReferrer: true,
-              errorMessage: null
-            });
-          })
-          .catch(err => {
-            console.log(err);
-            this.setState({
-              errorMessage: "Invalid credentials"
-            })
+  handleSubmit = (values: any) => {
+    const {username, password} = values;
+    this.props.authService.login(username, password)
+        .then(resp => {
+          const {token, expiresIn} = resp;
+          const expiresAt = new Date(Date.now() + expiresIn).getTime();
+          this.props.authStore.setAuthenticated(resp.token);
+          localStorageService.setAuthToken({token, expiresAt});
+          return this.props.loggedInUserService.getLoggedInUser();
+        })
+        .then((profile) => {
+          this.props.profileStore.setLoggedInUser(profile);
+          this.setState({
+            redirectToReferrer: true,
+            errorMessage: null
           });
-    });
+        })
+        .catch(err => {
+          console.log(err);
+          this.setState({
+            errorMessage: "Invalid credentials"
+          })
+        });
   }
 
   render(): ReactNode {
@@ -99,7 +96,7 @@ class NormalLoginForm extends Component<InjectedProps, LoginFormState> {
             <img alt="Convergence Logo" className={styles.logo} src={logo}/>
             <div className={styles.title}>Convergence</div>
           </div>
-          <Form ref={this._formRef} onFinish={this.handleSubmit} className={styles.loginForm}>
+          <Form onFinish={this.handleSubmit} className={styles.loginForm}>
             <Form.Item name="username"
                        rules={[{required: true, message: 'Please input your username!'}]}>
               <Input prefix={<UserOutlined style={{color: 'rgba(0,0,0,.25)'}}/>}

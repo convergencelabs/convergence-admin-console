@@ -10,7 +10,7 @@
  */
 
 import React, {ReactNode} from "react";
-import {Button, Col, Form, FormInstance, notification, Row} from "antd";
+import {Button, Col, Form, notification, Row} from "antd";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {DomainId} from "../../../../models/DomainId";
@@ -35,7 +35,6 @@ export interface ModelSnapshotPolicySettingsComponentState {
 
 class ModelSnapshotPolicySettingsComponent extends React.Component<InjectedProps, ModelSnapshotPolicySettingsComponentState> {
   private _subscription: PromiseSubscription | null;
-  private _formRef = React.createRef<FormInstance>();
 
   constructor(props: InjectedProps) {
     super(props);
@@ -58,16 +57,16 @@ class ModelSnapshotPolicySettingsComponent extends React.Component<InjectedProps
   public render(): ReactNode {
     if (this.state.initialValue !== null) {
       return (
-        <Form ref={this._formRef} onFinish={this._handleSubmit}>
-          <ModelSnapshotPolicyFormFragment initialValue={this.state.initialValue}/>
-          <Row>
-            <Col span={24}>
-              <FormButtonBar>
-                <Button type="primary" htmlType="submit">Apply</Button>
-              </FormButtonBar>
-            </Col>
-          </Row>
-        </Form>
+          <Form layout="vertical" onFinish={this._handleSubmit}>
+            <ModelSnapshotPolicyFormFragment initialValue={this.state.initialValue}/>
+            <Row>
+              <Col span={24}>
+                <FormButtonBar>
+                  <Button type="primary" htmlType="submit">Apply</Button>
+                </FormButtonBar>
+              </Col>
+            </Row>
+          </Form>
       );
     } else {
       return null;
@@ -75,40 +74,40 @@ class ModelSnapshotPolicySettingsComponent extends React.Component<InjectedProps
   }
 
 
-  private _handleSubmit = () => {
-    this._formRef.current!.validateFields().then(values => {
-        const {
-          snapshotsEnabled,
-          triggerByVersion,
-          maximumVersion,
-          limitByVersion,
-          minimumVersion,
+  private _handleSubmit = (values: any) => {
+    const {
+      snapshotsEnabled,
+      triggerByVersion,
+      maximumVersion,
+      limitByVersion,
+      minimumVersion,
 
-          triggerByTime,
-          maximumTime,
-          limitByTime,
-          minimumTime
-        } = values;
+      triggerByTime,
+      maximumTime,
+      limitByTime,
+      minimumTime
+    } = values;
 
-        const policy = new ModelSnapshotPolicy(
-          snapshotsEnabled,
-          triggerByVersion,
-          maximumVersion,
-          limitByVersion,
-          minimumVersion,
+    const policy = new ModelSnapshotPolicy(
+        snapshotsEnabled,
+        triggerByVersion,
+        maximumVersion,
+        limitByVersion,
+        minimumVersion,
 
-          triggerByTime,
-          maximumTime,
-          limitByTime,
-          minimumTime
-        );
-        this.props.domainConfigService.setModelSnapshotPolicy(this.props.domainId, policy)
-          .then(() => {
-            notification.success({
-              message: 'Settings Updated',
-              description: `The domain model snapshot policy settings were successfully updated.`
-            });
-          }).catch((err) => {
+        triggerByTime,
+        maximumTime,
+        limitByTime,
+        minimumTime
+    );
+    this.props.domainConfigService.setModelSnapshotPolicy(this.props.domainId, policy)
+        .then(() => {
+          notification.success({
+            message: 'Settings Updated',
+            description: `The domain model snapshot policy settings were successfully updated.`
+          });
+        })
+        .catch((err) => {
           if (err instanceof RestError) {
             if (err.code === "duplicate") {
               notification.error({
@@ -118,20 +117,19 @@ class ModelSnapshotPolicySettingsComponent extends React.Component<InjectedProps
             }
           }
         });
-    });
   }
 
   private _loadConfig = () => {
     const {promise, subscription} = makeCancelable(
-      this.props.domainConfigService.getModelSnapshotPolicy(this.props.domainId));
+        this.props.domainConfigService.getModelSnapshotPolicy(this.props.domainId));
     this._subscription = subscription;
     promise.then(initialValue => {
-        this.setState({initialValue});
-        this._subscription = null;
-      }
+          this.setState({initialValue});
+          this._subscription = null;
+        }
     );
   }
 }
 
 const injections = [SERVICES.DOMAIN_CONFIG_SERVICE];
-export const ModelSnapshotPolicySettings = injectAs<ModelSnapshotPolicySettingsProps>(injections,ModelSnapshotPolicySettingsComponent);
+export const ModelSnapshotPolicySettings = injectAs<ModelSnapshotPolicySettingsProps>(injections, ModelSnapshotPolicySettingsComponent);

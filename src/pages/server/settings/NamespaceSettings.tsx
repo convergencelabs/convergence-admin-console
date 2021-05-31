@@ -10,7 +10,7 @@
  */
 
 import React, {ReactNode} from "react";
-import {Button, Form, FormInstance, Input, notification, Select} from "antd";
+import {Button, Form, Input, notification, Select} from "antd";
 import {FormButtonBar} from "../../../components/common/FormButtonBar/";
 import {injectAs} from "../../../utils/mobx-utils";
 import {SERVICES} from "../../../services/ServiceConstants";
@@ -38,7 +38,6 @@ const DISABLED = "disabled";
 
 class NamespaceSettingsComponent extends React.Component<InjectedProps, NamespaceAndDomainSettingsState> {
   private _configSubscription: PromiseSubscription | null;
-  private _formRef = React.createRef<FormInstance>();
 
   constructor(props: InjectedProps) {
     super(props);
@@ -60,9 +59,7 @@ class NamespaceSettingsComponent extends React.Component<InjectedProps, Namespac
       const defaultNamespace = this.state.configs.get(CONFIG.Namespaces.DefaultNamespace);
 
       return (
-          <Form ref={this._formRef}
-                layout="vertical"
-                onFinish={this._handleSubmit}>
+          <Form layout="vertical" onFinish={this._handleSubmit}>
             <Form.Item name="namespacesEnabled"
                        label="Namespaces"
                        tooltip="Determines if the server will allow grouping related domains into namespaces"
@@ -106,33 +103,31 @@ class NamespaceSettingsComponent extends React.Component<InjectedProps, Namespac
     }
   }
 
-  private _handleSubmit = () => {
-    this._formRef.current!.validateFields().then(values => {
-      const {defaultNamespace, namespacesEnabled, userNamespacesEnabled} = values;
-      const config = new NamespaceConfig(
-          namespacesEnabled === ENABLED,
-          userNamespacesEnabled === ENABLED,
-          defaultNamespace
-      );
-      this.props.configService
-          .setNamespaceConfig(config)
-          .then(() => {
-            this.props.configStore.setDefaultNamespace(defaultNamespace);
-            this.props.configStore.setNamespacesEnabled(namespacesEnabled === ENABLED);
-            this.props.configStore.setUserNamespacesEnabled(userNamespacesEnabled === ENABLED);
-            notification.success({
-              message: "Configuration Saved",
-              description: "Namespace configuration successfully saved."
-            })
+  private _handleSubmit = (values: any) => {
+    const {defaultNamespace, namespacesEnabled, userNamespacesEnabled} = values;
+    const config = new NamespaceConfig(
+        namespacesEnabled === ENABLED,
+        userNamespacesEnabled === ENABLED,
+        defaultNamespace
+    );
+    this.props.configService
+        .setNamespaceConfig(config)
+        .then(() => {
+          this.props.configStore.setDefaultNamespace(defaultNamespace);
+          this.props.configStore.setNamespacesEnabled(namespacesEnabled === ENABLED);
+          this.props.configStore.setUserNamespacesEnabled(userNamespacesEnabled === ENABLED);
+          notification.success({
+            message: "Configuration Saved",
+            description: "Namespace configuration successfully saved."
           })
-          .catch(err => {
-            console.error(err);
-            notification.error({
-              message: "Configuration Not Saved",
-              description: "Namespace  configuration could not be saved."
-            })
-          });
-    });
+        })
+        .catch(err => {
+          console.error(err);
+          notification.error({
+            message: "Configuration Not Saved",
+            description: "Namespace  configuration could not be saved."
+          })
+        });
   }
 
   private _loadConfig(): void {

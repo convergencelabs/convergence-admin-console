@@ -10,7 +10,7 @@
  */
 
 import React, {ReactNode} from "react";
-import {Button, Col, Form, FormInstance, Input, Row, Select} from "antd";
+import {Button, Col, Form, Input, Row, Select} from "antd";
 import styles from "./styles.module.css";
 
 export interface SessionTableFilters {
@@ -25,11 +25,10 @@ export interface SessionTableControlsProps {
 }
 
 export class SessionTableControls extends React.Component<SessionTableControlsProps, {}> {
-  private _formRef = React.createRef<FormInstance>();
 
   public render(): ReactNode {
     return (
-        <Form ref={this._formRef}>
+        <Form>
           <div className={styles.toolbar}>
             <Row gutter={16}>
               <Col span={6}>
@@ -88,10 +87,8 @@ export class SessionTableControls extends React.Component<SessionTableControlsPr
     );
   }
 
-  private _handleSubmit = () => {
-    this._formRef.current!.validateFields().then(values => {
-      const {sessionId, username, remoteHost, authMethod} = values;
-      this.props.onFilter({sessionId, username, remoteHost, authMethod});
-    });
+  private _handleSubmit = (values: any) => {
+    const {sessionId, username, remoteHost, authMethod} = values;
+    this.props.onFilter({sessionId, username, remoteHost, authMethod});
   }
 }

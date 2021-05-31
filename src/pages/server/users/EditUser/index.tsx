@@ -13,7 +13,7 @@ import React, {ReactNode} from "react";
 import {Page} from "../../../../components";
 import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
 import {QuestionCircleOutlined, UserOutlined} from '@ant-design/icons';
-import {Button, Card, Col, Form, FormInstance, Input, notification, Row, Select, Tooltip} from "antd";
+import {Button, Card, Col, Form, Input, notification, Row, Select, Tooltip} from "antd";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
 import {UpdateUserData, UserService} from "../../../../services/UserService";
@@ -36,7 +36,6 @@ export interface EditUserState {
 class EditUserComponent extends React.Component<InjectedProps, EditUserState> {
   private readonly _breadcrumbs: IBreadcrumbSegment[];
   private _userSubscription: PromiseSubscription | null;
-  private _formRef = React.createRef<FormInstance>();
 
   constructor(props: InjectedProps) {
     super(props);
@@ -69,9 +68,7 @@ class EditUserComponent extends React.Component<InjectedProps, EditUserState> {
       return (
           <Page breadcrumbs={this._breadcrumbs}>
             <Card title={<span><UserOutlined/> Edit Convergence User</span>} className={styles.formCard}>
-              <Form ref={this._formRef}
-                    layout="vertical"
-                    onFinish={this.handleSubmit}>
+              <Form layout="vertical" onFinish={this.handleSubmit}>
                 <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item name="username"
@@ -178,34 +175,31 @@ class EditUserComponent extends React.Component<InjectedProps, EditUserState> {
     this.props.history.push("/users/");
   }
 
-  private handleSubmit = () => {
-    this._formRef.current!.validateFields().then(values => {
-        const {username, displayName, firstName, lastName, email, serverRole} = values;
-        const userData: UpdateUserData = {
-          displayName,
-          firstName,
-          lastName,
-          email,
-          serverRole
-        };
-        this.props.userService.updateUser(username, userData)
-            .then(() => {
-              notification.success({
-                message: 'User Updated',
-                description: `User '${username}' successfully updated.`
-              });
-              this.props.history.push("./");
-            }).catch((err) => {
-          if (err instanceof RestError) {
-            console.log(JSON.stringify(err));
-            if (err.code === "duplicate") {
-              notification.error({
-                message: 'Could Not Update User',
-                description: `A user with the specified ${err.details["field"]} already exists.`
-              });
-            }
-          }
-        });
+  private handleSubmit = (values: any) => {
+    const {username, displayName, firstName, lastName, email, serverRole} = values;
+    const userData: UpdateUserData = {
+      displayName,
+      firstName,
+      lastName,
+      email,
+      serverRole
+    };
+    this.props.userService.updateUser(username, userData).then(() => {
+      notification.success({
+        message: 'User Updated',
+        description: `User '${username}' successfully updated.`
+      });
+      this.props.history.push("./");
+    }).catch((err) => {
+      if (err instanceof RestError) {
+        console.log(JSON.stringify(err));
+        if (err.code === "duplicate") {
+          notification.error({
+            message: 'Could Not Update User',
+            description: `A user with the specified ${err.details["field"]} already exists.`
+          });
+        }
+      }
     });
   }
 }

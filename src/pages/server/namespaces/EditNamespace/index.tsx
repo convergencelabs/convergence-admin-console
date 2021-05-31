@@ -12,8 +12,8 @@
 import React, {ReactNode} from "react";
 import {Page} from "../../../../components";
 import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
-import { FolderOutlined } from '@ant-design/icons';
-import {Button, Card, Col, Form, FormInstance, Input, notification, Row} from "antd";
+import {FolderOutlined} from '@ant-design/icons';
+import {Button, Card, Col, Form, Input, notification, Row} from "antd";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
 import {injectAs} from "../../../../utils/mobx-utils";
@@ -38,7 +38,6 @@ export interface EditNamespaceState {
 
 class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespaceState> {
   private readonly _breadcrumbs: IBreadcrumbSegment[];
-  private _formRef = React.createRef<FormInstance>();
   private readonly _roles = ["Developer", "Domain Admin", "Owner"];
 
   constructor(props: InjectedProps) {
@@ -67,133 +66,127 @@ class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespac
       return <div/>;
     } else {
       return (
-        <Page breadcrumbs={this._breadcrumbs}>
-          <Card title={<span><FolderOutlined /> Edit Namespace</span>} className={styles.formCard}>
-            <Form ref={this._formRef}
-                  layout="vertical"
-                  onFinish={this.handleSubmit}>
-              <Row gutter={16}>
-                <Col span={12}>
-                  <Form.Item name="id"
-                             label="Namespace Id"
-                             initialValue={this.state.namespace!.id}
-                  >
+          <Page breadcrumbs={this._breadcrumbs}>
+            <Card title={<span><FolderOutlined/> Edit Namespace</span>} className={styles.formCard}>
+              <Form layout="vertical" onFinish={this.handleSubmit}>
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <Form.Item name="id"
+                               label="Namespace Id"
+                               initialValue={this.state.namespace!.id}
+                    >
                       <Input disabled={true}/>
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item name="displayName"
-                             label="Display Name"
-                             initialValue={this.state.namespace!.displayName}
-                             rules={[{required: true, message: 'Please input a Display Name!', whitespace: true}]}
-                  >
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item name="displayName"
+                               label="Display Name"
+                               initialValue={this.state.namespace!.displayName}
+                               rules={[{required: true, message: 'Please input a Display Name!', whitespace: true}]}
+                    >
                       <Input/>
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row>
-                <Col span={24}>
-                  <FormButtonBar>
-                    <Button htmlType="button" onClick={this._handleCancel}>Cancel</Button>
-                    <Button type="primary" htmlType="submit">Update</Button>
-                  </FormButtonBar>
-                </Col>
-              </Row>
-            </Form>
-          </Card>
-          <Card className={styles.formCard} title="User Roles" type="inner">
-            <UserRoleAdder
-              roles={this._roles}
-              defaultRole="Developer"
-              selectWidth={200}
-              onAdd={this._setUserRole}/>
-            <UserRoleTable
-              roles={this._roles}
-              userRoles={this.state.userRoles}
-              onRemoveUser={this._onRemoveUserRole}
-              onChangeRole={this._setUserRole}
-            />
-          </Card>
-        </Page>
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col span={24}>
+                    <FormButtonBar>
+                      <Button htmlType="button" onClick={this._handleCancel}>Cancel</Button>
+                      <Button type="primary" htmlType="submit">Update</Button>
+                    </FormButtonBar>
+                  </Col>
+                </Row>
+              </Form>
+            </Card>
+            <Card className={styles.formCard} title="User Roles" type="inner">
+              <UserRoleAdder
+                  roles={this._roles}
+                  defaultRole="Developer"
+                  selectWidth={200}
+                  onAdd={this._setUserRole}/>
+              <UserRoleTable
+                  roles={this._roles}
+                  userRoles={this.state.userRoles}
+                  onRemoveUser={this._onRemoveUserRole}
+                  onChangeRole={this._setUserRole}
+              />
+            </Card>
+          </Page>
       );
     }
   }
 
   private _loadUserRoles(): void {
     this.props.roleService
-      .getUserRoles(RoleTarget.namespace(this.state.namespace!.id))
-      .then(userRoles => {
-        this.setState({userRoles});
-      });
+        .getUserRoles(RoleTarget.namespace(this.state.namespace!.id))
+        .then(userRoles => {
+          this.setState({userRoles});
+        });
   }
 
   private _onRemoveUserRole = (username: string) => {
     this.props.roleService
-      .deleteUserRoles(RoleTarget.namespace(this.state.namespace!.id), username)
-      .then(() => {
-        const userRoles = new Map(this.state.userRoles);
-        userRoles.delete(username);
-        this.setState({userRoles});
-        this._loadUserRoles();
-      })
-      .catch(err => {
-        console.error(err);
-        notification.error({
-          message: 'Could Not Delete namespaces Role',
-          description: `Could not delete role for the user.`,
+        .deleteUserRoles(RoleTarget.namespace(this.state.namespace!.id), username)
+        .then(() => {
+          const userRoles = new Map(this.state.userRoles);
+          userRoles.delete(username);
+          this.setState({userRoles});
+          this._loadUserRoles();
+        })
+        .catch(err => {
+          console.error(err);
+          notification.error({
+            message: 'Could Not Delete namespaces Role',
+            description: `Could not delete role for the user.`,
+          });
         });
-      });
   };
 
   private _setUserRole = (username: string, role: string) => {
     this.props.roleService
-      .setUserRole(RoleTarget.namespace(this.state.namespace!.id), username, role)
-      .then(() => {
-        const userRoles = new Map(this.state.userRoles);
-        userRoles.set(username, role);
-        this.setState({userRoles});
-        this._loadUserRoles();
-      })
-      .catch(err => {
-        console.error(err);
-        notification.error({
-          message: 'Could Not Set namespaces Role',
-          description: `Could not set role for the user.`,
+        .setUserRole(RoleTarget.namespace(this.state.namespace!.id), username, role)
+        .then(() => {
+          const userRoles = new Map(this.state.userRoles);
+          userRoles.set(username, role);
+          this.setState({userRoles});
+          this._loadUserRoles();
+        })
+        .catch(err => {
+          console.error(err);
+          notification.error({
+            message: 'Could Not Set namespaces Role',
+            description: `Could not set role for the user.`,
+          });
         });
-      });
   };
 
   private _handleCancel = () => {
     this.props.history.push("/namespaces/");
   };
 
-  private handleSubmit = () => {
-
-    this._formRef.current!.validateFields().then(values => {
-        const {id, displayName} = values;
-        this.props.namespaceService.updateNamespace(id, displayName)
-          .then(() => {
-            notification.success({
-              message: 'Namespace Updated',
-              description: `Namespace '${id}' successfully updated`,
-            });
-            this.props.history.push("./");
-          })
-          .catch((err) => {
-            let description = "Unknown error updating namespace.";
-            if (err instanceof RestError) {
-              if (err.code === "duplicate") {
-                description = `A namespace with the specified ${err.details["field"]} already exists.`;
-              }
-            }
-
-            notification.error({
-              message: 'Could Not Update Namespace',
-              description
-            });
+  private handleSubmit = (values: any) => {
+    const {id, displayName} = values;
+    this.props.namespaceService.updateNamespace(id, displayName)
+        .then(() => {
+          notification.success({
+            message: 'Namespace Updated',
+            description: `Namespace '${id}' successfully updated`,
           });
+          this.props.history.push("./");
+        })
+        .catch((err) => {
+          let description = "Unknown error updating namespace.";
+          if (err instanceof RestError) {
+            if (err.code === "duplicate") {
+              description = `A namespace with the specified ${err.details["field"]} already exists.`;
+            }
+          }
 
-    });
+          notification.error({
+            message: 'Could Not Update Namespace',
+            description
+          });
+        });
   }
 }
 

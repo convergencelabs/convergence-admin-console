@@ -10,7 +10,7 @@
  */
 
 import React, {ReactNode} from "react";
-import {Button, Form, FormInstance, InputNumber, notification, Select} from "antd";
+import {Button, Form, InputNumber, notification, Select} from "antd";
 import {FormButtonBar} from "../../../components/common/FormButtonBar";
 import styles from "./styles.module.css";
 import {injectAs} from "../../../utils/mobx-utils";
@@ -32,7 +32,6 @@ const FALSE = "false";
 
 class PasswordPolicyComponent extends React.Component<InjectedProps, PasswordPolicyState> {
   private _configSubscription: PromiseSubscription | null;
-  private _formRef = React.createRef<FormInstance>();
 
   constructor(props: InjectedProps) {
     super(props);
@@ -55,9 +54,8 @@ class PasswordPolicyComponent extends React.Component<InjectedProps, PasswordPol
       const special = this.state.configs.requireSpecial ? TRUE : FALSE;
 
       return (
-          <Form ref={this._formRef}
-                layout="vertical"
-                onFinish={this._handleSubmit} >
+          <Form layout="vertical"
+                onFinish={this._handleSubmit}>
             <Form.Item name="minLength"
                        label="Minimum Length"
                        initialValue={minLen}
@@ -113,31 +111,29 @@ class PasswordPolicyComponent extends React.Component<InjectedProps, PasswordPol
     );
   }
 
-  private _handleSubmit = () => {
-    this._formRef.current!.validateFields().then(values => {
-        const {minLength, requireDigit, requireUpperCase, requireLowerCase, requireSpecialCharacter} = values;
-        const config = new PasswordConfig(
-            minLength,
-            requireUpperCase === TRUE,
-            requireLowerCase === TRUE,
-            requireDigit === TRUE,
-            requireSpecialCharacter === TRUE);
-        this.props.configService
-            .setPasswordConfig(config)
-            .then(() =>
-                notification.success({
-                  message: "Configuration Saved",
-                  description: "Password policy configuration successfully saved."
-                })
-            )
-            .catch(err => {
-              console.error(err);
-              notification.error({
-                message: "Configuration Not Saved",
-                description: "Password policy configuration could not be saved."
-              })
-            });
-    });
+  private _handleSubmit = (values: any) => {
+    const {minLength, requireDigit, requireUpperCase, requireLowerCase, requireSpecialCharacter} = values;
+    const config = new PasswordConfig(
+        minLength,
+        requireUpperCase === TRUE,
+        requireLowerCase === TRUE,
+        requireDigit === TRUE,
+        requireSpecialCharacter === TRUE);
+    this.props.configService
+        .setPasswordConfig(config)
+        .then(() =>
+            notification.success({
+              message: "Configuration Saved",
+              description: "Password policy configuration successfully saved."
+            })
+        )
+        .catch(err => {
+          console.error(err);
+          notification.error({
+            message: "Configuration Not Saved",
+            description: "Password policy configuration could not be saved."
+          })
+        });
   }
 
   private _loadConfig(): void {

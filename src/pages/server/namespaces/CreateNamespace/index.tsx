@@ -13,7 +13,7 @@ import * as React from 'react';
 import {ReactNode} from 'react';
 import {Page} from "../../../../components";
 import {FolderOutlined} from '@ant-design/icons';
-import {Button, Card, Col, Form, FormInstance, Input, notification, Row} from "antd";
+import {Button, Card, Col, Form, Input, notification, Row} from "antd";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
@@ -32,15 +32,11 @@ class CreateNamespaceComponent extends React.Component<InjectedProps, {}> {
     {title: "New Namespace"}
   ];
 
-  private _formRef = React.createRef<FormInstance>();
-
   public render(): ReactNode {
     return (
         <Page breadcrumbs={this._breadcrumbs}>
           <Card title={<span><FolderOutlined/> New Namespace</span>} className={styles.formCard}>
-            <Form ref={this._formRef}
-                  layout="vertical"
-                  onFinish={this.handleSubmit}>
+            <Form layout="vertical" onFinish={this.handleSubmit}>
               <Row gutter={16}>
                 <Col span={24}>
                   <Form.Item name="id"
@@ -82,30 +78,27 @@ class CreateNamespaceComponent extends React.Component<InjectedProps, {}> {
     this.props.history.push("/namespaces/");
   }
 
-  private handleSubmit = () => {
-    this._formRef.current!.validateFields().then(values => {
-      const {id, displayName} = values;
-      this.props.namespaceService.createNamespace(id, displayName)
-          .then(() => {
-            notification.success({
-              message: 'Namespace Created',
-              description: `Namespace '${id}' successfully created`,
-              placement: "bottomRight",
-              duration: 3
-            });
-            this.props.history.push("/namespaces");
-          }).catch((err) => {
-        if (err instanceof RestError) {
-          console.log(JSON.stringify(err));
-          if (err.code === "duplicate") {
-            notification["error"]({
-              message: 'Could Not Create Namespace',
-              description: `A namespace with the specified ${err.details["field"]} already exists.`,
-              placement: "bottomRight"
-            });
-          }
-        }
+  private handleSubmit = (values: any) => {
+    const {id, displayName} = values;
+    this.props.namespaceService.createNamespace(id, displayName).then(() => {
+      notification.success({
+        message: 'Namespace Created',
+        description: `Namespace '${id}' successfully created`,
+        placement: "bottomRight",
+        duration: 3
       });
+      this.props.history.push("/namespaces");
+    }).catch((err) => {
+      if (err instanceof RestError) {
+        console.log(JSON.stringify(err));
+        if (err.code === "duplicate") {
+          notification["error"]({
+            message: 'Could Not Create Namespace',
+            description: `A namespace with the specified ${err.details["field"]} already exists.`,
+            placement: "bottomRight"
+          });
+        }
+      }
     });
   }
 }

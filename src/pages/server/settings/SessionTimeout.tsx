@@ -10,7 +10,7 @@
  */
 
 import React, {ReactNode} from "react";
-import {Button, Form, FormInstance, InputNumber, notification} from "antd";
+import {Button, Form, InputNumber, notification} from "antd";
 import {FormButtonBar} from "../../../components/common/FormButtonBar";
 import {injectAs} from "../../../utils/mobx-utils";
 import {SERVICES} from "../../../services/ServiceConstants";
@@ -27,7 +27,6 @@ export interface SessionTimeoutState {
 
 class SessionTimeoutComponent extends React.Component<InjectedProps, SessionTimeoutState> {
   private _configSubscription: PromiseSubscription | null;
-  private _formRef = React.createRef<FormInstance>();
 
   constructor(props: InjectedProps) {
     super(props);
@@ -44,9 +43,8 @@ class SessionTimeoutComponent extends React.Component<InjectedProps, SessionTime
   public render(): ReactNode {
     if (this.state.timeout !== null) {
       return (
-          <Form ref={this._formRef}
-                layout="vertical"
-                onFinish={this._handleSubmit} >
+          <Form layout="vertical"
+                onFinish={this._handleSubmit}>
             <Form.Item name="v"
                        label="Session Timeout (minutes)"
                        initialValue={this.state.timeout}
@@ -69,25 +67,23 @@ class SessionTimeoutComponent extends React.Component<InjectedProps, SessionTime
     }
   }
 
-  private _handleSubmit = () => {
-    this._formRef.current!.validateFields().then(values => {
-      const {timeout} = values;
-      this.props.configService
-          .setSessionTimeoutMinutes(timeout)
-          .then(() =>
-              notification.success({
-                message: "Configuration Saved",
-                description: "The session timeout was successfully saved."
-              })
-          )
-          .catch(err => {
-            console.error(err);
-            notification.error({
-              message: "Configuration Not Saved",
-              description: "The session timeout configuration could not be saved."
+  private _handleSubmit = (values: any) => {
+    const {timeout} = values;
+    this.props.configService
+        .setSessionTimeoutMinutes(timeout)
+        .then(() =>
+            notification.success({
+              message: "Configuration Saved",
+              description: "The session timeout was successfully saved."
             })
-          });
-    });
+        )
+        .catch(err => {
+          console.error(err);
+          notification.error({
+            message: "Configuration Not Saved",
+            description: "The session timeout configuration could not be saved."
+          })
+        });
   }
 
   private _loadConfig(): void {

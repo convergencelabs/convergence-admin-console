@@ -87,17 +87,15 @@ export class SetPasswordForm extends React.Component<SetPasswordProps> {
     }
   }
 
-  private _handleSubmit = () => {
-    this._formRef.current!.validateFields().then(values => {
-        const {password} = values;
-        this.props.onSetPassword(password).then(clear => {
-          if (clear) {
-            this._formRef.current!.setFieldsValue({
-              password: "",
-              confirm: ""
-            });
-          }
+  private _handleSubmit = (values: any) => {
+    const {password} = values;
+    this.props.onSetPassword(password).then(clear => {
+      if (clear) {
+        this._formRef.current!.setFieldsValue({
+          password: "",
+          confirm: ""
         });
+      }
     });
   }
 
