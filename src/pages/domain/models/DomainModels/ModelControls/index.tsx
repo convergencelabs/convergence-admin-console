@@ -56,8 +56,8 @@ export class ModelControls extends React.Component<ModelControlsProps, {}> {
     }
 
     return (
-        <Form ref={this._formRef} layout="horizontal">
-          <div className={styles.toolbar}>
+        <div className={styles.toolbar}>
+          <Form ref={this._formRef} layout="inline" className={styles.controls}>
             <div className={styles.modeSelector}>
               <span className={styles.label}>Mode:</span>
               <Form.Item name="mode"
@@ -73,42 +73,42 @@ export class ModelControls extends React.Component<ModelControlsProps, {}> {
             <span className={styles.label}>{fieldLabel}:</span>
             {
               mode === ModelSearchMode.BROWSE ?
-                  <Form.Item name="collection" initialValue={this.props.initialData}>
-                    <CollectionAutoComplete initialValue={this.props.initialData} className={styles.collection}
+                  <Form.Item name="collection"
+                             initialValue={this.props.initialData}
+                             className={styles.collection}>
+                    <CollectionAutoComplete initialValue={this.props.initialData}
                                             domainId={this.props.domainId}/>
                   </Form.Item>
                   : null
             }
             {
               mode === ModelSearchMode.QUERY ?
-                  <Form.Item name="query" initialValue={this.props.initialData}>
-                    <Input className={styles.query} placeholder="Enter Query"/>
+                  <Form.Item name="query" className={styles.query} initialValue={this.props.initialData}>
+                    <Input placeholder="Enter Query"/>
                   </Form.Item>
                   : null
             }
             {
               mode === ModelSearchMode.ID ?
-                  <Form.Item name="id" initialValue={this.props.initialData}>
-                    <Input className={styles.id} placeholder="Enter Model Id"/>
+                  <Form.Item name="id" className={styles.id} initialValue={this.props.initialData}>
+                    <Input  placeholder="Enter Model Id"/>
                   </Form.Item>
                   : null
             }
             {
               mode === ModelSearchMode.BROWSE ?
-                  <span>
-                  <span className={styles.label}>Results Per Page:</span>
-                    <Form.Item name="resultsPerPage" initialValue={this.props.resultsPerPageDefault || 20}>
-                      <InputNumber/>
-                    </Form.Item>
-                  </span>
+                  <Form.Item label="Results Per Page" name="resultsPerPage"
+                             initialValue={this.props.resultsPerPageDefault || 20}>
+                    <InputNumber/>
+                  </Form.Item>
                   : null
             }
             <Button htmlType="button"
                     type="primary"
                     className={styles.button}
                     onClick={this._handleSubmit}>{buttonLabel}</Button>
-          </div>
-        </Form>
+          </Form>
+        </div>
     );
   }
 
