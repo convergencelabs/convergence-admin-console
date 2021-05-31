@@ -34,7 +34,7 @@ interface InjectedProps extends CreateDomainModelProps {
 }
 
 export interface CreateDomainModelState {
-
+  idMode: string;
 }
 
 class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDomainModelState> {
@@ -43,6 +43,10 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
     {title: "New Model"}
   ];
   private _formRef = React.createRef<FormInstance>();
+
+  state = {
+    idMode: "auto"
+  }
 
   public render(): ReactNode {
     return (
@@ -62,13 +66,13 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
                          initialValue="auto"
                          rules={[{required: false, message: 'Please select a model id strategy!', whitespace: true}]}
               >
-                <Select>
+                <Select onSelect={this._idModeChanged}>
                   <Select.Option key="auto" value="auto">Auto Generated</Select.Option>
                   <Select.Option key="manual" value="manual">User Defined</Select.Option>
                 </Select>
               </Form.Item>
               {
-                this._formRef.current!.getFieldValue("idMode") === "manual" ?
+                this.state.idMode === "manual" ?
                     <Form.Item name="id"
                                label="Id"
                                rules={[{required: true, message: 'Please input a model id!', whitespace: true}]}
@@ -79,7 +83,7 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
               }
               <Form.Item name="data"
                          label="Data"
-                         initialValue="{\n\n}"
+                         initialValue={"{\n\n}"}
                          rules={[{required: true, validator: this._validateData}]}
               >
                 <AceEditor
@@ -88,7 +92,6 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
                     height="300px"
                     mode="json"
                     theme="solarized_dark"
-
                     name="create-model-data-editor"
                     fontSize={12}
                     showPrintMargin={true}
@@ -153,6 +156,10 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
           console.error(parseErr)
         }
     });
+  }
+
+  private _idModeChanged = (value: string) => {
+    this.setState({idMode: value})
   }
 }
 
