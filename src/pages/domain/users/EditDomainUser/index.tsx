@@ -135,6 +135,7 @@ class EditDomainUserComponent extends React.Component<InjectedProps, EditDomainU
                                  {required: false, message: 'Please input an E-mail!'}
                                ]}
                     >
+                      <Input/>
                     </Form.Item>
                   </Col>
                 </Row>

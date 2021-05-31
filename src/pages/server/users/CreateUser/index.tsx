@@ -11,8 +11,8 @@
 
 import React, {ReactNode} from "react";
 import {Page} from "../../../../components";
-import {QuestionCircleOutlined, UserOutlined} from '@ant-design/icons';
-import {Button, Card, Col, Form, FormInstance, Input, notification, Row, Select, Tooltip} from "antd";
+import {UserOutlined} from '@ant-design/icons';
+import {Button, Card, Col, Form, FormInstance, Input, notification, Row, Select} from "antd";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
@@ -31,7 +31,6 @@ interface InjectedProps extends RouteComponentProps {
 }
 
 export interface CreateUserComponentState {
-  confirmDirty: boolean;
   passwordConfig: PasswordConfig | null;
 }
 
@@ -50,7 +49,6 @@ class CreateUserComponent extends React.Component<InjectedProps, CreateUserCompo
     super(props);
 
     this.state = {
-      confirmDirty: false,
       passwordConfig: null
     };
 
@@ -73,22 +71,17 @@ class CreateUserComponent extends React.Component<InjectedProps, CreateUserCompo
                   <Col span={12}>
                     <Form.Item name="username"
                                label="Username"
-                               rules={[{
-                                 required: true, whitespace: true, message: 'Please input a Username!',
-                               }]}
+                               rules={[
+                                 {required: true, whitespace: true, message: 'Please input a Username!'}
+                               ]}
                     >
                       <Input/>
                     </Form.Item>
                   </Col>
                   <Col span={12}>
                     <Form.Item name="displayName"
-                               label={(
-                                   <span>Display Name&nbsp;
-                                     <Tooltip title="What do you want others to call you?">
-                                      <QuestionCircleOutlined/>
-                                    </Tooltip>
-                                   </span>
-                               )}
+                               tooltip="What do you want others to call you?"
+                               label="Display Name"
                                rules={[{required: true, message: 'Please input a Display Name!', whitespace: true}]}
                     >
 
@@ -100,9 +93,9 @@ class CreateUserComponent extends React.Component<InjectedProps, CreateUserCompo
                   <Col span={12}>
                     <Form.Item name="firstName"
                                label="First Name"
-                               rules={[{
-                                 required: false, whitespace: true, message: 'Please input a First Name!',
-                               }]}
+                               rules={[
+                                 {required: false, whitespace: true, message: 'Please input a First Name!'}
+                               ]}
                     >
                       <Input/>
                     </Form.Item>
@@ -110,9 +103,9 @@ class CreateUserComponent extends React.Component<InjectedProps, CreateUserCompo
                   <Col span={12}>
                     <Form.Item name="lastName"
                                label="Last Name"
-                               rules={[{
-                                 required: false, whitespace: true, message: 'Please input a Last Name!',
-                               }]}
+                               rules={[
+                                 {required: false, whitespace: true, message: 'Please input a Last Name!'}
+                               ]}
                     >
                       <Input/>
                     </Form.Item>
@@ -122,11 +115,10 @@ class CreateUserComponent extends React.Component<InjectedProps, CreateUserCompo
                   <Col span={24}>
                     <Form.Item name="email"
                                label="E-mail"
-                               rules={[{
-                                 type: 'email', message: 'The input is not valid E-mail!',
-                               }, {
-                                 required: true, message: 'Please input an E-mail!',
-                               }]}
+                               rules={[
+                                 {type: 'email', message: 'The input is not valid E-mail!'},
+                                 {required: true, message: 'Please input an E-mail!'}
+                               ]}
                     >
                       <Input/>
                     </Form.Item>
@@ -147,11 +139,11 @@ class CreateUserComponent extends React.Component<InjectedProps, CreateUserCompo
                   <Col span={12}>
                     <Form.Item name="password"
                                label="Password"
-                               rules={[{
-                                 required: true, message: 'Please input a password!',
-                               }, {
-                                 validator: this.validateToNextPassword,
-                               }]}
+                               rules={[
+                                 {required: true, message: 'Please input a password!'},
+                                 {validator: this._validatePassword}
+                               ]}
+                               hasFeedback
                     >
 
                       <Input type="password"/>
@@ -160,13 +152,13 @@ class CreateUserComponent extends React.Component<InjectedProps, CreateUserCompo
                   <Col span={12}>
                     <Form.Item name="confirm"
                                label="Confirm Password"
-                               rules={[{
-                                 required: true, message: 'Please confirm the password!',
-                               }, {
-                                 validator: this.compareToFirstPassword,
-                               }]}
+                               dependencies={["password"]}
+                               rules={[
+                                 {required: true, message: 'Please confirm the password!'},
+                                 {validator: this._validateConfirmationPassword}
+                               ]}
                     >
-                      <Input type="password" onBlur={this.handleConfirmBlur}/>
+                      <Input type="password"/>
                     </Form.Item>
                   </Col>
                 </Row>
@@ -191,34 +183,34 @@ class CreateUserComponent extends React.Component<InjectedProps, CreateUserCompo
     this.props.history.push("/users/");
   }
 
-  private _handleSubmit = () => {
-    this._formRef.current!.validateFields().then(values => {
-      const {username, displayName, firstName, lastName, email, password, serverRole} = values;
-      const userData: CreateUserData = {
-        username,
-        displayName,
-        firstName,
-        lastName,
-        email,
-        password,
-        serverRole
-      };
-      this.props.userService.createUser(userData)
-          .then(() => {
-            notification.success({
-              message: 'User Created',
-              description: `Convergence User '${username}' successfully created.`
-            });
-            this.props.history.push("/users");
-          }).catch((err) => {
-        if (err instanceof RestError) {
-          if (err.code === "duplicate") {
-            notification.error({
-              message: 'Could Not Create User',
-              description: `A user with the specified ${err.details["field"]} already exists.`
-            });
-          }
-        }
+  private _handleSubmit = (values: any) => {
+    const {username, displayName, firstName, lastName, email, password, serverRole} = values;
+    const userData: CreateUserData = {
+      username,
+      displayName,
+      firstName,
+      lastName,
+      email,
+      password,
+      serverRole
+    };
+    this.props.userService.createUser(userData).then(() => {
+      notification.success({
+        message: 'User Created',
+        description: `Convergence User '${username}' successfully created.`
+      });
+      this.props.history.push("/users");
+    }).catch((err) => {
+      let description = `The user could not be created. Check the console for additional details.`
+      if (err instanceof RestError && err.code === "duplicate") {
+          description = `A user with the specified ${err.details["field"]} already exists.`
+      } else {
+        console.error(err);
+      }
+
+      notification.error({
+        message: 'Could Not Create User',
+        description
       });
     });
   }
@@ -230,25 +222,17 @@ class CreateUserComponent extends React.Component<InjectedProps, CreateUserCompo
     }
   }
 
-  private handleConfirmBlur = (e: any) => {
-    const value = e.target.value;
-    this.setState({confirmDirty: this.state.confirmDirty || !!value});
-  }
-
-  private compareToFirstPassword = (rule: any, value: any, callback: (error?: string) => void) => {
+  private _validateConfirmationPassword = (rule: any, value: any): Promise<void> => {
     if (value && value !== this._formRef.current!.getFieldValue('password')) {
-      callback('The passwords do not match!');
+      return Promise.reject(new Error('The passwords do not match!'));
     } else {
-      callback();
+      return Promise.resolve();
+
     }
   }
 
-  private validateToNextPassword = (rule: any, value: any, callback: (error?: string) => void) => {
+  private _validatePassword = (rule: any, value: any, callback: (error?: string) => void) => {
     if (this._passwordValidator.validatePassword(this.state.passwordConfig!, value, callback)) {
-      if (value && this.state.confirmDirty) {
-        this._formRef.current!.validateFields(['confirm']).then(() => {
-        });
-      }
       callback();
     }
   }

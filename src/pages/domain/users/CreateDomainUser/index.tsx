@@ -32,11 +32,7 @@ interface InjectedProps extends CreateDomainUserProps {
   domainUserService: DomainUserService;
 }
 
-export interface CreateDomainUserComponentState {
-  confirmDirty: boolean;
-}
-
-class CreateDomainUserComponent extends React.Component<InjectedProps, CreateDomainUserComponentState> {
+class CreateDomainUserComponent extends React.Component<InjectedProps> {
   private readonly _breadcrumbs = [
     {title: "Users", link: toDomainRoute(this.props.domainId, "users/")},
     {title: "New User"}
@@ -106,12 +102,6 @@ class CreateDomainUserComponent extends React.Component<InjectedProps, CreateDom
                 <Col span={24}>
                   <Form.Item name="email"
                              label="E-mail"
-                             rules={[{required: false, whitespace: true, message: 'Please input a Last Name!'}]}
-                  >
-                    <Input/>
-                  </Form.Item>
-                  <Form.Item name="email"
-                             label="E-mail"
                              rules={[
                                {type: 'email', message: 'The input is not valid E-mail!'},
                                {required: false, message: 'Please input an E-mail!'}
@@ -125,10 +115,7 @@ class CreateDomainUserComponent extends React.Component<InjectedProps, CreateDom
                 <Col span={12}>
                   <Form.Item name="password"
                              label="Password"
-                             rules={[
-                               {required: true, message: 'Please input a password!'},
-                               {validator: this.validateToNextPassword}
-                             ]}
+                             rules={[{required: true, message: 'Please input a password!'}]}
                   >
                     <Input type="password"/>
                   </Form.Item>
@@ -136,12 +123,13 @@ class CreateDomainUserComponent extends React.Component<InjectedProps, CreateDom
                 <Col span={12}>
                   <Form.Item name="confirm"
                              label="Confirm Password"
+                             dependencies={["password"]}
                              rules={[
                                {required: true, message: 'Please confirm the password!'},
-                               {validator: this.compareToFirstPassword}
+                               {validator: this._validateConfirm}
                              ]}
                   >
-                    <Input type="password" onBlur={this.handleConfirmBlur}/>
+                    <Input type="password"/>
                   </Form.Item>
                 </Col>
               </Row>
@@ -196,24 +184,12 @@ class CreateDomainUserComponent extends React.Component<InjectedProps, CreateDom
     });
   }
 
-  private handleConfirmBlur = (e: any) => {
-    const value = e.target.value;
-    this.setState({confirmDirty: this.state.confirmDirty || !!value});
-  }
-
-  private compareToFirstPassword = (rule: any, value: any, callback: (error?: string) => void) => {
+  private _validateConfirm = (rule: any, value: any, callback: (error?: string) => void) => {
     if (value && value !== this._formRef.current!.getFieldValue('password')) {
       callback('The passwords do not match!');
     } else {
       callback();
     }
-  }
-
-  private validateToNextPassword = (rule: any, value: any, callback: (error?: string) => void) => {
-    if (value && this.state.confirmDirty) {
-      this._formRef.current!.validateFields(['confirm']).then(_ => {});
-    }
-    callback();
   }
 }
 

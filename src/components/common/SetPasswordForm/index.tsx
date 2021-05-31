@@ -17,7 +17,6 @@ import {PasswordFormValidator} from "../../../utils/PasswordFormValidator";
 import {PasswordConfig} from "../../../models/PasswordConfig";
 import {FormButtonBar} from "../FormButtonBar/";
 
-
 interface SetPasswordProps {
   passwordConfig: PasswordConfig;
 
@@ -28,26 +27,14 @@ interface SetPasswordProps {
   okButtonText?: string;
 }
 
-interface InjectedProps extends SetPasswordProps {
-
-}
-
-interface ChangePasswordFormState {
-  confirmDirty: boolean;
-}
-
-export class SetPasswordForm extends React.Component<InjectedProps, ChangePasswordFormState> {
+export class SetPasswordForm extends React.Component<SetPasswordProps> {
 
   private _configSubscription: PromiseSubscription | null;
   private _passwordValidator = new PasswordFormValidator();
   private _formRef = React.createRef<FormInstance>();
 
-  constructor(props: InjectedProps) {
+  constructor(props: SetPasswordProps) {
     super(props);
-
-    this.state = {
-      confirmDirty: false
-    };
 
     this._configSubscription = null;
   }
@@ -61,7 +48,7 @@ export class SetPasswordForm extends React.Component<InjectedProps, ChangePasswo
                          label="Password"
                          rules={[
                            {required: true, message: 'Please input a password!'},
-                           {validator: this._compareToConfirm}
+                           {validator: this._validatePassword}
                          ]}
               >
                 <Input type="password"/>
@@ -70,12 +57,13 @@ export class SetPasswordForm extends React.Component<InjectedProps, ChangePasswo
             <Col span={12}>
               <Form.Item name="confirm"
                          label="Confirm Password"
+                         dependencies={["password"]}
                          rules={[
                            {required: true, message: 'Please confirm the password!'},
-                           {validator: this._compareToPassword}
+                           {validator: this._validateConfirm}
                          ]}
               >
-                <Input type="password" onBlur={this._handleConfirmBlur}/>
+                <Input type="password"/>
               </Form.Item>
             </Col>
           </Row>
@@ -111,25 +99,16 @@ export class SetPasswordForm extends React.Component<InjectedProps, ChangePasswo
     });
   }
 
-  private _handleConfirmBlur = (e: any) => {
-    const value = e.target.value;
-    this.setState({confirmDirty: this.state.confirmDirty || !!value});
-  }
-
-  private _compareToPassword = (rule: any, value: any, callback: (error?: string) => void) => {
+  private _validateConfirm = (rule: any, value: any, callback: (error?: string) => void) => {
     if (value && value !== this._formRef.current!.getFieldValue('password')) {
-      callback('Two passwords that you enter is inconsistent!');
+      callback('The passwords do not match!');
     } else {
       callback();
     }
   }
 
-  private _compareToConfirm = (rule: any, value: any, callback: (error?: string) => void) => {
+  private _validatePassword = (rule: any, value: any, callback: (error?: string) => void) => {
     if (this._passwordValidator.validatePassword(this.props.passwordConfig, value, callback)) {
-      const form = this._formRef.current!;
-      if (value && this.state.confirmDirty) {
-        form.validateFields(['confirm']).catch(e => console.error(e));
-      }
       callback();
     }
   }
