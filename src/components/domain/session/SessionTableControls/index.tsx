@@ -28,7 +28,7 @@ export class SessionTableControls extends React.Component<SessionTableControlsPr
 
   public render(): ReactNode {
     return (
-        <Form>
+        <Form layout="vertical">
           <div className={styles.toolbar}>
             <Row gutter={16}>
               <Col span={6}>
@@ -74,11 +74,12 @@ export class SessionTableControls extends React.Component<SessionTableControlsPr
               </Col>
               <Col span={2}>
                 <div className={styles.filter}>
-                  <div className={styles.label}>&nbsp;</div>
-                  <Button htmlType="button"
-                          type="primary"
-                          className={styles.button}
-                          onClick={this._handleSubmit}>Filter</Button>
+                  <Form.Item label="&nbsp;">
+                    <Button htmlType="button"
+                            type="primary"
+                            className={styles.button}
+                            onClick={this._handleSubmit}>Filter</Button>
+                  </Form.Item>
                 </div>
               </Col>
             </Row>
