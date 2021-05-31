@@ -10,7 +10,7 @@
  */
 
 import React, {ReactNode} from "react";
-import {Button, Checkbox, Col, Form, FormInstance, Input, Row} from "antd";
+import {Button, Checkbox, Col, Form, Input, Row} from "antd";
 import {UserApiKey} from "../../../models/UserApiKey";
 import {FormButtonBar} from "../../common/FormButtonBar";
 
@@ -24,12 +24,11 @@ interface DomainCollectionFormProps {
 }
 
 export class ApiKeyForm extends React.Component<DomainCollectionFormProps, {}> {
-  private _formRef = React.createRef<FormInstance>();
 
   public render(): ReactNode {
     const {initialValue} = this.props;
     return (
-        <Form ref={this._formRef} onFinish={this._handleSubmit}>
+        <Form layout="vertical" onFinish={this._handleSubmit}>
           <Row gutter={16}>
             <Col span={24}>
               <Form.Item name="name"
@@ -69,10 +68,8 @@ export class ApiKeyForm extends React.Component<DomainCollectionFormProps, {}> {
     this.props.onCancel();
   }
 
-  private _handleSubmit = () => {
-    this._formRef.current!.validateFields().then(values => {
-      const {name, enabled} = values;
-      this.props.onSave({name, enabled});
-    });
+  private _handleSubmit = (values: any) => {
+    const {name, enabled} = values;
+    this.props.onSave({name, enabled});
   }
 }

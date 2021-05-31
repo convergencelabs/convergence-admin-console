@@ -12,7 +12,7 @@
 import * as React from 'react';
 import {ReactNode} from 'react';
 import {QuestionCircleOutlined, UserOutlined} from '@ant-design/icons';
-import {Button, Card, Col, Form, FormInstance, Input, notification, Row, Tooltip} from "antd";
+import {Button, Card, Col, Form, Input, notification, Row, Tooltip} from "antd";
 import styles from "./styles.module.css";
 import {makeCancelable, PromiseSubscription} from "../../../utils/make-cancelable";
 import {LoggedInUserService} from "../../../services/LoggedInUserService";
@@ -35,7 +35,6 @@ export interface EditUserState {
 
 class ProfileFormComponent extends React.Component<InjectedProps, EditUserState> {
   private _profileSubscription: PromiseSubscription | null;
-  private _formRef = React.createRef<FormInstance>();
 
   constructor(props: InjectedProps) {
     super(props);
@@ -61,7 +60,7 @@ class ProfileFormComponent extends React.Component<InjectedProps, EditUserState>
       const profile = this.state.profile;
       return (
           <Card title={<span><UserOutlined/> Edit User</span>} className={styles.formCard}>
-            <Form ref={this._formRef} onFinish={this.handleSubmit}>
+            <Form layout="vertical" onFinish={this.handleSubmit}>
               <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item name="username"
@@ -149,31 +148,26 @@ class ProfileFormComponent extends React.Component<InjectedProps, EditUserState>
     });
   }
 
-  private handleSubmit = () => {
-    this._formRef.current!.validateFields().then(values => {
-        const {username, displayName, firstName, lastName, email} = values;
-        const profile = new UserProfile(
-            username,
-            displayName,
-            firstName,
-            lastName,
-            email
-        );
-        this.props.loggedInUserService.updateProfile(profile)
-            .then(() => {
-              notification["success"]({
-                message: 'Success',
-                description: `Your profile was successfully updated.`
-              });
-            }).catch((err) => {
-          console.log(err)
-          notification["error"]({
-            message: 'Could Not Update Profile',
-            description: `Your user profile could not be updated.`
-          });
-
-
-        });
+  private handleSubmit = (values: any) => {
+    const {username, displayName, firstName, lastName, email} = values;
+    const profile = new UserProfile(
+        username,
+        displayName,
+        firstName,
+        lastName,
+        email
+    );
+    this.props.loggedInUserService.updateProfile(profile).then(() => {
+      notification["success"]({
+        message: 'Success',
+        description: `Your profile was successfully updated.`
+      });
+    }).catch((err) => {
+      console.log(err)
+      notification["error"]({
+        message: 'Could Not Update Profile',
+        description: `Your user profile could not be updated.`
+      });
     });
   }
 }
