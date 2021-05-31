@@ -70,7 +70,7 @@ export class UserRoleTable extends Component<UserRoleTableProps,{}> {
     )
   }
 
-  private _renderActions = (text: any, record: any) => {
+  private _renderActions = (text: any, record: UserRole) => {
     const {username} = record;
     return (
       <span className={styles.actions}>
@@ -88,12 +88,12 @@ export class UserRoleTable extends Component<UserRoleTableProps,{}> {
     );
   };
 
-  private _renderRole = (text: any, record: any) => {
+  private _renderRole = (role: string, record: UserRole) => {
     const {username} = record;
     return (
       <Select style={{width: "100%"}}
-              defaultValue={text}
-              onChange={(role: string, _: any) => this.props.onChangeRole(username, role)}>
+              defaultValue={role}
+              onChange={(role: string) => this.props.onChangeRole(username, role)}>
         {this.props.roles.map(role => <Option key={role} value={role}>{role}</Option>)}
       </Select>
     );
