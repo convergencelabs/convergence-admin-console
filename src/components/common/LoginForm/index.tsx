@@ -10,7 +10,7 @@
  */
 
 import React, {Component, ReactNode} from 'react';
-import {Redirect, RouteComponentProps} from "react-router";
+import {Redirect, RouteComponentProps, StaticContext} from "react-router";
 import {LockOutlined, UserOutlined, WarningOutlined} from '@ant-design/icons';
 import {Button, Checkbox, Form, FormInstance, Input} from 'antd';
 import styles from "./styles.module.css";
@@ -24,7 +24,14 @@ import {SERVICES} from "../../../services/ServiceConstants";
 import {LoggedInUserService} from "../../../services/LoggedInUserService";
 import {LoggedInUserStore} from "../../../stores/LoggedInUserStore";
 
-export interface InjectedProps extends RouteComponentProps {
+export interface LoginFormLocation {
+  from: {
+    pathname: string
+  };
+}
+
+
+export interface InjectedProps extends RouteComponentProps<{ }, StaticContext, LoginFormLocation> {
   authStore: AuthStore;
   authService: AuthService;
   loggedInUserService: LoggedInUserService;
@@ -81,7 +88,6 @@ class NormalLoginForm extends Component<InjectedProps, LoginFormState> {
     if (redirectToReferrer) {
       return <Redirect to={from}/>;
     }
-
 
     const error = this.state.errorMessage ?
         <div className={styles.error}><WarningOutlined/>{this.state.errorMessage}</div> :

@@ -9,13 +9,24 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import {action, decorate, observable} from "mobx";
+import {action, makeAutoObservable, observable} from "mobx";
 
 export class ConfigStore {
   public configLoaded: boolean = false;
   public namespacesEnabled: boolean = true;
   public userNamespacesEnabled: boolean = true;
   public defaultNamespace: string = "";
+
+  constructor() {
+    makeAutoObservable(this, {
+      configLoaded: observable,
+      namespacesEnabled: observable,
+      userNamespacesEnabled: observable,
+      setNamespacesEnabled: action,
+      setUserNamespacesEnabled: action,
+      setConfigLoaded: action
+    });
+  }
 
   public setNamespacesEnabled(enabled: boolean): void {
     this.namespacesEnabled = enabled;
@@ -34,13 +45,6 @@ export class ConfigStore {
   }
 }
 
-decorate(ConfigStore, {
-  configLoaded: observable,
-  namespacesEnabled: observable,
-  userNamespacesEnabled: observable,
-  setNamespacesEnabled: action,
-  setUserNamespacesEnabled: action,
-  setConfigLoaded: action
-});
+
 
 export const configStore = new ConfigStore();

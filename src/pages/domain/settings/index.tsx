@@ -15,13 +15,13 @@ import { Card, Tabs } from "antd";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {DomainId} from "../../../models/DomainId";
-import {Page} from "../../../components/common/Page";
+import {Page} from "../../../components";
 import {toDomainRoute} from "../../../utils/domain-url";
 import {DomainGeneralSettingsTab} from "./GeneralSettingsTab";
 import {DomainMembers} from "./MemberSettingsTab";
 import {DangerousSettings} from "./DangerSettingsTab";
 
-export interface DomainSettingsProps extends RouteComponentProps<{tab: string}> {
+export interface DomainSettingsProps extends RouteComponentProps<{tab?: string}> {
   domainId: DomainId;
 }
 

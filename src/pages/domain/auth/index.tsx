@@ -15,12 +15,12 @@ import { Card, Tabs } from "antd";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {DomainId} from "../../../models/DomainId";
-import {Page} from "../../../components/common/Page";
+import {Page} from "../../../components";
 import {DomainJwtKeys} from "./jwt/DomainJwtKeys";
 import {toDomainRoute} from "../../../utils/domain-url";
 import {AnonymousAuthForm} from "./anonymous/AnonymousAuthForm";
 
-export interface DomainAuthenticationProps extends RouteComponentProps<{tab: string}> {
+export interface DomainAuthenticationProps extends RouteComponentProps<{tab?: string}> {
   domainId: DomainId;
 }
 

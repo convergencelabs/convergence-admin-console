@@ -9,11 +9,19 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import {action, decorate, observable} from "mobx";
+import {action, makeAutoObservable, observable} from "mobx";
 import {LoggedInUser} from "../models/LoggedInUser";
 
 export class LoggedInUserStore {
   public loggedInUser: LoggedInUser | null = null;
+
+  constructor() {
+    makeAutoObservable(this, {
+      loggedInUser: observable,
+      setLoggedInUser: action,
+      logout: action
+    });
+  }
 
   public setLoggedInUser(loggedInUser: LoggedInUser): void {
     this.loggedInUser = loggedInUser;
@@ -35,11 +43,5 @@ export class LoggedInUserStore {
     this.loggedInUser = null;
   }
 }
-
-decorate(LoggedInUserStore, {
-  loggedInUser: observable,
-  setLoggedInUser: action,
-  logout: action
-});
 
 export const loggedInUserStore = new LoggedInUserStore();

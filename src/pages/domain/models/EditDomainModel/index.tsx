@@ -29,7 +29,7 @@ import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
 
 interface EditDomainModelRouteProps {
   id: string;
-  tab: string;
+  tab?: string;
 }
 
 interface EditDomainModelProps extends RouteComponentProps<EditDomainModelRouteProps> {
