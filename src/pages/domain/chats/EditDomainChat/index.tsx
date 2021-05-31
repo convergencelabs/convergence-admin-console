@@ -75,6 +75,7 @@ class EditDomainChatComponent extends React.Component<InjectedProps, EditDomainC
     return this.state.initialChat !== null ? (
         <Page breadcrumbs={this._breadcrumbs}>
           <Card title={<span><FolderOutlined /> Edit Chat</span>} className={styles.formCard}>
+            <Form layout="vertical">
             <Form.Item label="Chat Id">
               <Input disabled={true} value={this.state.initialChat.chatId}/>
             </Form.Item>
@@ -90,6 +91,7 @@ class EditDomainChatComponent extends React.Component<InjectedProps, EditDomainC
                 </Form.Item>
               </Col>
             </Row>
+            </Form>
             <Card type="inner" title="Chat Name">
               <Form.Item>
                 <Input value={this.state.name} onChange={this._onNameChange}/>

@@ -25,7 +25,7 @@ interface AddModelUserPermissionControlProps {
 }
 
 interface AddModelUserPermissionControlState {
-  username?: string;
+  username: string | null;
   permissions: ModelPermissions;
 }
 
@@ -38,7 +38,7 @@ export class AddModelUserPermissionControl extends React.Component<AddModelUserP
     this._defaultPermissions = new ModelPermissions(false, false, false, false);
 
     this.state = {
-      username: undefined,
+      username: null,
       permissions: this._defaultPermissions
     }
   }
@@ -86,7 +86,7 @@ export class AddModelUserPermissionControl extends React.Component<AddModelUserP
       .onAdd(new ModelUserPermissions(new DomainUserId(DomainUserType.NORMAL, this.state.username), this.state.permissions))
       .then(() => {
         this.setState({
-          username: undefined,
+          username: null,
           permissions: this._defaultPermissions
         })
       });

@@ -69,7 +69,9 @@ class EditUserComponent extends React.Component<InjectedProps, EditUserState> {
       return (
           <Page breadcrumbs={this._breadcrumbs}>
             <Card title={<span><UserOutlined/> Edit Convergence User</span>} className={styles.formCard}>
-              <Form ref={this._formRef} onFinish={this.handleSubmit}>
+              <Form ref={this._formRef}
+                    layout="vertical"
+                    onFinish={this.handleSubmit}>
                 <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item name="username"

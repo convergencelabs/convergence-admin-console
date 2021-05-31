@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {ReactNode} from 'react';
 import {Page} from "../../../../components";
-import {Card, notification} from "antd";
+import {Card, Col, notification, Row} from "antd";
 import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
 import {RouteComponentProps} from "react-router";
 import {injectAs} from "../../../../utils/mobx-utils";
@@ -71,9 +71,9 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
     if (prevProps.location.search !== this.props.location.search) {
       const searchParams = this._parseQueryInput(this.props.location.search);
       if (searchParams.mode !== this.state.searchParams.mode ||
-        searchParams.pageSize !== this.state.searchParams.pageSize ||
-        searchParams.page !== this.state.searchParams.page ||
-        searchParams.queryInput !== this.state.searchParams.queryInput) {
+          searchParams.pageSize !== this.state.searchParams.pageSize ||
+          searchParams.page !== this.state.searchParams.page ||
+          searchParams.queryInput !== this.state.searchParams.queryInput) {
         this.setState({searchParams}, () => this._performSearch());
       }
     }
@@ -81,38 +81,42 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
 
   public render(): ReactNode {
     return (
-      <Page breadcrumbs={this._breadcrumbs}>
-        <Card title={this._renderToolbar()}>
-          <ModelControls
-            initialData={this.state.searchParams.queryInput}
-            initialMode={this.state.searchParams.mode}
-            domainId={this.props.domainId}
-            resultsPerPageDefault={25}
-            onBrowse={this._onBrowse}
-            onQuery={this._onQuery}
-            onIdLookup={this._onLookup}
-            onModeChange={this._onModeChange}
-          />
-          <DomainModelsTable
-            domainId={this.props.domainId}
-            pagedModels={this.state.models}
-            pagination={this.state.searchParams.mode === ModelSearchMode.BROWSE}
-            page={this.state.searchParams.page}
-            pageSize={this.state.searchParams.pageSize}
-            loading={this.state.loading}
-            onPageChange={this._onPageChange}
-            onDeleteConfirm={this._deleteModel}
-          />
-        </Card>
-      </Page>
+        <Page breadcrumbs={this._breadcrumbs}>
+          <Card title={this._renderToolbar()}>
+            <Row>
+              <Col span={24}>
+                <ModelControls
+                    initialData={this.state.searchParams.queryInput}
+                    initialMode={this.state.searchParams.mode}
+                    domainId={this.props.domainId}
+                    resultsPerPageDefault={25}
+                    onBrowse={this._onBrowse}
+                    onQuery={this._onQuery}
+                    onIdLookup={this._onLookup}
+                    onModeChange={this._onModeChange}
+                />
+              </Col>
+            </Row>
+            <DomainModelsTable
+                domainId={this.props.domainId}
+                pagedModels={this.state.models}
+                pagination={this.state.searchParams.mode === ModelSearchMode.BROWSE}
+                page={this.state.searchParams.page}
+                pageSize={this.state.searchParams.pageSize}
+                loading={this.state.loading}
+                onPageChange={this._onPageChange}
+                onDeleteConfirm={this._deleteModel}
+            />
+          </Card>
+        </Page>
     );
   }
 
   private _renderToolbar(): ReactNode {
     return (
-      <CardTitleToolbar title="Models" icon={<FileOutlined />}>
-        <ToolbarButton icon={<PlusCircleOutlined />} tooltip="Create Model" onClick={this._goToCreate}/>
-      </CardTitleToolbar>
+        <CardTitleToolbar title="Models" icon={<FileOutlined/>}>
+          <ToolbarButton icon={<PlusCircleOutlined/>} tooltip="Create Model" onClick={this._goToCreate}/>
+        </CardTitleToolbar>
     );
   }
 
@@ -307,7 +311,9 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
     const collection = queryInput!;
 
     const offset = page === undefined ? 0 : ((page - 1) * pageSize);
-    const query = `SELECT FROM ${collection} LIMIT ${pageSize} OFFSET ${offset}`;
+    const query = `SELECT
+                   FROM ${collection} LIMIT ${pageSize}
+                   OFFSET ${offset}`;
     const searchParams = {...this.state.searchParams, pageSize};
     this.props.domainModelService
         .queryModels(this.props.domainId, query)
@@ -332,7 +338,7 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
             loading: false
           });
         })
-        .catch(err => {
+        .catch(() => {
           this.setState({
             models: EMPTY_DATA,
             loading: false

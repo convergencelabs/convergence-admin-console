@@ -12,7 +12,7 @@
 import React, {ReactNode} from "react";
 import {Page} from "../../../../components";
 import {FileOutlined} from '@ant-design/icons';
-import {Button, Card, Form, FormInstance, Input, notification, Select} from 'antd';
+import {Button, Card, Form, Input, notification, Select} from 'antd';
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
 import {injectAs} from "../../../../utils/mobx-utils";
@@ -42,7 +42,6 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
     {title: "Models", link: toDomainRoute(this.props.domainId, "models")},
     {title: "New Model"}
   ];
-  private _formRef = React.createRef<FormInstance>();
 
   state = {
     idMode: "auto"
@@ -52,7 +51,7 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
     return (
         <Page breadcrumbs={this._breadcrumbs}>
           <Card title={<span><FileOutlined/> New Model</span>} className={styles.formCard}>
-            <Form ref={this._formRef} onFinish={this._handleSubmit}>
+            <Form layout="vertical" onFinish={this._handleSubmit}>
               <Form.Item name="collection"
                          label="Collection"
                          rules={[{
@@ -98,7 +97,7 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
                     showGutter={true}
                     highlightActiveLine={true}
                     editorProps={{$blockScrolling: true}}
-                    setOptions={{ useWorker: false }}
+                    setOptions={{useWorker: false}}
                 />
               </Form.Item>
               <FormButtonBar>
@@ -125,38 +124,35 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
     }
   }
 
-  private _handleSubmit = () => {
+  private _handleSubmit = (values: any) => {
+    const {collection, idMode, id, data} = values;
 
-    this._formRef.current!.validateFields().then(values => {
-        const {collection, idMode, id, data} = values;
+    try {
+      const dataObj = JSON.parse(data);
+      const domainId = this.props.domainId;
 
-        try {
-          const dataObj = JSON.parse(data);
-          const domainId = this.props.domainId;
-
-          const create: Promise<string> = idMode === "auto" ?
-              this.props.domainModelService.createModel(domainId, collection, dataObj) :
-              this.props.domainModelService.createOrUpdateModel(domainId, collection, id, dataObj);
-          create.then((modelId) => {
-            notification.success({
-              message: 'Model Created',
-              description: `Model '${modelId}' successfully created`
+      const create: Promise<string> = idMode === "auto" ?
+          this.props.domainModelService.createModel(domainId, collection, dataObj) :
+          this.props.domainModelService.createOrUpdateModel(domainId, collection, id, dataObj);
+      create.then((modelId) => {
+        notification.success({
+          message: 'Model Created',
+          description: `Model '${modelId}' successfully created`
+        });
+        this.props.history.push(toDomainRoute(domainId, `models/${modelId}`));
+      }).catch((err) => {
+        if (err instanceof RestError) {
+          if (err.code === "duplicate") {
+            notification.error({
+              message: 'Could Not Create Model',
+              description: `A model with the specified ${err.details["field"]} already exists.`
             });
-            this.props.history.push(toDomainRoute(domainId, `models/${modelId}`));
-          }).catch((err) => {
-            if (err instanceof RestError) {
-              if (err.code === "duplicate") {
-                notification.error({
-                  message: 'Could Not Create Model',
-                  description: `A model with the specified ${err.details["field"]} already exists.`
-                });
-              }
-            }
-          });
-        } catch (parseErr) {
-          console.error(parseErr)
+          }
         }
-    });
+      });
+    } catch (parseErr) {
+      console.error(parseErr)
+    }
   }
 
   private _idModeChanged = (value: string) => {

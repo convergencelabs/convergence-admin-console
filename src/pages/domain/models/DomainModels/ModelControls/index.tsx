@@ -56,7 +56,7 @@ export class ModelControls extends React.Component<ModelControlsProps, {}> {
     }
 
     return (
-        <Form ref={this._formRef}>
+        <Form ref={this._formRef} layout="horizontal">
           <div className={styles.toolbar}>
             <div className={styles.modeSelector}>
               <span className={styles.label}>Mode:</span>

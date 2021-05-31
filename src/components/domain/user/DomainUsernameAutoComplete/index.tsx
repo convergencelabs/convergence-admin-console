@@ -25,7 +25,7 @@ export interface UserAutoCompleteProps {
   className: string;
   onChange: (username: string) => void;
   placeholder?: string;
-  value?: string;
+  value: string | null;
 }
 
 export interface InjectedProps extends UserAutoCompleteProps{
@@ -34,13 +34,13 @@ export interface InjectedProps extends UserAutoCompleteProps{
 
 export interface UsernameAutoCompleteState {
   users: DomainUser[];
-  selectedValue?: string;
+  selectedValue: string | null;
 }
 
 class DomainUsernameAutoCompleteComponent extends Component<InjectedProps, UsernameAutoCompleteState> {
   state = {
     users: [],
-    selectedValue: undefined
+    selectedValue: null
   };
 
   public render(): ReactNode {
@@ -60,7 +60,7 @@ class DomainUsernameAutoCompleteComponent extends Component<InjectedProps, Usern
         className={className}
         onSearch={this._onSearch}
         onChange={this._onChange}
-        value={inputValue}
+        value={inputValue === null ? undefined : inputValue}
         optionLabelProp="value"
         placeholder={placeholder || "Select User"}
         notFoundContent={null}

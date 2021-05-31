@@ -12,7 +12,7 @@
 import React, {ReactNode} from "react";
 import {Page} from "../../../../components";
 import {FolderOutlined} from '@ant-design/icons';
-import {Button, Card, Form, FormInstance, Input, notification, Select} from "antd";
+import {Button, Card, Form, Input, notification, Select} from "antd";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
@@ -32,8 +32,6 @@ interface InjectedProps extends CreateDomainChatProps {
 }
 
 class CreateDomainChatComponent extends React.Component<InjectedProps, {}> {
-  private _formRef = React.createRef<FormInstance>();
-
   private readonly _breadcrumbs = [
     {title: "Chats", link: toDomainRoute(this.props.domainId, "chats")},
     {title: "New Chat"}
@@ -43,7 +41,8 @@ class CreateDomainChatComponent extends React.Component<InjectedProps, {}> {
     return (
         <Page breadcrumbs={this._breadcrumbs}>
           <Card title={<span><FolderOutlined/> New Chat</span>} className={styles.formCard}>
-            <Form ref={this._formRef} onFinish={this.handleSubmit}>
+            <Form layout="vertical"
+                  onFinish={this._handleSubmit}>
               <Form.Item name="chatId"
                          label="Chat Id"
                          rules={[{
@@ -91,38 +90,36 @@ class CreateDomainChatComponent extends React.Component<InjectedProps, {}> {
     this.props.history.push(toDomainRoute(this.props.domainId, "chats"));
   }
 
-  private handleSubmit = () => {
-    this._formRef.current!.validateFields().then(values => {
-        const {chatId, chatType, membership, name, topic} = values;
-        const createChatData = {
-          chatId,
-          chatType,
-          membership,
-          name,
-          topic,
-          members: []
+  private _handleSubmit = (values: any) => {
+    const {chatId, chatType, membership, name, topic} = values;
+    const createChatData = {
+      chatId,
+      chatType,
+      membership,
+      name,
+      topic,
+      members: []
+    }
+    this.props.domainChatService.createChat(this.props.domainId, createChatData)
+        .then(() => {
+          notification.success({
+            message: 'Chat Created',
+            description: `Chat '${chatId}' successfully created`,
+            placement: "bottomRight",
+            duration: 3
+          });
+          this.props.history.push(toDomainRoute(this.props.domainId, "chats"));
+        }).catch((err) => {
+      if (err instanceof RestError) {
+        console.log(JSON.stringify(err));
+        if (err.code === "duplicate") {
+          notification["error"]({
+            message: 'Could Not Create Chat',
+            description: `A chat with the specified ${err.details["field"]} already exists.`,
+            placement: "bottomRight"
+          });
         }
-        this.props.domainChatService.createChat(this.props.domainId, createChatData)
-            .then(() => {
-              notification.success({
-                message: 'Chat Created',
-                description: `Chat '${chatId}' successfully created`,
-                placement: "bottomRight",
-                duration: 3
-              });
-              this.props.history.push(toDomainRoute(this.props.domainId, "chats"));
-            }).catch((err) => {
-          if (err instanceof RestError) {
-            console.log(JSON.stringify(err));
-            if (err.code === "duplicate") {
-              notification["error"]({
-                message: 'Could Not Create Chat',
-                description: `A chat with the specified ${err.details["field"]} already exists.`,
-                placement: "bottomRight"
-              });
-            }
-          }
-        });
+      }
     });
   }
 }

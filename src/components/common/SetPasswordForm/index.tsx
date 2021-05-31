@@ -41,7 +41,9 @@ export class SetPasswordForm extends React.Component<SetPasswordProps> {
 
   public render(): ReactNode {
     return (
-        <Form ref={this._formRef} onFinish={this._handleSubmit}>
+        <Form ref={this._formRef}
+              layout="vertical"
+              onFinish={this._handleSubmit}>
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item name="password"

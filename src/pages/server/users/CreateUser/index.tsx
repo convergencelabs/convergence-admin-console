@@ -66,7 +66,9 @@ class CreateUserComponent extends React.Component<InjectedProps, CreateUserCompo
       return (
           <Page breadcrumbs={this._breadcrumbs}>
             <Card title={<span><UserOutlined/> New Convergence User</span>} className={styles.formCard}>
-              <Form ref={this._formRef} onFinish={this._handleSubmit}>
+              <Form ref={this._formRef}
+                    layout="vertical"
+                    onFinish={this._handleSubmit}>
                 <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item name="username"

@@ -52,7 +52,9 @@ class CreateDomainUserComponent extends React.Component<InjectedProps> {
     return (
         <Page breadcrumbs={this._breadcrumbs}>
           <Card title={<span><UserOutlined/> New User</span>} className={styles.formCard}>
-            <Form ref={this._formRef} onFinish={this._handleSubmit}>
+            <Form ref={this._formRef}
+                  layout="vertical"
+                  onFinish={this._handleSubmit}>
               <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item name="username"
@@ -152,35 +154,33 @@ class CreateDomainUserComponent extends React.Component<InjectedProps> {
     this.props.history.push(url);
   }
 
-  private _handleSubmit = () => {
-    this._formRef.current!.validateFields().then(values => {
-        const {username, displayName, firstName, lastName, email, password} = values;
-        const userData: CreateDomainUserData = {
-          username,
-          displayName,
-          firstName,
-          lastName,
-          email,
-          password
-        };
-        this.props.domainUserService.createUser(this.props.domainId, userData)
-            .then(() => {
-              notification.success({
-                message: 'User Created',
-                description: `User '${username}' successfully created.`
-              });
-              const url = toDomainRoute(this.props.domainId, "users/");
-              this.props.history.push(url);
-            }).catch((err) => {
-          if (err instanceof RestError) {
-            if (err.code === "duplicate") {
-              notification.error({
-                message: 'Could Not Create User',
-                description: `A user with the specified ${err.details["field"]} already exists.`
-              });
-            }
-          }
-        });
+  private _handleSubmit = (values: any) => {
+    const {username, displayName, firstName, lastName, email, password} = values;
+    const userData: CreateDomainUserData = {
+      username,
+      displayName,
+      firstName,
+      lastName,
+      email,
+      password
+    };
+    this.props.domainUserService.createUser(this.props.domainId, userData)
+        .then(() => {
+          notification.success({
+            message: 'User Created',
+            description: `User '${username}' successfully created.`
+          });
+          const url = toDomainRoute(this.props.domainId, "users/");
+          this.props.history.push(url);
+        }).catch((err) => {
+      if (err instanceof RestError) {
+        if (err.code === "duplicate") {
+          notification.error({
+            message: 'Could Not Create User',
+            description: `A user with the specified ${err.details["field"]} already exists.`
+          });
+        }
+      }
     });
   }
 

@@ -24,12 +24,12 @@ interface DomainUserListProps {
 }
 
 interface DomainUserListState {
-  username: string;
+  username: string | null;
 }
 
 export class DomainUserList extends React.Component<DomainUserListProps, DomainUserListState> {
   state = {
-    username: ""
+    username: null
   };
 
   public render(): ReactNode {
@@ -92,7 +92,7 @@ export class DomainUserList extends React.Component<DomainUserListProps, DomainU
 
   private _onAdd = () => {
     const users = this.props.users.slice(0);
-    users.push(this.state.username);
+    users.push(this.state.username!);
     this.props.onChange(users);
     this.setState({username: ""});
   }

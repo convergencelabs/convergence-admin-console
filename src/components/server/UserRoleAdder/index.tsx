@@ -25,7 +25,7 @@ export interface UserRoleAdderProps {
 }
 
 export interface UserRoleAdderState {
-  selectedUsername: string;
+  selectedUsername: string | null;
   selectedRole: string;
 }
 
@@ -35,7 +35,7 @@ export class UserRoleAdder extends Component<UserRoleAdderProps,UserRoleAdderSta
     super(props);
 
     this.state = {
-      selectedUsername: "",
+      selectedUsername: null,
       selectedRole: this.props.defaultRole || ""
     };
   }
@@ -48,7 +48,7 @@ export class UserRoleAdder extends Component<UserRoleAdderProps,UserRoleAdderSta
           onChange={this._onChangeUsername}
           className={styles.username}
           value={this.state.selectedUsername}
-          placeholder={"Select User to Add"}/>
+          placeholder="Select User to Add"/>
         <Select
           style={{ width: this.props.selectWidth }}
           value={this.state.selectedRole}
@@ -76,8 +76,8 @@ export class UserRoleAdder extends Component<UserRoleAdderProps,UserRoleAdderSta
   private _onAdd = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    this.setState({selectedUsername: "", selectedRole: this.props.defaultRole});
+    this.setState({selectedUsername: null, selectedRole: this.props.defaultRole});
 
-    this.props.onAdd(this.state.selectedUsername, this.state.selectedRole);
+    this.props.onAdd(this.state.selectedUsername!, this.state.selectedRole);
   }
 }

@@ -44,7 +44,9 @@ class SessionTimeoutComponent extends React.Component<InjectedProps, SessionTime
   public render(): ReactNode {
     if (this.state.timeout !== null) {
       return (
-          <Form ref={this._formRef} onFinish={this._handleSubmit} layout="horizontal">
+          <Form ref={this._formRef}
+                layout="vertical"
+                onFinish={this._handleSubmit} >
             <Form.Item name="v"
                        label="Session Timeout (minutes)"
                        initialValue={this.state.timeout}

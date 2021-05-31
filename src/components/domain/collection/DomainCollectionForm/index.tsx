@@ -10,7 +10,7 @@
  */
 
 import React, {ReactNode} from "react";
-import {Button, Checkbox, Col, Divider, Form, FormInstance, Input, Row, Tabs} from "antd";
+import {Button, Checkbox, Col, Divider, Form, Input, Row, Tabs} from "antd";
 import {FormButtonBar} from "../../../common/FormButtonBar/";
 import {ModelSnapshotPolicyFormFragment} from "../../common/ModelSnapshotPolicyFormFragment";
 import {CollectionPermissions} from "../../../../models/domain/CollectionPermissions";
@@ -38,7 +38,6 @@ export interface DomainCollectionFormState {
 }
 
 export class DomainCollectionForm extends React.Component<DomainCollectionFormProps, DomainCollectionFormState> {
-  private _formRef = React.createRef<FormInstance>();
 
   constructor(props: DomainCollectionFormProps) {
     super(props);
@@ -52,7 +51,8 @@ export class DomainCollectionForm extends React.Component<DomainCollectionFormPr
     const {initialValue, disableId} = this.props;
 
     return (
-        <Form ref={this._formRef} onFinish={this._handleSubmit}>
+        <Form layout="vertical"
+              onFinish={this._handleSubmit}>
           <Row>
             <Col span={24}>
               <Form.Item name="id"
@@ -62,7 +62,7 @@ export class DomainCollectionForm extends React.Component<DomainCollectionFormPr
                            required: !this.props.disableId, whitespace: true, message: 'Please input an Id!',
                          }]}
               >
-                    <Input disabled={disableId}/>
+                <Input disabled={disableId}/>
               </Form.Item>
             </Col>
           </Row>
@@ -73,7 +73,7 @@ export class DomainCollectionForm extends React.Component<DomainCollectionFormPr
                          initialValue={initialValue.description}
                          rules={[{required: false, message: 'Please input a Description!', whitespace: true}]}
               >
-                    <Input.TextArea autoSize={{minRows: 2, maxRows: 6}}/>
+                <Input.TextArea autoSize={{minRows: 2, maxRows: 6}}/>
               </Form.Item>
             </Col>
           </Row>
@@ -157,8 +157,11 @@ export class DomainCollectionForm extends React.Component<DomainCollectionFormPr
                     </Form.Item>
                   </Col>
                 </Row>
-                <ModelSnapshotPolicyFormFragment initialValue={initialValue.snapshotPolicy}
-                                                 formRef={this._formRef}/>
+                <Row>
+                  <Col span={24}>
+                    <ModelSnapshotPolicyFormFragment initialValue={initialValue.snapshotPolicy}/>
+                  </Col>
+                </Row>
               </Tabs.TabPane>
             </Tabs>
           </Row>
@@ -179,56 +182,54 @@ export class DomainCollectionForm extends React.Component<DomainCollectionFormPr
     this.props.onCancel();
   }
 
-  private _handleSubmit = () => {
-    this._formRef.current!.validateFields().then(values => {
-        const {
-          id,
-          description,
+  private _handleSubmit = (values: any) => {
+    const {
+      id,
+      description,
 
-          readPermission,
-          createPermission,
-          writePermission,
-          removePermission,
-          managePermission,
+      readPermission,
+      createPermission,
+      writePermission,
+      removePermission,
+      managePermission,
 
-          overrideSnapshotPolicy,
+      overrideSnapshotPolicy,
 
-          snapshotsEnabled,
-          triggerByVersion,
-          maximumVersion,
-          limitByVersion,
-          minimumVersion,
+      snapshotsEnabled,
+      triggerByVersion,
+      maximumVersion,
+      limitByVersion,
+      minimumVersion,
 
-          triggerByTime,
-          maximumTime,
-          limitByTime,
-          minimumTime
-        } = values;
+      triggerByTime,
+      maximumTime,
+      limitByTime,
+      minimumTime
+    } = values;
 
-        const worldPermissions = new CollectionPermissions(
-            readPermission, writePermission, createPermission, removePermission, managePermission);
+    const worldPermissions = new CollectionPermissions(
+        readPermission, writePermission, createPermission, removePermission, managePermission);
 
-        const userPermissions = this.state.userPermissions.slice(0);
+    const userPermissions = this.state.userPermissions.slice(0);
 
-        // We have to or the values here in case the tab was never show, these will be
-        // all undefined, however in that case it means they were not edited and
-        // we can use what was passed in.
-        const snapshotPolicy = new ModelSnapshotPolicy(
-            snapshotsEnabled || this.props.initialValue.snapshotPolicy.snapshotsEnabled,
-            triggerByVersion || this.props.initialValue.snapshotPolicy.triggerByVersion,
-            maximumVersion || this.props.initialValue.snapshotPolicy.maximumVersionInterval,
-            limitByVersion || this.props.initialValue.snapshotPolicy.limitByVersion,
-            minimumVersion || this.props.initialValue.snapshotPolicy.minimumVersionInterval,
-            triggerByTime || this.props.initialValue.snapshotPolicy.triggerByTime,
-            maximumTime || this.props.initialValue.snapshotPolicy.maximumTimeInterval,
-            limitByTime || this.props.initialValue.snapshotPolicy.limitByTime,
-            minimumTime || this.props.initialValue.snapshotPolicy.minimumTimeInterval);
+    // We have to or the values here in case the tab was never show, these will be
+    // all undefined, however in that case it means they were not edited and
+    // we can use what was passed in.
+    const snapshotPolicy = new ModelSnapshotPolicy(
+        snapshotsEnabled || this.props.initialValue.snapshotPolicy.snapshotsEnabled,
+        triggerByVersion || this.props.initialValue.snapshotPolicy.triggerByVersion,
+        maximumVersion || this.props.initialValue.snapshotPolicy.maximumVersionInterval,
+        limitByVersion || this.props.initialValue.snapshotPolicy.limitByVersion,
+        minimumVersion || this.props.initialValue.snapshotPolicy.minimumVersionInterval,
+        triggerByTime || this.props.initialValue.snapshotPolicy.triggerByTime,
+        maximumTime || this.props.initialValue.snapshotPolicy.maximumTimeInterval,
+        limitByTime || this.props.initialValue.snapshotPolicy.limitByTime,
+        minimumTime || this.props.initialValue.snapshotPolicy.minimumTimeInterval);
 
-        const collection = new Collection(
-            id, description, worldPermissions, userPermissions, overrideSnapshotPolicy, snapshotPolicy);
+    const collection = new Collection(
+        id, description, worldPermissions, userPermissions, overrideSnapshotPolicy, snapshotPolicy);
 
-        this.props.onSave(collection);
-    });
+    this.props.onSave(collection);
   }
 
   private _onUserPermissionsChanged = (p: CollectionUserPermissions[]) => {

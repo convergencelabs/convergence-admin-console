@@ -69,7 +69,9 @@ class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespac
       return (
         <Page breadcrumbs={this._breadcrumbs}>
           <Card title={<span><FolderOutlined /> Edit Namespace</span>} className={styles.formCard}>
-            <Form ref={this._formRef} onFinish={this.handleSubmit}>
+            <Form ref={this._formRef}
+                  layout="vertical"
+                  onFinish={this.handleSubmit}>
               <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item name="id"
@@ -99,7 +101,7 @@ class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespac
               </Row>
             </Form>
           </Card>
-          <Card className={styles.formCard}>
+          <Card className={styles.formCard} title="User Roles" type="inner">
             <UserRoleAdder
               roles={this._roles}
               defaultRole="Developer"

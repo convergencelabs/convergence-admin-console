@@ -11,7 +11,6 @@
 
 import React, {ReactNode} from "react";
 import {Button, Form, FormInstance, Input, notification, Select} from "antd";
-import {FormFieldWithHelp} from "../../../components/common/FormFieldWithHelp/";
 import {FormButtonBar} from "../../../components/common/FormButtonBar/";
 import {injectAs} from "../../../utils/mobx-utils";
 import {SERVICES} from "../../../services/ServiceConstants";
@@ -61,14 +60,12 @@ class NamespaceSettingsComponent extends React.Component<InjectedProps, Namespac
       const defaultNamespace = this.state.configs.get(CONFIG.Namespaces.DefaultNamespace);
 
       return (
-          <Form ref={this._formRef} onFinish={this._handleSubmit} layout="horizontal">
+          <Form ref={this._formRef}
+                layout="vertical"
+                onFinish={this._handleSubmit}>
             <Form.Item name="namespacesEnabled"
-                       label={(
-                           <FormFieldWithHelp
-                               label="Namespaces"
-                               tooltip="Determines if the server will allow grouping related domains into namespaces."
-                           />
-                       )}
+                       label="Namespaces"
+                       tooltip="Determines if the server will allow grouping related domains into namespaces"
                        initialValue={namespacesEnabled}
             >
               <Select onChange={(val: string) => this.setState({namespacesEnabled: val === ENABLED})}>
@@ -77,14 +74,8 @@ class NamespaceSettingsComponent extends React.Component<InjectedProps, Namespac
               </Select>
             </Form.Item>
             <Form.Item name="userNamespacesEnabled"
-                       label={(
-                           <FormFieldWithHelp
-                               label="User Namespaces"
-                               tooltip={
-                                 `Determines if each user has an implicit namespace in which to create domains. This option requires namespaces to be enabled.`
-                               }
-                           />
-                       )}
+                       label="User Namespaces"
+                       tooltip={`Determines if each user has an implicit namespace in which to create domains. This option requires namespaces to be enabled.`}
                        initialValue={userNamespacesEnabled}
             >
               <Select disabled={!this.state.namespacesEnabled}>
@@ -93,14 +84,8 @@ class NamespaceSettingsComponent extends React.Component<InjectedProps, Namespac
               </Select>
             </Form.Item>
             <Form.Item name="defaultNamespace"
-                       label={(
-                           <FormFieldWithHelp
-                               label="Default Namespaces"
-                               tooltip={
-                                 `The default namespace domains will be created in. This namespace will automatically be created and can not be deleted. This is a required field if namespaces are disabled.`
-                               }
-                           />
-                       )}
+                       label="Default Namespaces"
+                       tooltip={`The default namespace domains will be created in. This namespace will automatically be created and can not be deleted. This is a required field if namespaces are disabled.`}
                        initialValue={defaultNamespace}
             >
               <Input/>
@@ -123,30 +108,30 @@ class NamespaceSettingsComponent extends React.Component<InjectedProps, Namespac
 
   private _handleSubmit = () => {
     this._formRef.current!.validateFields().then(values => {
-        const {defaultNamespace, namespacesEnabled, userNamespacesEnabled} = values;
-        const config = new NamespaceConfig(
-            namespacesEnabled === ENABLED,
-            userNamespacesEnabled === ENABLED,
-            defaultNamespace
-        );
-        this.props.configService
-            .setNamespaceConfig(config)
-            .then(() => {
-              this.props.configStore.setDefaultNamespace(defaultNamespace);
-              this.props.configStore.setNamespacesEnabled(namespacesEnabled === ENABLED);
-              this.props.configStore.setUserNamespacesEnabled(userNamespacesEnabled === ENABLED);
-              notification.success({
-                message: "Configuration Saved",
-                description: "Namespace configuration successfully saved."
-              })
+      const {defaultNamespace, namespacesEnabled, userNamespacesEnabled} = values;
+      const config = new NamespaceConfig(
+          namespacesEnabled === ENABLED,
+          userNamespacesEnabled === ENABLED,
+          defaultNamespace
+      );
+      this.props.configService
+          .setNamespaceConfig(config)
+          .then(() => {
+            this.props.configStore.setDefaultNamespace(defaultNamespace);
+            this.props.configStore.setNamespacesEnabled(namespacesEnabled === ENABLED);
+            this.props.configStore.setUserNamespacesEnabled(userNamespacesEnabled === ENABLED);
+            notification.success({
+              message: "Configuration Saved",
+              description: "Namespace configuration successfully saved."
             })
-            .catch(err => {
-              console.error(err);
-              notification.error({
-                message: "Configuration Not Saved",
-                description: "Namespace  configuration could not be saved."
-              })
-            });
+          })
+          .catch(err => {
+            console.error(err);
+            notification.error({
+              message: "Configuration Not Saved",
+              description: "Namespace  configuration could not be saved."
+            })
+          });
     });
   }
 

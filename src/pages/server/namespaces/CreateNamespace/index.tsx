@@ -12,8 +12,8 @@
 import * as React from 'react';
 import {ReactNode} from 'react';
 import {Page} from "../../../../components";
-import {FolderOutlined, QuestionCircleOutlined} from '@ant-design/icons';
-import {Button, Card, Col, Form, FormInstance, Input, notification, Row, Tooltip} from "antd";
+import {FolderOutlined} from '@ant-design/icons';
+import {Button, Card, Col, Form, FormInstance, Input, notification, Row} from "antd";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
@@ -38,7 +38,9 @@ class CreateNamespaceComponent extends React.Component<InjectedProps, {}> {
     return (
         <Page breadcrumbs={this._breadcrumbs}>
           <Card title={<span><FolderOutlined/> New Namespace</span>} className={styles.formCard}>
-            <Form ref={this._formRef} onFinish={this.handleSubmit}>
+            <Form ref={this._formRef}
+                  layout="vertical"
+                  onFinish={this.handleSubmit}>
               <Row gutter={16}>
                 <Col span={24}>
                   <Form.Item name="id"
@@ -54,13 +56,8 @@ class CreateNamespaceComponent extends React.Component<InjectedProps, {}> {
               <Row gutter={16}>
                 <Col span={24}>
                   <Form.Item name="displayName"
-                             label={(
-                                 <span>Display Name&nbsp;
-                                   <Tooltip title="A display friendly name for the namespace?">
-                                    <QuestionCircleOutlined/>
-                                  </Tooltip>
-                                 </span>
-                             )}
+                             label="Display Name"
+                             tooltip="A display friendly name for the namespace"
                              rules={[{required: true, message: 'Please input a Display Name!', whitespace: true}]}
                   >
                     <Input/>

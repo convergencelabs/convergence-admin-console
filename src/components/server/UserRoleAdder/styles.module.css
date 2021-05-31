@@ -11,6 +11,7 @@
 
 .userRoleAdder {
   display: flex;
+  margin-bottom: 10px;
 }
 
 .userRoleAdder .username {

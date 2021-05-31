@@ -9,12 +9,11 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import React, {ReactNode, RefObject} from "react";
-import {Checkbox, Col, Form, FormInstance, InputNumber, Row} from "antd";
+import React, {ReactNode} from "react";
+import {Checkbox, Col, Form, InputNumber, Row} from "antd";
 import {ModelSnapshotPolicy} from "../../../../models/domain/ModelSnapshotPolicy";
 
 interface ModelSnapshotPolicyFormFragmentProps {
-  formRef: RefObject<FormInstance>
   initialValue: ModelSnapshotPolicy;
 }
 

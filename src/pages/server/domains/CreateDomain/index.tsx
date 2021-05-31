@@ -15,7 +15,6 @@ import {DatabaseOutlined} from '@ant-design/icons';
 import {Button, Card, Col, Form, FormInstance, Input, notification, Radio, Row} from "antd";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
-import {FormFieldWithHelp} from "../../../../components/common/FormFieldWithHelp/";
 import {NamespaceAutoComplete} from "../../../../components/server/NamespaceAutoComplete";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
@@ -59,7 +58,9 @@ class CreateDomainComponent extends React.Component<InjectedProps, CreateDomainS
     return (
         <Page breadcrumbs={this._breadcrumbs}>
           <Card title={<span><DatabaseOutlined/> New Domain</span>} className={styles.formCard}>
-            <Form ref={this._formRef} onFinish={this._handleSubmit}>
+            <Form ref={this._formRef}
+                  layout="vertical"
+                  onFinish={this._handleSubmit}>
               {
                 this.props.configStore.namespacesEnabled && this.props.configStore.userNamespacesEnabled ?
                     <Row gutter={16}>
@@ -100,12 +101,8 @@ class CreateDomainComponent extends React.Component<InjectedProps, CreateDomainS
               <Row gutter={16}>
                 <Col span={24}>
                   <Form.Item name="id"
-                             label={(
-                                 <FormFieldWithHelp
-                                     label="Domain Id"
-                                     tooltip="The url friendly id that will be used to connect to the domain."
-                                 />
-                             )}
+                             label="Domain Id"
+                             tooltip="The url friendly id that will be used to connect to the domain."
                              rules={[{required: true, message: 'Please input a domain id!', whitespace: true}]}
                   >
                     <Input placeholder="Enter a unique id"/>
@@ -115,12 +112,8 @@ class CreateDomainComponent extends React.Component<InjectedProps, CreateDomainS
               <Row gutter={16}>
                 <Col span={24}>
                   <Form.Item name="displayName"
-                             label={(
-                                 <FormFieldWithHelp
-                                     label="Display Name"
-                                     tooltip="A nickname that will be displayed in the admin console."
-                                 />
-                             )}
+                             label="Display Name"
+                             tooltip="A nickname that will be displayed in the admin console."
                              rules={[{required: true, whitespace: true, message: 'Please input a display name!'}]}
                   >
                     <Input placeholder="Enter an optional display name"/>

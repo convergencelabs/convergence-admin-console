@@ -59,7 +59,7 @@ class ModelSnapshotPolicySettingsComponent extends React.Component<InjectedProps
     if (this.state.initialValue !== null) {
       return (
         <Form ref={this._formRef} onFinish={this._handleSubmit}>
-          <ModelSnapshotPolicyFormFragment formRef={this._formRef} initialValue={this.state.initialValue}/>
+          <ModelSnapshotPolicyFormFragment initialValue={this.state.initialValue}/>
           <Row>
             <Col span={24}>
               <FormButtonBar>

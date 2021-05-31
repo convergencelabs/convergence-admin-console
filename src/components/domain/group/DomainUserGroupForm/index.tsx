@@ -10,7 +10,7 @@
  */
 
 import React, {ReactNode} from "react";
-import {Button, Col, Form, FormInstance, Input, Row} from "antd";
+import {Button, Col, Form, Input, Row} from "antd";
 import {DomainId} from "../../../../models/DomainId";
 import {DomainUserList} from "../../user/DomainUserList/";
 import {DomainUserGroup} from "../../../../models/domain/DomainUserGroup";
@@ -31,7 +31,6 @@ export interface DomainUserGroupFormState {
 }
 
 export class DomainUserGroupForm extends React.Component<DomainUserGroupFormProps, DomainUserGroupFormState> {
-  private _formRef = React.createRef<FormInstance>();
 
   constructor(props: DomainUserGroupFormProps) {
     super(props);
@@ -43,7 +42,7 @@ export class DomainUserGroupForm extends React.Component<DomainUserGroupFormProp
 
   public render(): ReactNode {
     return (
-        <Form ref={this._formRef} onFinish={this._handleSubmit}>
+        <Form layout="vertical" onFinish={this._handleSubmit}>
           <Row gutter={16}>
             <Col span={24}>
               <Form.Item name="id"
@@ -68,13 +67,15 @@ export class DomainUserGroupForm extends React.Component<DomainUserGroupFormProp
             </Col>
           </Row>
           <Row>
-            <Form.Item label="Members">
-              <DomainUserList
-                  domainId={this.props.domainId}
-                  users={this.state.members}
-                  onChange={this._onMembersChanged}
-              />
-            </Form.Item>
+            <Col span={24}>
+              <Form.Item label="Members">
+                <DomainUserList
+                    domainId={this.props.domainId}
+                    users={this.state.members}
+                    onChange={this._onMembersChanged}
+                />
+              </Form.Item>
+            </Col>
           </Row>
           <Row>
             <Col span={24}>
@@ -96,11 +97,9 @@ export class DomainUserGroupForm extends React.Component<DomainUserGroupFormProp
     this.props.onCancel();
   }
 
-  private _handleSubmit = () => {
-    this._formRef.current!.validateFields().then(values => {
-        const {id, description} = values;
-        const group = new DomainUserGroup(id, description, this.state.members);
-        this.props.onSave(group);
-    });
+  private _handleSubmit = (values: any) => {
+    const {id, description} = values;
+    const group = new DomainUserGroup(id, description, this.state.members);
+    this.props.onSave(group);
   }
 }

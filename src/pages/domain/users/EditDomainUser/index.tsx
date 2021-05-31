@@ -12,7 +12,7 @@
 import React, {ReactNode} from 'react';
 import {Page} from "../../../../components";
 import {QuestionCircleOutlined, UserOutlined} from '@ant-design/icons';
-import {Button, Card, Col, Form, FormInstance, Input, notification, Row, Select, Tooltip} from "antd";
+import {Button, Card, Col, Form, Input, notification, Row, Select, Tooltip} from "antd";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
 import {RestError} from "../../../../services/RestError";
@@ -44,7 +44,6 @@ export interface EditDomainUserState {
 class EditDomainUserComponent extends React.Component<InjectedProps, EditDomainUserState> {
   private readonly _breadcrumbs: IBreadcrumbSegment[];
   private _userSubscription: PromiseSubscription | null;
-  private _formRef = React.createRef<FormInstance>();
 
   constructor(props: InjectedProps) {
     super(props);
@@ -76,7 +75,7 @@ class EditDomainUserComponent extends React.Component<InjectedProps, EditDomainU
       return (
           <Page breadcrumbs={this._breadcrumbs}>
             <Card title={this._renderToolbar()} className={styles.formCard}>
-              <Form ref={this._formRef} onFinish={this._handleSubmit}>
+              <Form layout="vertical" onFinish={this._handleSubmit}>
                 <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item name="username"
@@ -170,60 +169,58 @@ class EditDomainUserComponent extends React.Component<InjectedProps, EditDomainU
   }
 
   private _renderToolbar(): ReactNode {
-      return (<CardTitleToolbar icon={<UserOutlined />} title="Edit User"/>)
-    }
+    return (<CardTitleToolbar icon={<UserOutlined/>} title="Edit User"/>)
+  }
 
   private _loadUser(): void {
-      const {promise, subscription} = makeCancelable(
-          this.props.domainUserService.getUser(this.props.domainId, this.props.match.params.username));
-      this._userSubscription = subscription;
-      promise.then(user => {
-        this._userSubscription = null;
-        this.setState({user});
-      }).catch(err => {
-        this._userSubscription = null;
-        this.setState({user: null});
-      });
-    }
+    const {promise, subscription} = makeCancelable(
+        this.props.domainUserService.getUser(this.props.domainId, this.props.match.params.username));
+    this._userSubscription = subscription;
+    promise.then(user => {
+      this._userSubscription = null;
+      this.setState({user});
+    }).catch(err => {
+      this._userSubscription = null;
+      this.setState({user: null});
+    });
+  }
 
   private _handleCancel = () => {
-      const usersUrl = toDomainRoute(this.props.domainId, "users/");
-      this.props.history.push(usersUrl);
-    }
-
-  private _handleSubmit = () => {
-      this._formRef.current!.validateFields().then(values => {
-          const {username, displayName, firstName, lastName, email, status} = values;
-          const disabled = status === "disabled";
-          const userData: UpdateDomainUserData = {
-            displayName,
-            firstName,
-            lastName,
-            email,
-            disabled
-          };
-          this.props.domainUserService.updateUser(this.props.domainId, username, userData)
-              .then(() => {
-                notification.success({
-                  message: 'User Updated',
-                  description: `User '${username}' successfully updated`
-                });
-                const usersUrl = toDomainRoute(this.props.domainId, "users/");
-                this.props.history.push(usersUrl);
-              }).catch((err) => {
-            if (err instanceof RestError) {
-              console.log(JSON.stringify(err));
-              if (err.code === "duplicate") {
-                notification.error({
-                  message: 'Could Not Create User',
-                  description: `A user with the specified ${err.details["field"]} already exists.`
-                });
-              }
-            }
-          });
-      });
-    }
+    const usersUrl = toDomainRoute(this.props.domainId, "users/");
+    this.props.history.push(usersUrl);
   }
+
+  private _handleSubmit = (values: any) => {
+    const {username, displayName, firstName, lastName, email, status} = values;
+    const disabled = status === "disabled";
+    const userData: UpdateDomainUserData = {
+      displayName,
+      firstName,
+      lastName,
+      email,
+      disabled
+    };
+    this.props.domainUserService.updateUser(this.props.domainId, username, userData)
+        .then(() => {
+          notification.success({
+            message: 'User Updated',
+            description: `User '${username}' successfully updated`
+          });
+          const usersUrl = toDomainRoute(this.props.domainId, "users/");
+          this.props.history.push(usersUrl);
+        }).catch((err) => {
+      if (err instanceof RestError) {
+        console.log(JSON.stringify(err));
+        if (err.code === "duplicate") {
+          notification.error({
+            message: 'Could Not Create User',
+            description: `A user with the specified ${err.details["field"]} already exists.`
+          });
+        }
+      }
+    });
+  }
+}
 
 const injections = [SERVICES.DOMAIN_USER_SERVICE];
 export const EditDomainUser = injectAs<EditDomainUserProps>(injections, EditDomainUserComponent);

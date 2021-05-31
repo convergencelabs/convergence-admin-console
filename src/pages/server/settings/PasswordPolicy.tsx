@@ -55,7 +55,9 @@ class PasswordPolicyComponent extends React.Component<InjectedProps, PasswordPol
       const special = this.state.configs.requireSpecial ? TRUE : FALSE;
 
       return (
-          <Form ref={this._formRef} onFinish={this._handleSubmit} layout="horizontal">
+          <Form ref={this._formRef}
+                layout="vertical"
+                onFinish={this._handleSubmit} >
             <Form.Item name="minLength"
                        label="Minimum Length"
                        initialValue={minLen}

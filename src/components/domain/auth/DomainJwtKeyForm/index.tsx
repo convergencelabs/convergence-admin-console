@@ -45,7 +45,8 @@ export class DomainJwtKeyForm extends React.Component<DomainJwtKeyFormProps, Dom
 
   public render(): ReactNode {
     return (
-      <Form onFinish={this._handleSubmit}>
+      <Form layout="vertical"
+            onFinish={this._handleSubmit}>
         <Form.Item name="id"
                    label="Id"
                    initialValue={this.props.initialValue.id}
