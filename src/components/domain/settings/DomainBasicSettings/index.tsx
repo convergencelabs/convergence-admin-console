@@ -9,7 +9,7 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import React, {FormEvent, ReactNode} from "react";
+import React, {ReactNode} from "react";
 import {Button, Col, Form, FormInstance, Input, notification, Row} from "antd";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
@@ -82,8 +82,7 @@ class DomainBasicSettingsForm extends React.Component<InjectedProps, DomainBasic
     }
   }
 
-  private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  private _handleSubmit = () => {
     this._formRef.current!.validateFields().then(values => {
         const {displayName} = values;
         this.props.domainService.updateDomain(this.props.domainId, displayName)

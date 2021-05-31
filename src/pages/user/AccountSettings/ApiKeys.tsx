@@ -13,7 +13,7 @@ import React, {ReactNode} from 'react';
 import {
   CopyOutlined,
   DeleteOutlined,
-  EditOutlined,
+  EditOutlined, KeyOutlined,
   PlusCircleOutlined,
   QuestionCircleOutlined,
   ReloadOutlined,
@@ -128,7 +128,7 @@ export class ApiKeysComponent extends React.Component<InjectedProps, ApiKeysStat
 
   private _renderToolbar(): ReactNode {
     return (
-      <CardTitleToolbar title="API Keys" icon="key">
+      <CardTitleToolbar title="API Keys" icon={<KeyOutlined />}>
         <Tooltip placement="topRight" title="Create API Key" mouseEnterDelay={1}>
           <Button className={styles.iconButton} shape="circle" size="small" htmlType="button"
                   onClick={this._goToCreate}>

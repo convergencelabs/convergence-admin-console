@@ -13,7 +13,7 @@ import React, {KeyboardEvent, ReactNode} from "react";
 import Tooltip from "antd/es/tooltip";
 import {
   DeleteOutlined,
-  EditOutlined,
+  EditOutlined, KeyOutlined,
   PlusCircleOutlined,
   QuestionCircleOutlined,
   ReloadOutlined,
@@ -69,12 +69,12 @@ class DomainJwtKeysComponent extends React.Component<InjectedProps, DomainJwtKey
       title: 'Key Age',
       dataIndex: 'updated',
       sorter: (a: DomainJwtKey, b: DomainJwtKey) => a.updated.getTime() - b.updated.getTime(),
-      render: (val: Date, record: DomainJwtKey) => durationToNow(val)
+      render: (val: Date, _: DomainJwtKey) => durationToNow(val)
     }, {
       title: 'Enabled',
       dataIndex: 'enabled',
-      sorter: (a: DomainJwtKey, b: DomainJwtKey) => a.updated,
-      render: (val: boolean, record: DomainJwtKey) => yesNo(val)
+      sorter: (a: DomainJwtKey, _: DomainJwtKey) => a.updated,
+      render: (val: boolean, _: DomainJwtKey) => yesNo(val)
     }, {
       title: '',
       align: 'right',
@@ -125,7 +125,7 @@ class DomainJwtKeysComponent extends React.Component<InjectedProps, DomainJwtKey
 
   private _renderToolbar(): ReactNode {
     return (
-      <CardTitleToolbar title="Keys" icon="key">
+      <CardTitleToolbar title="Keys" icon={<KeyOutlined />}>
         <span className={styles.search}>
           <Input placeholder="Search Keys" addonAfter={<SearchOutlined />} onKeyUp={this._onFilterChange}/>
         </span>
@@ -202,7 +202,7 @@ class DomainJwtKeysComponent extends React.Component<InjectedProps, DomainJwtKey
     promise.then(keys => {
       this._keysSubscription = null;
       this.setState({keys});
-    }).catch(err => {
+    }).catch(() => {
       this._keysSubscription = null;
       this.setState({keys: null});
     });

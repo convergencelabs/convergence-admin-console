@@ -9,7 +9,7 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import React, {FormEvent, ReactNode} from "react";
+import React, {ReactNode} from "react";
 import {Page} from "../../../../components";
 import {FolderOutlined} from '@ant-design/icons';
 import {Button, Card, Form, FormInstance, Input, notification, Select} from "antd";
@@ -91,8 +91,7 @@ class CreateDomainChatComponent extends React.Component<InjectedProps, {}> {
     this.props.history.push(toDomainRoute(this.props.domainId, "chats"));
   }
 
-  private handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  private handleSubmit = () => {
     this._formRef.current!.validateFields().then(values => {
         const {chatId, chatType, membership, name, topic} = values;
         const createChatData = {

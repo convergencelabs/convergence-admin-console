@@ -9,7 +9,7 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import React, {FormEvent, ReactNode} from "react";
+import React, {ReactNode} from "react";
 import {Page} from "../../../../components";
 import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
 import { FolderOutlined } from '@ant-design/icons';
@@ -165,8 +165,8 @@ class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespac
     this.props.history.push("/namespaces/");
   };
 
-  private handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  private handleSubmit = () => {
+
     this._formRef.current!.validateFields().then(values => {
         const {id, displayName} = values;
         this.props.namespaceService.updateNamespace(id, displayName)

@@ -15,8 +15,8 @@ import Tooltip from "antd/es/tooltip";
 import {
   DeleteOutlined,
   EditOutlined,
-  EyeOutlined,
-  QuestionCircleOutlined,
+  EyeOutlined, MessageOutlined, PlusCircleOutlined,
+  QuestionCircleOutlined, ReloadOutlined,
   SearchOutlined,
 } from '@ant-design/icons';
 import {Button, Card, Input, notification, Popconfirm, Table, TablePaginationConfig} from "antd";
@@ -150,12 +150,12 @@ class DomainChatComponent extends React.Component<InjectedProps, DomainChatState
 
   private _renderToolbar(): ReactNode {
     return (
-      <CardTitleToolbar title="Chat" icon="message">
+      <CardTitleToolbar title="Chat" icon={<MessageOutlined />}>
         <span className={styles.search}>
           <Input placeholder="Search Chat" addonAfter={<SearchOutlined />} onKeyUp={this._onFilterChange}/>
         </span>
-        <ToolbarButton icon="plus-circle" tooltip="Create Chat" onClick={this._goToCreate}/>
-        <ToolbarButton icon="reload" tooltip="Reload Chats" onClick={this._loadChats}/>
+        <ToolbarButton icon={<PlusCircleOutlined />} tooltip="Create Chat" onClick={this._goToCreate}/>
+        <ToolbarButton icon={<ReloadOutlined />} tooltip="Reload Chats" onClick={this._loadChats}/>
       </CardTitleToolbar>
     );
   }

@@ -10,7 +10,7 @@
  */
 
 import React, {KeyboardEvent, ReactNode} from 'react';
-import {Page} from "../../../../components/common/Page/";
+import {Page} from "../../../../components";
 import Tooltip from "antd/es/tooltip";
 
 import {
@@ -20,7 +20,7 @@ import {
   PlusCircleOutlined,
   QuestionCircleOutlined,
   ReloadOutlined,
-  SearchOutlined,
+  SearchOutlined, UserOutlined,
 } from '@ant-design/icons';
 
 import { Button, Card, Input, message, notification, Popconfirm, Table, Tag } from "antd";
@@ -87,7 +87,7 @@ class ServerUsersComponent extends React.Component<InjectedProps, ServerUsersSta
       dataIndex: 'serverRole',
       key: 'serverRole',
       align: 'left',
-      render: (value: any, record: any) => <Tag color="blue">{value}</Tag>
+      render: (value: any, _: any) => <Tag color="blue">{value}</Tag>
     }, {
       title: 'Actions',
       key: 'actions',
@@ -126,7 +126,7 @@ class ServerUsersComponent extends React.Component<InjectedProps, ServerUsersSta
 
   private _renderToolbar(): ReactNode {
     return (
-      <CardTitleToolbar title="Users" icon="user">
+      <CardTitleToolbar title="Users" icon={<UserOutlined />}>
         <span className={styles.search}>
           <Input placeholder="Search Users" addonAfter={<SearchOutlined />} onKeyUp={this._onFilterChange}/>
         </span>
@@ -218,7 +218,7 @@ class ServerUsersComponent extends React.Component<InjectedProps, ServerUsersSta
         this._loadUsers();
         message.success(`User '${username}' deleted.`);
       })
-      .catch(err => {
+      .catch(() => {
         notification.error({
           message: 'Could Not Delete User',
           description: `The user could not be deleted.`,
@@ -233,7 +233,7 @@ class ServerUsersComponent extends React.Component<InjectedProps, ServerUsersSta
     promise.then(users => {
       this._usersSubscription = null;
       this.setState({users});
-    }).catch(err => {
+    }).catch(() => {
       this._usersSubscription = null;
       this.setState({users: null});
     });

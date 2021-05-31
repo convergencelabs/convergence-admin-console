@@ -9,7 +9,7 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import React, {FormEvent, ReactNode} from "react";
+import React, {ReactNode} from "react";
 import {Page} from "../../../../components";
 import {QuestionCircleOutlined, UserOutlined} from '@ant-design/icons';
 import {Button, Card, Col, Form, FormInstance, Input, notification, Row, Select, Tooltip} from "antd";
@@ -191,8 +191,7 @@ class CreateUserComponent extends React.Component<InjectedProps, CreateUserCompo
     this.props.history.push("/users/");
   }
 
-  private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  private _handleSubmit = () => {
     this._formRef.current!.validateFields().then(values => {
       const {username, displayName, firstName, lastName, email, password, serverRole} = values;
       const userData: CreateUserData = {

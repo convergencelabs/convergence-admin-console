@@ -15,8 +15,8 @@ import Tooltip from "antd/es/tooltip";
 import {
   DeleteOutlined,
   EditOutlined,
-  EyeOutlined,
-  QuestionCircleOutlined,
+  EyeOutlined, FolderOutlined, PlusCircleOutlined,
+  QuestionCircleOutlined, ReloadOutlined,
   SearchOutlined,
 } from '@ant-design/icons';
 import {Button, Card, Input, notification, Popconfirm, Table, TablePaginationConfig} from "antd";
@@ -146,7 +146,7 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
 
   private _renderToolbar(): ReactNode {
     return (
-      <CardTitleToolbar title="Collections" icon="folder">
+      <CardTitleToolbar title="Collections" icon={<FolderOutlined />}>
         <span className={styles.search}>
           <Input placeholder="Search Collections"
                  addonAfter={<SearchOutlined />}
@@ -154,8 +154,8 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
                  value={this.state.searchParams.filter}
           />
         </span>
-        <ToolbarButton icon="plus-circle" tooltip="Create Collection" onClick={this._goToCreate}/>
-        <ToolbarButton icon="reload" tooltip="Reload Collections" onClick={this._loadCollections}/>
+        <ToolbarButton icon={<PlusCircleOutlined />} tooltip="Create Collection" onClick={this._goToCreate}/>
+        <ToolbarButton icon={<ReloadOutlined />} tooltip="Reload Collections" onClick={this._loadCollections}/>
       </CardTitleToolbar>
     );
   }

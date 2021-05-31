@@ -15,6 +15,7 @@ import {observer} from "mobx-react";
 import {Breadcrumb} from 'antd';
 import {breadcrumbsStore, IBreadcrumbSegment} from "../../../stores/BreacrumsStore";
 import styles from './styles.module.css';
+import {HomeOutlined} from "@ant-design/icons";
 
 export interface AppBreadcrumbsProps {
   hideHome?: boolean;
@@ -25,7 +26,7 @@ class AppBreadcrumbsComponent extends React.Component<AppBreadcrumbsProps, {}> {
   public render(): ReactNode {
     const home = this.props.hideHome ?
         null :
-        AppBreadcrumbsComponent._renderItem({link: "/", icon: "home"}, 0);
+        AppBreadcrumbsComponent._renderItem({link: "/", icon: <HomeOutlined />}, 0);
 
     const children = this._renderItems();
 

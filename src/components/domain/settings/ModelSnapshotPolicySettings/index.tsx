@@ -9,7 +9,7 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import React, {FormEvent, ReactNode} from "react";
+import React, {ReactNode} from "react";
 import {Button, Col, Form, FormInstance, notification, Row} from "antd";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
@@ -75,8 +75,7 @@ class ModelSnapshotPolicySettingsComponent extends React.Component<InjectedProps
   }
 
 
-  private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  private _handleSubmit = () => {
     this._formRef.current!.validateFields().then(values => {
         const {
           snapshotsEnabled,

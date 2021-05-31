@@ -9,7 +9,7 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import React, {FormEvent, ReactNode} from "react";
+import React, {ReactNode} from "react";
 import {Button, Form, FormInstance, InputNumber, notification, Select} from "antd";
 import {FormButtonBar} from "../../../components/common/FormButtonBar";
 import styles from "./styles.module.css";
@@ -111,8 +111,7 @@ class PasswordPolicyComponent extends React.Component<InjectedProps, PasswordPol
     );
   }
 
-  private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  private _handleSubmit = () => {
     this._formRef.current!.validateFields().then(values => {
         const {minLength, requireDigit, requireUpperCase, requireLowerCase, requireSpecialCharacter} = values;
         const config = new PasswordConfig(

@@ -9,7 +9,7 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import React, {FormEvent, ReactNode} from "react";
+import React, {ReactNode} from "react";
 import {Page} from "../../../../components";
 import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
 import {QuestionCircleOutlined, UserOutlined} from '@ant-design/icons';
@@ -176,8 +176,7 @@ class EditUserComponent extends React.Component<InjectedProps, EditUserState> {
     this.props.history.push("/users/");
   }
 
-  private handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  private handleSubmit = () => {
     this._formRef.current!.validateFields().then(values => {
         const {username, displayName, firstName, lastName, email, serverRole} = values;
         const userData: UpdateUserData = {

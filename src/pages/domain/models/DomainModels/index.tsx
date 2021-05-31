@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {ReactNode} from 'react';
-import {Page} from "../../../../components/common/Page/";
+import {Page} from "../../../../components";
 import {Card, notification} from "antd";
 import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
 import {RouteComponentProps} from "react-router";
@@ -16,6 +16,7 @@ import {DomainModelsTable} from './DomainModelsTable';
 import queryString from 'query-string';
 import {PagedData} from "../../../../models/PagedData";
 import {ModelSearchMode} from "./ModelSearchMode";
+import {FileOutlined, PlusCircleOutlined} from "@ant-design/icons";
 
 export interface SearchParams {
   mode: ModelSearchMode;
@@ -109,37 +110,37 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
 
   private _renderToolbar(): ReactNode {
     return (
-      <CardTitleToolbar title="Models" icon="file">
-        <ToolbarButton icon="plus-circle" tooltip="Create Model" onClick={this._goToCreate}/>
+      <CardTitleToolbar title="Models" icon={<FileOutlined />}>
+        <ToolbarButton icon={<PlusCircleOutlined />} tooltip="Create Model" onClick={this._goToCreate}/>
       </CardTitleToolbar>
     );
   }
 
   private _deleteModel = (modelId: string) => {
     this.props.domainModelService
-      .deleteModel(this.props.domainId, modelId)
-      .then(() => {
-          notification.success({
-            message: "Model Deleted",
-            description: `The model '${modelId}' was deleted.`
-          });
+        .deleteModel(this.props.domainId, modelId)
+        .then(() => {
+              notification.success({
+                message: "Model Deleted",
+                description: `The model '${modelId}' was deleted.`
+              });
 
-          const data = this.state.models.data.filter((m: Model) => m.id !== modelId);
-          const models = {
-            data,
-            startIndex: this.state.models.startIndex,
-            totalResults: this.state.models.totalResults
-          };
-          this.setState({models});
-        }
-      )
-      .catch(err => {
-        console.log(err);
-        notification.error({
-          message: "Model Not Deleted",
-          description: `Ths model could not be deleted.`
+              const data = this.state.models.data.filter((m: Model) => m.id !== modelId);
+              const models = {
+                data,
+                startIndex: this.state.models.startIndex,
+                totalResults: this.state.models.totalResults
+              };
+              this.setState({models});
+            }
+        )
+        .catch(err => {
+          console.log(err);
+          notification.error({
+            message: "Model Not Deleted",
+            description: `Ths model could not be deleted.`
+          });
         });
-      });
   }
 
   private _goToCreate = () => {
@@ -309,34 +310,34 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
     const query = `SELECT FROM ${collection} LIMIT ${pageSize} OFFSET ${offset}`;
     const searchParams = {...this.state.searchParams, pageSize};
     this.props.domainModelService
-      .queryModels(this.props.domainId, query)
-      .then(models => this.setState({models, loading: false, searchParams}));
+        .queryModels(this.props.domainId, query)
+        .then(models => this.setState({models, loading: false, searchParams}));
   }
 
   private _query(): void {
     const query = this.state.searchParams.queryInput!;
     this.props.domainModelService
-      .queryModels(this.props.domainId, query)
-      .then(models => this.setState({models, loading: false}));
+        .queryModels(this.props.domainId, query)
+        .then(models => this.setState({models, loading: false}));
   }
 
   private _lookup(): void {
     const id = this.state.searchParams.queryInput!;
 
     this.props.domainModelService
-      .getModelById(this.props.domainId, id)
-      .then(model => {
-        this.setState({
-          models: {data: [model], totalResults: 1, startIndex: 0},
-          loading: false
-        });
-      })
-      .catch(err => {
-        this.setState({
-          models: EMPTY_DATA,
-          loading: false
+        .getModelById(this.props.domainId, id)
+        .then(model => {
+          this.setState({
+            models: {data: [model], totalResults: 1, startIndex: 0},
+            loading: false
+          });
         })
-      });
+        .catch(err => {
+          this.setState({
+            models: EMPTY_DATA,
+            loading: false
+          })
+        });
   }
 }
 

@@ -10,7 +10,7 @@
  */
 
 import * as React from 'react';
-import {FormEvent, ReactNode} from 'react';
+import {ReactNode} from 'react';
 import {QuestionCircleOutlined, UserOutlined} from '@ant-design/icons';
 import {Button, Card, Col, Form, FormInstance, Input, notification, Row, Tooltip} from "antd";
 import styles from "./styles.module.css";
@@ -149,8 +149,7 @@ class ProfileFormComponent extends React.Component<InjectedProps, EditUserState>
     });
   }
 
-  private handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  private handleSubmit = () => {
     this._formRef.current!.validateFields().then(values => {
         const {username, displayName, firstName, lastName, email} = values;
         const profile = new UserProfile(

@@ -10,11 +10,11 @@
  */
 
 import React, {KeyboardEvent, ReactNode} from "react";
-import {Page} from "../../../../components/common/Page/";
+import {Page} from "../../../../components";
 import Tooltip from "antd/es/tooltip";
 import {
   DeleteOutlined,
-  EditOutlined,
+  EditOutlined, GroupOutlined,
   PlusCircleOutlined,
   QuestionCircleOutlined,
   ReloadOutlined,
@@ -93,7 +93,7 @@ class DomainUserGroupsComponent extends React.Component<InjectedProps, DomainGro
 
   private _renderToolbar(): ReactNode {
     return (
-      <CardTitleToolbar title="Groups" icon="group">
+      <CardTitleToolbar title="Groups" icon={<GroupOutlined />}>
         <span className={styles.search}>
           <Input placeholder="Search Groups" addonAfter={<SearchOutlined />} onKeyUp={this._onFilterChange}/>
         </span>
@@ -185,7 +185,7 @@ class DomainUserGroupsComponent extends React.Component<InjectedProps, DomainGro
     promise.then(groups => {
       this._groupsSubscription = null;
       this.setState({groups});
-    }).catch(err => {
+    }).catch(() => {
       this._groupsSubscription = null;
       this.setState({groups: null});
     });

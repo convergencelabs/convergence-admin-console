@@ -9,9 +9,9 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import {Page} from "../../../../components/common/Page/";
+import {Page} from "../../../../components";
 import React, {ReactNode} from "react";
-import { FileOutlined, FolderOutlined } from '@ant-design/icons';
+import {DeleteOutlined, FileOutlined, FolderOutlined} from '@ant-design/icons';
 import { Card, notification, Popconfirm, Tabs } from "antd";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
@@ -121,7 +121,7 @@ class EditDomainModelComponent extends React.Component<InjectedProps, EditDomain
         </span>
         <span className={styles.spacer}/>
         <Popconfirm title="Delete this model?" onConfirm={this._onDeleteModel} placement="bottomRight">
-          <ToolbarButton icon="delete" tooltip="Delete Model"/>
+          <ToolbarButton icon={<DeleteOutlined />} tooltip="Delete Model"/>
         </Popconfirm>
       </span>
     );

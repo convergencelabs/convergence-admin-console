@@ -10,7 +10,7 @@
  */
 
 import * as React from 'react';
-import {FormEvent, ReactNode} from 'react';
+import {ReactNode} from 'react';
 import {Button, Col, Form, FormInstance, Input, Row} from "antd";
 import {PromiseSubscription} from "../../../utils/make-cancelable";
 import {PasswordFormValidator} from "../../../utils/PasswordFormValidator";
@@ -97,8 +97,7 @@ export class SetPasswordForm extends React.Component<InjectedProps, ChangePasswo
     }
   }
 
-  private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  private _handleSubmit = () => {
     this._formRef.current!.validateFields().then(values => {
         const {password} = values;
         this.props.onSetPassword(password).then(clear => {

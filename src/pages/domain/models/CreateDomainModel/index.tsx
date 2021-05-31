@@ -9,7 +9,7 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import React, {FormEvent, ReactNode} from "react";
+import React, {ReactNode} from "react";
 import {Page} from "../../../../components";
 import {FileOutlined} from '@ant-design/icons';
 import {Button, Card, Form, FormInstance, Input, notification, Select} from 'antd';
@@ -121,8 +121,7 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
     }
   }
 
-  private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  private _handleSubmit = () => {
 
     this._formRef.current!.validateFields().then(values => {
         const {collection, idMode, id, data} = values;

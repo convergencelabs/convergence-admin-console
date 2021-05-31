@@ -12,12 +12,13 @@
 import React, {KeyboardEvent, ReactNode} from "react";
 import {Page} from "../../../../components";
 import {
+  EditOutlined,
   FileAddOutlined,
   FileTextOutlined,
   LoginOutlined,
   LogoutOutlined,
-  MessageOutlined,
-  SearchOutlined,
+  MessageOutlined, ReloadOutlined,
+  SearchOutlined, TableOutlined,
   UserAddOutlined,
   UserDeleteOutlined,
 } from '@ant-design/icons';
@@ -208,20 +209,19 @@ class ViewChatEventsComponent extends React.Component<InjectedProps, ViewChatSta
 
   private _renderOverviewToolbar(): ReactNode {
     return (
-      <CardTitleToolbar title="Chat" icon="message">
-        <ToolbarButton icon="edit" tooltip="Reload Chats" onClick={this._gotoEdit} disabled={!this.state.chatInfo}/>
+      <CardTitleToolbar title="Chat" icon={<MessageOutlined />}>
+        <ToolbarButton icon={<EditOutlined />} tooltip="Reload Chats" onClick={this._gotoEdit} disabled={!this.state.chatInfo}/>
       </CardTitleToolbar>
     )
   }
 
   private _renderToolbar(): ReactNode {
     return (
-      <CardTitleToolbar title="Chat Events" icon="table">
+      <CardTitleToolbar title="Chat Events" icon={<TableOutlined />}>
         <span className={styles.search}>
           <Input placeholder="Search Messages" addonAfter={<SearchOutlined />} onKeyUp={this._onFilterChange}/>
         </span>
-        <ToolbarButton icon="reload" tooltip="Reload Events
-        " onClick={this._loadChatEvents}/>
+        <ToolbarButton icon={<ReloadOutlined />} tooltip="Reload Events" onClick={this._loadChatEvents}/>
       </CardTitleToolbar>
     );
   }

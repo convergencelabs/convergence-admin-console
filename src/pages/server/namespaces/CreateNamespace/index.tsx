@@ -10,7 +10,7 @@
  */
 
 import * as React from 'react';
-import {FormEvent, ReactNode} from 'react';
+import {ReactNode} from 'react';
 import {Page} from "../../../../components";
 import {FolderOutlined, QuestionCircleOutlined} from '@ant-design/icons';
 import {Button, Card, Col, Form, FormInstance, Input, notification, Row, Tooltip} from "antd";
@@ -85,8 +85,7 @@ class CreateNamespaceComponent extends React.Component<InjectedProps, {}> {
     this.props.history.push("/namespaces/");
   }
 
-  private handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  private handleSubmit = () => {
     this._formRef.current!.validateFields().then(values => {
       const {id, displayName} = values;
       this.props.namespaceService.createNamespace(id, displayName)
@@ -114,4 +113,5 @@ class CreateNamespaceComponent extends React.Component<InjectedProps, {}> {
   }
 }
 
-export const CreateNamespace = injectAs<RouteComponentProps>([SERVICES.NAMESPACE_SERVICE], CreateNamespaceComponent);
+export const CreateNamespace =
+    injectAs<RouteComponentProps>([SERVICES.NAMESPACE_SERVICE], CreateNamespaceComponent);

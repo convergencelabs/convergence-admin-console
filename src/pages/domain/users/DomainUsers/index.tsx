@@ -11,7 +11,7 @@
 
 import * as React from 'react';
 import {KeyboardEvent, ReactNode} from 'react';
-import {Page} from "../../../../components/common/Page/";
+import {Page} from "../../../../components";
 import Tooltip from "antd/es/tooltip";
 import {
   DeleteOutlined,
@@ -20,7 +20,7 @@ import {
   PlusCircleOutlined,
   QuestionCircleOutlined,
   ReloadOutlined,
-  SearchOutlined,
+  SearchOutlined, UserOutlined,
 } from '@ant-design/icons';
 import { Button, Card, Input, notification, Popconfirm, Table } from "antd";
 import styles from "./styles.module.css";
@@ -105,7 +105,7 @@ export class DomainUsersComponent extends React.Component<InjectedProps, DomainU
 
   private _renderToolbar(): ReactNode {
     return (
-      <CardTitleToolbar title="Users" icon="user">
+      <CardTitleToolbar title="Users" icon={<UserOutlined />}>
         <span className={styles.search}>
           <Input placeholder="Search Users" addonAfter={<SearchOutlined />} onKeyUp={this._onFilterChange}/>
         </span>

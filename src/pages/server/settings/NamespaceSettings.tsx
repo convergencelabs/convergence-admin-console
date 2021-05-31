@@ -9,7 +9,7 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import React, {FormEvent, ReactNode} from "react";
+import React, {ReactNode} from "react";
 import {Button, Form, FormInstance, Input, notification, Select} from "antd";
 import {FormFieldWithHelp} from "../../../components/common/FormFieldWithHelp/";
 import {FormButtonBar} from "../../../components/common/FormButtonBar/";
@@ -121,8 +121,7 @@ class NamespaceSettingsComponent extends React.Component<InjectedProps, Namespac
     }
   }
 
-  private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  private _handleSubmit = () => {
     this._formRef.current!.validateFields().then(values => {
         const {defaultNamespace, namespacesEnabled, userNamespacesEnabled} = values;
         const config = new NamespaceConfig(

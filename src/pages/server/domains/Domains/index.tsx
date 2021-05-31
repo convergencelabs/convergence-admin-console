@@ -13,6 +13,7 @@ import React, {KeyboardEvent, ReactNode} from 'react';
 import {Page} from "../../../../components";
 
 import {
+  DatabaseOutlined,
   DeleteOutlined,
   PlusCircleOutlined,
   QuestionCircleOutlined,
@@ -158,7 +159,7 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
 
   private _renderToolbar(): ReactNode {
     return (
-      <CardTitleToolbar title="Domains" icon="database">
+      <CardTitleToolbar title="Domains" icon={<DatabaseOutlined />}>
         {this.props.configStore.namespacesEnabled ?
           <NamespaceAutoComplete placeholder={"Filter Namespace"} onChange={this._onNamespaceChange}/> : null
         }
@@ -218,7 +219,7 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
                 type={favType}
                 onClick={() => this._onFavClick(record)}
         >
-          {fav ? <StarOutlined style={{color}}/> : <StarFilled style={{color}} />}
+          {fav ? <StarFilled style={{color}}/> : <StarOutlined style={{color}} />}
         </Button>
         {deleteComponent}
       </span>

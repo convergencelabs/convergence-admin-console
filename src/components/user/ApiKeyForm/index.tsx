@@ -9,7 +9,7 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import React, {FormEvent, ReactNode} from "react";
+import React, {ReactNode} from "react";
 import {Button, Checkbox, Col, Form, FormInstance, Input, Row} from "antd";
 import {UserApiKey} from "../../../models/UserApiKey";
 import {FormButtonBar} from "../../common/FormButtonBar";
@@ -69,8 +69,7 @@ export class ApiKeyForm extends React.Component<DomainCollectionFormProps, {}> {
     this.props.onCancel();
   }
 
-  private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  private _handleSubmit = () => {
     this._formRef.current!.validateFields().then(values => {
       const {name, enabled} = values;
       this.props.onSave({name, enabled});

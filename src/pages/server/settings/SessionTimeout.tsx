@@ -9,7 +9,7 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import React, {FormEvent, ReactNode} from "react";
+import React, {ReactNode} from "react";
 import {Button, Form, FormInstance, InputNumber, notification} from "antd";
 import {FormButtonBar} from "../../../components/common/FormButtonBar";
 import {injectAs} from "../../../utils/mobx-utils";
@@ -67,8 +67,7 @@ class SessionTimeoutComponent extends React.Component<InjectedProps, SessionTime
     }
   }
 
-  private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  private _handleSubmit = () => {
     this._formRef.current!.validateFields().then(values => {
       const {timeout} = values;
       this.props.configService

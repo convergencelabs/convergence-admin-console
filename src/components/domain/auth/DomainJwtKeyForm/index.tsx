@@ -9,7 +9,7 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import React, {FormEvent, ReactNode} from "react";
+import React, {ReactNode} from "react";
 import {Button, Checkbox, Col, Form, FormInstance, Input, Row} from "antd";
 import {DomainId} from "../../../../models/DomainId";
 import {DomainJwtKey} from "../../../../models/domain/DomainJwtKey";
@@ -112,8 +112,7 @@ export class DomainJwtKeyForm extends React.Component<DomainJwtKeyFormProps, Dom
     this.props.onCancel();
   }
 
-  private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  private _handleSubmit = () => {
     this._formRef.current!.validateFields().then(values => {
 
         const {id, description, key, enabled} = values;

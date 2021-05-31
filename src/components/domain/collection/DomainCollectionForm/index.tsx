@@ -9,7 +9,7 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import React, {FormEvent, ReactNode} from "react";
+import React, {ReactNode} from "react";
 import {Button, Checkbox, Col, Divider, Form, FormInstance, Input, Row, Tabs} from "antd";
 import {FormButtonBar} from "../../../common/FormButtonBar/";
 import {ModelSnapshotPolicyFormFragment} from "../../common/ModelSnapshotPolicyFormFragment";
@@ -179,8 +179,7 @@ export class DomainCollectionForm extends React.Component<DomainCollectionFormPr
     this.props.onCancel();
   }
 
-  private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  private _handleSubmit = () => {
     this._formRef.current!.validateFields().then(values => {
         const {
           id,

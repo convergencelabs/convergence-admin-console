@@ -9,9 +9,9 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import React, {FormEvent, ReactNode} from 'react';
+import React, {ReactNode} from 'react';
 import {Page} from "../../../../components";
-import {QuestionCircleOutlined} from '@ant-design/icons';
+import {QuestionCircleOutlined, UserOutlined} from '@ant-design/icons';
 import {Button, Card, Col, Form, FormInstance, Input, notification, Row, Select, Tooltip} from "antd";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
@@ -169,7 +169,7 @@ class EditDomainUserComponent extends React.Component<InjectedProps, EditDomainU
   }
 
   private _renderToolbar(): ReactNode {
-      return (<CardTitleToolbar icon="user" title="Edit User"/>)
+      return (<CardTitleToolbar icon={<UserOutlined />} title="Edit User"/>)
     }
 
   private _loadUser(): void {
@@ -190,8 +190,7 @@ class EditDomainUserComponent extends React.Component<InjectedProps, EditDomainU
       this.props.history.push(usersUrl);
     }
 
-  private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
+  private _handleSubmit = () => {
       this._formRef.current!.validateFields().then(values => {
           const {username, displayName, firstName, lastName, email, status} = values;
           const disabled = status === "disabled";

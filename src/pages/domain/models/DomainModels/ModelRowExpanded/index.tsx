@@ -20,6 +20,7 @@ import {Model} from '../../../../../models/domain/Model';
 import {DomainId} from '../../../../../models/DomainId';
 import {toDomainRoute} from "../../../../../utils/domain-url";
 import {longDateTime} from "../../../../../utils/format-utils";
+import {DeleteOutlined, EditOutlined, TeamOutlined} from "@ant-design/icons";
 
 interface ModelRowExpandedProps {
   record: Model;
@@ -37,13 +38,13 @@ export class ModelRowExpanded extends React.Component<ModelRowExpandedProps, {}>
       <div className={styles.modelExpander}>
         <div className={styles.modelExpanderToolbar}>
           <Link to={data}>
-            <ToolbarButton icon="edit" tooltip="Edit Model"/>
+            <ToolbarButton icon={<EditOutlined />} tooltip="Edit Model"/>
             </Link>
           <Link to={permission}>
-            <ToolbarButton icon="team" tooltip="Edit Permissions"/>
+            <ToolbarButton icon={<TeamOutlined />} tooltip="Edit Permissions"/>
           </Link>
           <Popconfirm title="Delete this model?" onConfirm={() => this.props.onDeleteConfirm(this.props.record.id)}>
-            <ToolbarButton icon="delete" tooltip="Delete Model"/>
+            <ToolbarButton icon={<DeleteOutlined />} tooltip="Delete Model"/>
           </Popconfirm>
         </div>
         <table>

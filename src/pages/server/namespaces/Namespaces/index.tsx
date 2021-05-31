@@ -10,16 +10,14 @@
  */
 
 import React, {ReactNode} from "react";
-import {Page} from "../../../../components/common/Page/";
-
+import {Page} from "../../../../components";
 import {
-  DeleteOutlined,
+  DeleteOutlined, FolderOutlined,
   PlusCircleOutlined,
   QuestionCircleOutlined,
   ReloadOutlined,
   SearchOutlined,
 } from '@ant-design/icons';
-
 import { Button, Card, Input, notification, Popconfirm, Table } from "antd";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
@@ -111,7 +109,7 @@ class NamespacesComponent extends React.Component<InjectedProps, NamespacesState
 
   private _renderToolbar(): ReactNode {
     return (
-      <CardTitleToolbar title="Namespaces" icon="folder">
+      <CardTitleToolbar title="Namespaces" icon={<FolderOutlined />}>
         <span className={styles.search}>
           <Input placeholder="Search Namespaces" addonAfter={<SearchOutlined />}/>
         </span>

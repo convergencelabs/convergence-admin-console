@@ -37,7 +37,7 @@ export class ModelControls extends React.Component<ModelControlsProps, {}> {
   private _formRef = React.createRef<FormInstance>();
 
   public render(): ReactElement {
-    const mode = (this._formRef.current!.getFieldValue("mode") as ModelSearchMode) || ModelSearchMode.BROWSE;
+    const mode = (this._formRef.current?.getFieldValue("mode") as ModelSearchMode) || ModelSearchMode.BROWSE;
     let fieldLabel = "";
     let buttonLabel = "";
     switch (mode) {
