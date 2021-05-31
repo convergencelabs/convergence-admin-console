@@ -12,8 +12,8 @@
 import React, {ReactNode} from "react";
 import {Page} from "../../../../components";
 import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
-import {QuestionCircleOutlined, UserOutlined} from '@ant-design/icons';
-import {Button, Card, Col, Form, Input, notification, Row, Select, Tooltip} from "antd";
+import {UserOutlined} from '@ant-design/icons';
+import {Button, Card, Col, Form, Input, notification, Row, Select} from "antd";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
 import {UpdateUserData, UserService} from "../../../../services/UserService";
@@ -83,13 +83,8 @@ class EditUserComponent extends React.Component<InjectedProps, EditUserState> {
                   </Col>
                   <Col span={12}>
                     <Form.Item name="displayName"
-                               label={(
-                                   <span>Display Name&nbsp;
-                                     <Tooltip title="What do you want others to call you?">
-                              <QuestionCircleOutlined/>
-                            </Tooltip>
-                          </span>
-                               )}
+                               label="Display Name"
+                               tooltip="The name that should be displayed for this user."
                                initialValue={user.displayName}
                                rules={[{required: true, message: 'Please input a Display Name!', whitespace: true}]}
                     >

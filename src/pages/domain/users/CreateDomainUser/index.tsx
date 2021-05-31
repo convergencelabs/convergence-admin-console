@@ -11,8 +11,8 @@
 
 import React, {ReactNode} from 'react';
 import {Page} from "../../../../components";
-import {QuestionCircleOutlined, UserOutlined} from '@ant-design/icons';
-import {Button, Card, Col, Form, FormInstance, Input, notification, Row, Tooltip} from "antd";
+import {UserOutlined} from '@ant-design/icons';
+import {Button, Card, Col, Form, FormInstance, Input, notification, Row} from "antd";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
 import {injectAs} from "../../../../utils/mobx-utils";
@@ -69,13 +69,8 @@ class CreateDomainUserComponent extends React.Component<InjectedProps> {
                 <Col span={12}>
                   <Form.Item
                       name="displayName"
-                      label={(
-                          <span>Display Name&nbsp;
-                            <Tooltip title="What do you want others to call you?">
-                          <QuestionCircleOutlined/>
-                        </Tooltip>
-                      </span>
-                      )}
+                      label="Display Name"
+                      tooltip="The name that should be displayed for this user"
                       rules={[{required: true, message: 'Please input a Display Name!', whitespace: true}]}
                   >
                     <Input/>

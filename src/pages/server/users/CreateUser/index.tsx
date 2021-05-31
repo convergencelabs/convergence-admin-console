@@ -82,7 +82,7 @@ class CreateUserComponent extends React.Component<InjectedProps, CreateUserCompo
                   </Col>
                   <Col span={12}>
                     <Form.Item name="displayName"
-                               tooltip="What do you want others to call you?"
+                               tooltip="The name that should be displayed for this user."
                                label="Display Name"
                                rules={[{required: true, message: 'Please input a Display Name!', whitespace: true}]}
                     >

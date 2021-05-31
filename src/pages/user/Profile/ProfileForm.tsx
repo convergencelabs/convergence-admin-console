@@ -11,8 +11,8 @@
 
 import * as React from 'react';
 import {ReactNode} from 'react';
-import {QuestionCircleOutlined, UserOutlined} from '@ant-design/icons';
-import {Button, Card, Col, Form, Input, notification, Row, Tooltip} from "antd";
+import {UserOutlined} from '@ant-design/icons';
+import {Button, Card, Col, Form, Input, notification, Row} from "antd";
 import styles from "./styles.module.css";
 import {makeCancelable, PromiseSubscription} from "../../../utils/make-cancelable";
 import {LoggedInUserService} from "../../../services/LoggedInUserService";
@@ -73,13 +73,8 @@ class ProfileFormComponent extends React.Component<InjectedProps, EditUserState>
                 </Col>
                 <Col span={12}>
                   <Form.Item name="displayName"
-                             label={(
-                                 <span>Display Name&nbsp;
-                                   <Tooltip title="What do you want others to call you?">
-                          <QuestionCircleOutlined/>
-                        </Tooltip>
-                        </span>
-                             )}
+                             label="Display Name"
+                             tooltip="How do you want others to see your name?"
                              initialValue={profile.displayName}
                              rules={[{required: true, message: 'Please input a Display Name!', whitespace: true}]}
                   >
@@ -132,7 +127,7 @@ class ProfileFormComponent extends React.Component<InjectedProps, EditUserState>
           </Card>
       );
     } else {
-      return <div></div>;
+      return <div/>;
     }
   }
 
