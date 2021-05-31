@@ -98,6 +98,7 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
                     showGutter={true}
                     highlightActiveLine={true}
                     editorProps={{$blockScrolling: true}}
+                    setOptions={{ useWorker: false }}
                 />
               </Form.Item>
               <FormButtonBar>
