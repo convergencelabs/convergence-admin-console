@@ -10,21 +10,19 @@
  */
 
 import React, {FormEvent, ReactNode} from "react";
-import {Button, Checkbox, Col, Divider, Form, Input, Row, Tabs} from "antd";
-import {FormComponentProps} from "antd/lib/form";
+import {Button, Checkbox, Col, Divider, Form, FormInstance, Input, Row, Tabs} from "antd";
 import {FormButtonBar} from "../../../common/FormButtonBar/";
 import {ModelSnapshotPolicyFormFragment} from "../../common/ModelSnapshotPolicyFormFragment";
 import {CollectionPermissions} from "../../../../models/domain/CollectionPermissions";
 import {ModelSnapshotPolicy} from "../../../../models/domain/ModelSnapshotPolicy";
 import {Collection} from "../../../../models/domain/Collection";
-import {FormCreateOption} from "antd/es/form";
 import {CollectionPermissionsTab} from "../CollectionUserPermissionsTab";
 import {DomainId} from "../../../../models/DomainId";
 import {CollectionUserPermissions} from "../../../../models/domain/CollectionUserPermissions";
 import {DescriptionBox} from "../../../common/DescriptionBox";
 import styles from "./styles.module.css";
 
-export interface DomainCollectionFormProps extends FormComponentProps {
+export interface DomainCollectionFormProps {
   domainId: DomainId;
   initialValue: Collection;
   disableId?: boolean;
@@ -39,7 +37,8 @@ export interface DomainCollectionFormState {
   userPermissions: CollectionUserPermissions[];
 }
 
-class DomainCollectionFormComponent extends React.Component<DomainCollectionFormProps, DomainCollectionFormState> {
+export class DomainCollectionForm extends React.Component<DomainCollectionFormProps, DomainCollectionFormState> {
+  private _formRef = React.createRef<FormInstance>();
 
   constructor(props: DomainCollectionFormProps) {
     super(props);
@@ -50,34 +49,31 @@ class DomainCollectionFormComponent extends React.Component<DomainCollectionForm
   }
 
   public render(): ReactNode {
-    const {getFieldDecorator} = this.props.form;
     const {initialValue, disableId} = this.props;
 
     return (
-        <Form onSubmit={this._handleSubmit}>
+        <Form ref={this._formRef} onFinish={this._handleSubmit}>
           <Row>
             <Col span={24}>
-              <Form.Item label="Id">
-                {getFieldDecorator('id', {
-                  initialValue: initialValue.id,
-                  rules: [{
-                    required: !this.props.disableId, whitespace: true, message: 'Please input an Id!',
-                  }],
-                })(
+              <Form.Item name="id"
+                         label="Id"
+                         initialValue={initialValue.id}
+                         rules={[{
+                           required: !this.props.disableId, whitespace: true, message: 'Please input an Id!',
+                         }]}
+              >
                     <Input disabled={disableId}/>
-                )}
               </Form.Item>
             </Col>
           </Row>
           <Row>
             <Col span={24}>
-              <Form.Item label="Description">
-                {getFieldDecorator('description', {
-                  initialValue: initialValue.description,
-                  rules: [{required: false, message: 'Please input a Description!', whitespace: true}],
-                })(
+              <Form.Item name="description"
+                         label="Description"
+                         initialValue={initialValue.description}
+                         rules={[{required: false, message: 'Please input a Description!', whitespace: true}]}
+              >
                     <Input.TextArea autoSize={{minRows: 2, maxRows: 6}}/>
-                )}
               </Form.Item>
             </Col>
           </Row>
@@ -93,41 +89,44 @@ class DomainCollectionFormComponent extends React.Component<DomainCollectionForm
                 </div>
                 <Row>
                   <Col span={4}>
-                    {getFieldDecorator('readPermission', {
-                      initialValue: initialValue.worldPermissions.read,
-                      valuePropName: 'checked'
-                    })(
-                        <Checkbox>Read</Checkbox>)}
+                    <Form.Item name="readPermission"
+                               initialValue={initialValue.worldPermissions.read}
+                               valuePropName="checked"
+                    >
+                      <Checkbox>Read</Checkbox>
+                    </Form.Item>
                   </Col>
                   <Col span={4}>
-                    {getFieldDecorator('writePermission', {
-                      initialValue: initialValue.worldPermissions.write,
-                      valuePropName: 'checked'
-                    })(
-                        <Checkbox>Write</Checkbox>)}
+                    <Form.Item name="writePermission"
+                               initialValue={initialValue.worldPermissions.write}
+                               valuePropName="checked"
+                    >
+                      <Checkbox>Write</Checkbox>
+                    </Form.Item>
                   </Col>
                   <Col span={4}>
-                    {getFieldDecorator('createPermission', {
-                      initialValue: initialValue.worldPermissions.create,
-                      valuePropName: 'checked'
-                    })(
-                        <Checkbox>Create</Checkbox>)}
+                    <Form.Item name="createPermission"
+                               initialValue={initialValue.worldPermissions.create}
+                               valuePropName="checked"
+                    >
+                      <Checkbox>Create</Checkbox>
+                    </Form.Item>
                   </Col>
                   <Col span={4}>
-                    {getFieldDecorator('removePermission', {
-                      initialValue: initialValue.worldPermissions.remove,
-                      valuePropName: 'checked'
-                    })(
-                        <Checkbox>Remove</Checkbox>
-                    )}
+                    <Form.Item name="removePermission"
+                               initialValue={initialValue.worldPermissions.remove}
+                               valuePropName="checked"
+                    >
+                      <Checkbox>Remove</Checkbox>
+                    </Form.Item>
                   </Col>
                   <Col span={4}>
-                    {getFieldDecorator('managePermission', {
-                      initialValue: initialValue.worldPermissions.manage,
-                      valuePropName: 'checked'
-                    })(
-                        <Checkbox>Manage</Checkbox>
-                    )}
+                    <Form.Item name="managePermission"
+                               initialValue={initialValue.worldPermissions.manage}
+                               valuePropName="checked"
+                    >
+                      <Checkbox>Manage</Checkbox>
+                    </Form.Item>
                   </Col>
                 </Row>
               </Tabs.TabPane>
@@ -150,14 +149,16 @@ class DomainCollectionFormComponent extends React.Component<DomainCollectionForm
                 </Row>
                 <Row>
                   <Col span={24}>
-                    {getFieldDecorator('overrideSnapshotPolicy', {
-                      initialValue: initialValue.overrideSnapshotPolicy, valuePropName: 'checked'
-                    })(
-                        <Checkbox>Override Domain Snapshot Policy</Checkbox>
-                    )}
+                    <Form.Item name="overrideSnapshotPolicy"
+                               initialValue={initialValue.overrideSnapshotPolicy}
+                               valuePropName="checked"
+                    >
+                      <Checkbox>Override Domain Snapshot Policy</Checkbox>
+                    </Form.Item>
                   </Col>
                 </Row>
-                <ModelSnapshotPolicyFormFragment initialValue={initialValue.snapshotPolicy} form={this.props.form}/>
+                <ModelSnapshotPolicyFormFragment initialValue={initialValue.snapshotPolicy}
+                                                 formRef={this._formRef}/>
               </Tabs.TabPane>
             </Tabs>
           </Row>
@@ -180,9 +181,7 @@ class DomainCollectionFormComponent extends React.Component<DomainCollectionForm
 
   private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values: any) => {
-      console.log(values);
-      if (!err) {
+    this._formRef.current!.validateFields().then(values => {
         const {
           id,
           description,
@@ -230,7 +229,6 @@ class DomainCollectionFormComponent extends React.Component<DomainCollectionForm
             id, description, worldPermissions, userPermissions, overrideSnapshotPolicy, snapshotPolicy);
 
         this.props.onSave(collection);
-      }
     });
   }
 
@@ -238,6 +236,3 @@ class DomainCollectionFormComponent extends React.Component<DomainCollectionForm
     this.setState({userPermissions: p});
   }
 }
-
-const formOptions: FormCreateOption<DomainCollectionFormProps> = {};
-export const DomainCollectionForm = Form.create(formOptions)(DomainCollectionFormComponent);

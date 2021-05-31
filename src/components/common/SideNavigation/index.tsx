@@ -12,17 +12,18 @@
 import * as React from 'react';
 import * as H from 'history';
 import {UnregisterCallback} from 'history';
-import {Icon, Layout, Menu} from 'antd';
+import { Layout, Menu } from 'antd';
 import styles from './styles.module.css';
 import {matchPath, RouteComponentProps, withRouter} from "react-router";
 import {Link} from "react-router-dom";
+import {ReactNode} from "react";
 
 const {Sider} = Layout;
 
 export interface SideNavigationMenuItem {
   key: string;
   title: string;
-  icon: string;
+  icon: ReactNode;
   link: string;
   routeMatch: {
     path: string;
@@ -49,10 +50,6 @@ export class SideNavigationComponent extends React.Component<SideNavigationProps
     this.setState({collapsed});
   };
 
-  onSelect = ({item, key, selectedKeys}: any) => {
-    // console.log(key);
-  };
-
   public componentDidMount(): void {
     this._historyUnregister = this.props.history.listen(() => this.forceUpdate());
   }
@@ -77,13 +74,12 @@ export class SideNavigationComponent extends React.Component<SideNavigationProps
               {...selectProps}
               mode="inline"
               inlineIndent={10}
-              onSelect={this.onSelect}
               className={styles.navMenu}>
           {
             this.props.menus.map(menu => (
               <Menu.Item key={menu.key}>
                 <Link to={{pathname: menu.link}}>
-                  <Icon type={menu.icon}/>
+                  {menu.icon}
                   <span>{menu.title}</span>
                 </Link>
               </Menu.Item>

@@ -91,7 +91,7 @@ export class DomainCardComponent extends Component<InjectedProps, {}> {
 
 interface DomainCardButtonProps extends RouteComponentProps {
   domain: DomainDescriptor
-  icon: string;
+  icon: ReactNode;
   link: string;
   tooltip: string;
   disabled: boolean;
@@ -104,7 +104,7 @@ class DomainCardButton extends Component<DomainCardButtonProps, {}> {
       <Tooltip title={tooltip} mouseEnterDelay={1}>
         <Button shape="circle" icon={icon} disabled={disabled} onClick={this._goto}/>
       </Tooltip>
-    )
+    );
   };
 
   private _goto = () => {

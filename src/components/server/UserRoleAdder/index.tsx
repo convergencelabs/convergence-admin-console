@@ -12,7 +12,7 @@
 import * as React from 'react';
 import {Component, MouseEvent, ReactNode} from 'react';
 import styles from "./styles.module.css";
-import {UsernameAutoComplete} from "../UsernameAutoComplete/index";
+import {UsernameAutoComplete} from "../UsernameAutoComplete";
 import {Button, Select} from "antd";
 
 const {Option} = Select;
@@ -54,7 +54,7 @@ export class UserRoleAdder extends Component<UserRoleAdderProps,UserRoleAdderSta
           value={this.state.selectedRole}
           onSelect={this._onSelectRole}
         >
-          {this.props.roles.map(role => <Option key={role}>{role}</Option>)}
+          {this.props.roles.map(role => <Option key={role} value={role}>{role}</Option>)}
         </Select>
         <Button
           htmlType="button"

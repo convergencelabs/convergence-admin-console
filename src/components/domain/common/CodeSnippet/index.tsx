@@ -13,6 +13,7 @@ import React, {ReactNode} from "react";
 import Highlight from "react-highlight";
 import styles from "./styles.module.css";
 import CopyToClipboard from "react-copy-to-clipboard";
+import { CopyOutlined } from '@ant-design/icons';
 import {Button} from "antd";
 
 export interface CodeSnippetProps {
@@ -28,12 +29,12 @@ export class CodeSnippet extends React.Component<CodeSnippetProps, {}> {
         <div className={styles.code}>
           <span className={styles.copy}>
             <CopyToClipboard text={this.props.code}>
-              <Button htmlType="button" icon="copy"/>
+              <Button htmlType="button" icon={<CopyOutlined />}/>
             </CopyToClipboard>
           </span>
           <Highlight className={"JavaScript"}>{this.props.code}</Highlight>
         </div>
       </div>
-    )
+    );
   }
 }

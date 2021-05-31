@@ -11,8 +11,8 @@
 
 import React, {Component, FormEvent, ReactNode} from 'react';
 import {Redirect, RouteComponentProps} from "react-router";
-import {Button, Checkbox, Form, Icon, Input,} from 'antd';
-import {FormComponentProps} from 'antd/lib/form/Form';
+import {LockOutlined, UserOutlined, WarningOutlined} from '@ant-design/icons';
+import {Button, Checkbox, Form, FormInstance, Input} from 'antd';
 import styles from "./styles.module.css";
 import logo from "../../../assets/images/logo.png";
 import {AuthService} from "../../../services/AuthService";
@@ -23,9 +23,8 @@ import {STORES} from "../../../stores/StoreConstants";
 import {SERVICES} from "../../../services/ServiceConstants";
 import {LoggedInUserService} from "../../../services/LoggedInUserService";
 import {LoggedInUserStore} from "../../../stores/LoggedInUserStore";
-import {FormCreateOption} from "antd/es/form";
 
-export interface InjectedProps extends RouteComponentProps, FormComponentProps {
+export interface InjectedProps extends RouteComponentProps {
   authStore: AuthStore;
   authService: AuthService;
   loggedInUserService: LoggedInUserService;
@@ -35,7 +34,6 @@ export interface InjectedProps extends RouteComponentProps, FormComponentProps {
 export interface LoginFormState {
   redirectToReferrer: boolean;
   errorMessage: string | null;
-
 }
 
 class NormalLoginForm extends Component<InjectedProps, LoginFormState> {
@@ -44,34 +42,34 @@ class NormalLoginForm extends Component<InjectedProps, LoginFormState> {
     errorMessage: null
   };
 
+  private _formRef = React.createRef<FormInstance>();
+
   handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        const {username, password} = values;
-        this.props.authService.login(username, password)
-          .then(resp => {
-            const {token, expiresIn} = resp;
-            const expiresAt = new Date(Date.now() + expiresIn).getTime();
-            this.props.authStore.setAuthenticated(resp.token);
-            localStorageService.setAuthToken({token, expiresAt});
-            return this.props.loggedInUserService.getLoggedInUser();
-          })
-          .then((profile) => {
-            this.props.profileStore.setLoggedInUser(profile);
-            this.setState({
-              redirectToReferrer: true,
-              errorMessage: null
-            });
-          })
-          .catch(err => {
-            console.log(err);
-            this.setState({
-              errorMessage: "Invalid credentials"
-            })
-          });
-      }
-    });
+    this._formRef.current!.validateFields().then(values => {
+          const {username, password} = values;
+          this.props.authService.login(username, password)
+              .then(resp => {
+                const {token, expiresIn} = resp;
+                const expiresAt = new Date(Date.now() + expiresIn).getTime();
+                this.props.authStore.setAuthenticated(resp.token);
+                localStorageService.setAuthToken({token, expiresAt});
+                return this.props.loggedInUserService.getLoggedInUser();
+              })
+              .then((profile) => {
+                this.props.profileStore.setLoggedInUser(profile);
+                this.setState({
+                  redirectToReferrer: true,
+                  errorMessage: null
+                });
+              })
+              .catch(err => {
+                console.log(err);
+                this.setState({
+                  errorMessage: "Invalid credentials"
+                })
+              });
+        });
   }
 
   render(): ReactNode {
@@ -85,52 +83,37 @@ class NormalLoginForm extends Component<InjectedProps, LoginFormState> {
       return <Redirect to={from}/>;
     }
 
-    const {getFieldDecorator} = this.props.form;
 
     const error = this.state.errorMessage ?
-      <div className={styles.error}><Icon type="warning"/>{this.state.errorMessage}</div> :
-      null;
+        <div className={styles.error}><WarningOutlined/>{this.state.errorMessage}</div> :
+        null;
 
     return (
-      <div className={styles.loginContainer}>
-        <div className={styles.header}>
-          <img alt="Convergence Logo" className={styles.logo} src={logo}/>
-          <div className={styles.title}>Convergence</div>
-        </div>
-        <Form onSubmit={this.handleSubmit} className={styles.loginForm}>
-          <Form.Item>
-            {getFieldDecorator('username', {
-              rules: [{required: true, message: 'Please input your username!'}],
-            })(
-              <Input prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>} placeholder="Username"/>
-            )}
-          </Form.Item>
-          <Form.Item>
-            {getFieldDecorator('password', {
-              rules: [{required: true, message: 'Please input your Password!'}],
-            })(
-              <Input prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}}/>} type="password"
+        <div className={styles.loginContainer}>
+          <div className={styles.header}>
+            <img alt="Convergence Logo" className={styles.logo} src={logo}/>
+            <div className={styles.title}>Convergence</div>
+          </div>
+          <Form ref={this._formRef} onFinish={this.handleSubmit} className={styles.loginForm}>
+            <Form.Item name="username" rules={[{required: true, message: 'Please input your username!'}]}>
+              <Input prefix={<UserOutlined style={{color: 'rgba(0,0,0,.25)'}}/>} placeholder="Username"/>
+            </Form.Item>
+            <Form.Item name="password" rules={[{required: true, message: 'Please input your Password!'}]}>
+              <Input prefix={<LockOutlined style={{color: 'rgba(0,0,0,.25)'}}/>} type="password"
                      placeholder="Password"/>
-            )}
-          </Form.Item>
-          {error}
-          <Form.Item>
-            {getFieldDecorator('remember', {
-              valuePropName: 'checked',
-              initialValue: true,
-            })(
+            </Form.Item>
+            {error}
+            <Form.Item name="remember" valuePropName="checked" initialValue={true}>
               <Checkbox>Remember me</Checkbox>
-            )}
-            <Button type="primary" htmlType="submit" className={styles.loginFormButton}>
-              Log in
-            </Button>
-          </Form.Item>
-        </Form>
-      </div>
+              <Button type="primary" htmlType="submit" className={styles.loginFormButton}>
+                Log in
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
     );
   }
 }
 
 const injections = [STORES.AUTH_STORE, STORES.PROFILE_STORE, SERVICES.AUTH_SERVICE, SERVICES.LOGGED_IN_USER_SERVICE];
-const formOptions: FormCreateOption<InjectedProps> = {};
-export const LoginForm = injectAs<RouteComponentProps>(injections, Form.create(formOptions)(NormalLoginForm));
+export const LoginForm = injectAs<RouteComponentProps>(injections, NormalLoginForm);

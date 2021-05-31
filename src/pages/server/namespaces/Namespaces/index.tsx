@@ -11,7 +11,16 @@
 
 import React, {ReactNode} from "react";
 import {Page} from "../../../../components/common/Page/";
-import {Button, Card, Icon, Input, notification, Popconfirm, Table} from "antd";
+
+import {
+  DeleteOutlined,
+  PlusCircleOutlined,
+  QuestionCircleOutlined,
+  ReloadOutlined,
+  SearchOutlined,
+} from '@ant-design/icons';
+
+import { Button, Card, Input, notification, Popconfirm, Table } from "antd";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
@@ -104,13 +113,13 @@ class NamespacesComponent extends React.Component<InjectedProps, NamespacesState
     return (
       <CardTitleToolbar title="Namespaces" icon="folder">
         <span className={styles.search}>
-          <Input placeholder="Search Namespaces" addonAfter={<Icon type="search"/>}/>
+          <Input placeholder="Search Namespaces" addonAfter={<SearchOutlined />}/>
         </span>
         {loggedInUserStore.isServerAdmin() || loggedInUserStore.isDomainAdmin() ?
           <Tooltip placement="topRight" title="Create Namespace" mouseEnterDelay={1}>
             <Button className={styles.iconButton} shape="circle" size="small" htmlType="button"
                     onClick={this._goToCreate}>
-              <Icon type="plus-circle"/>
+              <PlusCircleOutlined />
             </Button>
           </Tooltip>
           :
@@ -119,17 +128,16 @@ class NamespacesComponent extends React.Component<InjectedProps, NamespacesState
         <Tooltip placement="topRight" title="Reload Namespaces" mouseEnterDelay={1}>
           <Button className={styles.iconButton} shape="circle" size="small" htmlType="button"
                   onClick={this._loadNamespaces}>
-            <Icon type="reload"/>
+            <ReloadOutlined />
           </Button>
         </Tooltip>
       </CardTitleToolbar>
-    )
+    );
   }
 
   private _renderActions = (text: any, record: NamespaceAndDomains) => {
     const deleteDisabled = record.domains.length > 0;
-    const deleteButton = <Button shape="circle" size="small" htmlType="button" disabled={deleteDisabled}><Icon
-      type="delete"/></Button>;
+    const deleteButton = <Button shape="circle" size="small" htmlType="button" disabled={deleteDisabled}><DeleteOutlined /></Button>;
 
     const deleteComponent = deleteDisabled ?
       <Tooltip placement="topRight" title="Can not delete a namespace with domains!" mouseEnterDelay={1}>
@@ -140,7 +148,7 @@ class NamespacesComponent extends React.Component<InjectedProps, NamespacesState
                   onConfirm={() => this._onDeleteNamespace(record.id)}
                   okText="Yes"
                   cancelText="No"
-                  icon={<Icon type="question-circle-o" style={{color: 'red'}}/>}
+                  icon={<QuestionCircleOutlined style={{color: 'red'}} />}
       >
         <Tooltip placement="topRight" title="Delete Namespace" mouseEnterDelay={2}>
           {deleteButton}

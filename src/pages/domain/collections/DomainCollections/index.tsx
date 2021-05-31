@@ -10,9 +10,16 @@
  */
 
 import React, {KeyboardEvent, ReactNode} from "react";
-import {Page} from "../../../../components/common/Page/";
+import {Page} from "../../../../components";
 import Tooltip from "antd/es/tooltip";
-import {Button, Card, Icon, Input, notification, Popconfirm, Table} from "antd";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  EyeOutlined,
+  QuestionCircleOutlined,
+  SearchOutlined,
+} from '@ant-design/icons';
+import {Button, Card, Input, notification, Popconfirm, Table, TablePaginationConfig} from "antd";
 import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
 import {RouteComponentProps} from "react-router";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
@@ -26,7 +33,6 @@ import {ToolbarButton} from "../../../../components/common/ToolbarButton";
 import {toDomainRoute} from "../../../../utils/domain-url";
 import styles from "./styles.module.css";
 import {PagedData} from "../../../../models/PagedData";
-import {PaginationConfig} from "antd/lib/pagination";
 import {appendToQueryParamString} from "../../../../utils/router-utils";
 import queryString from "query-string";
 
@@ -115,7 +121,7 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
   }
 
   public render(): ReactNode {
-    const pagination: PaginationConfig = {
+    const pagination: TablePaginationConfig = {
       pageSize: this.state.searchParams.pageSize,
       current: this.state.searchParams.page,
       total: this.state.collections.totalResults,
@@ -143,7 +149,7 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
       <CardTitleToolbar title="Collections" icon="folder">
         <span className={styles.search}>
           <Input placeholder="Search Collections"
-                 addonAfter={<Icon type="search"/>}
+                 addonAfter={<SearchOutlined />}
                  onInput={this._onFilterChange}
                  value={this.state.searchParams.filter}
           />
@@ -151,7 +157,7 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
         <ToolbarButton icon="plus-circle" tooltip="Create Collection" onClick={this._goToCreate}/>
         <ToolbarButton icon="reload" tooltip="Reload Collections" onClick={this._loadCollections}/>
       </CardTitleToolbar>
-    )
+    );
   }
 
   private _renderActions = (_: undefined, record: CollectionSummary) => {
@@ -159,12 +165,12 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
       <span className={styles.actions}>
         <Tooltip placement="topRight" title="Browse Collection" mouseEnterDelay={1}>
           <Link to={toDomainRoute(this.props.domainId, `models/?mode=browse&collection=${record.id}`)}>
-            <Button shape="circle" size="small" htmlType="button" icon="eye"/>
+            <Button shape="circle" size="small" htmlType="button" icon={<EyeOutlined />}/>
           </Link>
         </Tooltip>
         <Tooltip placement="topRight" title="Edit Collection" mouseEnterDelay={1}>
           <Link to={toDomainRoute(this.props.domainId, `collections/${record.id}`)}>
-            <Button shape="circle" size="small" htmlType="button" icon="edit"/>
+            <Button shape="circle" size="small" htmlType="button" icon={<EditOutlined />}/>
           </Link>
         </Tooltip>
          <Popconfirm title="Are you sure delete this collection?"
@@ -172,11 +178,10 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
                      onConfirm={() => this._onDeleteCollection(record.id)}
                      okText="Yes"
                      cancelText="No"
-                     icon={<Icon type="question-circle-o" style={{color: 'red'}}/>}
+                     icon={<QuestionCircleOutlined style={{color: 'red'}} />}
          >
         <Tooltip placement="topRight" title="Delete Collection" mouseEnterDelay={2}>
-          <Button shape="circle" size="small" htmlType="button"><Icon
-            type="delete"/></Button>
+          <Button shape="circle" size="small" htmlType="button"><DeleteOutlined /></Button>
         </Tooltip>
       </Popconfirm>
     </span>
@@ -192,7 +197,7 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
           description: `The collection '${collectionId}' was deleted.`,
         });
       })
-      .catch(err => {
+      .catch(() => {
         notification.error({
           message: 'Could Not Delete Collection',
           description: `The collection could not be deleted.`,

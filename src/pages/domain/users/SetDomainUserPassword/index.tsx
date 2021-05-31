@@ -10,9 +10,9 @@
  */
 
 import React, {ReactNode} from 'react';
-import {Page} from "../../../../components/common/Page/";
-import {Card, Form, Icon, notification, Tag} from "antd";
-import {FormComponentProps} from "antd/lib/form";
+import {Page} from "../../../../components";
+import { UserOutlined } from '@ant-design/icons';
+import {Card, notification, Tag} from "antd";
 import {RouteComponentProps} from "react-router";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
@@ -29,7 +29,7 @@ export interface SetDomainUserPasswordProps extends RouteComponentProps<{ userna
   domainId: DomainId;
 }
 
-interface InjectedProps extends SetDomainUserPasswordProps, FormComponentProps {
+interface InjectedProps extends SetDomainUserPasswordProps {
   domainUserService: DomainUserService;
 }
 
@@ -50,7 +50,7 @@ class SetDomainUserPasswordComponent extends React.Component<InjectedProps, {}> 
   public render(): ReactNode {
     return (
       <Page breadcrumbs={this._breadcrumbs}>
-        <Card title={<span><Icon type="user"/> <Tag>{this.props.match.params.username}</Tag> Set Password</span>}
+        <Card title={<span><UserOutlined /> <Tag>{this.props.match.params.username}</Tag> Set Password</span>}
               className={styles.formCard}>
           <SetPasswordForm
             passwordConfig={PasswordConfig.PERMISSIVE}
@@ -92,4 +92,4 @@ class SetDomainUserPasswordComponent extends React.Component<InjectedProps, {}> 
 }
 
 const injections = [SERVICES.DOMAIN_USER_SERVICE];
-export const SetDomainUserPassword = injectAs<SetDomainUserPasswordProps>(injections, Form.create()(SetDomainUserPasswordComponent));
+export const SetDomainUserPassword = injectAs<SetDomainUserPasswordProps>(injections, SetDomainUserPasswordComponent);

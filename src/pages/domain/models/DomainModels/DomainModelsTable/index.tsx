@@ -12,7 +12,7 @@
 import * as React from 'react';
 import {ReactNode} from 'react';
 import moment from "moment";
-import {Table, Tooltip} from "antd";
+import {Table, TablePaginationConfig, Tooltip} from "antd";
 import {Link} from "react-router-dom";
 import styles from "./styles.module.css";
 import {Model} from '../../../../../models/domain/Model';
@@ -23,7 +23,6 @@ import {ModelDropdownMenu} from '../ModelDropDownMenu/';
 import {ModelRowExpanded} from '../ModelRowExpanded';
 import {DomainId} from '../../../../../models/DomainId';
 import {toDomainRoute} from '../../../../../utils/domain-url';
-import {PaginationConfig} from "antd/lib/pagination";
 
 interface DomainModelsTableProps {
   pagedModels: PagedRestData<Model>;
@@ -64,7 +63,7 @@ export class DomainModelsTable extends React.Component<DomainModelsTableProps, {
   }
 
   public render(): ReactNode {
-    const pagination: PaginationConfig | false = this.props.pagination ? {
+    const pagination: TablePaginationConfig | false = this.props.pagination ? {
       pageSize: this.props.pageSize,
       current: this.props.page,
       total: this.props.pagedModels.totalResults,

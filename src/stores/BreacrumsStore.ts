@@ -16,7 +16,7 @@ import {DomainId} from "../models/DomainId";
 export interface IBreadcrumbSegment {
   title?: string;
   link?: string;
-  icon?: string;
+  icon?: ReactNode;
   renderer?: () => ReactNode;
 }
 

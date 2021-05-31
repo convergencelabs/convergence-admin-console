@@ -10,7 +10,8 @@
  */
 
 import React, {ReactNode} from "react";
-import {Card, Icon, Tabs} from "antd";
+import { LockOutlined } from '@ant-design/icons';
+import { Card, Tabs } from "antd";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {DomainId} from "../../../models/DomainId";
@@ -31,7 +32,7 @@ export class DomainAuthentication extends React.Component<DomainAuthenticationPr
     const baseUrl = toDomainRoute(this.props.domainId, `authentication`);
     return (
       <Page breadcrumbs={this._breadcrumbs}>
-        <Card title={ <span><Icon type="lock"/> Authentication</span>} className={styles.formCard}>
+        <Card title={ <span><LockOutlined /> Authentication</span>} className={styles.formCard}>
           <Tabs className={styles.tabs}
                 type="card"
                 defaultActiveKey={tab}

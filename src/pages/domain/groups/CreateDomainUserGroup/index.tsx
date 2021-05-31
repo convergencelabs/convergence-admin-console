@@ -9,10 +9,10 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import {Page} from "../../../../components/common/Page/";
+import {Page} from "../../../../components";
 import React, {ReactNode} from "react";
-import {Card, Icon, notification} from "antd";
-import {FormComponentProps} from "antd/lib/form";
+import { TeamOutlined } from '@ant-design/icons';
+import { Card, notification } from "antd";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {injectAs} from "../../../../utils/mobx-utils";
@@ -28,7 +28,7 @@ export interface CreateDomainUserGroupProps extends RouteComponentProps {
   domainId: DomainId;
 }
 
-interface InjectedProps extends CreateDomainUserGroupProps, FormComponentProps {
+interface InjectedProps extends CreateDomainUserGroupProps {
   domainGroupService: DomainGroupService;
 }
 
@@ -42,7 +42,7 @@ class CreateDomainUserGroupComponent extends React.Component<InjectedProps, {}> 
   public render(): ReactNode {
     return (
       <Page breadcrumbs={this._breadcrumbs}>
-        <Card title={<span><Icon type="team"/> New Group</span>} className={styles.formCard}>
+        <Card title={<span><TeamOutlined /> New Group</span>} className={styles.formCard}>
           <DomainUserGroupForm
             domainId={this.props.domainId}
             saveButtonLabel="Create"

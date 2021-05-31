@@ -10,15 +10,14 @@
  */
 
 import React, {FormEvent, ReactNode} from "react";
-import {FormComponentProps} from "antd/lib/form";
-import {Button, Form, InputNumber, notification} from "antd";
-import {FormButtonBar} from "../../../components/common/FormButtonBar/index";
+import {Button, Form, FormInstance, InputNumber, notification} from "antd";
+import {FormButtonBar} from "../../../components/common/FormButtonBar";
 import {injectAs} from "../../../utils/mobx-utils";
 import {SERVICES} from "../../../services/ServiceConstants";
 import {ConfigService} from "../../../services/ConfigService";
 import {makeCancelable, PromiseSubscription} from "../../../utils/make-cancelable";
 
-export interface InjectedProps extends FormComponentProps {
+export interface InjectedProps {
   configService: ConfigService;
 }
 
@@ -28,6 +27,7 @@ export interface SessionTimeoutState {
 
 class SessionTimeoutComponent extends React.Component<InjectedProps, SessionTimeoutState> {
   private _configSubscription: PromiseSubscription | null;
+  private _formRef = React.createRef<FormInstance>();
 
   constructor(props: InjectedProps) {
     super(props);
@@ -42,22 +42,22 @@ class SessionTimeoutComponent extends React.Component<InjectedProps, SessionTime
   }
 
   public render(): ReactNode {
-    const {getFieldDecorator} = this.props.form;
     if (this.state.timeout !== null) {
       return (
-        <Form onSubmit={this._handleSubmit} layout="horizontal">
-          <Form.Item label="Session Timeout (minutes)">
-            {getFieldDecorator('timeout', {initialValue: this.state.timeout})(
+          <Form ref={this._formRef} onFinish={this._handleSubmit} layout="horizontal">
+            <Form.Item name="v"
+                       label="Session Timeout (minutes)"
+                       initialValue={this.state.timeout}
+            >
               <InputNumber min={1}/>
-            )}
-          </Form.Item>
-          <FormButtonBar>
-            <Button type="primary" htmlType="submit">Save</Button>
-          </FormButtonBar>
-        </Form>
+            </Form.Item>
+            <FormButtonBar>
+              <Button type="primary" htmlType="submit">Save</Button>
+            </FormButtonBar>
+          </Form>
       );
     } else {
-      return (null);
+      return null;
     }
   }
 
@@ -69,16 +69,15 @@ class SessionTimeoutComponent extends React.Component<InjectedProps, SessionTime
 
   private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        const {timeout} = values;
-        this.props.configService
+    this._formRef.current!.validateFields().then(values => {
+      const {timeout} = values;
+      this.props.configService
           .setSessionTimeoutMinutes(timeout)
           .then(() =>
-            notification.success({
-              message: "Configuration Saved",
-              description: "The session timeout was successfully saved."
-            })
+              notification.success({
+                message: "Configuration Saved",
+                description: "The session timeout was successfully saved."
+              })
           )
           .catch(err => {
             console.error(err);
@@ -87,7 +86,6 @@ class SessionTimeoutComponent extends React.Component<InjectedProps, SessionTime
               description: "The session timeout configuration could not be saved."
             })
           });
-      }
     });
   }
 
@@ -97,11 +95,11 @@ class SessionTimeoutComponent extends React.Component<InjectedProps, SessionTime
     promise.then(timeout => {
       this._configSubscription = null;
       this.setState({timeout});
-    }).catch(err => {
+    }).catch(_ => {
       this._configSubscription = null;
       this.setState({timeout: null});
     });
   }
 }
 
-export const SessionTimeout = injectAs<{}>([SERVICES.CONFIG_SERVICE], Form.create()(SessionTimeoutComponent));
+export const SessionTimeout = injectAs([SERVICES.CONFIG_SERVICE], SessionTimeoutComponent);

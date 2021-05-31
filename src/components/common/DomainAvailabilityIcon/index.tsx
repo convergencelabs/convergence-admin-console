@@ -11,8 +11,8 @@
 
 import React, {ReactNode} from "react";
 import styles from "./styles.module.css";
-import {Icon} from "antd";
 import {DomainAvailability} from "../../../models/DomainAvailability";
+import {CheckCircleOutlined, DisconnectOutlined, PauseCircleOutlined} from "@ant-design/icons";
 
 export interface DomainAvailabilityIconProps {
   availability: DomainAvailability;
@@ -21,36 +21,15 @@ export interface DomainAvailabilityIconProps {
 export class DomainAvailabilityIcon extends React.Component<DomainAvailabilityIconProps, {}> {
 
   public render(): ReactNode {
-    const icon = this._iconType(this.props.availability);
-    const className = this._className(this.props.availability);
-    return (
-      <Icon type={icon} className={className}/>
-    );
-  }
-
-  private _iconType(status: DomainAvailability): string {
-    switch (status) {
+    switch (this.props.availability) {
       case DomainAvailability.ONLINE:
-        return "check-circle";
+        return <CheckCircleOutlined className={styles.online}/>;
       case DomainAvailability.OFFLINE:
-        return "disconnect";
+        return <DisconnectOutlined className={styles.offline}/>;
       case DomainAvailability.MAINTENANCE:
-        return "pause-circle";
+        return <PauseCircleOutlined className={styles.maintenance}/>;
       default:
-        throw new Error("Unknown domain status: " + status);
-    }
-  }
-
-  private _className(status: DomainAvailability): string {
-    switch (status) {
-      case DomainAvailability.ONLINE:
-        return styles.online;
-      case DomainAvailability.OFFLINE:
-        return styles.offline;
-      case DomainAvailability.MAINTENANCE:
-        return styles.maintenance;
-      default:
-        throw new Error("Unknown domain status: " + status);
+        throw new Error("Unknown domain status: " + this.props.availability);
     }
   }
 }

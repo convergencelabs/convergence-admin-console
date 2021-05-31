@@ -10,7 +10,7 @@
  */
 
 import React, {ReactNode} from "react";
-import {Icon} from "antd";
+import { FrownOutlined } from '@ant-design/icons';
 import {MessagePage} from "../MessagePage";
 import styles from "./styles.module.css";
 
@@ -23,7 +23,7 @@ export class ErrorPage extends React.Component<ErrorPageProps, {}> {
   public render(): ReactNode {
     return (
       <MessagePage>
-          <Icon type="frown" className={styles.icon}/>
+          <FrownOutlined className={styles.icon} />
           <div className={styles.title}>{this.props.title}</div>
           <div className={styles.text}>{this.props.message}</div>
       </MessagePage>

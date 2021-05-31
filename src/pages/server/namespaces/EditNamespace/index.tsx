@@ -10,10 +10,10 @@
  */
 
 import React, {FormEvent, ReactNode} from "react";
-import {Page} from "../../../../components/common/Page/";
+import {Page} from "../../../../components";
 import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
-import {Button, Card, Col, Form, Icon, Input, notification, Row} from "antd";
-import {FormComponentProps} from "antd/lib/form";
+import { FolderOutlined } from '@ant-design/icons';
+import {Button, Card, Col, Form, FormInstance, Input, notification, Row} from "antd";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
 import {injectAs} from "../../../../utils/mobx-utils";
@@ -26,7 +26,7 @@ import {UserRoleTable} from "../../../../components/server/UserRoleTable/";
 import {RoleService, RoleTarget} from "../../../../services/RoleService";
 import styles from "./styles.module.css";
 
-interface InjectedProps extends RouteComponentProps, FormComponentProps {
+interface InjectedProps extends RouteComponentProps {
   namespaceService: NamespaceService;
   roleService: RoleService;
 }
@@ -38,7 +38,7 @@ export interface EditNamespaceState {
 
 class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespaceState> {
   private readonly _breadcrumbs: IBreadcrumbSegment[];
-
+  private _formRef = React.createRef<FormInstance>();
   private readonly _roles = ["Developer", "Domain Admin", "Owner"];
 
   constructor(props: InjectedProps) {
@@ -62,33 +62,30 @@ class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespac
   }
 
   public render(): ReactNode {
-    const {getFieldDecorator} = this.props.form;
     const {namespace} = this.state;
     if (namespace === null) {
       return <div/>;
     } else {
       return (
         <Page breadcrumbs={this._breadcrumbs}>
-          <Card title={<span><Icon type="folder"/> Edit Namespace</span>} className={styles.formCard}>
-            <Form onSubmit={this.handleSubmit}>
+          <Card title={<span><FolderOutlined /> Edit Namespace</span>} className={styles.formCard}>
+            <Form ref={this._formRef} onFinish={this.handleSubmit}>
               <Row gutter={16}>
                 <Col span={12}>
-                  <Form.Item label="Namespace Id">
-                    {getFieldDecorator('id', {
-                      initialValue: this.state.namespace!.id
-                    })(
+                  <Form.Item name="id"
+                             label="Namespace Id"
+                             initialValue={this.state.namespace!.id}
+                  >
                       <Input disabled={true}/>
-                    )}
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <Form.Item label="Display Name">
-                    {getFieldDecorator('displayName', {
-                      rules: [{required: true, message: 'Please input a Display Name!', whitespace: true}],
-                      initialValue: this.state.namespace!.displayName
-                    })(
+                  <Form.Item name="displayName"
+                             label="Display Name"
+                             initialValue={this.state.namespace!.displayName}
+                             rules={[{required: true, message: 'Please input a Display Name!', whitespace: true}]}
+                  >
                       <Input/>
-                    )}
                   </Form.Item>
                 </Col>
               </Row>
@@ -170,8 +167,7 @@ class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespac
 
   private handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values: any) => {
-      if (!err) {
+    this._formRef.current!.validateFields().then(values => {
         const {id, displayName} = values;
         this.props.namespaceService.updateNamespace(id, displayName)
           .then(() => {
@@ -194,10 +190,10 @@ class EditNamespaceComponent extends React.Component<InjectedProps, EditNamespac
               description
             });
           });
-      }
+
     });
   }
 }
 
 const injections = [SERVICES.NAMESPACE_SERVICE, SERVICES.ROLE_SERVICE];
-export const EditNamespace = injectAs<RouteComponentProps>(injections, Form.create()(EditNamespaceComponent));
+export const EditNamespace = injectAs<RouteComponentProps>(injections, EditNamespaceComponent);

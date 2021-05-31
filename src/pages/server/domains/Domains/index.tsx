@@ -10,8 +10,17 @@
  */
 
 import React, {KeyboardEvent, ReactNode} from 'react';
-import {Page} from "../../../../components/common/Page/";
-import {Button, Card, Icon, Input, notification, Popconfirm, Table} from "antd";
+import {Page} from "../../../../components";
+
+import {
+  DeleteOutlined,
+  PlusCircleOutlined,
+  QuestionCircleOutlined,
+  ReloadOutlined,
+  SearchOutlined, StarFilled, StarOutlined,
+} from '@ant-design/icons';
+
+import { Button, Card, Input, notification, Popconfirm, Table } from "antd";
 import styles from "./styles.module.css";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
@@ -154,36 +163,35 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
           <NamespaceAutoComplete placeholder={"Filter Namespace"} onChange={this._onNamespaceChange}/> : null
         }
         <span className={styles.search}>
-          <Input placeholder="Search Domains" addonAfter={<Icon type="search"/>} onKeyUp={this._onFilterChange}/>
+          <Input placeholder="Search Domains" addonAfter={<SearchOutlined />} onKeyUp={this._onFilterChange}/>
         </span>
         <Tooltip placement="topRight" title="Create Domain" mouseEnterDelay={1}>
           <Button className={styles.iconButton} shape="circle" size="small" htmlType="button"
                   onClick={this._goToCreate}>
-            <Icon type="plus-circle"/>
+            <PlusCircleOutlined />
           </Button>
         </Tooltip>
         <Tooltip placement="topRight" title="Reload Domains" mouseEnterDelay={1}>
           <Button className={styles.iconButton} shape="circle" size="small" htmlType="button"
                   onClick={this._loadDomains}>
-            <Icon type="reload"/>
+            <ReloadOutlined />
           </Button>
         </Tooltip>
       </CardTitleToolbar>
-    )
+    );
   }
 
   private _renderActions = (text: any, record: DomainDescriptor) => {
     const fav = this._isFav(record);
     const favType = fav ? undefined : "dashed";
     const color = fav ? "#e3b12e" : "darkgray";
-    const theme = fav ? "filled" : undefined;
 
     const deleteDisabled = false;
     const deleteButton = <Button className={styles.iconButton}
                                  shape="circle"
                                  size="small"
                                  htmlType="button"
-                                 disabled={deleteDisabled}><Icon type="delete"/></Button>;
+                                 disabled={deleteDisabled}><DeleteOutlined /></Button>;
 
     const deleteComponent = deleteDisabled ?
       <Tooltip placement="topRight" title="You do not have permissions to delete this domain!" mouseEnterDelay={1}>
@@ -194,7 +202,7 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
                   onConfirm={() => this._onDeleteDomain(record.namespace, record.id)}
                   okText="Yes"
                   cancelText="No"
-                  icon={<Icon type="question-circle-o" style={{color: 'red'}}/>}
+                  icon={<QuestionCircleOutlined style={{color: 'red'}} />}
       >
         <Tooltip placement="topRight" title="Delete Domain" mouseEnterDelay={2}>
           {deleteButton}
@@ -210,9 +218,7 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
                 type={favType}
                 onClick={() => this._onFavClick(record)}
         >
-          <Icon type="star"
-                theme={theme}
-                style={{color}}/>
+          {fav ? <StarOutlined style={{color}}/> : <StarFilled style={{color}} />}
         </Button>
         {deleteComponent}
       </span>

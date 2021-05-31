@@ -62,7 +62,7 @@ class DangerousSettingsComponent extends React.Component<InjectedProps, Dangerou
           <FormButtonBar>
             <Button
               htmlType="button"
-              type="danger"
+              color="danger"
               disabled={this.props.domainId.id !== this.state.domainId}
               onClick={this._onDelete}
             >Delete</Button>

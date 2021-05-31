@@ -10,10 +10,8 @@
  */
 
 import React, {ReactNode} from "react";
-import {Button, Col, Form, Input, Row, Select} from "antd";
-import {FormComponentProps} from "antd/lib/form";
+import {Button, Col, Form, FormInstance, Input, Row, Select} from "antd";
 import styles from "./styles.module.css";
-import {FormCreateOption} from "antd/es/form";
 
 export interface SessionTableFilters {
   sessionId: string;
@@ -22,70 +20,78 @@ export interface SessionTableFilters {
   authMethod: string;
 }
 
-export interface SessionTableControlsProps extends FormComponentProps{
+export interface SessionTableControlsProps {
   onFilter(filters: SessionTableFilters): void;
 }
 
-class SessionTableControlsForm extends React.Component<SessionTableControlsProps, {}> {
+export class SessionTableControls extends React.Component<SessionTableControlsProps, {}> {
+  private _formRef = React.createRef<FormInstance>();
 
   public render(): ReactNode {
-    const {getFieldDecorator} = this.props.form;
-
     return (
-      <div className={styles.toolbar}>
-        <Row  gutter={16}>
-          <Col span={6}>
-            <div className={styles.label}>Session Id:</div>
-            {getFieldDecorator('sessionId',)(
-              <Input className={styles.sessionId}/>
-            )}
-          </Col>
-          <Col span={6}>
-            <div className={styles.label}>Username:</div>
-            {getFieldDecorator('username')(
-              <Input className={styles.username}/>
-            )}
-          </Col>
-          <Col span={3}>
-            <div className={styles.label}>Auth Method:</div>
-            {getFieldDecorator('authMethod')(
-              <Select className={styles.authMethod}>
-                <Select.Option value="jwt">JWT</Select.Option>
-                <Select.Option value="password">Password</Select.Option>
-                <Select.Option value="reconnect">Reconnect</Select.Option>
-                <Select.Option value="anonymous">Anonymous</Select.Option>
-              </Select>
-            )}
-          </Col>
-          <Col span={7}>
-            <div className={styles.label}>Remote Host:</div>
-            {getFieldDecorator('remoteHost')(
-              <Input className={styles.remoteHost}/>
-            )}
-          </Col>
-          <Col span={2}>
-            <div className={styles.filter}>
-              <div className={styles.label}>&nbsp;</div>
-              <Button htmlType="button"
-                      type="primary"
-                      className={styles.button}
-                      onClick={this._handleSubmit}>Filter</Button>
-            </div>
-          </Col>
-        </Row>
-      </div>
+        <Form ref={this._formRef}>
+          <div className={styles.toolbar}>
+            <Row gutter={16}>
+              <Col span={6}>
+                <Form.Item
+                    name="sessionId"
+                    label="Session Id"
+                    className={styles.label}
+                >
+                  <Input className={styles.sessionId}/>
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item
+                    name="username"
+                    label="Username"
+                    className={styles.label}
+                >
+                  <Input className={styles.username}/>
+                </Form.Item>
+              </Col>
+              <Col span={3}>
+                <Form.Item
+                    name="authMethod"
+                    label="Auth Method"
+                    className={styles.label}
+                >
+                  <Select className={styles.authMethod}>
+                    <Select.Option value="jwt">JWT</Select.Option>
+                    <Select.Option value="password">Password</Select.Option>
+                    <Select.Option value="reconnect">Reconnect</Select.Option>
+                    <Select.Option value="anonymous">Anonymous</Select.Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col span={7}>
+                <Form.Item
+                    name="remoteHost"
+                    label="Remote Host"
+                    className={styles.label}
+                >
+                  <Input className={styles.remoteHost}/>
+                </Form.Item>
+              </Col>
+              <Col span={2}>
+                <div className={styles.filter}>
+                  <div className={styles.label}>&nbsp;</div>
+                  <Button htmlType="button"
+                          type="primary"
+                          className={styles.button}
+                          onClick={this._handleSubmit}>Filter</Button>
+                </div>
+              </Col>
+            </Row>
+          </div>
+        </Form>
     );
   }
 
   private _handleSubmit = () => {
-    this.props.form.validateFieldsAndScroll((err: any, values: any) => {
-      if (!err) {
-        const {sessionId, username, remoteHost, authMethod} = values;
-        this.props.onFilter({sessionId, username, remoteHost, authMethod});
-      }
+    this._formRef.current!.validateFields().then(values => {
+      const {sessionId, username, remoteHost, authMethod} = values;
+      this.props.onFilter({sessionId, username, remoteHost, authMethod});
     });
   }
 }
-
-const formOptions: FormCreateOption<SessionTableControlsProps> = {};
-export const SessionTableControls = Form.create(formOptions)(SessionTableControlsForm);

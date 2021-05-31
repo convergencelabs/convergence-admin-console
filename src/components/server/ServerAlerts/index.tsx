@@ -12,7 +12,8 @@
 import * as React from 'react';
 import {Component, ReactNode} from 'react';
 import styles from "./styles.module.css";
-import {Button, Card, Icon, Table} from "antd";
+import { CloseSquareOutlined, DeleteOutlined, InfoCircleOutlined, WarningOutlined } from '@ant-design/icons';
+import { Button, Card, Table } from "antd";
 import {shortDateTime} from "../../../utils/format-utils";
 
 
@@ -65,7 +66,7 @@ export class ServerAlerts extends Component<{}, {}> {
 
   public render(): ReactNode {
     return (
-      <Card className={styles.alerts} title={<span><Icon type="warning"/> Alerts</span>}>
+      <Card className={styles.alerts} title={<span><WarningOutlined /> Alerts</span>}>
         <Table className={styles.alertTable}
                size="small"
                columns={this._tableColumns}
@@ -99,14 +100,14 @@ export class ServerAlerts extends Component<{}, {}> {
   private static _renderType = (text: any, record: any) => {
     switch (record.type) {
       case "warning":
-        return (<Icon type="warning" style={{color: "orange"}}/>);
+        return <WarningOutlined style={{color: "orange"}} />;
       case "error":
-        return (<Icon type="close-square" style={{color: "red"}}/>);
+        return <CloseSquareOutlined style={{color: "red"}} />;
       case "info":
-        return (<Icon type="info-circle" style={{color: "#2388a9"}}/>);
+        return <InfoCircleOutlined style={{color: "#2388a9"}} />;
     }
   }
   private static _renderActions = (text: any, record: any) => {
-    return (<Button htmlType="button" size="small" shape="circle" icon="delete"/>);
+    return <Button htmlType="button" size="small" shape="circle" icon={<DeleteOutlined />}/>;
   }
 }

@@ -10,6 +10,7 @@
  */
 
 import React, {ReactNode} from 'react';
+import { DeleteOutlined } from '@ant-design/icons';
 import {Button, Popconfirm, Row, Table} from "antd";
 import {ColumnProps} from "antd/lib/table";
 import {CollectionUserPermissionsEditor} from "../CollectionUserPermissionsEditor";
@@ -52,7 +53,7 @@ export class CollectionPermissionsTab extends React.Component<CollectionPermissi
       width: 50,
       render: (_: any, record: CollectionUserPermissions) => (
           <Popconfirm title="Delete user permissions?" onConfirm={() => this._deleteUserPermission(record.userId)}>
-            <Button shape="circle" size="small" icon="delete"/>
+            <Button shape="circle" size="small" icon={<DeleteOutlined />}/>
           </Popconfirm>
       )
     }];

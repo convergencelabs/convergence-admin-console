@@ -10,10 +10,10 @@
  */
 
 import React, {ReactNode} from "react";
-import {Card, Form, Icon, notification} from "antd";
-import {FormComponentProps} from "antd/lib/form";
+import { FolderOutlined } from '@ant-design/icons';
+import { Card, notification } from "antd";
 import {RouteComponentProps} from "react-router";
-import {Page} from "../../../../components/common/Page/";
+import {Page} from "../../../../components";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {RestError} from "../../../../services/RestError";
@@ -30,7 +30,7 @@ export interface CreateDomainCollectionsProps extends RouteComponentProps {
   domainId: DomainId;
 }
 
-interface InjectedProps extends CreateDomainCollectionsProps, FormComponentProps {
+interface InjectedProps extends CreateDomainCollectionsProps {
   domainCollectionService: DomainCollectionService;
 }
 
@@ -66,7 +66,7 @@ class CreateDomainCollectionComponent extends React.Component<InjectedProps, {}>
   public render(): ReactNode {
     return (
       <Page breadcrumbs={this._breadcrumbs}>
-        <Card title={<span><Icon type="folder"/> New Collection</span>} className={styles.formCard}>
+        <Card title={<span><FolderOutlined /> New Collection</span>} className={styles.formCard}>
           <DomainCollectionForm
             domainId={this.props.domainId}
             saveButtonLabel="Create"
@@ -108,4 +108,4 @@ class CreateDomainCollectionComponent extends React.Component<InjectedProps, {}>
 }
 
 const injections = [SERVICES.DOMAIN_COLLECTION_SERVICE];
-export const CreateDomainCollection = injectAs<CreateDomainCollectionsProps>(injections, Form.create()(CreateDomainCollectionComponent));
+export const CreateDomainCollection = injectAs<CreateDomainCollectionsProps>(injections, CreateDomainCollectionComponent);

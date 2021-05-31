@@ -11,9 +11,9 @@
 
 import * as React from 'react';
 import {ReactNode} from 'react';
-import {Page} from "../../../../components/common/Page";
-import {Card, Form, Icon, notification} from "antd";
-import {FormComponentProps} from "antd/lib/form";
+import {Page} from "../../../../components";
+import { KeyOutlined } from '@ant-design/icons';
+import { Card, notification } from "antd";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {injectAs} from "../../../../utils/mobx-utils";
@@ -23,7 +23,7 @@ import {ApiKeyService} from "../../../../services/ApiKeyService";
 import {ApiKeyForm} from "../../../../components/user/ApiKeyForm";
 import {UserApiKey} from "../../../../models/UserApiKey";
 
-interface InjectedProps extends RouteComponentProps, FormComponentProps {
+interface InjectedProps extends RouteComponentProps {
   apiKeyService: ApiKeyService;
 }
 
@@ -36,7 +36,7 @@ class CreateApiKeyComponent extends React.Component<InjectedProps, {}> {
   public render(): ReactNode {
     return (
       <Page breadcrumbs={this._breadcrumbs}>
-        <Card title={<span><Icon type="key"/> New API Key</span>} className={styles.formCard}>
+        <Card title={<span><KeyOutlined /> New API Key</span>} className={styles.formCard}>
           <ApiKeyForm initialValue={new UserApiKey("", "", true)} saveButtonLabel="Create"
                       onCancel={this._handleCancel} onSave={this._handleSubmit}
           />
@@ -74,4 +74,4 @@ class CreateApiKeyComponent extends React.Component<InjectedProps, {}> {
   }
 }
 
-export const CreateApiKey = injectAs<RouteComponentProps>([SERVICES.API_KEY_SERVICE], Form.create()(CreateApiKeyComponent));
+export const CreateApiKey = injectAs<RouteComponentProps>([SERVICES.API_KEY_SERVICE],CreateApiKeyComponent);

@@ -10,10 +10,9 @@
  */
 
 import React, {FormEvent, ReactNode} from "react";
-import {Button, Form, Input, notification, Select} from "antd";
+import {Button, Form, FormInstance, Input, notification, Select} from "antd";
 import {FormFieldWithHelp} from "../../../components/common/FormFieldWithHelp/";
 import {FormButtonBar} from "../../../components/common/FormButtonBar/";
-import {FormComponentProps} from "antd/lib/form";
 import {injectAs} from "../../../utils/mobx-utils";
 import {SERVICES} from "../../../services/ServiceConstants";
 import {makeCancelable, PromiseSubscription} from "../../../utils/make-cancelable";
@@ -25,7 +24,7 @@ import {ConfigStore} from "../../../stores/ConfigStore";
 
 const {Option} = Select;
 
-interface InjectedProps extends FormComponentProps {
+interface InjectedProps {
   configService: ConfigService;
   configStore: ConfigStore;
 }
@@ -39,8 +38,8 @@ const ENABLED = "enabled";
 const DISABLED = "disabled";
 
 class NamespaceSettingsComponent extends React.Component<InjectedProps, NamespaceAndDomainSettingsState> {
-
   private _configSubscription: PromiseSubscription | null;
+  private _formRef = React.createRef<FormInstance>();
 
   constructor(props: InjectedProps) {
     super(props);
@@ -57,69 +56,59 @@ class NamespaceSettingsComponent extends React.Component<InjectedProps, Namespac
 
   public render(): ReactNode {
     if (this.state.configs !== null) {
-      const {getFieldDecorator} = this.props.form;
       const namespacesEnabled = this.state.configs.get(CONFIG.Namespaces.Enabled) ? ENABLED : DISABLED;
       const userNamespacesEnabled = this.state.configs.get(CONFIG.Namespaces.UserNamespacesEnabled) ? ENABLED : DISABLED;
       const defaultNamespace = this.state.configs.get(CONFIG.Namespaces.DefaultNamespace);
 
       return (
-        <Form onSubmit={this._handleSubmit} layout="horizontal">
-          <Form.Item label={(
-            <FormFieldWithHelp
-              label="Namespaces"
-              tooltip="Determines if the server will allow grouping related domains into namespaces."
-            />
-          )}>
-            {getFieldDecorator('namespacesEnabled', {
-              initialValue: namespacesEnabled,
-              rules: []
-            })(
+          <Form ref={this._formRef} onFinish={this._handleSubmit} layout="horizontal">
+            <Form.Item name="namespacesEnabled"
+                       label={(
+                           <FormFieldWithHelp
+                               label="Namespaces"
+                               tooltip="Determines if the server will allow grouping related domains into namespaces."
+                           />
+                       )}
+                       initialValue={namespacesEnabled}
+            >
               <Select onChange={(val: string) => this.setState({namespacesEnabled: val === ENABLED})}>
                 <Option key={ENABLED} value={ENABLED}>Enabled</Option>
                 <Option key={DISABLED} value={DISABLED}>Disabled</Option>
               </Select>
-            )}
-          </Form.Item>
-          <Form.Item label={(
-            <FormFieldWithHelp
-              label="User Namespaces"
-              tooltip={
-                `Determines if each user has an implicit namespace in which to create domains.
-               This option requires namespaces to be enabled.`
-              }
-            />
-          )}>
-            {getFieldDecorator('userNamespacesEnabled', {
-              initialValue: userNamespacesEnabled,
-              rules: []
-            })(
+            </Form.Item>
+            <Form.Item name="userNamespacesEnabled"
+                       label={(
+                           <FormFieldWithHelp
+                               label="User Namespaces"
+                               tooltip={
+                                 `Determines if each user has an implicit namespace in which to create domains. This option requires namespaces to be enabled.`
+                               }
+                           />
+                       )}
+                       initialValue={userNamespacesEnabled}
+            >
               <Select disabled={!this.state.namespacesEnabled}>
                 <Option key={ENABLED} value={ENABLED}>Enabled</Option>
                 <Option key={DISABLED} value={DISABLED}>Disabled</Option>
               </Select>
-            )}
-          </Form.Item>
-          <Form.Item label={(
-            <FormFieldWithHelp
-              label="Default Namespaces"
-              tooltip={
-                `The default namespace domains will be created in.
-               This namespace will automatically be created and can not be deleted.
-               This is a required field if namespaces are disabled.`
-              }
-            />
-          )}>
-            {getFieldDecorator('defaultNamespace', {
-              rules: [],
-              initialValue: defaultNamespace,
-            })(
+            </Form.Item>
+            <Form.Item name="defaultNamespace"
+                       label={(
+                           <FormFieldWithHelp
+                               label="Default Namespaces"
+                               tooltip={
+                                 `The default namespace domains will be created in. This namespace will automatically be created and can not be deleted. This is a required field if namespaces are disabled.`
+                               }
+                           />
+                       )}
+                       initialValue={defaultNamespace}
+            >
               <Input/>
-            )}
-          </Form.Item>
-          <FormButtonBar>
-            <Button type="primary" htmlType="submit">Save</Button>
-          </FormButtonBar>
-        </Form>
+            </Form.Item>
+            <FormButtonBar>
+              <Button type="primary" htmlType="submit">Save</Button>
+            </FormButtonBar>
+          </Form>
       );
     } else {
       return null;
@@ -134,33 +123,31 @@ class NamespaceSettingsComponent extends React.Component<InjectedProps, Namespac
 
   private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
+    this._formRef.current!.validateFields().then(values => {
         const {defaultNamespace, namespacesEnabled, userNamespacesEnabled} = values;
         const config = new NamespaceConfig(
-          namespacesEnabled === ENABLED,
-          userNamespacesEnabled === ENABLED,
-          defaultNamespace
+            namespacesEnabled === ENABLED,
+            userNamespacesEnabled === ENABLED,
+            defaultNamespace
         );
         this.props.configService
-          .setNamespaceConfig(config)
-          .then(() => {
-            this.props.configStore.setDefaultNamespace(defaultNamespace);
-            this.props.configStore.setNamespacesEnabled(namespacesEnabled === ENABLED);
-            this.props.configStore.setUserNamespacesEnabled(userNamespacesEnabled === ENABLED);
-            notification.success({
-              message: "Configuration Saved",
-              description: "Namespace configuration successfully saved."
+            .setNamespaceConfig(config)
+            .then(() => {
+              this.props.configStore.setDefaultNamespace(defaultNamespace);
+              this.props.configStore.setNamespacesEnabled(namespacesEnabled === ENABLED);
+              this.props.configStore.setUserNamespacesEnabled(userNamespacesEnabled === ENABLED);
+              notification.success({
+                message: "Configuration Saved",
+                description: "Namespace configuration successfully saved."
+              })
             })
-          })
-          .catch(err => {
-            console.error(err);
-            notification.error({
-              message: "Configuration Not Saved",
-              description: "Namespace  configuration could not be saved."
-            })
-          });
-      }
+            .catch(err => {
+              console.error(err);
+              notification.error({
+                message: "Configuration Not Saved",
+                description: "Namespace  configuration could not be saved."
+              })
+            });
     });
   }
 
@@ -170,7 +157,7 @@ class NamespaceSettingsComponent extends React.Component<InjectedProps, Namespac
     promise.then(configs => {
       this._configSubscription = null;
       this.setState({configs});
-    }).catch(err => {
+    }).catch(_ => {
       this._configSubscription = null;
       this.setState({configs: null});
     });
@@ -178,4 +165,4 @@ class NamespaceSettingsComponent extends React.Component<InjectedProps, Namespac
 }
 
 const injections = [SERVICES.CONFIG_SERVICE, STORES.CONFIG_STORE];
-export const NamespaceSettings = injectAs<{}>(injections, Form.create()(NamespaceSettingsComponent));
+export const NamespaceSettings = injectAs<{}>(injections, NamespaceSettingsComponent);

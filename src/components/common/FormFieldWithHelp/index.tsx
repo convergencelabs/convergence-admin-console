@@ -11,7 +11,8 @@
 
 import React, {ReactNode} from "react";
 import styles from "./styles.module.css";
-import {Icon, Tooltip} from "antd";
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Tooltip } from "antd";
 
 export interface FormFieldWithHelpProps {
   label: string;
@@ -23,7 +24,7 @@ export class FormFieldWithHelp extends React.Component<FormFieldWithHelpProps, {
     return (
       <span>
         <span className={styles.label}>{this.props.label}</span>
-        <Tooltip title={this.props.tooltip}><Icon className={styles.icon} type="question-circle-o"/></Tooltip>
+        <Tooltip title={this.props.tooltip}><QuestionCircleOutlined className={styles.icon} /></Tooltip>
       </span>
     );
   }

@@ -12,7 +12,14 @@
 import React, {ReactNode} from "react";
 import {RouteComponentProps} from "react-router";
 import {Page} from "../../../components/common/Page";
-import {Button, Card, Col, Icon, Input, Row, Tabs} from 'antd';
+import {
+  BarChartOutlined,
+  CloudOutlined,
+  CodeOutlined,
+  CopyOutlined,
+  ProfileOutlined,
+} from '@ant-design/icons';
+import { Button, Card, Col, Input, Row, Tabs } from 'antd';
 import CopyToClipboard from "react-copy-to-clipboard";
 import styles from "./styles.module.css";
 import {ConnectionPasswordSnippet} from "./snippet_connection_password";
@@ -50,7 +57,7 @@ export class DomainDashboard extends React.Component<DomainDashboardProps, {}> {
       <CopyToClipboard text={domainConnectUrl}
                        onCopy={() => {
                        }}>
-        <Button className={styles.copyButton} htmlType="button" icon="copy"/>
+        <Button className={styles.copyButton} htmlType="button" icon={<CopyOutlined />}/>
       </CopyToClipboard>;
 
     return (
@@ -58,19 +65,19 @@ export class DomainDashboard extends React.Component<DomainDashboardProps, {}> {
         <div className={styles.domainDashboard}>
           <Row gutter={16}>
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              <Card className={styles.card} title={<span><Icon type="profile"/> Overview</span>}>
+              <Card className={styles.card} title={<span><ProfileOutlined /> Overview</span>}>
                 <DomainInfo domainId={this.props.domainId}/>
               </Card>
             </Col>
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              <Card className={styles.card} title={<span><Icon type="bar-chart"/> Statistics</span>}>
+              <Card className={styles.card} title={<span><BarChartOutlined /> Statistics</span>}>
                 <DomainStats domainId={this.props.domainId}/>
               </Card>
             </Col>
           </Row>
           <Row gutter={16}>
             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-              <Card title={<span><Icon type="cloud"/> Connection URL</span>} className={styles.card}>
+              <Card title={<span><CloudOutlined /> Connection URL</span>} className={styles.card}>
                 <Input placeholder="Basic usage"
                        value={domainConnectUrl}
                        readOnly={true}
@@ -81,7 +88,7 @@ export class DomainDashboard extends React.Component<DomainDashboardProps, {}> {
           </Row>
           <Row gutter={16}>
             <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-              <Card className={styles.card} title={<span><Icon type="code"/> Code Snippets</span>}>
+              <Card className={styles.card} title={<span><CodeOutlined /> Code Snippets</span>}>
                 <Tabs
                   defaultActiveKey="connection"
                   tabPosition="left"

@@ -11,6 +11,7 @@
 
 import React, {ReactNode} from 'react';
 import {DomainModelService} from "../../../../../services/domain/DomainModelService";
+import { DeleteOutlined } from '@ant-design/icons';
 import {Button, Card, notification, Popconfirm, Table} from "antd";
 import styles from "./styles.module.css";
 import Checkbox from "antd/es/checkbox/Checkbox";
@@ -67,7 +68,7 @@ class ModelPermissionsTabComponent extends React.Component<InjectedProps, ModelP
       width: 50,
       render: (_: any, record: ModelUserPermissions) => (
         <Popconfirm title="Delete user permissions?" onConfirm={() => this._deleteUserPermission(record.userId)}>
-          <Button shape="circle" size="small" icon="delete"/>
+          <Button shape="circle" size="small" icon={<DeleteOutlined />}/>
         </Popconfirm>
       )
     }];

@@ -12,7 +12,8 @@
 import * as React from 'react';
 import {Component, ReactNode} from 'react';
 import styles from "./styles.module.css";
-import {Card, Icon} from "antd";
+import { CheckCircleOutlined, ProfileOutlined } from '@ant-design/icons';
+import { Card } from "antd";
 import {InfoTable, InfoTableRow} from "../InfoTable";
 import {ServerStatus} from "../../../models/ServerStatus";
 import {makeCancelable, PromiseSubscription} from "../../../utils/make-cancelable";
@@ -60,13 +61,13 @@ export class ServerInfoComponent extends Component<InjectedProps, ServerInfoStat
           <InfoTableRow label="Schema Version">{serverStatus.schemaVersion}</InfoTableRow>
           <InfoTableRow label="Namespaces">{serverStatus.namespaces}</InfoTableRow>
           <InfoTableRow label="Domains">{serverStatus.domains}</InfoTableRow>
-          <InfoTableRow label="Status">Healthy <Icon type="check-circle" style={{color: "green"}}/></InfoTableRow>
+          <InfoTableRow label="Status">Healthy <CheckCircleOutlined style={{color: "green"}} /></InfoTableRow>
         </InfoTable>
       ) :
       null;
 
     return (
-      <Card className={styles.info} title={<span><Icon type="profile"/> Server Info</span>}>
+      <Card className={styles.info} title={<span><ProfileOutlined /> Server Info</span>}>
         {contents}
       </Card>
     );

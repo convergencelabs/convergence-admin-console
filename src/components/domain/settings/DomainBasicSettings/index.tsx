@@ -10,8 +10,7 @@
  */
 
 import React, {FormEvent, ReactNode} from "react";
-import {Button, Col, Form, Input, notification, Row} from "antd";
-import {FormComponentProps} from "antd/lib/form";
+import {Button, Col, Form, FormInstance, Input, notification, Row} from "antd";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {DomainId} from "../../../../models/DomainId";
@@ -24,7 +23,7 @@ export interface DomainBasicSettingsFormProps {
   domainId: DomainId;
 }
 
-interface InjectedProps extends DomainBasicSettingsFormProps, FormComponentProps {
+interface InjectedProps extends DomainBasicSettingsFormProps {
   domainService: DomainService;
 }
 
@@ -33,6 +32,7 @@ export interface DomainBasicSettingsFormState {
 }
 
 class DomainBasicSettingsForm extends React.Component<InjectedProps, DomainBasicSettingsFormState> {
+  private _formRef = React.createRef<FormInstance>();
   private _subscription: PromiseSubscription | null;
 
   constructor(props: InjectedProps) {
@@ -55,18 +55,16 @@ class DomainBasicSettingsForm extends React.Component<InjectedProps, DomainBasic
 
   public render(): ReactNode {
     if (this.state.initialValue !== null) {
-      const {getFieldDecorator} = this.props.form;
       return (
-        <Form onSubmit={this._handleSubmit}>
+        <Form ref={this._formRef} onFinish={this._handleSubmit}>
           <Row>
             <Col span={24}>
-              <Form.Item label="Display Name">
-                {getFieldDecorator('displayName', {
-                  rules: [{required: true, message: "A display name is required!"}],
-                  initialValue: this.state.initialValue.displayName
-                })(
+              <Form.Item name="displayName"
+                         label="Display Name"
+                         initialValue={this.state.initialValue.displayName}
+                         rules={[{required: true, message: "A display name is required!"}]}
+              >
                   <Input placeholder="Enter a Display Name"/>
-                )}
               </Form.Item>
             </Col>
           </Row>
@@ -86,8 +84,7 @@ class DomainBasicSettingsForm extends React.Component<InjectedProps, DomainBasic
 
   private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values: any) => {
-      if (!err) {
+    this._formRef.current!.validateFields().then(values => {
         const {displayName} = values;
         this.props.domainService.updateDomain(this.props.domainId, displayName)
           .then(() => {
@@ -96,13 +93,12 @@ class DomainBasicSettingsForm extends React.Component<InjectedProps, DomainBasic
               description: `The domain info was successfully updated.`
             });
           })
-          .catch((err) => {
+          .catch((_) => {
             notification.error({
               message: 'Could Not Update Domain',
               description: `The domain info could not be updated.`
             });
           });
-      }
     });
   }
 
@@ -119,4 +115,4 @@ class DomainBasicSettingsForm extends React.Component<InjectedProps, DomainBasic
 }
 
 const injections = [SERVICES.DOMAIN_SERVICE];
-export const DomainBasicSettings = injectAs<DomainBasicSettingsFormProps>(injections, Form.create()(DomainBasicSettingsForm));
+export const DomainBasicSettings = injectAs<DomainBasicSettingsFormProps>(injections, DomainBasicSettingsForm);

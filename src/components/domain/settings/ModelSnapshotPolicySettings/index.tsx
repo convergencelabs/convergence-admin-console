@@ -10,8 +10,7 @@
  */
 
 import React, {FormEvent, ReactNode} from "react";
-import {Button, Col, Form, notification, Row} from "antd";
-import {FormComponentProps} from "antd/lib/form";
+import {Button, Col, Form, FormInstance, notification, Row} from "antd";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {DomainId} from "../../../../models/DomainId";
@@ -26,7 +25,7 @@ export interface ModelSnapshotPolicySettingsProps {
   domainId: DomainId;
 }
 
-interface InjectedProps extends ModelSnapshotPolicySettingsProps, FormComponentProps {
+interface InjectedProps extends ModelSnapshotPolicySettingsProps {
   domainConfigService: DomainConfigService;
 }
 
@@ -36,6 +35,7 @@ export interface ModelSnapshotPolicySettingsComponentState {
 
 class ModelSnapshotPolicySettingsComponent extends React.Component<InjectedProps, ModelSnapshotPolicySettingsComponentState> {
   private _subscription: PromiseSubscription | null;
+  private _formRef = React.createRef<FormInstance>();
 
   constructor(props: InjectedProps) {
     super(props);
@@ -58,8 +58,8 @@ class ModelSnapshotPolicySettingsComponent extends React.Component<InjectedProps
   public render(): ReactNode {
     if (this.state.initialValue !== null) {
       return (
-        <Form onSubmit={this._handleSubmit}>
-          <ModelSnapshotPolicyFormFragment form={this.props.form} initialValue={this.state.initialValue}/>
+        <Form ref={this._formRef} onFinish={this._handleSubmit}>
+          <ModelSnapshotPolicyFormFragment formRef={this._formRef} initialValue={this.state.initialValue}/>
           <Row>
             <Col span={24}>
               <FormButtonBar>
@@ -77,8 +77,7 @@ class ModelSnapshotPolicySettingsComponent extends React.Component<InjectedProps
 
   private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values: any) => {
-      if (!err) {
+    this._formRef.current!.validateFields().then(values => {
         const {
           snapshotsEnabled,
           triggerByVersion,
@@ -120,7 +119,6 @@ class ModelSnapshotPolicySettingsComponent extends React.Component<InjectedProps
             }
           }
         });
-      }
     });
   }
 
@@ -137,4 +135,4 @@ class ModelSnapshotPolicySettingsComponent extends React.Component<InjectedProps
 }
 
 const injections = [SERVICES.DOMAIN_CONFIG_SERVICE];
-export const ModelSnapshotPolicySettings = injectAs<ModelSnapshotPolicySettingsProps>(injections, Form.create()(ModelSnapshotPolicySettingsComponent));
+export const ModelSnapshotPolicySettings = injectAs<ModelSnapshotPolicySettingsProps>(injections,ModelSnapshotPolicySettingsComponent);

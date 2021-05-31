@@ -10,6 +10,7 @@
  */
 
 import React, {ReactNode} from "react";
+import { CopyOutlined } from '@ant-design/icons';
 import {Button, Input, Modal, Spin, Tabs} from "antd";
 import {FormButtonBar} from "../../../common/FormButtonBar";
 import {DomainJwtKeyService} from "../../../../services/domain/DomainJwtKeyService";
@@ -64,7 +65,7 @@ class GenerateJwtKeyModal extends React.Component<InjectedProps, GenerateJwtKeyM
                                 readOnly={true}
                                 value={this.state.privateKey}/>
                 <CopyToClipboard text={this.state.privateKey}>
-                  <Button htmlType="button" icon="copy" className={styles.copyButton}>Copy Private Key</Button>
+                  <Button htmlType="button" icon={<CopyOutlined />} className={styles.copyButton}>Copy Private Key</Button>
                 </CopyToClipboard>
               </Tabs.TabPane>
               <Tabs.TabPane tab="Public Key" key="public">

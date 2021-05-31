@@ -12,7 +12,7 @@
 import React, {ReactNode} from 'react';
 import {Link} from "react-router-dom";
 import {observer} from "mobx-react";
-import {Breadcrumb, Icon} from 'antd';
+import {Breadcrumb} from 'antd';
 import {breadcrumbsStore, IBreadcrumbSegment} from "../../../stores/BreacrumsStore";
 import styles from './styles.module.css';
 
@@ -22,31 +22,11 @@ export interface AppBreadcrumbsProps {
 
 class AppBreadcrumbsComponent extends React.Component<AppBreadcrumbsProps, {}> {
 
-  private _renderItems(): ReactNode[] {
-    const breadcrumbs = breadcrumbsStore.breadcrumbs;
-    return breadcrumbs ? breadcrumbs.map((v, i) => this._renderItem(v, i + 1)) : [];
-  }
-
-  private _renderItem(item: IBreadcrumbSegment, key: number): ReactNode {
-    let icon: ReactNode;
-
-    if (item.renderer) {
-      icon = item.renderer();
-    } else if (item.icon) {
-      icon = <Icon type={item.icon}/>
-    }
-
-    const content = item.link ?
-      <Link to={item.link}>{icon}{item.title}</Link> :
-      <span>{icon}{item.title}</span>;
-
-    return (
-      <Breadcrumb.Item key={key}>{content}</Breadcrumb.Item>
-    );
-  }
-
   public render(): ReactNode {
-    const home = this.props.hideHome ? null : this._renderItem({link: "/", icon: "home"}, 0);
+    const home = this.props.hideHome ?
+        null :
+        AppBreadcrumbsComponent._renderItem({link: "/", icon: "home"}, 0);
+
     const children = this._renderItems();
 
     return (
@@ -54,6 +34,29 @@ class AppBreadcrumbsComponent extends React.Component<AppBreadcrumbsProps, {}> {
         {home}
         {children}
       </Breadcrumb>
+    );
+  }
+
+  private _renderItems(): ReactNode[] {
+    const breadcrumbs = breadcrumbsStore.breadcrumbs;
+    return breadcrumbs ? breadcrumbs.map((v, i) => AppBreadcrumbsComponent._renderItem(v, i + 1)) : [];
+  }
+
+  private static _renderItem(item: IBreadcrumbSegment, key: number): ReactNode {
+    let icon: ReactNode;
+
+    if (item.renderer) {
+      icon = item.renderer();
+    } else if (item.icon) {
+      icon = item.icon;
+    }
+
+    const content = item.link ?
+        <Link to={item.link}>{icon}{item.title}</Link> :
+        <span>{icon}{item.title}</span>;
+
+    return (
+        <Breadcrumb.Item key={key}>{content}</Breadcrumb.Item>
     );
   }
 }
