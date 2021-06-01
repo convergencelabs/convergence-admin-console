@@ -20,6 +20,8 @@ import {toDomainRoute} from "../../../utils/domain-url";
 import {DomainGeneralSettingsTab} from "./GeneralSettingsTab";
 import {DomainMembers} from "./MemberSettingsTab";
 import {DangerousSettings} from "./DangerSettingsTab";
+import {DomainModelSettingsTab} from "./ModelSettingsTab";
+import {DomainCollectionSettingsTab} from "./CollectionSettingsTab";
 
 export interface DomainSettingsProps extends RouteComponentProps<{tab?: string}> {
   domainId: DomainId;
@@ -46,6 +48,12 @@ export class DomainSettings extends React.Component<DomainSettingsProps, {}> {
             </Tabs.TabPane>
             <Tabs.TabPane tab="Members" key="members">
               <DomainMembers domainId={this.props.domainId} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Models" key="models">
+              <DomainModelSettingsTab domainId={this.props.domainId} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Collections" key="collections">
+              <DomainCollectionSettingsTab domainId={this.props.domainId} />
             </Tabs.TabPane>
             <Tabs.TabPane tab="Dangerous" key="dangerous">
               <DangerousSettings domainId={this.props.domainId} history={this.props.history}/>

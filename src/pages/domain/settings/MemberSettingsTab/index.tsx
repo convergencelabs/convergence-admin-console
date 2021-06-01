@@ -11,8 +11,8 @@
 
 import React, {ReactNode} from "react";
 import Tooltip from "antd/es/tooltip";
-import { DeleteOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { Button, notification, Popconfirm, Table } from "antd";
+import {DeleteOutlined, QuestionCircleOutlined} from '@ant-design/icons';
+import {Button, notification, Popconfirm, Table} from "antd";
 import styles from "./styles.module.css";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
 import {injectAs} from "../../../../utils/mobx-utils";
@@ -22,6 +22,7 @@ import {DomainMemberService} from "../../../../services/domain/DomainMemberServi
 import {DomainMember} from "../../../../models/domain/DomainMember";
 import {AddDomainMemberControl} from "../../../../components/domain/settings/AddDomainMemberControl";
 import {loggedInUserStore} from "../../../../stores/LoggedInUserStore";
+import {DomainSettingSection} from "../SettingsSection";
 
 export interface DomainMemberSettingsProps {
   domainId: DomainId;
@@ -77,19 +78,19 @@ class DomainMemberSettingsComponent extends React.Component<InjectedProps, Domai
 
   public render(): ReactNode {
     return (
-      <div className={styles.members}>
-        <AddDomainMemberControl
-          domainId={this.props.domainId}
-          onAdd={this._onAdd}
-          user={loggedInUserStore.loggedInUser?.username!}
-        />
-        <Table className={styles.memberTable}
-               size="middle"
-               rowKey="username"
-               columns={this._memberTableColumns}
-               dataSource={this.state.members || []}
-        />
-      </div>
+        <DomainSettingSection>
+          <AddDomainMemberControl
+              domainId={this.props.domainId}
+              onAdd={this._onAdd}
+              user={loggedInUserStore.loggedInUser?.username!}
+          />
+          <Table className={styles.memberTable}
+                 size="middle"
+                 rowKey="username"
+                 columns={this._memberTableColumns}
+                 dataSource={this.state.members || []}
+          />
+        </DomainSettingSection>
     );
   }
 
@@ -97,17 +98,17 @@ class DomainMemberSettingsComponent extends React.Component<InjectedProps, Domai
     const disabled = record.username === loggedInUserStore.loggedInUser?.username;
 
     return (
-      <span className={styles.actions}>
+        <span className={styles.actions}>
         <Popconfirm title="Are you sure you want to remove this member?"
                     placement="topRight"
                     onConfirm={() => this._onDeleteMember(record.username)}
                     okText="Yes"
                     cancelText="No"
                     disabled={disabled}
-                    icon={<QuestionCircleOutlined style={{color: 'red'}} />}
+                    icon={<QuestionCircleOutlined style={{color: 'red'}}/>}
         >
         <Tooltip placement="topRight" title="Remove Member" mouseEnterDelay={2}>
-          <Button shape="circle" size="small" htmlType="button" icon={<DeleteOutlined />} disabled={disabled}/>
+          <Button shape="circle" size="small" htmlType="button" icon={<DeleteOutlined/>} disabled={disabled}/>
         </Tooltip>
       </Popconfirm>
     </span>
@@ -116,40 +117,43 @@ class DomainMemberSettingsComponent extends React.Component<InjectedProps, Domai
 
   private _onAdd = (member: DomainMember) => {
     return this.props.domainMemberService
-      .setDomainMemberRole(
-        this.props.domainId,
-        member.username,
-        member.role
-      )
-      .then(() => {
-        this._loadMembers();
-        return Promise.resolve(true);
-      })
-      .catch((err) => {
-        return Promise.resolve(false);
-      });
+        .setDomainMemberRole(
+            this.props.domainId,
+            member.username,
+            member.role
+        )
+        .then(() => {
+          this._loadMembers();
+          return Promise.resolve(true);
+        })
+        .catch((err) => {
+          return Promise.resolve(false);
+        });
   }
 
   private _onDeleteMember = (username: string) => {
     this.props.domainMemberService.removeDomainMember(this.props.domainId, username)
-      .then(() => {
-        this._loadMembers();
-        notification.success({
-          message: 'Member Removed',
-          description: `The member '${username}' was removed from this domain.`,
+        .then(() => {
+          this._loadMembers();
+          notification.success({
+            message: 'Member Removed',
+            description: `The member '${username}' was removed from this domain.`,
+          });
+        })
+        .catch(err => {
+          console.error(err);
+          notification.error({
+            message: 'Could Not Remove Member',
+            description: `The member could not be removed.`,
+          });
         });
-      })
-      .catch(err => {
-        console.error(err);
-        notification.error({
-          message: 'Could Not Remove Member',
-          description: `The member could not be removed.`,
-        });
-      });
   }
 
   private _loadMembers = () => {
-    const {promise, subscription} = makeCancelable(this.props.domainMemberService.getDomainMembers(this.props.domainId));
+    const {
+      promise,
+      subscription
+    } = makeCancelable(this.props.domainMemberService.getDomainMembers(this.props.domainId));
     this._membersSubscription = subscription;
     promise.then(memberMap => {
       const members: DomainMember[] = [];

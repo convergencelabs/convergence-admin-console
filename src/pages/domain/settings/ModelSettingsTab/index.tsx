@@ -8,22 +8,23 @@
  * Alternatively, see <https://www.gnu.org/licenses/gpl-3.0.html> for the
  * full text of the GPLv3 license, if it was not provided.
  */
+
 import React, {ReactNode} from "react";
 import {Card} from "antd";
 import {DomainId} from "../../../../models/DomainId";
-import {DomainBasicSettings} from "../../../../components/domain/settings/DomainBasicSettings";
+import {ModelSnapshotPolicySettings} from "../../../../components/domain/settings/ModelSnapshotPolicySettings"
 import {DomainSettingSection} from "../SettingsSection";
 
-export interface DomainSettingsProps {
+export interface DomainModelSettingsTabProps {
   domainId: DomainId;
 }
 
-export class DomainGeneralSettingsTab extends React.Component<DomainSettingsProps, {}> {
+export class DomainModelSettingsTab extends React.Component<DomainModelSettingsTabProps, {}> {
   public render(): ReactNode {
     return (
         <DomainSettingSection>
-          <Card type="inner" title="Basic Information">
-            <DomainBasicSettings domainId={this.props.domainId}/>
+          <Card type="inner" title="Default Model Snapshot Policy">
+            <ModelSnapshotPolicySettings domainId={this.props.domainId} />
           </Card>
         </DomainSettingSection>
     );
