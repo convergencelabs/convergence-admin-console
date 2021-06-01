@@ -21,6 +21,7 @@ import {DomainId} from "../../../../models/DomainId";
 import {CollectionUserPermissions} from "../../../../models/domain/CollectionUserPermissions";
 import {DescriptionBox} from "../../../common/DescriptionBox";
 import styles from "./styles.module.css";
+import {getOrElse} from "../../../../utils/data-utils";
 
 export interface DomainCollectionFormProps {
   domainId: DomainId;
@@ -207,6 +208,8 @@ export class DomainCollectionForm extends React.Component<DomainCollectionFormPr
       minimumTime
     } = values;
 
+    const defaults = this.props.initialValue;
+
     const worldPermissions = new CollectionPermissions(
         readPermission, writePermission, createPermission, removePermission, managePermission);
 
@@ -216,18 +219,20 @@ export class DomainCollectionForm extends React.Component<DomainCollectionFormPr
     // all undefined, however in that case it means they were not edited and
     // we can use what was passed in.
     const snapshotPolicy = new ModelSnapshotPolicy(
-        snapshotsEnabled || this.props.initialValue.snapshotPolicy.snapshotsEnabled,
-        triggerByVersion || this.props.initialValue.snapshotPolicy.triggerByVersion,
-        maximumVersion || this.props.initialValue.snapshotPolicy.maximumVersionInterval,
-        limitByVersion || this.props.initialValue.snapshotPolicy.limitByVersion,
-        minimumVersion || this.props.initialValue.snapshotPolicy.minimumVersionInterval,
-        triggerByTime || this.props.initialValue.snapshotPolicy.triggerByTime,
-        maximumTime || this.props.initialValue.snapshotPolicy.maximumTimeInterval,
-        limitByTime || this.props.initialValue.snapshotPolicy.limitByTime,
-        minimumTime || this.props.initialValue.snapshotPolicy.minimumTimeInterval);
+        getOrElse(snapshotsEnabled, defaults.snapshotPolicy.snapshotsEnabled),
+        getOrElse(triggerByVersion, defaults.snapshotPolicy.triggerByVersion),
+        getOrElse(maximumVersion, defaults.snapshotPolicy.maximumVersionInterval),
+        getOrElse(limitByVersion, defaults.snapshotPolicy.limitByVersion),
+        getOrElse(minimumVersion, defaults.snapshotPolicy.minimumVersionInterval),
+        getOrElse(triggerByTime, defaults.snapshotPolicy.triggerByTime),
+        getOrElse(maximumTime, defaults.snapshotPolicy.maximumTimeInterval),
+        getOrElse(limitByTime, defaults.snapshotPolicy.limitByTime),
+        getOrElse(minimumTime,  defaults.snapshotPolicy.minimumTimeInterval));
+
+    const overrideSnapshot = getOrElse(overrideSnapshotPolicy, defaults.overrideSnapshotPolicy);
 
     const collection = new Collection(
-        id, description, worldPermissions, userPermissions, overrideSnapshotPolicy, snapshotPolicy);
+        id, description, worldPermissions, userPermissions, overrideSnapshot, snapshotPolicy);
 
     this.props.onSave(collection);
   }
