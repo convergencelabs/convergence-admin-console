@@ -183,3 +183,7 @@ export interface CreateChatData {
   topic: string;
   members: string[];
 }
+
+export interface ReconnectConfigData {
+  tokenValidity: number;
+}

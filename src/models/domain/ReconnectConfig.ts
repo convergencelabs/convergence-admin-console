@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 - Convergence Labs, Inc.
+ * Copyright (c) 2021 - Convergence Labs, Inc.
  *
  * This file is part of the Convergence Server, which is released under
  * the terms of the GNU General Public License version 3 (GPLv3). A copy
@@ -9,6 +9,8 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-.formCard {
-  width: 600px;
+export class ReconnectConfig {
+  constructor(public readonly tokenValidity: number) {
+    Object.freeze(this);
+  }
 }

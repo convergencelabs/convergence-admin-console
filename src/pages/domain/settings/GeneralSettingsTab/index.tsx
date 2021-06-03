@@ -13,6 +13,7 @@ import {Card} from "antd";
 import {DomainId} from "../../../../models/DomainId";
 import {DomainBasicSettings} from "../../../../components/domain/settings/DomainBasicSettings";
 import {DomainSettingSection} from "../SettingsSection";
+import {ReconnectSettings} from "../../../../components/domain/settings/ReconnectSettings";
 
 export interface DomainSettingsProps {
   domainId: DomainId;
@@ -24,6 +25,9 @@ export class DomainGeneralSettingsTab extends React.Component<DomainSettingsProp
         <DomainSettingSection>
           <Card type="inner" title="Basic Information">
             <DomainBasicSettings domainId={this.props.domainId}/>
+          </Card>
+          <Card type="inner" title="Reconnect Settings">
+            <ReconnectSettings domainId={this.props.domainId} />
           </Card>
         </DomainSettingSection>
     );

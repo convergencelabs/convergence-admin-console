@@ -11,11 +11,12 @@
 
 import {DomainId} from "../../models/DomainId";
 import {AbstractDomainService} from "./AbstractDomainService";
-import {ModelSnapshotPolicyData} from "./common-rest-data";
+import {ModelSnapshotPolicyData, ReconnectConfigData} from "./common-rest-data";
 import {toModelSnapshotPolicy} from "./incoming-rest-data-converters";
 import {ModelSnapshotPolicy} from "../../models/domain/ModelSnapshotPolicy";
 import {toModelSnapshotPolicyData} from "./outgoing-rest-data-converters";
 import {CollectionConfig} from "../../models/domain/CollectionConfig";
+import {ReconnectConfig} from "../../models/domain/ReconnectConfig";
 
 export class DomainConfigService extends AbstractDomainService {
 
@@ -52,6 +53,17 @@ export class DomainConfigService extends AbstractDomainService {
   public setCollectionConfig(domainId: DomainId, config: CollectionConfig): Promise<void> {
     const url = this._getDomainUrl(domainId,`config/collection`);
     const entity = {autoCreate: config.autoCreate};
+    return this._put<void>(url, entity);
+  }
+
+  public getReconnectConfig(domainId: DomainId): Promise<ReconnectConfig> {
+    const url = this._getDomainUrl(domainId,`config/reconnect`);
+    return this._get<ReconnectConfigData>(url).then(c => new ReconnectConfig(c.tokenValidity));
+  }
+
+  public setReconnectConfig(domainId: DomainId, config: ReconnectConfig): Promise<void> {
+    const url = this._getDomainUrl(domainId,`config/reconnect`);
+    const entity: ReconnectConfigData = {tokenValidity: config.tokenValidity};
     return this._put<void>(url, entity);
   }
 }
