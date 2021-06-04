@@ -26,7 +26,7 @@ export interface SetCollectionUserPermissionControlProps {
 }
 
 export interface AddCollectionUserPermissionControlState {
-  username?: string;
+  username: string | null;
   permissions: CollectionPermissions;
 }
 
@@ -39,7 +39,7 @@ export class AddCollectionUserPermissionControl extends React.Component<SetColle
     this._defaultPermissions = new CollectionPermissions(false, false, false, false, false);
 
     this.state = {
-      username: undefined,
+      username: null,
       permissions: this._defaultPermissions
     }
   }
@@ -89,7 +89,7 @@ export class AddCollectionUserPermissionControl extends React.Component<SetColle
     ));
 
     this.setState({
-      username: undefined,
+      username: null,
       permissions: this._defaultPermissions
     });
   }

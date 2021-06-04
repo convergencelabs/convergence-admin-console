@@ -10,15 +10,15 @@
  */
 
 import React, {ReactNode} from "react";
-import {Card, Icon, notification} from "antd";
-import {FormComponentProps} from "antd/lib/form";
+import { TeamOutlined } from '@ant-design/icons';
+import { Card, notification } from "antd";
 import {RouteComponentProps} from "react-router";
 import {DomainId} from "../../../../../models/DomainId";
 import {DomainJwtKeyService} from "../../../../../services/domain/DomainJwtKeyService";
 import {SERVICES} from "../../../../../services/ServiceConstants";
 import {toDomainRoute} from "../../../../../utils/domain-url";
 import {DomainJwtKey} from "../../../../../models/domain/DomainJwtKey";
-import {Page} from "../../../../../components/common/Page";
+import {Page} from "../../../../../components";
 import {RestError} from "../../../../../services/RestError";
 import {injectAs} from "../../../../../utils/mobx-utils";
 import {DomainJwtKeyForm} from "../../../../../components/domain/auth/DomainJwtKeyForm";
@@ -28,7 +28,7 @@ export interface CreateDomainJwtKeyProps extends RouteComponentProps {
   domainId: DomainId;
 }
 
-interface InjectedProps extends CreateDomainJwtKeyProps, FormComponentProps {
+interface InjectedProps extends CreateDomainJwtKeyProps {
   domainJwtKeyService: DomainJwtKeyService;
 }
 
@@ -44,7 +44,7 @@ class CreateDomainJwtKeyComponent extends React.Component<InjectedProps, {}> {
   public render(): ReactNode {
     return (
       <Page breadcrumbs={this._breadcrumbs}>
-        <Card title={<span><Icon type="team"/> New JWT Key</span>} className={styles.formCard}>
+        <Card title={<span><TeamOutlined /> New JWT Key</span>} className={styles.formCard}>
           <DomainJwtKeyForm
             disableId={false}
             domainId={this.props.domainId}

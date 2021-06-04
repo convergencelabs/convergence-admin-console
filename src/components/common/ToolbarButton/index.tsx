@@ -15,7 +15,7 @@ import {Button, Tooltip} from "antd";
 import {TooltipPlacement} from "antd/lib/tooltip";
 
 export interface ToolbarButtonProps {
-  icon: string;
+  icon: ReactNode;
   tooltip: string;
   placement?: TooltipPlacement;
   onClick?: () => void;

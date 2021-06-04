@@ -11,9 +11,18 @@
 
 import * as React from 'react';
 import {KeyboardEvent, ReactNode} from 'react';
-import {Page} from "../../../../components/common/Page/";
+import {Page} from "../../../../components";
 import Tooltip from "antd/es/tooltip";
-import {Button, Card, Icon, Input, notification, Popconfirm, Table} from "antd";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  LockOutlined,
+  PlusCircleOutlined,
+  QuestionCircleOutlined,
+  ReloadOutlined,
+  SearchOutlined, UserOutlined,
+} from '@ant-design/icons';
+import { Button, Card, Input, notification, Popconfirm, Table } from "antd";
 import styles from "./styles.module.css";
 import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
 import {RouteComponentProps} from "react-router";
@@ -96,24 +105,24 @@ export class DomainUsersComponent extends React.Component<InjectedProps, DomainU
 
   private _renderToolbar(): ReactNode {
     return (
-      <CardTitleToolbar title="Users" icon="user">
+      <CardTitleToolbar title="Users" icon={<UserOutlined />}>
         <span className={styles.search}>
-          <Input placeholder="Search Users" addonAfter={<Icon type="search"/>} onKeyUp={this._onFilterChange}/>
+          <Input placeholder="Search Users" addonAfter={<SearchOutlined />} onKeyUp={this._onFilterChange}/>
         </span>
         <Tooltip placement="topRight" title="Create User" mouseEnterDelay={1}>
           <Button className={styles.iconButton} shape="circle" size="small" htmlType="button"
                   onClick={this._goToCreate}>
-            <Icon type="plus-circle"/>
+            <PlusCircleOutlined />
           </Button>
         </Tooltip>
         <Tooltip placement="topRight" title="Reload Users" mouseEnterDelay={1}>
           <Button className={styles.iconButton} shape="circle" size="small" htmlType="button"
                   onClick={this._loadUsers}>
-            <Icon type="reload"/>
+            <ReloadOutlined />
           </Button>
         </Tooltip>
       </CardTitleToolbar>
-    )
+    );
   }
 
   private _onFilterChange = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -145,12 +154,12 @@ export class DomainUsersComponent extends React.Component<InjectedProps, DomainU
       <span className={styles.actions}>
         <Tooltip placement="topRight" title="Edit User" mouseEnterDelay={1}>
           <Link to={toDomainRoute(this.props.domainId, `users/${value.username}`)}>
-            <Button shape="circle" size="small" htmlType="button" icon="edit"/>
+            <Button shape="circle" size="small" htmlType="button" icon={<EditOutlined />}/>
           </Link>
         </Tooltip>
         <Tooltip placement="topRight" title="Set Password" mouseEnterDelay={1}>
           <Link to={toDomainRoute(this.props.domainId, `users/${value.username}/set-password`)}>
-            <Button shape="circle" size="small" htmlType="button" icon="lock"/>
+            <Button shape="circle" size="small" htmlType="button" icon={<LockOutlined />}/>
           </Link>
         </Tooltip>
         <Popconfirm title="Are you sure delete this user?"
@@ -158,10 +167,10 @@ export class DomainUsersComponent extends React.Component<InjectedProps, DomainU
                     onConfirm={() => this._onDeleteUser(record.username)}
                     okText="Yes"
                     cancelText="No"
-                    icon={<Icon type="question-circle-o" style={{color: 'red'}}/>}
+                    icon={<QuestionCircleOutlined style={{color: 'red'}} />}
         >
         <Tooltip placement="topRight" title="Delete User" mouseEnterDelay={2}>
-          <Button shape="circle" size="small" htmlType="button" icon="delete"/>
+          <Button shape="circle" size="small" htmlType="button" icon={<DeleteOutlined />}/>
         </Tooltip>
       </Popconfirm>
     </span>

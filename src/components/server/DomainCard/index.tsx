@@ -28,6 +28,14 @@ import {ConfigStore} from "../../../stores/ConfigStore";
 import {DomainId} from "../../../models/DomainId";
 import {RouteComponentProps, withRouter} from "react-router";
 import {DomainAvailabilityIcon} from "../../common/DomainAvailabilityIcon";
+import {
+  CloudOutlined,
+  DashboardOutlined, FileOutlined,
+  FolderOutlined, LockOutlined,
+  MessageOutlined, SettingOutlined,
+  TeamOutlined,
+  UserOutlined
+} from "@ant-design/icons";
 
 export interface DomainCardProps {
   domain: DomainDescriptor
@@ -74,15 +82,15 @@ export class DomainCardComponent extends Component<InjectedProps, {}> {
           addonAfter={<CopyAddOnButton copyText={url}/>}
         />
         <div className={styles.buttons}>
-          <DomainCardButton link="" tooltip={"Dashboard"} icon="dashboard" disabled={disabled} {...props}/>
-          <DomainCardButton link="users" tooltip={"Users"} icon="user" disabled={disabled} {...props}/>
-          <DomainCardButton link="groups" tooltip={"Groups"} icon="team" disabled={disabled} {...props}/>
-          <DomainCardButton link="sessions" tooltip={"Sessions"} icon="cloud" disabled={disabled} {...props}/>
-          <DomainCardButton link="chats"  tooltip={"Chat"} icon="message" disabled={disabled} {...props}/>
-          <DomainCardButton link="collections"  tooltip={"Collections"} icon="folder" disabled={disabled} {...props}/>
-          <DomainCardButton link="models"  tooltip={"Models"} icon="file" disabled={disabled} {...props}/>
-          <DomainCardButton link="authentication" tooltip={"Authentication"} icon="lock" disabled={disabled} {...props}/>
-          <DomainCardButton link="settings" tooltip={"Settings"} icon="setting" disabled={disabled} {...props}/>
+          <DomainCardButton link="" tooltip={"Dashboard"} icon={<DashboardOutlined />} disabled={disabled} {...props}/>
+          <DomainCardButton link="users" tooltip={"Users"} icon={<UserOutlined />} disabled={disabled} {...props}/>
+          <DomainCardButton link="groups" tooltip={"Groups"} icon={<TeamOutlined />} disabled={disabled} {...props}/>
+          <DomainCardButton link="sessions" tooltip={"Sessions"} icon={<CloudOutlined />} disabled={disabled} {...props}/>
+          <DomainCardButton link="chats"  tooltip={"Chat"} icon={<MessageOutlined />} disabled={disabled} {...props}/>
+          <DomainCardButton link="collections"  tooltip={"Collections"} icon={<FolderOutlined />} disabled={disabled} {...props}/>
+          <DomainCardButton link="models"  tooltip={"Models"} icon={<FileOutlined />} disabled={disabled} {...props}/>
+          <DomainCardButton link="authentication" tooltip={"Authentication"} icon={<LockOutlined />} disabled={disabled} {...props}/>
+          <DomainCardButton link="settings" tooltip={"Settings"} icon={<SettingOutlined />} disabled={disabled} {...props}/>
         </div>
       </Card>
     );
@@ -91,7 +99,7 @@ export class DomainCardComponent extends Component<InjectedProps, {}> {
 
 interface DomainCardButtonProps extends RouteComponentProps {
   domain: DomainDescriptor
-  icon: string;
+  icon: ReactNode;
   link: string;
   tooltip: string;
   disabled: boolean;
@@ -104,7 +112,7 @@ class DomainCardButton extends Component<DomainCardButtonProps, {}> {
       <Tooltip title={tooltip} mouseEnterDelay={1}>
         <Button shape="circle" icon={icon} disabled={disabled} onClick={this._goto}/>
       </Tooltip>
-    )
+    );
   };
 
   private _goto = () => {

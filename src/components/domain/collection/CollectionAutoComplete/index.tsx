@@ -68,7 +68,6 @@ export class CollectionAutoCompleteComponent extends Component<InjectedProps, Co
         onSearch={this._onSearch}
         onChange={this._onChange}
         value={inputValue}
-        optionLabelProp="value"
         placeholder={placeholder || "Select Collection"}
       >
         {children}

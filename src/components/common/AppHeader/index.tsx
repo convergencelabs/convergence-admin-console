@@ -10,7 +10,16 @@
  */
 
 import React, {ReactNode} from 'react';
-import {Avatar, Badge, Dropdown, Icon, Layout, Menu, Tooltip} from 'antd';
+
+import {
+  BellOutlined,
+  DownOutlined,
+  LogoutOutlined,
+  ProfileOutlined,
+  SettingOutlined,
+} from '@ant-design/icons';
+
+import { Avatar, Badge, Dropdown, Layout, Menu, Tooltip } from 'antd';
 import styles from './styles.module.css';
 import logo from '../../../assets/images/logo.png';
 import {authStore} from "../../../stores/AuthStore";
@@ -35,13 +44,13 @@ class AppHeaderComponent extends React.Component<InjectedProps, {}> {
   private _menu = (
     <Menu className={styles.userMenu}>
       <Menu.Item key="profile">
-        <Link to={"/profile"}><Icon type="profile"/>Profile</Link>
+        <Link to={"/profile"}><ProfileOutlined />Profile</Link>
       </Menu.Item>
       <Menu.Item key="settings">
-        <Link to={"/account-settings"}><Icon type="setting"/>Settings</Link>
+        <Link to={"/account-settings"}><SettingOutlined />Settings</Link>
       </Menu.Item>
       <Menu.Divider/>
-      <Menu.Item key="logout" onClick={this._logout}><Icon type="logout"/> Logout</Menu.Item>
+      <Menu.Item key="logout" onClick={this._logout}><LogoutOutlined /> Logout</Menu.Item>
     </Menu>
   );
 
@@ -55,14 +64,14 @@ class AppHeaderComponent extends React.Component<InjectedProps, {}> {
         <span className={styles.slogan}>Admin Console</span>
         <Badge count={0}>
           <Tooltip title={"No Alerts"} mouseEnterDelay={1}>
-          <Icon type="bell" className={styles.icon}/>
+          <BellOutlined className={styles.icon} />
           </Tooltip>
         </Badge>
         <Dropdown overlay={this._menu} trigger={['click']}>
           <span className="ant-dropdown-link" style={{cursor: "pointer"}}>
             <span className={styles.username}>{displayName}</span>
             <Avatar src={`https://www.gravatar.com/avatar/${emailHash}?d=mp`}/>
-            <Icon className={styles.down} type="down"/>
+            <DownOutlined className={styles.down} />
           </span>
         </Dropdown>
       </Layout.Header>

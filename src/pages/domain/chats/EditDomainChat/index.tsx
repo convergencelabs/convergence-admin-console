@@ -10,9 +10,9 @@
  */
 
 import React, {ChangeEvent, ReactNode} from "react";
-import {Page} from "../../../../components/common/Page/";
-import {Button, Card, Col, Form, Icon, Input, notification, Row} from "antd";
-import {FormComponentProps} from "antd/lib/form";
+import {Page} from "../../../../components";
+import { FolderOutlined } from '@ant-design/icons';
+import {Button, Card, Col, Form, Input, notification, Row} from "antd";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
 import {injectAs} from "../../../../utils/mobx-utils";
@@ -29,7 +29,7 @@ interface EditDomainChatProps extends RouteComponentProps<{ id: string }> {
   domainId: DomainId;
 }
 
-interface InjectedProps extends EditDomainChatProps, FormComponentProps {
+interface InjectedProps extends EditDomainChatProps {
   domainChatService: DomainChatService;
 }
 
@@ -74,7 +74,8 @@ class EditDomainChatComponent extends React.Component<InjectedProps, EditDomainC
   public render(): ReactNode {
     return this.state.initialChat !== null ? (
         <Page breadcrumbs={this._breadcrumbs}>
-          <Card title={<span><Icon type="folder"/> Edit Chat</span>} className={styles.formCard}>
+          <Card title={<span><FolderOutlined /> Edit Chat</span>} className={styles.formCard}>
+            <Form layout="vertical">
             <Form.Item label="Chat Id">
               <Input disabled={true} value={this.state.initialChat.chatId}/>
             </Form.Item>
@@ -90,6 +91,7 @@ class EditDomainChatComponent extends React.Component<InjectedProps, EditDomainC
                 </Form.Item>
               </Col>
             </Row>
+            </Form>
             <Card type="inner" title="Chat Name">
               <Form.Item>
                 <Input value={this.state.name} onChange={this._onNameChange}/>
@@ -190,5 +192,4 @@ class EditDomainChatComponent extends React.Component<InjectedProps, EditDomainC
 }
 
 const injections = [SERVICES.DOMAIN_CHAT_SERVICE];
-export const EditDomainChat =
-  injectAs<EditDomainChatProps>(injections, Form.create()(EditDomainChatComponent));
+export const EditDomainChat = injectAs<EditDomainChatProps>(injections, EditDomainChatComponent);

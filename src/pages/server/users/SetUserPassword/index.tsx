@@ -10,10 +10,10 @@
  */
 
 import React, {ReactNode} from "react";
-import {Page} from "../../../../components/common/Page/";
+import {Page} from "../../../../components";
 import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
-import {Card, Form, Icon, notification, Tag} from "antd";
-import {FormComponentProps} from "antd/lib/form";
+import { UserOutlined } from '@ant-design/icons';
+import { Card, notification, Tag } from "antd";
 import {RouteComponentProps} from "react-router";
 import {UserService} from "../../../../services/UserService";
 import {injectAs} from "../../../../utils/mobx-utils";
@@ -22,7 +22,7 @@ import {ConvergenceUserPasswordForm} from "../../../../components/common/Converg
 import {RestError} from "../../../../services/RestError";
 import styles from "./styles.module.css";
 
-interface InjectedProps extends RouteComponentProps<{ username: string }>, FormComponentProps {
+interface InjectedProps extends RouteComponentProps<{ username: string }> {
   userService: UserService;
 }
 
@@ -32,6 +32,7 @@ export interface SetUserPasswordState {
 
 class SetUserPasswordComponent extends React.Component<InjectedProps, SetUserPasswordState> {
   private readonly _breadcrumbs: IBreadcrumbSegment[];
+
 
   constructor(props: InjectedProps) {
     super(props);
@@ -47,7 +48,7 @@ class SetUserPasswordComponent extends React.Component<InjectedProps, SetUserPas
   public render(): ReactNode {
     return (
       <Page breadcrumbs={this._breadcrumbs}>
-        <Card title={<span><Icon type="user"/> <Tag>{this.props.match.params.username}</Tag> Set Password</span>}
+        <Card title={<span><UserOutlined /> <Tag>{this.props.match.params.username}</Tag> Set Password</span>}
               className={styles.formCard}>
           <ConvergenceUserPasswordForm
             onSetPassword={this._handleSetPassword}
@@ -87,4 +88,4 @@ class SetUserPasswordComponent extends React.Component<InjectedProps, SetUserPas
 }
 
 const injections = [SERVICES.USER_SERVICE];
-export const SetUserPassword = injectAs<RouteComponentProps>(injections, Form.create()(SetUserPasswordComponent));
+export const SetUserPassword = injectAs<RouteComponentProps>(injections, SetUserPasswordComponent);

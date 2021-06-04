@@ -9,10 +9,10 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import React, {FormEvent, ReactNode} from "react";
+import React, {ReactNode} from "react";
 import {Page} from "../../../../components";
-import {Button, Card, Form, Icon, Input, notification, Select} from 'antd';
-import {FormComponentProps} from "antd/lib/form";
+import {FileOutlined} from '@ant-design/icons';
+import {Button, Card, Form, Input, notification, Select} from 'antd';
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
 import {injectAs} from "../../../../utils/mobx-utils";
@@ -29,12 +29,12 @@ export interface CreateDomainModelProps extends RouteComponentProps {
   domainId: DomainId;
 }
 
-interface InjectedProps extends CreateDomainModelProps, FormComponentProps {
+interface InjectedProps extends CreateDomainModelProps {
   domainModelService: DomainModelService;
 }
 
 export interface CreateDomainModelState {
-
+  idMode: string;
 }
 
 class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDomainModelState> {
@@ -43,74 +43,70 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
     {title: "New Model"}
   ];
 
+  state = {
+    idMode: "auto"
+  }
+
   public render(): ReactNode {
-    const {getFieldDecorator} = this.props.form;
-
     return (
-      <Page breadcrumbs={this._breadcrumbs}>
-        <Card title={<span><Icon type="file"/> New Model</span>} className={styles.formCard}>
-          <Form onSubmit={this._handleSubmit}>
-            <Form.Item label="Collection">
-              {getFieldDecorator('collection', {
-                rules: [{
-                  required: true, whitespace: true, message: 'Please select a Collection!',
-                }],
-              })(
+        <Page breadcrumbs={this._breadcrumbs}>
+          <Card title={<span><FileOutlined/> New Model</span>} className={styles.formCard}>
+            <Form layout="vertical" onFinish={this._handleSubmit}>
+              <Form.Item name="collection"
+                         label="Collection"
+                         rules={[{
+                           required: true, whitespace: true, message: 'Please select a Collection!'
+                         }]}
+              >
                 <CollectionAutoComplete domainId={this.props.domainId}/>
-              )}
-            </Form.Item>
-            <Form.Item label="Model Id">
-              {getFieldDecorator('idMode', {
-                initialValue: "auto",
-                rules: [{required: false, message: 'Please select a model id strategy!', whitespace: true}],
-              })(
-                <Select>
-                  <Select.Option key="auto">Auto Generated</Select.Option>
-                  <Select.Option key="manual">User Defined</Select.Option>
+              </Form.Item>
+              <Form.Item name="idMode"
+                         label="Model Id"
+                         initialValue="auto"
+                         rules={[{required: false, message: 'Please select a model id strategy!', whitespace: true}]}
+              >
+                <Select onSelect={this._idModeChanged}>
+                  <Select.Option key="auto" value="auto">Auto Generated</Select.Option>
+                  <Select.Option key="manual" value="manual">User Defined</Select.Option>
                 </Select>
-              )}
-            </Form.Item>
-            {
-              this.props.form.getFieldValue("idMode") === "manual" ?
-                <Form.Item label="Id">
-                  {getFieldDecorator('id', {
-                    rules: [{required: true, message: 'Please input a model id!', whitespace: true}],
-                  })(
-                    <Input/>
-                  )}
-                </Form.Item> :
-                null
-            }
-            <Form.Item label="Data">
-              {getFieldDecorator('data', {
-                initialValue: "{\n\n}",
-                rules: [
-                  {required: true, validator: this._validateData}
-                ],
-              })(
+              </Form.Item>
+              {
+                this.state.idMode === "manual" ?
+                    <Form.Item name="id"
+                               label="Id"
+                               rules={[{required: true, message: 'Please input a model id!', whitespace: true}]}
+                    >
+                      <Input/>
+                    </Form.Item> :
+                    null
+              }
+              <Form.Item name="data"
+                         label="Data"
+                         initialValue={"{\n\n}"}
+                         rules={[{required: true, validator: this._validateData}]}
+              >
                 <AceEditor
-                  className={styles.data}
-                  width={"100%"}
-                  height="300px"
-                  mode="json"
-                  theme="solarized_dark"
-
-                  name="create-model-data-editor"
-                  fontSize={12}
-                  showPrintMargin={true}
-                  showGutter={true}
-                  highlightActiveLine={true}
-                  editorProps={{$blockScrolling: true}}
+                    className={styles.data}
+                    width={"100%"}
+                    height="300px"
+                    mode="json"
+                    theme="solarized_dark"
+                    name="create-model-data-editor"
+                    fontSize={12}
+                    showPrintMargin={true}
+                    showGutter={true}
+                    highlightActiveLine={true}
+                    editorProps={{$blockScrolling: true}}
+                    setOptions={{useWorker: false}}
                 />
-              )}
-            </Form.Item>
-            <FormButtonBar>
-              <Button htmlType="button" onClick={this._handleCancel}>Cancel</Button>
-              <Button type="primary" htmlType="submit">Create</Button>
-            </FormButtonBar>
-          </Form>
-        </Card>
-      </Page>
+              </Form.Item>
+              <FormButtonBar>
+                <Button htmlType="button" onClick={this._handleCancel}>Cancel</Button>
+                <Button type="primary" htmlType="submit">Create</Button>
+              </FormButtonBar>
+            </Form>
+          </Card>
+        </Page>
     );
   }
 
@@ -128,43 +124,41 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
     }
   }
 
-  private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  private _handleSubmit = (values: any) => {
+    const {collection, idMode, id, data} = values;
 
-    this.props.form.validateFieldsAndScroll((err, values: any) => {
-      if (!err) {
-        const {collection, idMode, id, data} = values;
+    try {
+      const dataObj = JSON.parse(data);
+      const domainId = this.props.domainId;
 
-        try {
-          const dataObj = JSON.parse(data);
-          const domainId = this.props.domainId;
-
-          const create: Promise<string> = idMode === "auto" ?
-            this.props.domainModelService.createModel(domainId, collection, dataObj) :
-            this.props.domainModelService.createOrUpdateModel(domainId, collection, id, dataObj);
-          create.then((modelId) => {
-            notification.success({
-              message: 'Model Created',
-              description: `Model '${modelId}' successfully created`
+      const create: Promise<string> = idMode === "auto" ?
+          this.props.domainModelService.createModel(domainId, collection, dataObj) :
+          this.props.domainModelService.createOrUpdateModel(domainId, collection, id, dataObj);
+      create.then((modelId) => {
+        notification.success({
+          message: 'Model Created',
+          description: `Model '${modelId}' successfully created`
+        });
+        this.props.history.push(toDomainRoute(domainId, `models/${modelId}`));
+      }).catch((err) => {
+        if (err instanceof RestError) {
+          if (err.code === "duplicate") {
+            notification.error({
+              message: 'Could Not Create Model',
+              description: `A model with the specified ${err.details["field"]} already exists.`
             });
-            this.props.history.push(toDomainRoute(domainId, `models/${modelId}`));
-          }).catch((err) => {
-            if (err instanceof RestError) {
-              if (err.code === "duplicate") {
-                notification.error({
-                  message: 'Could Not Create Model',
-                  description: `A model with the specified ${err.details["field"]} already exists.`
-                });
-              }
-            }
-          });
-        } catch (parseErr) {
-          console.error(parseErr)
+          }
         }
-      }
-    });
+      });
+    } catch (parseErr) {
+      console.error(parseErr)
+    }
+  }
+
+  private _idModeChanged = (value: string) => {
+    this.setState({idMode: value})
   }
 }
 
 const injections = [SERVICES.DOMAIN_MODEL_SERVICE];
-export const CreateDomainModel = injectAs<CreateDomainModelProps>(injections, Form.create()(CreateDomainModelComponent));
+export const CreateDomainModel = injectAs<CreateDomainModelProps>(injections, CreateDomainModelComponent);

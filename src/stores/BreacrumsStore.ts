@@ -9,14 +9,14 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import {action, decorate, observable} from "mobx";
+import {action, makeAutoObservable, observable} from "mobx";
 import {ReactNode} from "react";
 import {DomainId} from "../models/DomainId";
 
 export interface IBreadcrumbSegment {
   title?: string;
   link?: string;
-  icon?: string;
+  icon?: ReactNode;
   renderer?: () => ReactNode;
 }
 
@@ -24,6 +24,14 @@ export class BreadcrumbsStore {
   public breadcrumbs: IBreadcrumbSegment[] = [];
   private _domainId: DomainId | null = null;
   private _path: IBreadcrumbSegment[] = [];
+
+  constructor() {
+    makeAutoObservable(this, {
+      breadcrumbs: observable,
+      setPath: action,
+      setDomain: action
+    });
+  }
 
   public setDomain(domainId: DomainId | null): void {
     this._domainId = domainId;
@@ -60,12 +68,5 @@ export class BreadcrumbsStore {
     this.breadcrumbs = segments;
   }
 }
-
-
-decorate(BreadcrumbsStore, {
-  breadcrumbs: observable,
-  setPath: action,
-  setDomain: action
-});
 
 export const breadcrumbsStore = new BreadcrumbsStore();

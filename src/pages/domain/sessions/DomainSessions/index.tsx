@@ -10,7 +10,7 @@
  */
 
 import React, {ReactNode} from "react";
-import {Page} from "../../../../components/common/Page/";
+import {Page} from "../../../../components";
 import {Card, Switch, Table} from "antd";
 import {RouteComponentProps} from "react-router";
 import {formatDomainUserId, longDateTime, shortDateTime} from "../../../../utils/format-utils";
@@ -24,6 +24,7 @@ import {SERVICES} from "../../../../services/ServiceConstants";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar";
 import styles from "./styles.module.css";
+import {CloudOutlined} from "@ant-design/icons";
 
 export interface DomainSessionsProps extends RouteComponentProps {
   domainId: DomainId;
@@ -64,19 +65,19 @@ class DomainSessionsComponent extends React.Component<InjectedProps, DomainSessi
       title: 'User',
       dataIndex: 'userId',
       sorter: true,
-      render: (val: DomainUserId, record: DomainSession) => formatDomainUserId(val),
+      render: (val: DomainUserId, _: DomainSession) => formatDomainUserId(val),
     }, {
       title: 'Auth Method',
       dataIndex: 'authMethod'
     }, {
       title: 'Connected At',
       dataIndex: 'connected',
-      render: (val: Date, record: DomainSession) => val ? shortDateTime(val) : "",
+      render: (val: Date, _: DomainSession) => val ? shortDateTime(val) : "",
       sorter: (a: DomainSession, b: DomainSession) => a.connected.getTime() - b.connected.getTime()
     }, {
       title: 'Disconnected At',
       dataIndex: 'disconnected',
-      render: (val: Date, record: DomainSession) => val ? shortDateTime(val) : ""
+      render: (val: Date, _: DomainSession) => val ? shortDateTime(val) : ""
     }, {
       title: 'Remote Host',
       dataIndex: 'remoteHost',
@@ -109,7 +110,7 @@ class DomainSessionsComponent extends React.Component<InjectedProps, DomainSessi
   }
 
   private _renderToolbar = () => {
-    return <CardTitleToolbar icon="cloud" title="Sessions">
+    return <CardTitleToolbar icon={<CloudOutlined />} title="Sessions">
       <div className={styles.titleTools}>
         <span>Disconnected Sessions:</span><Switch onChange={this._onChangeDisconnected}/>
         <span>Convergence Users:</span><Switch onChange={this._onChangeConvergenceUsers}/>

@@ -10,8 +10,8 @@
  */
 
 import React, {ReactNode} from "react";
-import {Card, Form, Icon, notification} from "antd";
-import {FormComponentProps} from "antd/lib/form";
+import { FolderOutlined } from '@ant-design/icons';
+import { Card, notification } from "antd";
 import {RouteComponentProps} from "react-router";
 import {Page} from "../../../../components";
 import {injectAs} from "../../../../utils/mobx-utils";
@@ -29,7 +29,7 @@ export interface EditDomainCollectionsProps extends RouteComponentProps<{ id: st
   domainId: DomainId;
 }
 
-interface InjectedProps extends EditDomainCollectionsProps, FormComponentProps {
+interface InjectedProps extends EditDomainCollectionsProps {
   domainCollectionService: DomainCollectionService;
 }
 
@@ -68,7 +68,7 @@ class EditDomainCollectionComponent extends React.Component<InjectedProps, EditD
     if (initialCollection !== null) {
       return (
         <Page breadcrumbs={this._breadcrumbs}>
-          <Card title={<span><Icon type="folder"/> Edit Collection</span>} className={styles.formCard}>
+          <Card title={<span><FolderOutlined /> Edit Collection</span>} className={styles.formCard}>
             <DomainCollectionForm
               domainId={this.props.domainId}
               initialValue={initialCollection}
@@ -125,4 +125,4 @@ class EditDomainCollectionComponent extends React.Component<InjectedProps, EditD
 }
 
 const injections = [SERVICES.DOMAIN_COLLECTION_SERVICE];
-export const EditDomainCollection = injectAs<EditDomainCollectionsProps>(injections, Form.create()(EditDomainCollectionComponent));
+export const EditDomainCollection = injectAs<EditDomainCollectionsProps>(injections, EditDomainCollectionComponent);

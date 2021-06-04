@@ -15,6 +15,7 @@ import {SideNavigation, SideNavigationMenuItem} from "../../common/SideNavigatio
 import {STORES} from "../../../stores/StoreConstants";
 import {injectObserver} from "../../../utils/mobx-utils";
 import {ConfigStore} from "../../../stores/ConfigStore";
+import {DatabaseOutlined, FolderOutlined, HomeOutlined, SettingOutlined, UserOutlined} from "@ant-design/icons";
 
 interface InjectedProps {
   configStore: ConfigStore;
@@ -27,11 +28,11 @@ class ServerSideNavigationComponent extends React.Component<InjectedProps, {}> {
     const {namespacesEnabled} = this.props.configStore;
 
     const menus: SideNavigationMenuItem[] = [
-      {key: "home", icon: "home", title: "Home", link: "/", routeMatch: {path: "/", exact: true}},
-      {key: "namespaces", icon: "folder", title: "Namespaces", link: "/namespaces", routeMatch: {path: "/namespaces"}},
-      {key: "domains", icon: "database", title: "Domains", link: "/domains", routeMatch: {path: "/domains"}},
-      {key: "users", icon: "user", title: "Users", link: "/users", routeMatch: {path: "/users"}},
-      {key: "settings", icon: "setting", title: "Settings", link: "/settings", routeMatch: {path: "/settings"}}
+      {key: "home", icon: <HomeOutlined/>, title: "Home", link: "/", routeMatch: {path: "/", exact: true}},
+      {key: "namespaces", icon: <FolderOutlined/>, title: "Namespaces", link: "/namespaces", routeMatch: {path: "/namespaces"}},
+      {key: "domains", icon: <DatabaseOutlined/>, title: "Domains", link: "/domains", routeMatch: {path: "/domains"}},
+      {key: "users", icon: <UserOutlined/>, title: "Users", link: "/users", routeMatch: {path: "/users"}},
+      {key: "settings", icon: <SettingOutlined />, title: "Settings", link: "/settings", routeMatch: {path: "/settings"}}
     ];
 
     if (!namespacesEnabled) {

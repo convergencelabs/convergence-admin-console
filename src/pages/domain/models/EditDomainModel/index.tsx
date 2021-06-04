@@ -9,9 +9,10 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import {Page} from "../../../../components/common/Page/";
+import {Page} from "../../../../components";
 import React, {ReactNode} from "react";
-import {Card, Icon, notification, Popconfirm, Tabs} from "antd";
+import {DeleteOutlined, FileOutlined, FolderOutlined} from '@ant-design/icons';
+import { Card, notification, Popconfirm, Tabs } from "antd";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {injectAs} from "../../../../utils/mobx-utils";
@@ -28,7 +29,7 @@ import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
 
 interface EditDomainModelRouteProps {
   id: string;
-  tab: string;
+  tab?: string;
 }
 
 interface EditDomainModelProps extends RouteComponentProps<EditDomainModelRouteProps> {
@@ -111,17 +112,16 @@ class EditDomainModelComponent extends React.Component<InjectedProps, EditDomain
     return (
       <span className={styles.title}>
         <span className={styles.editTitle}>
-          <Icon type="file"/>
+          <FileOutlined />
           <span> Edit Model</span>
         </span>
         <span className={styles.modelAndCollection}>
           <span className={styles.modelId}>{model.id}</span>
-          <span className={styles.collectionId}><Icon className={styles.collectionIcon}
-                                                      type="folder"/>{model.collection}</span>
+          <span className={styles.collectionId}><FolderOutlined className={styles.collectionIcon} />{model.collection}</span>
         </span>
         <span className={styles.spacer}/>
         <Popconfirm title="Delete this model?" onConfirm={this._onDeleteModel} placement="bottomRight">
-          <ToolbarButton icon="delete" tooltip="Delete Model"/>
+          <ToolbarButton icon={<DeleteOutlined />} tooltip="Delete Model"/>
         </Popconfirm>
       </span>
     );

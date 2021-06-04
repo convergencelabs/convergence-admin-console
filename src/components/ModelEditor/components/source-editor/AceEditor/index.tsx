@@ -36,7 +36,7 @@ export class AceEditor extends React.Component<AceEditorProps, {}> {
   }
 
   initEditor() {
-    this._editor = edit(this._container!);
+    this._editor = edit(this._container!, {useWorker: false});
     this._editor.setTheme("ace/theme/xcode");
     this._editor.setReadOnly(!this.props.editable);
     (this._editor as any).$blockScrolling = Infinity;

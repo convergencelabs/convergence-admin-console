@@ -14,7 +14,7 @@ import styles from "./styles.module.css";
 import {Button} from "antd";
 
 export interface IconButtonAddonProps {
-  icon: string;
+  icon: ReactNode;
   onClick?: (e: any) => void
 }
 

@@ -10,7 +10,15 @@
  */
 
 import React, {ReactNode} from 'react';
-import {Button, Card, Icon, notification, Popconfirm, Table} from "antd";
+import {
+  CopyOutlined,
+  DeleteOutlined,
+  EditOutlined, KeyOutlined,
+  PlusCircleOutlined,
+  QuestionCircleOutlined,
+  ReloadOutlined,
+} from '@ant-design/icons';
+import { Button, Card, notification, Popconfirm, Table } from "antd";
 import styles from "./styles.module.css";
 import {injectAs} from "../../../utils/mobx-utils";
 import {SERVICES} from "../../../services/ServiceConstants";
@@ -120,21 +128,21 @@ export class ApiKeysComponent extends React.Component<InjectedProps, ApiKeysStat
 
   private _renderToolbar(): ReactNode {
     return (
-      <CardTitleToolbar title="API Keys" icon="key">
+      <CardTitleToolbar title="API Keys" icon={<KeyOutlined />}>
         <Tooltip placement="topRight" title="Create API Key" mouseEnterDelay={1}>
           <Button className={styles.iconButton} shape="circle" size="small" htmlType="button"
                   onClick={this._goToCreate}>
-            <Icon type="plus-circle"/>
+            <PlusCircleOutlined />
           </Button>
         </Tooltip>
         <Tooltip placement="topRight" title="Reload API Keys" mouseEnterDelay={1}>
           <Button className={styles.iconButton} shape="circle" size="small" htmlType="button"
                   onClick={this._loadApiKeys}>
-            <Icon type="reload"/>
+            <ReloadOutlined />
           </Button>
         </Tooltip>
       </CardTitleToolbar>
-    )
+    );
   }
 
   private _renderActions = (text: any, record: UserApiKey) => {
@@ -142,12 +150,12 @@ export class ApiKeysComponent extends React.Component<InjectedProps, ApiKeysStat
       <span className={styles.actions}>
         <Tooltip placement="topRight" title="Copy Key" mouseEnterDelay={1}>
          <CopyToClipboard text={record.key}>
-          <Button shape="circle" size="small" htmlType="button" icon="copy"/>
+          <Button shape="circle" size="small" htmlType="button" icon={<CopyOutlined />}/>
         </CopyToClipboard>
         </Tooltip>
         <Tooltip placement="topRight" title="Edit API Key" mouseEnterDelay={1}>
           <Link to={`/api-keys/${record.key}`}>
-            <Button shape="circle" size="small" htmlType="button" icon="edit"/>
+            <Button shape="circle" size="small" htmlType="button" icon={<EditOutlined />}/>
           </Link>
         </Tooltip>
         <Popconfirm title="Are you sure delete this API Key?"
@@ -155,10 +163,10 @@ export class ApiKeysComponent extends React.Component<InjectedProps, ApiKeysStat
                     onConfirm={() => this._onDeleteApiKey(record.key, record.name)}
                     okText="Yes"
                     cancelText="No"
-                    icon={<Icon type="question-circle-o" style={{color: 'red'}}/>}
+                    icon={<QuestionCircleOutlined style={{color: 'red'}} />}
         >
         <Tooltip placement="topRight" title="Delete API Key" mouseEnterDelay={2}>
-          <Button shape="circle" size="small" htmlType="button" icon="delete"/>
+          <Button shape="circle" size="small" htmlType="button" icon={<DeleteOutlined />}/>
         </Tooltip>
       </Popconfirm>
     </span>

@@ -9,7 +9,7 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import {action, decorate, observable} from "mobx";
+import {action, makeAutoObservable, observable} from "mobx";
 import {authService} from "../services/AuthService";
 import {localStorageService} from "../services/LocalStorageService";
 
@@ -21,6 +21,18 @@ export class AuthStore {
   public timedOut: boolean = false;
   public authToken: string | null = null;
   private _validationTimeout: any | null = null;
+
+  constructor() {
+    makeAutoObservable(this, {
+      authenticated: observable,
+      authToken: observable,
+      timedOut: observable,
+      setAuthenticated: action,
+      logout: action,
+      timeOut: action,
+      clearTimedOut: action
+    });
+  }
 
   public setAuthenticated(authToken: string): void {
     this.authenticated = true;
@@ -65,15 +77,5 @@ export class AuthStore {
     }
   }
 }
-
-decorate(AuthStore, {
-  authenticated: observable,
-  authToken: observable,
-  timedOut: observable,
-  setAuthenticated: action,
-  logout: action,
-  timeOut: action,
-  clearTimedOut: action
-});
 
 export const authStore = new AuthStore();

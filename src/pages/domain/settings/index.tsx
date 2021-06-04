@@ -10,17 +10,18 @@
  */
 
 import React, {ReactNode} from "react";
-import {Card, Icon, Tabs} from "antd";
+import { SettingOutlined } from '@ant-design/icons';
+import { Card, Tabs } from "antd";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {DomainId} from "../../../models/DomainId";
-import {Page} from "../../../components/common/Page";
+import {Page} from "../../../components";
 import {toDomainRoute} from "../../../utils/domain-url";
 import {DomainGeneralSettingsTab} from "./GeneralSettingsTab";
 import {DomainMembers} from "./MemberSettingsTab";
 import {DangerousSettings} from "./DangerSettingsTab";
 
-export interface DomainSettingsProps extends RouteComponentProps<{tab: string}> {
+export interface DomainSettingsProps extends RouteComponentProps<{tab?: string}> {
   domainId: DomainId;
 }
 
@@ -32,7 +33,7 @@ export class DomainSettings extends React.Component<DomainSettingsProps, {}> {
     const baseUrl = toDomainRoute(this.props.domainId, `settings`);
     return (
       <Page breadcrumbs={this._breadcrumbs}>
-        <Card title={ <span><Icon type="setting"/> Settings</span>} className={styles.settingsCard}>
+        <Card title={ <span><SettingOutlined /> Settings</span>} className={styles.settingsCard}>
           <Tabs
             className={styles.tabs}
             type="card"

@@ -9,10 +9,9 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import React, {FormEvent, ReactNode} from "react";
-import {FormComponentProps} from "antd/lib/form";
+import React, {ReactNode} from "react";
 import {Button, Form, InputNumber, notification, Select} from "antd";
-import {FormButtonBar} from "../../../components/common/FormButtonBar/index";
+import {FormButtonBar} from "../../../components/common/FormButtonBar";
 import styles from "./styles.module.css";
 import {injectAs} from "../../../utils/mobx-utils";
 import {SERVICES} from "../../../services/ServiceConstants";
@@ -20,7 +19,7 @@ import {ConfigService} from "../../../services/ConfigService";
 import {makeCancelable, PromiseSubscription} from "../../../utils/make-cancelable";
 import {PasswordConfig} from "../../../models/PasswordConfig";
 
-export interface InjectedProps extends FormComponentProps {
+export interface InjectedProps {
   configService: ConfigService;
 }
 
@@ -47,7 +46,6 @@ class PasswordPolicyComponent extends React.Component<InjectedProps, PasswordPol
   }
 
   public render(): ReactNode {
-    const {getFieldDecorator} = this.props.form;
     if (this.state.configs !== null) {
       const minLen = this.state.configs.minLength;
       const lower = this.state.configs.requireLower ? TRUE : FALSE;
@@ -56,31 +54,45 @@ class PasswordPolicyComponent extends React.Component<InjectedProps, PasswordPol
       const special = this.state.configs.requireSpecial ? TRUE : FALSE;
 
       return (
-        <Form onSubmit={this._handleSubmit} layout="horizontal">
-          <Form.Item label="Minimum Length">
-            {getFieldDecorator('minLength', {initialValue: minLen})(
+          <Form layout="vertical"
+                onFinish={this._handleSubmit}>
+            <Form.Item name="minLength"
+                       label="Minimum Length"
+                       initialValue={minLen}
+            >
               <InputNumber min={4}/>
-            )}
-          </Form.Item>
-          <Form.Item label="Require Digits">
-            {getFieldDecorator('requireDigit', {initialValue: digits})(this._renderYesNo())}
-          </Form.Item>
-          <Form.Item label="Require Upper Case Character">
-            {getFieldDecorator('requireUpperCase', {initialValue: upper})(this._renderYesNo())}
-          </Form.Item>
-          <Form.Item label="Require Lower Case Letters">
-            {getFieldDecorator('requireLowerCase', {initialValue: lower})(this._renderYesNo())}
-          </Form.Item>
-          <Form.Item label="Require Special Characters">
-            {getFieldDecorator('requireSpecialCharacter', {initialValue: special})(this._renderYesNo())}
-          </Form.Item>
-          <FormButtonBar>
-            <Button type="primary" htmlType="submit">Save</Button>
-          </FormButtonBar>
-        </Form>
+            </Form.Item>
+            <Form.Item name="requireDigit"
+                       label="Require Digits"
+                       initialValue={digits}
+            >
+              {this._renderYesNo()}
+            </Form.Item>
+            <Form.Item name="requireUpperCase"
+                       label="Require Upper Case Character"
+                       initialValue={upper}
+            >
+              {this._renderYesNo()}
+            </Form.Item>
+            <Form.Item name="requireLowerCase"
+                       label="Require Lower Case Letters"
+                       initialValue={lower}
+            >
+              {this._renderYesNo()}
+            </Form.Item>
+            <Form.Item name="requireSpecialCharacter"
+                       label="Require Special Characters"
+                       initialValue={special}
+            >
+              {this._renderYesNo()}
+            </Form.Item>
+            <FormButtonBar>
+              <Button type="primary" htmlType="submit">Save</Button>
+            </FormButtonBar>
+          </Form>
       );
     } else {
-      return (null);
+      return null;
     }
   }
 
@@ -92,41 +104,36 @@ class PasswordPolicyComponent extends React.Component<InjectedProps, PasswordPol
 
   private _renderYesNo(): ReactNode {
     return (
-      <Select className={styles.yesNo}>
-        <Select.Option key="yes" value={TRUE}>Yes</Select.Option>
-        <Select.Option key="No" value={FALSE}>No</Select.Option>
-      </Select>
+        <Select className={styles.yesNo}>
+          <Select.Option key="yes" value={TRUE}>Yes</Select.Option>
+          <Select.Option key="No" value={FALSE}>No</Select.Option>
+        </Select>
     );
   }
 
-  private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        const {minLength, requireDigit, requireUpperCase, requireLowerCase, requireSpecialCharacter} = values;
-        const config = new PasswordConfig(
-          minLength,
-          requireUpperCase === TRUE,
-          requireLowerCase === TRUE,
-          requireDigit === TRUE,
-          requireSpecialCharacter === TRUE);
-        this.props.configService
-          .setPasswordConfig(config)
-          .then(() =>
+  private _handleSubmit = (values: any) => {
+    const {minLength, requireDigit, requireUpperCase, requireLowerCase, requireSpecialCharacter} = values;
+    const config = new PasswordConfig(
+        minLength,
+        requireUpperCase === TRUE,
+        requireLowerCase === TRUE,
+        requireDigit === TRUE,
+        requireSpecialCharacter === TRUE);
+    this.props.configService
+        .setPasswordConfig(config)
+        .then(() =>
             notification.success({
               message: "Configuration Saved",
               description: "Password policy configuration successfully saved."
             })
-          )
-          .catch(err => {
-            console.error(err);
-            notification.error({
-              message: "Configuration Not Saved",
-              description: "Password policy configuration could not be saved."
-            })
-          });
-      }
-    });
+        )
+        .catch(err => {
+          console.error(err);
+          notification.error({
+            message: "Configuration Not Saved",
+            description: "Password policy configuration could not be saved."
+          })
+        });
   }
 
   private _loadConfig(): void {
@@ -142,4 +149,4 @@ class PasswordPolicyComponent extends React.Component<InjectedProps, PasswordPol
   }
 }
 
-export const PasswordPolicy = injectAs<{}>([SERVICES.CONFIG_SERVICE], Form.create()(PasswordPolicyComponent));
+export const PasswordPolicy = injectAs<{}>([SERVICES.CONFIG_SERVICE], PasswordPolicyComponent);

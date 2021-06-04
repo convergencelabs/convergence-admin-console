@@ -11,7 +11,8 @@
 
 import React, {ReactNode} from "react";
 import {DomainDescriptor} from "../../../models/DomainDescriptor";
-import {Card, Col, Icon, Row} from "antd";
+import { DatabaseOutlined } from '@ant-design/icons';
+import { Card, Col, Row } from "antd";
 import {injectAs} from "../../../utils/mobx-utils";
 import {DomainCard} from "../DomainCard/";
 import {makeCancelable, PromiseSubscription} from "../../../utils/make-cancelable";
@@ -57,7 +58,7 @@ export class FavoriteDomainsComponent extends React.Component<RecentDomainInject
   public render(): ReactNode {
     const domains = this.state.domains || [];
     return (
-      <Card title={<span><Icon type="database"/> Favorite Domains</span>}>
+      <Card title={<span><DatabaseOutlined /> Favorite Domains</span>}>
         {
           domains.length > 0 ?
             (<Row gutter={16}>
@@ -69,7 +70,7 @@ export class FavoriteDomainsComponent extends React.Component<RecentDomainInject
             </Row>) :
             <div className={styles.noDomains}>
               <div className={styles.centered}>
-                <Icon className={styles.icon} type="database"/>
+                <DatabaseOutlined className={styles.icon} />
                 <div>No Favorite Domains</div>
                 <div>(Select One <Link to={"/domains"}>Here</Link>)</div>
               </div>

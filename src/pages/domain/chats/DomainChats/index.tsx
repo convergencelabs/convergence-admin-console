@@ -10,9 +10,16 @@
  */
 
 import React, {KeyboardEvent, ReactNode} from "react";
-import {Page} from "../../../../components/common/Page/";
+import {Page} from "../../../../components";
 import Tooltip from "antd/es/tooltip";
-import {Button, Card, Icon, Input, notification, Popconfirm, Table} from "antd";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  EyeOutlined, MessageOutlined, PlusCircleOutlined,
+  QuestionCircleOutlined, ReloadOutlined,
+  SearchOutlined,
+} from '@ant-design/icons';
+import {Button, Card, Input, notification, Popconfirm, Table, TablePaginationConfig} from "antd";
 import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
 import {RouteComponentProps} from "react-router";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
@@ -29,7 +36,6 @@ import {PagedData} from "../../../../models/PagedData";
 import queryString from "query-string";
 import {SearchParams} from "../../collections/DomainCollections";
 import {appendToQueryParamString} from "../../../../utils/router-utils";
-import {PaginationConfig} from "antd/lib/pagination";
 
 export interface IChatSearchParams {
   filter?: string;
@@ -119,7 +125,7 @@ class DomainChatComponent extends React.Component<InjectedProps, DomainChatState
   }
 
   public render(): ReactNode {
-    const pagination: PaginationConfig = {
+    const pagination: TablePaginationConfig = {
       pageSize: this.state.searchParams.pageSize,
       current: this.state.searchParams.page,
       total: this.state.chats.totalResults,
@@ -144,14 +150,14 @@ class DomainChatComponent extends React.Component<InjectedProps, DomainChatState
 
   private _renderToolbar(): ReactNode {
     return (
-      <CardTitleToolbar title="Chat" icon="message">
+      <CardTitleToolbar title="Chat" icon={<MessageOutlined />}>
         <span className={styles.search}>
-          <Input placeholder="Search Chat" addonAfter={<Icon type="search"/>} onKeyUp={this._onFilterChange}/>
+          <Input placeholder="Search Chat" addonAfter={<SearchOutlined />} onKeyUp={this._onFilterChange}/>
         </span>
-        <ToolbarButton icon="plus-circle" tooltip="Create Chat" onClick={this._goToCreate}/>
-        <ToolbarButton icon="reload" tooltip="Reload Chats" onClick={this._loadChats}/>
+        <ToolbarButton icon={<PlusCircleOutlined />} tooltip="Create Chat" onClick={this._goToCreate}/>
+        <ToolbarButton icon={<ReloadOutlined />} tooltip="Reload Chats" onClick={this._loadChats}/>
       </CardTitleToolbar>
-    )
+    );
   }
 
   private _goToCreate = () => {
@@ -164,12 +170,12 @@ class DomainChatComponent extends React.Component<InjectedProps, DomainChatState
       <span className={styles.actions}>
         <Tooltip placement="topRight" title="View Chat" mouseEnterDelay={1}>
           <Link to={toDomainRoute(this.props.domainId, `chats/${encodeURIComponent(record.chatId)}`)}>
-            <Button shape="circle" size="small" htmlType="button" icon="eye"/>
+            <Button shape="circle" size="small" htmlType="button" icon={<EyeOutlined />}/>
           </Link>
         </Tooltip>
         <Tooltip placement="topRight" title="Edit Chat" mouseEnterDelay={1}>
           <Link to={toDomainRoute(this.props.domainId, `chats/${encodeURIComponent(record.chatId)}/edit`)}>
-            <Button shape="circle" size="small" htmlType="button" icon="edit"/>
+            <Button shape="circle" size="small" htmlType="button" icon={<EditOutlined />}/>
           </Link>
         </Tooltip>
          <Popconfirm title="Are you sure delete this chat?"
@@ -177,11 +183,10 @@ class DomainChatComponent extends React.Component<InjectedProps, DomainChatState
                      onConfirm={() => this._onDeleteChat(record.chatId)}
                      okText="Yes"
                      cancelText="No"
-                     icon={<Icon type="question-circle-o" style={{color: 'red'}}/>}
+                     icon={<QuestionCircleOutlined style={{color: 'red'}} />}
          >
         <Tooltip placement="topRight" title="Delete Chat" mouseEnterDelay={2}>
-          <Button shape="circle" size="small" htmlType="button"><Icon
-            type="delete"/></Button>
+          <Button shape="circle" size="small" htmlType="button"><DeleteOutlined /></Button>
         </Tooltip>
       </Popconfirm>
     </span>
@@ -197,7 +202,7 @@ class DomainChatComponent extends React.Component<InjectedProps, DomainChatState
           description: `The chat '${chatId}' was deleted.`,
         });
       })
-      .catch(err => {
+      .catch(() => {
         notification.error({
           message: 'Could Not Delete Chat',
           description: `The chat could not be deleted.`,

@@ -9,10 +9,17 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import {action, decorate, observable} from "mobx";
+import {action, makeAutoObservable, observable} from "mobx";
 import {DomainDescriptor} from "../models/DomainDescriptor";
 
 export class DomainStore {
+
+  constructor() {
+    makeAutoObservable(this, {
+      selectedDomain: observable,
+      selectDomain: action
+    });
+  }
 
   public selectedDomain: DomainDescriptor | null = null;
 
@@ -21,9 +28,6 @@ export class DomainStore {
   }
 }
 
-decorate(DomainStore, {
-  selectedDomain: observable,
-  selectDomain: action
-});
+
 
 export const domainStore = new DomainStore();

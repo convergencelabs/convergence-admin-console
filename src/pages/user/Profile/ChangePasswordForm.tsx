@@ -11,15 +11,15 @@
 
 import * as React from 'react';
 import {ReactNode} from 'react';
-import {Card, Icon, notification} from "antd";
-import {FormComponentProps} from "antd/lib/form";
+import { LockOutlined } from '@ant-design/icons';
+import { Card, notification } from "antd";
 import styles from "./styles.module.css";
 import {injectAs} from "../../../utils/mobx-utils";
 import {SERVICES} from "../../../services/ServiceConstants";
 import {LoggedInUserService} from "../../../services/LoggedInUserService";
 import {ConvergenceUserPasswordForm} from "../../../components/common/ConvergenceUserPasswordForm";
 
-interface InjectedProps extends FormComponentProps {
+interface InjectedProps {
   loggedInUserService: LoggedInUserService;
 }
 
@@ -27,7 +27,7 @@ class ChangePasswordFormComponent extends React.Component<InjectedProps, {}> {
 
   public render(): ReactNode {
     return (
-      <Card title={<span><Icon type="lock"/> Change Password</span>} className={styles.setPassword}>
+      <Card title={<span><LockOutlined /> Change Password</span>} className={styles.setPassword}>
         <ConvergenceUserPasswordForm
           onSetPassword={this._handleSetPassword}
           showCancel={false}

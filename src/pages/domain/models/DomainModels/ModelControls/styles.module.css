@@ -17,12 +17,16 @@
   padding-bottom: 15px;
   align-items: center;
   white-space: nowrap;
+  flex: 1;
 }
 
 .modeSelector {
   padding-right: 15px;
   border-right: 1px solid darkgray;
   margin-right: 15px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .controls {
@@ -30,13 +34,16 @@
   display: flex;
   align-items: center;
   flex-direction: row;
+  white-space: nowrap;
 }
 
 .label {
   margin-right: 10px;
 }
 
-.collection:global.ant-select-auto-complete, .query:global.ant-input, .id:global.ant-input {
+:global(.ant-form-inline) .collection:global.ant-form-item,
+:global(.ant-form-inline) .query:global.ant-form-item,
+:global(.ant-form-inline) .id:global.ant-form-item {
   flex: 1;
   margin-right: 15px;
 }

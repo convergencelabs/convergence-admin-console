@@ -10,7 +10,7 @@
  */
 
 import React, {ReactNode} from "react";
-import {Icon} from "antd";
+import { LogoutOutlined } from '@ant-design/icons';
 import styles from "./styles.module.css";
 import {MessagePage} from "../MessagePage";
 import logo from "../../../assets/images/logo.png";
@@ -34,7 +34,7 @@ export class LoggedOutComponent extends React.Component<InjectedProps, {}> {
         </div>
         <div className={styles.message}>
           <span className={styles.spacer}/>
-          <Icon type="logout" className={styles.icon}/>
+          <LogoutOutlined className={styles.icon} />
           <span className={styles.title}>Logged Out</span>
           <span className={styles.spacer}/>
         </div>

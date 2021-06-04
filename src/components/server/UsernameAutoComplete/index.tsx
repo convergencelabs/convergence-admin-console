@@ -23,7 +23,7 @@ export interface UserAutoCompleteProps {
   className: string;
   onChange: (username: string) => void;
   placeholder?: string;
-  value?: string;
+  value: string | null;
   exclude?: string[];
 }
 
@@ -62,7 +62,7 @@ export class UsernameAutoCompleteComponent extends Component<InjectedProps, User
         showArrow={false}
         onSearch={this._onSearch}
         onChange={this._onChange}
-        value={inputValue}
+        value={inputValue === null ? undefined : inputValue}
         optionLabelProp="value"
         placeholder={placeholder || "Select User"}
       >

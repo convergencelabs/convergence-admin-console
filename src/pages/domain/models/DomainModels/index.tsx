@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {ReactNode} from 'react';
-import {Page} from "../../../../components/common/Page/";
-import {Card, notification} from "antd";
+import {Page} from "../../../../components";
+import {Card, Col, notification, Row} from "antd";
 import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
 import {RouteComponentProps} from "react-router";
 import {injectAs} from "../../../../utils/mobx-utils";
@@ -16,6 +16,7 @@ import {DomainModelsTable} from './DomainModelsTable';
 import queryString from 'query-string';
 import {PagedData} from "../../../../models/PagedData";
 import {ModelSearchMode} from "./ModelSearchMode";
+import {FileOutlined, PlusCircleOutlined} from "@ant-design/icons";
 
 export interface SearchParams {
   mode: ModelSearchMode;
@@ -70,9 +71,9 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
     if (prevProps.location.search !== this.props.location.search) {
       const searchParams = this._parseQueryInput(this.props.location.search);
       if (searchParams.mode !== this.state.searchParams.mode ||
-        searchParams.pageSize !== this.state.searchParams.pageSize ||
-        searchParams.page !== this.state.searchParams.page ||
-        searchParams.queryInput !== this.state.searchParams.queryInput) {
+          searchParams.pageSize !== this.state.searchParams.pageSize ||
+          searchParams.page !== this.state.searchParams.page ||
+          searchParams.queryInput !== this.state.searchParams.queryInput) {
         this.setState({searchParams}, () => this._performSearch());
       }
     }
@@ -80,66 +81,70 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
 
   public render(): ReactNode {
     return (
-      <Page breadcrumbs={this._breadcrumbs}>
-        <Card title={this._renderToolbar()}>
-          <ModelControls
-            initialData={this.state.searchParams.queryInput}
-            initialMode={this.state.searchParams.mode}
-            domainId={this.props.domainId}
-            resultsPerPageDefault={25}
-            onBrowse={this._onBrowse}
-            onQuery={this._onQuery}
-            onIdLookup={this._onLookup}
-            onModeChange={this._onModeChange}
-          />
-          <DomainModelsTable
-            domainId={this.props.domainId}
-            pagedModels={this.state.models}
-            pagination={this.state.searchParams.mode === ModelSearchMode.BROWSE}
-            page={this.state.searchParams.page}
-            pageSize={this.state.searchParams.pageSize}
-            loading={this.state.loading}
-            onPageChange={this._onPageChange}
-            onDeleteConfirm={this._deleteModel}
-          />
-        </Card>
-      </Page>
+        <Page breadcrumbs={this._breadcrumbs}>
+          <Card title={this._renderToolbar()}>
+            <Row>
+              <Col span={24}>
+                <ModelControls
+                    initialData={this.state.searchParams.queryInput}
+                    initialMode={this.state.searchParams.mode}
+                    domainId={this.props.domainId}
+                    resultsPerPageDefault={25}
+                    onBrowse={this._onBrowse}
+                    onQuery={this._onQuery}
+                    onIdLookup={this._onLookup}
+                    onModeChange={this._onModeChange}
+                />
+              </Col>
+            </Row>
+            <DomainModelsTable
+                domainId={this.props.domainId}
+                pagedModels={this.state.models}
+                pagination={this.state.searchParams.mode === ModelSearchMode.BROWSE}
+                page={this.state.searchParams.page}
+                pageSize={this.state.searchParams.pageSize}
+                loading={this.state.loading}
+                onPageChange={this._onPageChange}
+                onDeleteConfirm={this._deleteModel}
+            />
+          </Card>
+        </Page>
     );
   }
 
   private _renderToolbar(): ReactNode {
     return (
-      <CardTitleToolbar title="Models" icon="file">
-        <ToolbarButton icon="plus-circle" tooltip="Create Model" onClick={this._goToCreate}/>
-      </CardTitleToolbar>
+        <CardTitleToolbar title="Models" icon={<FileOutlined/>}>
+          <ToolbarButton icon={<PlusCircleOutlined/>} tooltip="Create Model" onClick={this._goToCreate}/>
+        </CardTitleToolbar>
     );
   }
 
   private _deleteModel = (modelId: string) => {
     this.props.domainModelService
-      .deleteModel(this.props.domainId, modelId)
-      .then(() => {
-          notification.success({
-            message: "Model Deleted",
-            description: `The model '${modelId}' was deleted.`
-          });
+        .deleteModel(this.props.domainId, modelId)
+        .then(() => {
+              notification.success({
+                message: "Model Deleted",
+                description: `The model '${modelId}' was deleted.`
+              });
 
-          const data = this.state.models.data.filter((m: Model) => m.id !== modelId);
-          const models = {
-            data,
-            startIndex: this.state.models.startIndex,
-            totalResults: this.state.models.totalResults
-          };
-          this.setState({models});
-        }
-      )
-      .catch(err => {
-        console.log(err);
-        notification.error({
-          message: "Model Not Deleted",
-          description: `Ths model could not be deleted.`
+              const data = this.state.models.data.filter((m: Model) => m.id !== modelId);
+              const models = {
+                data,
+                startIndex: this.state.models.startIndex,
+                totalResults: this.state.models.totalResults
+              };
+              this.setState({models});
+            }
+        )
+        .catch(err => {
+          console.log(err);
+          notification.error({
+            message: "Model Not Deleted",
+            description: `Ths model could not be deleted.`
+          });
         });
-      });
   }
 
   private _goToCreate = () => {
@@ -306,37 +311,39 @@ class DomainModelsComponent extends React.Component<InjectedProps, DomainModelsS
     const collection = queryInput!;
 
     const offset = page === undefined ? 0 : ((page - 1) * pageSize);
-    const query = `SELECT FROM ${collection} LIMIT ${pageSize} OFFSET ${offset}`;
+    const query = `SELECT
+                   FROM ${collection} LIMIT ${pageSize}
+                   OFFSET ${offset}`;
     const searchParams = {...this.state.searchParams, pageSize};
     this.props.domainModelService
-      .queryModels(this.props.domainId, query)
-      .then(models => this.setState({models, loading: false, searchParams}));
+        .queryModels(this.props.domainId, query)
+        .then(models => this.setState({models, loading: false, searchParams}));
   }
 
   private _query(): void {
     const query = this.state.searchParams.queryInput!;
     this.props.domainModelService
-      .queryModels(this.props.domainId, query)
-      .then(models => this.setState({models, loading: false}));
+        .queryModels(this.props.domainId, query)
+        .then(models => this.setState({models, loading: false}));
   }
 
   private _lookup(): void {
     const id = this.state.searchParams.queryInput!;
 
     this.props.domainModelService
-      .getModelById(this.props.domainId, id)
-      .then(model => {
-        this.setState({
-          models: {data: [model], totalResults: 1, startIndex: 0},
-          loading: false
-        });
-      })
-      .catch(err => {
-        this.setState({
-          models: EMPTY_DATA,
-          loading: false
+        .getModelById(this.props.domainId, id)
+        .then(model => {
+          this.setState({
+            models: {data: [model], totalResults: 1, startIndex: 0},
+            loading: false
+          });
         })
-      });
+        .catch(() => {
+          this.setState({
+            models: EMPTY_DATA,
+            loading: false
+          })
+        });
   }
 }
 

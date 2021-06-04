@@ -10,8 +10,8 @@
  */
 
 import React, {ReactNode} from "react";
-import {Card, Icon, notification} from "antd";
-import {FormComponentProps} from "antd/lib/form";
+import { KeyOutlined } from '@ant-design/icons';
+import { Card, notification } from "antd";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {DomainId} from "../../../../../models/DomainId";
@@ -22,7 +22,7 @@ import {toDomainRoute} from "../../../../../utils/domain-url";
 import {SERVICES} from "../../../../../services/ServiceConstants";
 import {injectAs} from "../../../../../utils/mobx-utils";
 import {RestError} from "../../../../../services/RestError";
-import {Page} from "../../../../../components/common/Page";
+import {Page} from "../../../../../components";
 import {DomainJwtKeyForm} from "../../../../../components/domain/auth/DomainJwtKeyForm";
 import {IBreadcrumbSegment} from "../../../../../stores/BreacrumsStore";
 
@@ -30,7 +30,7 @@ export interface EditDomainJwtKeyProps extends RouteComponentProps<{id: string}>
   domainId: DomainId;
 }
 
-interface InjectedProps extends EditDomainJwtKeyProps, FormComponentProps {
+interface InjectedProps extends EditDomainJwtKeyProps {
   domainJwtKeyService: DomainJwtKeyService;
 }
 
@@ -63,7 +63,7 @@ class EditDomainJwtKeyComponent extends React.Component<InjectedProps, EditDomai
     if (this.state.initialKey !== null) {
       return (
         <Page breadcrumbs={this._breadcrumbs}>
-          <Card title={<span><Icon type="key"/> Edit JWT Key</span>} className={styles.formCard}>
+          <Card title={<span><KeyOutlined /> Edit JWT Key</span>} className={styles.formCard}>
             <DomainJwtKeyForm
               disableId={true}
               domainId={this.props.domainId}

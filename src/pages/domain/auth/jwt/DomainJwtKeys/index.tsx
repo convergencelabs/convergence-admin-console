@@ -11,7 +11,15 @@
 
 import React, {KeyboardEvent, ReactNode} from "react";
 import Tooltip from "antd/es/tooltip";
-import {Button, Card, Icon, Input, notification, Popconfirm, Table} from "antd";
+import {
+  DeleteOutlined,
+  EditOutlined, KeyOutlined,
+  PlusCircleOutlined,
+  QuestionCircleOutlined,
+  ReloadOutlined,
+  SearchOutlined,
+} from '@ant-design/icons';
+import { Button, Card, Input, notification, Popconfirm, Table } from "antd";
 import styles from "./styles.module.css";
 import {Link} from "react-router-dom";
 import {DomainId} from "../../../../../models/DomainId";
@@ -61,12 +69,12 @@ class DomainJwtKeysComponent extends React.Component<InjectedProps, DomainJwtKey
       title: 'Key Age',
       dataIndex: 'updated',
       sorter: (a: DomainJwtKey, b: DomainJwtKey) => a.updated.getTime() - b.updated.getTime(),
-      render: (val: Date, record: DomainJwtKey) => durationToNow(val)
+      render: (val: Date, _: DomainJwtKey) => durationToNow(val)
     }, {
       title: 'Enabled',
       dataIndex: 'enabled',
-      sorter: (a: DomainJwtKey, b: DomainJwtKey) => a.updated,
-      render: (val: boolean, record: DomainJwtKey) => yesNo(val)
+      sorter: (a: DomainJwtKey, _: DomainJwtKey) => a.updated,
+      render: (val: boolean, _: DomainJwtKey) => yesNo(val)
     }, {
       title: '',
       align: 'right',
@@ -117,24 +125,24 @@ class DomainJwtKeysComponent extends React.Component<InjectedProps, DomainJwtKey
 
   private _renderToolbar(): ReactNode {
     return (
-      <CardTitleToolbar title="Keys" icon="key">
+      <CardTitleToolbar title="Keys" icon={<KeyOutlined />}>
         <span className={styles.search}>
-          <Input placeholder="Search Keys" addonAfter={<Icon type="search"/>} onKeyUp={this._onFilterChange}/>
+          <Input placeholder="Search Keys" addonAfter={<SearchOutlined />} onKeyUp={this._onFilterChange}/>
         </span>
         <Tooltip placement="topRight" title="Create Key" mouseEnterDelay={1}>
           <Button className={styles.iconButton} shape="circle" size="small" htmlType="button"
                   onClick={this._goToCreate}>
-            <Icon type="plus-circle"/>
+            <PlusCircleOutlined />
           </Button>
         </Tooltip>
         <Tooltip placement="topRight" title="Reload Keys" mouseEnterDelay={1}>
           <Button className={styles.iconButton} shape="circle" size="small" htmlType="button"
                   onClick={this._loadKeys}>
-            <Icon type="reload"/>
+            <ReloadOutlined />
           </Button>
         </Tooltip>
       </CardTitleToolbar>
-    )
+    );
   }
 
   private _onFilterChange = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -151,7 +159,7 @@ class DomainJwtKeysComponent extends React.Component<InjectedProps, DomainJwtKey
       <span className={styles.actions}>
         <Tooltip placement="topRight" title="Edit User" mouseEnterDelay={1}>
           <Link to={toDomainRoute(this.props.domainId, `authentication/jwt/${record.id}`)}>
-            <Button shape="circle" size="small" htmlType="button" icon="edit"/>
+            <Button shape="circle" size="small" htmlType="button" icon={<EditOutlined />}/>
           </Link>
         </Tooltip>
         <Popconfirm title="Are you sure delete this group?"
@@ -159,10 +167,10 @@ class DomainJwtKeysComponent extends React.Component<InjectedProps, DomainJwtKey
                     onConfirm={() => this._onDeleteGroup(record.id)}
                     okText="Yes"
                     cancelText="No"
-                    icon={<Icon type="question-circle-o" style={{color: 'red'}}/>}
+                    icon={<QuestionCircleOutlined style={{color: 'red'}} />}
         >
         <Tooltip placement="topRight" title="Delete User" mouseEnterDelay={2}>
-          <Button shape="circle" size="small" htmlType="button" icon="delete"/>
+          <Button shape="circle" size="small" htmlType="button" icon={<DeleteOutlined />}/>
         </Tooltip>
       </Popconfirm>
     </span>
@@ -194,7 +202,7 @@ class DomainJwtKeysComponent extends React.Component<InjectedProps, DomainJwtKey
     promise.then(keys => {
       this._keysSubscription = null;
       this.setState({keys});
-    }).catch(err => {
+    }).catch(() => {
       this._keysSubscription = null;
       this.setState({keys: null});
     });

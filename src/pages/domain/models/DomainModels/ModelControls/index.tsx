@@ -10,32 +10,34 @@
  */
 import * as React from 'react';
 import {ReactElement} from 'react';
-import {Button, Form, Input, InputNumber, Select} from "antd";
-import {FormComponentProps} from "antd/lib/form";
+import {Button, Form, FormInstance, Input, InputNumber, Select} from "antd";
 import {CollectionAutoComplete} from "../../../../../components/domain/collection/CollectionAutoComplete";
 import {DomainId} from "../../../../../models/DomainId";
 import styles from "./styles.module.css";
-import {FormCreateOption} from "antd/es/form";
 import {ModelSearchMode} from "../ModelSearchMode";
 
 const {Option} = Select;
 
-interface ModelControlsProps extends  FormComponentProps {
+interface ModelControlsProps {
   initialMode?: ModelSearchMode;
   initialData?: string;
   domainId: DomainId;
   resultsPerPageDefault: number;
+
   onModeChange(mode: ModelSearchMode): void;
+
   onBrowse(collection: string, perPage: number): void;
+
   onQuery(query: string, perPage: number): void;
+
   onIdLookup(modelId: string, perPage: number): void;
 }
 
-class ModelControlsComponent extends React.Component<ModelControlsProps, {}> {
+export class ModelControls extends React.Component<ModelControlsProps, {}> {
+  private _formRef = React.createRef<FormInstance>();
 
   public render(): ReactElement {
-    const {getFieldDecorator} = this.props.form;
-    const mode = this.props.form.getFieldValue("mode") as ModelSearchMode || ModelSearchMode.BROWSE;
+    const mode = (this._formRef.current?.getFieldValue("mode") as ModelSearchMode) || ModelSearchMode.BROWSE;
     let fieldLabel = "";
     let buttonLabel = "";
     switch (mode) {
@@ -54,72 +56,76 @@ class ModelControlsComponent extends React.Component<ModelControlsProps, {}> {
     }
 
     return (
-      <div className={styles.toolbar}>
-        <div className={styles.modeSelector}>
-          <span className={styles.label}>Mode:</span>
-          {getFieldDecorator('mode', {initialValue: this.props.initialMode || ModelSearchMode.BROWSE})(
-            <Select style={{width: 150}} onChange={this.props.onModeChange}>
-              <Option key={ModelSearchMode.BROWSE} value={ModelSearchMode.BROWSE}>Browse</Option>
-              <Option key={ModelSearchMode.QUERY} value={ModelSearchMode.QUERY}>Query</Option>
-              <Option key={ModelSearchMode.ID} value={ModelSearchMode.ID}>Id Lookup</Option>
-            </Select>
-          )}
+        <div className={styles.toolbar}>
+          <Form ref={this._formRef} layout="inline" className={styles.controls}>
+            <div className={styles.modeSelector}>
+              <span className={styles.label}>Mode:</span>
+              <Form.Item name="mode"
+                         initialValue={this.props.initialMode || ModelSearchMode.BROWSE}
+              >
+                <Select style={{width: 150}} onChange={this.props.onModeChange}>
+                  <Option key={ModelSearchMode.BROWSE} value={ModelSearchMode.BROWSE}>Browse</Option>
+                  <Option key={ModelSearchMode.QUERY} value={ModelSearchMode.QUERY}>Query</Option>
+                  <Option key={ModelSearchMode.ID} value={ModelSearchMode.ID}>Id Lookup</Option>
+                </Select>
+              </Form.Item>
+            </div>
+            <span className={styles.label}>{fieldLabel}:</span>
+            {
+              mode === ModelSearchMode.BROWSE ?
+                  <Form.Item name="collection"
+                             initialValue={this.props.initialData}
+                             className={styles.collection}>
+                    <CollectionAutoComplete initialValue={this.props.initialData}
+                                            domainId={this.props.domainId}/>
+                  </Form.Item>
+                  : null
+            }
+            {
+              mode === ModelSearchMode.QUERY ?
+                  <Form.Item name="query" className={styles.query} initialValue={this.props.initialData}>
+                    <Input placeholder="Enter Query"/>
+                  </Form.Item>
+                  : null
+            }
+            {
+              mode === ModelSearchMode.ID ?
+                  <Form.Item name="id" className={styles.id} initialValue={this.props.initialData}>
+                    <Input  placeholder="Enter Model Id"/>
+                  </Form.Item>
+                  : null
+            }
+            {
+              mode === ModelSearchMode.BROWSE ?
+                  <Form.Item label="Results Per Page" name="resultsPerPage"
+                             initialValue={this.props.resultsPerPageDefault || 20}>
+                    <InputNumber/>
+                  </Form.Item>
+                  : null
+            }
+            <Button htmlType="button"
+                    type="primary"
+                    className={styles.button}
+                    onClick={this._handleSubmit}>{buttonLabel}</Button>
+          </Form>
         </div>
-        <span className={styles.label}>{fieldLabel}:</span>
-        {
-          mode === ModelSearchMode.BROWSE ?
-            getFieldDecorator('collection', {initialValue: this.props.initialData})(
-              <CollectionAutoComplete initialValue={this.props.initialData} className={styles.collection} domainId={this.props.domainId} />
-            ) : null
-        }
-        {
-          mode === ModelSearchMode.QUERY ?
-            getFieldDecorator('query', {initialValue: this.props.initialData})(
-              <Input className={styles.query} placeholder="Enter Query"/>
-            ) : null
-        }
-        {
-          mode === ModelSearchMode.ID ?
-            getFieldDecorator('id', {initialValue: this.props.initialData})(
-              <Input className={styles.id} placeholder="Enter Model Id"/>
-            ) : null
-        }
-        {
-          mode === ModelSearchMode.BROWSE ?
-            <span>
-              <span className={styles.label}>Results Per Page:</span>
-              {getFieldDecorator('resultsPerPage', {initialValue: this.props.resultsPerPageDefault || 20})(
-                <InputNumber/>
-              )}
-            </span>: null
-        }
-        <Button htmlType="button"
-                type="primary"
-                className={styles.button}
-                onClick={this._handleSubmit}>{buttonLabel}</Button>
-      </div>
     );
   }
 
   private _handleSubmit = () => {
-    this.props.form.validateFieldsAndScroll((err: any, values: any) => {
-      if (!err) {
-        const {mode, collection, query, id, resultsPerPage} = values;
-        switch (mode) {
-          case ModelSearchMode.BROWSE:
-            this.props.onBrowse(collection, resultsPerPage);
-            break;
-          case ModelSearchMode.QUERY:
-            this.props.onQuery(query, resultsPerPage);
-            break;
-          case ModelSearchMode.ID:
-            this.props.onIdLookup(id, resultsPerPage);
-            break;
-        }
+    this._formRef.current!.validateFields().then(values => {
+      const {mode, collection, query, id, resultsPerPage} = values;
+      switch (mode) {
+        case ModelSearchMode.BROWSE:
+          this.props.onBrowse(collection, resultsPerPage);
+          break;
+        case ModelSearchMode.QUERY:
+          this.props.onQuery(query, resultsPerPage);
+          break;
+        case ModelSearchMode.ID:
+          this.props.onIdLookup(id, resultsPerPage);
+          break;
       }
     });
   }
 }
-
-const formOptions: FormCreateOption<ModelControlsProps> = { };
-export const ModelControls = Form.create(formOptions)(ModelControlsComponent);

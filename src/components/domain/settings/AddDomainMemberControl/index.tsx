@@ -23,7 +23,7 @@ interface AddDomainMemberControlProps {
 }
 
 interface AddDomainMemberControlState {
-  username?: string;
+  username: string | null;
   role: string;
 }
 
@@ -35,7 +35,7 @@ export class AddDomainMemberControl extends React.Component<AddDomainMemberContr
     super(props);
 
     this.state = {
-      username: undefined,
+      username: null,
       role: this._defaultRole
     }
   }

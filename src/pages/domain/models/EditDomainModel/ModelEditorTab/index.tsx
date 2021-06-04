@@ -17,6 +17,7 @@ import {SapphireEditor} from "../../../../../components/ModelEditor/";
 import {STORES} from "../../../../../stores/StoreConstants";
 import {ConvergenceDomainStore} from "../../../../../stores/ConvergenceDomainStore";
 import {RealTimeModel, VersionChangedEvent} from "@convergence/convergence";
+import { TeamOutlined } from '@ant-design/icons';
 import {Button, Popover} from "antd";
 import styles from "./styles.module.css";
 import {filter} from "rxjs/operators";
@@ -139,9 +140,9 @@ class ModelEditorTabComponent extends React.Component<InjectedProps, ModelEditor
 
     return (
       <Popover placement="bottomRight" title="Connected Users" content={content} trigger="click">
-        <Button icon="team" size="small">{this.state.connectedUsers.length}</Button>
+        <Button icon={<TeamOutlined />} size="small">{this.state.connectedUsers.length}</Button>
       </Popover>
-    )
+    );
   }
 
   private _onUsersChanged = () => {

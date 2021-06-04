@@ -11,7 +11,8 @@
 
 import React, {ReactNode} from "react";
 import Tooltip from "antd/es/tooltip";
-import {Button, Icon, notification, Popconfirm, Table} from "antd";
+import { DeleteOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { Button, notification, Popconfirm, Table } from "antd";
 import styles from "./styles.module.css";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
 import {injectAs} from "../../../../utils/mobx-utils";
@@ -103,10 +104,10 @@ class DomainMemberSettingsComponent extends React.Component<InjectedProps, Domai
                     okText="Yes"
                     cancelText="No"
                     disabled={disabled}
-                    icon={<Icon type="question-circle-o" style={{color: 'red'}}/>}
+                    icon={<QuestionCircleOutlined style={{color: 'red'}} />}
         >
         <Tooltip placement="topRight" title="Remove Member" mouseEnterDelay={2}>
-          <Button shape="circle" size="small" htmlType="button" icon="delete" disabled={disabled}/>
+          <Button shape="circle" size="small" htmlType="button" icon={<DeleteOutlined />} disabled={disabled}/>
         </Tooltip>
       </Popconfirm>
     </span>

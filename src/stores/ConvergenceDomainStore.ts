@@ -9,7 +9,7 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import {action, decorate, observable} from "mobx";
+import {action, makeAutoObservable, observable} from "mobx";
 import {Convergence, ConvergenceDomain} from "@convergence/convergence";
 import {DomainId} from "../models/DomainId";
 import {domainConvergenceJwtService} from "../services/domain/DomainConvergenceUserJwtService";
@@ -18,6 +18,17 @@ import {domainRealtimeUrl} from "../utils/domain-url";
 export class ConvergenceDomainStore {
   public domain: ConvergenceDomain | null = null;
   public domainId: DomainId | null = null;
+
+  constructor() {
+    makeAutoObservable(this, {
+      domain: observable,
+      domainId: observable,
+      activateDomain: action,
+      connect: action,
+      disconnect: action,
+      _setDomain: action
+    });
+  }
 
   public activateDomain(domain: DomainId): Promise<void> {
     if (this.domainId !== null && this.domainId.equals(domain)) {
@@ -56,14 +67,5 @@ export class ConvergenceDomainStore {
     this.domain = domain;
   }
 }
-
-decorate(ConvergenceDomainStore, {
-  domain: observable,
-  domainId: observable,
-  activateDomain: action,
-  connect: action,
-  disconnect: action,
-  _setDomain: action
-});
 
 export const convergenceDomainStore = new ConvergenceDomainStore();

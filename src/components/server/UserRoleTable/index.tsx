@@ -12,7 +12,8 @@
 import * as React from 'react';
 import {Component, ReactNode} from 'react';
 import styles from "./styles.module.css";
-import {Button, Icon, Popconfirm, Select, Table} from "antd";
+import { DeleteOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { Button, Popconfirm, Select, Table } from "antd";
 import Tooltip from "antd/es/tooltip";
 
 const {Option} = Select;
@@ -69,7 +70,7 @@ export class UserRoleTable extends Component<UserRoleTableProps,{}> {
     )
   }
 
-  private _renderActions = (text: any, record: any) => {
+  private _renderActions = (text: any, record: UserRole) => {
     const {username} = record;
     return (
       <span className={styles.actions}>
@@ -78,22 +79,22 @@ export class UserRoleTable extends Component<UserRoleTableProps,{}> {
                     onConfirm={() => {this.props.onRemoveUser(username)}}
                     okText="Yes"
                     cancelText="No"
-                    icon={<Icon type="question-circle-o" style={{color: 'red'}}/>}>
+                    icon={<QuestionCircleOutlined style={{color: 'red'}} />}>
         <Tooltip placement="topRight" title="Delete User" mouseEnterDelay={1}>
-          <Button shape="circle" size="small" htmlType="button"><Icon type="delete"/></Button>
+          <Button shape="circle" size="small" htmlType="button"><DeleteOutlined /></Button>
         </Tooltip>
       </Popconfirm>
     </span>
     );
   };
 
-  private _renderRole = (text: any, record: any) => {
+  private _renderRole = (role: string, record: UserRole) => {
     const {username} = record;
     return (
       <Select style={{width: "100%"}}
-              defaultValue={text}
-              onChange={(role: string, _: any) => this.props.onChangeRole(username, role)}>
-        {this.props.roles.map(role => <Option key={role}>{role}</Option>)}
+              defaultValue={role}
+              onChange={(role: string) => this.props.onChangeRole(username, role)}>
+        {this.props.roles.map(role => <Option key={role} value={role}>{role}</Option>)}
       </Select>
     );
   }

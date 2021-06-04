@@ -10,9 +10,9 @@
  */
 
 import React, {ReactNode} from "react";
-import {Page} from "../../../../components/common/Page/";
-import {Card, Icon, notification} from "antd";
-import {FormComponentProps} from "antd/lib/form";
+import {Page} from "../../../../components";
+import { TeamOutlined } from '@ant-design/icons';
+import { Card, notification } from "antd";
 import {RouteComponentProps} from "react-router";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
@@ -29,7 +29,7 @@ export interface EditDomainUserGroupProps extends RouteComponentProps<{id: strin
   domainId: DomainId;
 }
 
-interface InjectedProps extends EditDomainUserGroupProps, FormComponentProps {
+interface InjectedProps extends EditDomainUserGroupProps {
   domainGroupService: DomainGroupService;
 }
 
@@ -59,7 +59,7 @@ class EditDomainUserGroupComponent extends React.Component<InjectedProps, EditDo
     if (this.state.initialGroup !== null) {
       return (
         <Page breadcrumbs={this._breadcrumbs}>
-          <Card title={<span><Icon type="team"/> New Group</span>} className={styles.formCard}>
+          <Card title={<span><TeamOutlined /> New Group</span>} className={styles.formCard}>
             <DomainUserGroupForm
               domainId={this.props.domainId}
               saveButtonLabel="Save"

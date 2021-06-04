@@ -10,7 +10,8 @@
  */
 
 import React, {ReactNode} from "react";
-import {Button, Icon, List, Popconfirm} from "antd";
+import { DeleteOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { Button, List, Popconfirm } from "antd";
 import {DomainUsernameAutoComplete} from "../DomainUsernameAutoComplete";
 import {DomainId} from "../../../../models/DomainId";
 import styles from "./styles.module.css";
@@ -23,12 +24,12 @@ interface DomainUserListProps {
 }
 
 interface DomainUserListState {
-  username: string;
+  username: string | null;
 }
 
 export class DomainUserList extends React.Component<DomainUserListProps, DomainUserListState> {
   state = {
-    username: ""
+    username: null
   };
 
   public render(): ReactNode {
@@ -72,9 +73,9 @@ export class DomainUserList extends React.Component<DomainUserListProps, DomainU
                     onConfirm={() => this._onDelete(user)}
                     okText="Yes"
                     cancelText="No"
-                    icon={<Icon type="question-circle-o" style={{color: 'red'}}/>}
+                    icon={<QuestionCircleOutlined style={{color: 'red'}} />}
         >
-          <Button htmlType="button" icon="delete" size="small" shape="circle"/>
+          <Button htmlType="button" icon={<DeleteOutlined />} size="small" shape="circle"/>
         </Popconfirm>
       </List.Item>
     );
@@ -91,7 +92,7 @@ export class DomainUserList extends React.Component<DomainUserListProps, DomainU
 
   private _onAdd = () => {
     const users = this.props.users.slice(0);
-    users.push(this.state.username);
+    users.push(this.state.username!);
     this.props.onChange(users);
     this.setState({username: ""});
   }

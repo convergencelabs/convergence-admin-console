@@ -11,9 +11,9 @@
 
 import * as React from 'react';
 import {ReactNode} from 'react';
-import {Page} from "../../../../components/common/Page";
-import {Card, Form, Icon, notification} from "antd";
-import {FormComponentProps} from "antd/lib/form";
+import {Page} from "../../../../components";
+import { KeyOutlined } from '@ant-design/icons';
+import { Card, notification } from "antd";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {injectAs} from "../../../../utils/mobx-utils";
@@ -24,7 +24,7 @@ import {ApiKeyForm} from "../../../../components/user/ApiKeyForm";
 import {UserApiKey} from "../../../../models/UserApiKey";
 import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
 
-interface InjectedProps extends RouteComponentProps, FormComponentProps {
+interface InjectedProps extends RouteComponentProps {
   apiKeyService: ApiKeyService;
 }
 
@@ -61,7 +61,7 @@ class EditApiKeyComponent extends React.Component<InjectedProps, EditApiKeyState
     } else {
       return (
         <Page breadcrumbs={this._breadcrumbs}>
-          <Card title={<span><Icon type="key"/> Update API Key</span>} className={styles.formCard}>
+          <Card title={<span><KeyOutlined /> Update API Key</span>} className={styles.formCard}>
             <ApiKeyForm initialValue={apiKey}
                         saveButtonLabel="Update"
                         onCancel={this._handleCancel}
@@ -102,4 +102,4 @@ class EditApiKeyComponent extends React.Component<InjectedProps, EditApiKeyState
   }
 }
 
-export const EditApiKey = injectAs<RouteComponentProps>([SERVICES.API_KEY_SERVICE], Form.create()(EditApiKeyComponent));
+export const EditApiKey = injectAs<RouteComponentProps>([SERVICES.API_KEY_SERVICE], EditApiKeyComponent);

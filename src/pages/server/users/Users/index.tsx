@@ -10,9 +10,20 @@
  */
 
 import React, {KeyboardEvent, ReactNode} from 'react';
-import {Page} from "../../../../components/common/Page/";
+import {Page} from "../../../../components";
 import Tooltip from "antd/es/tooltip";
-import {Button, Card, Icon, Input, message, notification, Popconfirm, Table, Tag} from "antd";
+
+import {
+  DeleteOutlined,
+  EditOutlined,
+  LockOutlined,
+  PlusCircleOutlined,
+  QuestionCircleOutlined,
+  ReloadOutlined,
+  SearchOutlined, UserOutlined,
+} from '@ant-design/icons';
+
+import { Button, Card, Input, message, notification, Popconfirm, Table, Tag } from "antd";
 import styles from "./styles.module.css";
 import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
 import {RouteComponentProps} from "react-router";
@@ -76,7 +87,7 @@ class ServerUsersComponent extends React.Component<InjectedProps, ServerUsersSta
       dataIndex: 'serverRole',
       key: 'serverRole',
       align: 'left',
-      render: (value: any, record: any) => <Tag color="blue">{value}</Tag>
+      render: (value: any, _: any) => <Tag color="blue">{value}</Tag>
     }, {
       title: 'Actions',
       key: 'actions',
@@ -115,16 +126,16 @@ class ServerUsersComponent extends React.Component<InjectedProps, ServerUsersSta
 
   private _renderToolbar(): ReactNode {
     return (
-      <CardTitleToolbar title="Users" icon="user">
+      <CardTitleToolbar title="Users" icon={<UserOutlined />}>
         <span className={styles.search}>
-          <Input placeholder="Search Users" addonAfter={<Icon type="search"/>} onKeyUp={this._onFilterChange}/>
+          <Input placeholder="Search Users" addonAfter={<SearchOutlined />} onKeyUp={this._onFilterChange}/>
         </span>
         {
           loggedInUserStore.isServerAdmin() ?
           <Tooltip placement="topRight" title="Create User" mouseEnterDelay={1}>
             <Button className={styles.iconButton} shape="circle" size="small" htmlType="button"
                     onClick={this._goToCreate}>
-              <Icon type="plus-circle"/>
+              <PlusCircleOutlined />
             </Button>
           </Tooltip>
             :
@@ -133,11 +144,11 @@ class ServerUsersComponent extends React.Component<InjectedProps, ServerUsersSta
         <Tooltip placement="topRight" title="Reload Users" mouseEnterDelay={1}>
           <Button className={styles.iconButton} shape="circle" size="small" htmlType="button"
                   onClick={this._loadUsers}>
-            <Icon type="reload"/>
+            <ReloadOutlined />
           </Button>
         </Tooltip>
       </CardTitleToolbar>
-    )
+    );
   }
 
   private _onFilterChange = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -166,8 +177,7 @@ class ServerUsersComponent extends React.Component<InjectedProps, ServerUsersSta
   private _renderActions = (value: ConvergenceUser, record: any) => {
     const profile = this.props.profileStore.loggedInUser;
     const deleteDisabled = profile!.username === record.username;
-    const deleteButton = <Button shape="circle" size="small" htmlType="button" disabled={deleteDisabled}><Icon
-      type="delete"/></Button>;
+    const deleteButton = <Button shape="circle" size="small" htmlType="button" disabled={deleteDisabled}><DeleteOutlined /></Button>;
 
     const deleteComponent = deleteDisabled ?
       <Tooltip placement="topRight" title="You can not delete yourself!" mouseEnterDelay={1}>
@@ -178,7 +188,7 @@ class ServerUsersComponent extends React.Component<InjectedProps, ServerUsersSta
                   onConfirm={() => this._onDeleteUser(record.username)}
                   okText="Yes"
                   cancelText="No"
-                  icon={<Icon type="question-circle-o" style={{color: 'red'}}/>}
+                  icon={<QuestionCircleOutlined style={{color: 'red'}} />}
       >
         <Tooltip placement="topRight" title="Delete User" mouseEnterDelay={2}>
           {deleteButton}
@@ -189,12 +199,12 @@ class ServerUsersComponent extends React.Component<InjectedProps, ServerUsersSta
       <span className={styles.actions}>
         <Tooltip placement="topRight" title="Edit User" mouseEnterDelay={1}>
           <Link to={`/users/${value.username}`}>
-            <Button shape="circle" size="small" htmlType="button" icon="edit"/>
+            <Button shape="circle" size="small" htmlType="button" icon={<EditOutlined />}/>
           </Link>
         </Tooltip>
         <Tooltip placement="topRight" title="Set Password" mouseEnterDelay={1}>
           <Link to={`/users/${value.username}/set-password`}>
-            <Button shape="circle" size="small" htmlType="button" icon="lock"/>
+            <Button shape="circle" size="small" htmlType="button" icon={<LockOutlined />}/>
           </Link>
         </Tooltip>
         {deleteComponent}
@@ -208,7 +218,7 @@ class ServerUsersComponent extends React.Component<InjectedProps, ServerUsersSta
         this._loadUsers();
         message.success(`User '${username}' deleted.`);
       })
-      .catch(err => {
+      .catch(() => {
         notification.error({
           message: 'Could Not Delete User',
           description: `The user could not be deleted.`,
@@ -223,7 +233,7 @@ class ServerUsersComponent extends React.Component<InjectedProps, ServerUsersSta
     promise.then(users => {
       this._usersSubscription = null;
       this.setState({users});
-    }).catch(err => {
+    }).catch(() => {
       this._usersSubscription = null;
       this.setState({users: null});
     });

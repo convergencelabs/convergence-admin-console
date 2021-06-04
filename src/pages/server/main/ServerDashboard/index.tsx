@@ -10,7 +10,7 @@
  */
 
 import React, {ReactNode} from "react";
-import {Page} from "../../../../components/common/Page/";
+import {Page} from "../../../../components";
 import {Col, Row} from "antd";
 import styles from "./styles.module.css";
 import {SpacedGrid} from "../../../../components/common/SpacedGrid/";
@@ -24,7 +24,7 @@ export class ServerDashboard extends React.Component<{}, {}> {
     return (
       <Page breadcrumbs={[]}>
         <SpacedGrid>
-          <Row gutter={16} type="flex">
+          <Row gutter={16}>
             <Col xs={24} sm={24} md={12} lg={12} xl={12} className={styles.col}>
               <ServerInfo/>
             </Col>

@@ -9,13 +9,12 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import React, {FormEvent, ReactNode} from "react";
-import {Page} from "../../../../components/common/Page/";
-import {Button, Card, Col, Form, Icon, Input, notification, Radio, Row} from "antd";
-import {FormComponentProps} from "antd/lib/form";
+import React, {ReactNode} from "react";
+import {Page} from "../../../../components";
+import {DatabaseOutlined} from '@ant-design/icons';
+import {Button, Card, Col, Form, Input, notification, Radio, Row} from "antd";
 import {RouteComponentProps} from "react-router";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar/";
-import {FormFieldWithHelp} from "../../../../components/common/FormFieldWithHelp/";
 import {NamespaceAutoComplete} from "../../../../components/server/NamespaceAutoComplete";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {SERVICES} from "../../../../services/ServiceConstants";
@@ -33,7 +32,7 @@ export interface CreateDomainState {
   namespaceType: string;
 }
 
-interface InjectedProps extends RouteComponentProps, FormComponentProps {
+interface InjectedProps extends RouteComponentProps {
   profileStore: LoggedInUserStore;
   domainService: DomainService;
   configStore: ConfigStore;
@@ -54,96 +53,80 @@ class CreateDomainComponent extends React.Component<InjectedProps, CreateDomainS
   };
 
   public render(): ReactNode {
-    const {getFieldDecorator} = this.props.form;
     return (
-      <Page breadcrumbs={this._breadcrumbs}>
-        <Card title={<span><Icon type="database"/> New Domain</span>} className={styles.formCard}>
-          <Form onSubmit={this._handleSubmit}>
-            {
-              this.props.configStore.namespacesEnabled && this.props.configStore.userNamespacesEnabled ?
-                <Row gutter={16}>
-                  <Col span={24}>
-                    <Form.Item label="Create In">
-                      {getFieldDecorator('namespaceType', {
-                        rules: [{required: true, message: 'Please input a domain id!', whitespace: true}],
-                        initialValue: this.state.namespaceType
-                      })(
-                        <RadioGroup onChange={val => {
-                          this.setState({namespaceType: val.target.value})
-                        }}>
-                          <Radio value={USER}>User Namespace</Radio>
-                          <Radio value={SHARED}>Shared Namespace</Radio>
-                        </RadioGroup>
-                      )}
-                    </Form.Item>
-                  </Col>
-                </Row> :
-                null
-            }
-            {
-              this.props.configStore.namespacesEnabled && this.state.namespaceType !== "user" ?
-                <Row gutter={16}>
-                  <Col span={24}>
-                    <Form.Item label="Shared Namespace">
-                      {getFieldDecorator('namespace', {
-                        rules: [{
-                          required: this.state.namespaceType !== USER,
-                          whitespace: true,
-                          message: 'Please select a namespace!',
-                        }],
-                      })(
-                        <NamespaceAutoComplete disabled={this.state.namespaceType === USER}/>
-                      )}
-                    </Form.Item>
-                  </Col>
-                </Row>
-                : null
-            }
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item label={(
-                  <FormFieldWithHelp
-                    label="Domain Id"
-                    tooltip="The url friendly id that will be used to connect to the domain."
-                  />
-                )}>
-                  {getFieldDecorator('id', {
-                    rules: [{required: true, message: 'Please input a domain id!', whitespace: true}],
-                  })(
+        <Page breadcrumbs={this._breadcrumbs}>
+          <Card title={<span><DatabaseOutlined/> New Domain</span>} className={styles.formCard}>
+            <Form layout="vertical" onFinish={this._handleSubmit}>
+              {
+                this.props.configStore.namespacesEnabled && this.props.configStore.userNamespacesEnabled ?
+                    <Row gutter={16}>
+                      <Col span={24}>
+                        <Form.Item name="namespaceType"
+                                   label="Create In"
+                                   initialValue={this.state.namespaceType}
+                                   rules={[{required: true, message: 'Please input a domain id!', whitespace: true}]}
+                        >
+                          <RadioGroup onChange={val => {
+                            this.setState({namespaceType: val.target.value})
+                          }}>
+                            <Radio value={USER}>User Namespace</Radio>
+                            <Radio value={SHARED}>Shared Namespace</Radio>
+                          </RadioGroup>
+                        </Form.Item>
+                      </Col>
+                    </Row> :
+                    null
+              }
+              {
+                this.props.configStore.namespacesEnabled && this.state.namespaceType !== "user" ?
+                    <Row gutter={16}>
+                      <Col span={24}>
+                        <Form.Item name="namespace"
+                                   label="Shared Namespace"
+                                   rules={[{
+                                     required: this.state.namespaceType !== USER,
+                                     whitespace: true,
+                                     message: 'Please select a namespace!',
+                                   }]}>
+                          <NamespaceAutoComplete disabled={this.state.namespaceType === USER}/>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    : null
+              }
+              <Row gutter={16}>
+                <Col span={24}>
+                  <Form.Item name="id"
+                             label="Domain Id"
+                             tooltip="The url friendly id that will be used to connect to the domain."
+                             rules={[{required: true, message: 'Please input a domain id!', whitespace: true}]}
+                  >
                     <Input placeholder="Enter a unique id"/>
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item label={(
-                  <FormFieldWithHelp
-                    label="Display Name"
-                    tooltip="A nickname that will be displayed in the admin console."
-                  />
-                )}>
-                  {getFieldDecorator('displayName', {
-                    rules: [{
-                      required: true, whitespace: true, message: 'Please input a display name!',
-                    }],
-                  })(
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row gutter={16}>
+                <Col span={24}>
+                  <Form.Item name="displayName"
+                             label="Display Name"
+                             tooltip="A nickname that will be displayed in the admin console."
+                             rules={[{required: true, whitespace: true, message: 'Please input a display name!'}]}
+                  >
                     <Input placeholder="Enter an optional display name"/>
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={24}>
-                <FormButtonBar>
-                  <Button htmlType="button" onClick={this._handleCancel}>Cancel</Button>
-                  <Button type="primary" htmlType="submit">Create</Button>
-                </FormButtonBar>
-              </Col>
-            </Row>
-          </Form>
-        </Card>
-      </Page>
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row>
+                <Col span={24}>
+                  <FormButtonBar>
+                    <Button htmlType="button" onClick={this._handleCancel}>Cancel</Button>
+                    <Button type="primary" htmlType="submit">Create</Button>
+                  </FormButtonBar>
+                </Col>
+              </Row>
+            </Form>
+          </Card>
+        </Page>
     );
   }
 
@@ -151,46 +134,41 @@ class CreateDomainComponent extends React.Component<InjectedProps, CreateDomainS
     this.props.history.push("/domains/");
   }
 
-  private _handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        const {namespace, id, displayName, namespaceType} = values;
-        let ns: string;
+  private _handleSubmit = (values: any) => {
+    const {namespace, id, displayName, namespaceType} = values;
+    let ns: string;
 
-        if (this.props.configStore.namespacesEnabled) {
-          ns = namespaceType === USER ?
-            "~" + this.props.profileStore.loggedInUser!.username :
-            namespace;
-        } else {
-          ns = this.props.configStore.defaultNamespace;
-        }
+    if (this.props.configStore.namespacesEnabled) {
+      ns = namespaceType === USER ?
+          "~" + this.props.profileStore.loggedInUser!.username :
+          namespace;
+    } else {
+      ns = this.props.configStore.defaultNamespace;
+    }
 
-        this.props.domainService
-          .createDomain(new DomainId(ns, id), displayName)
-          .then(() => {
-            notification.success({
-              message: "Domain Created",
-              description: `The domain '${ns}/${id}' was successfully created.`
-            });
-            this.props.history.push("/domains/");
-          })
-          .catch(err => {
-            let message;
-            if (err instanceof RestError && err.code === "namespace_not_found") {
-              message = `The domain could not be created because the namespace '${err.details['namespace']}' does not exist`;
-            } else {
-              message = "The domain could not be created."
-            }
-            notification.error({
-              message: "Domain Not Created",
-              description: message
-            });
+    this.props.domainService
+        .createDomain(new DomainId(ns, id), displayName)
+        .then(() => {
+          notification.success({
+            message: "Domain Created",
+            description: `The domain '${ns}/${id}' was successfully created.`
           });
-      }
-    });
+          this.props.history.push("/domains/");
+        })
+        .catch(err => {
+          let message;
+          if (err instanceof RestError && err.code === "namespace_not_found") {
+            message = `The domain could not be created because the namespace '${err.details['namespace']}' does not exist`;
+          } else {
+            message = "The domain could not be created."
+          }
+          notification.error({
+            message: "Domain Not Created",
+            description: message
+          });
+        });
   }
 }
 
 const injections = [SERVICES.DOMAIN_SERVICE, STORES.PROFILE_STORE, STORES.CONFIG_STORE];
-export const CreateDomain = injectAs<RouteComponentProps>(injections, Form.create()(CreateDomainComponent));
+export const CreateDomain = injectAs<RouteComponentProps>(injections, CreateDomainComponent);

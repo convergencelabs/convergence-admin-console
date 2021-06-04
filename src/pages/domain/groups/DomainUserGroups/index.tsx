@@ -10,9 +10,17 @@
  */
 
 import React, {KeyboardEvent, ReactNode} from "react";
-import {Page} from "../../../../components/common/Page/";
+import {Page} from "../../../../components";
 import Tooltip from "antd/es/tooltip";
-import {Button, Card, Icon, Input, notification, Popconfirm, Table} from "antd";
+import {
+  DeleteOutlined,
+  EditOutlined, GroupOutlined,
+  PlusCircleOutlined,
+  QuestionCircleOutlined,
+  ReloadOutlined,
+  SearchOutlined,
+} from '@ant-design/icons';
+import { Button, Card, Input, notification, Popconfirm, Table } from "antd";
 import styles from "./styles.module.css";
 import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
 import {RouteComponentProps} from "react-router";
@@ -85,24 +93,24 @@ class DomainUserGroupsComponent extends React.Component<InjectedProps, DomainGro
 
   private _renderToolbar(): ReactNode {
     return (
-      <CardTitleToolbar title="Groups" icon="group">
+      <CardTitleToolbar title="Groups" icon={<GroupOutlined />}>
         <span className={styles.search}>
-          <Input placeholder="Search Groups" addonAfter={<Icon type="search"/>} onKeyUp={this._onFilterChange}/>
+          <Input placeholder="Search Groups" addonAfter={<SearchOutlined />} onKeyUp={this._onFilterChange}/>
         </span>
         <Tooltip placement="topRight" title="Create Group" mouseEnterDelay={1}>
           <Button className={styles.iconButton} shape="circle" size="small" htmlType="button"
                   onClick={this._goToCreate}>
-            <Icon type="plus-circle"/>
+            <PlusCircleOutlined />
           </Button>
         </Tooltip>
         <Tooltip placement="topRight" title="Reload Groups" mouseEnterDelay={1}>
           <Button className={styles.iconButton} shape="circle" size="small" htmlType="button"
                   onClick={this._loadGroups}>
-            <Icon type="reload"/>
+            <ReloadOutlined />
           </Button>
         </Tooltip>
       </CardTitleToolbar>
-    )
+    );
   }
 
   private _onFilterChange = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -134,7 +142,7 @@ class DomainUserGroupsComponent extends React.Component<InjectedProps, DomainGro
       <span className={styles.actions}>
         <Tooltip placement="topRight" title="Edit Group" mouseEnterDelay={1}>
           <Link to={toDomainRoute(this.props.domainId, `groups/${record.id}`)}>
-            <Button shape="circle" size="small" htmlType="button" icon="edit"/>
+            <Button shape="circle" size="small" htmlType="button" icon={<EditOutlined />}/>
           </Link>
         </Tooltip>
         <Popconfirm title="Are you sure delete this group?"
@@ -142,10 +150,10 @@ class DomainUserGroupsComponent extends React.Component<InjectedProps, DomainGro
                     onConfirm={() => this._onDeleteGroup(record.id)}
                     okText="Yes"
                     cancelText="No"
-                    icon={<Icon type="question-circle-o" style={{color: 'red'}}/>}
+                    icon={<QuestionCircleOutlined style={{color: 'red'}} />}
         >
         <Tooltip placement="topRight" title="Delete Group" mouseEnterDelay={2}>
-          <Button shape="circle" size="small" htmlType="button" icon="delete"/>
+          <Button shape="circle" size="small" htmlType="button" icon={<DeleteOutlined />}/>
         </Tooltip>
       </Popconfirm>
     </span>
@@ -177,7 +185,7 @@ class DomainUserGroupsComponent extends React.Component<InjectedProps, DomainGro
     promise.then(groups => {
       this._groupsSubscription = null;
       this.setState({groups});
-    }).catch(err => {
+    }).catch(() => {
       this._groupsSubscription = null;
       this.setState({groups: null});
     });

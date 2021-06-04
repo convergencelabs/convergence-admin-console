@@ -12,7 +12,7 @@
 import React, {ReactNode} from "react";
 import styles from "./styles.module.css";
 import {DomainStatus} from "../../../models/DomainStatus";
-import {Icon} from "antd";
+import {CheckCircleOutlined, CloseCircleOutlined, SyncOutlined} from "@ant-design/icons";
 
 export interface DomainStatusIconProps {
   status: DomainStatus;
@@ -21,40 +21,17 @@ export interface DomainStatusIconProps {
 export class DomainStatusIcon extends React.Component<DomainStatusIconProps, {}> {
 
   public render(): ReactNode {
-    const icon = this._iconType(this.props.status);
-    const className = this._className(this.props.status);
-    return (
-      <Icon type={icon} className={className} spin={this.props.status === DomainStatus.INITIALIZING}/>
-    );
-  }
-
-  private _iconType(status: DomainStatus): string {
-    switch (status) {
+    switch (this.props.status) {
       case DomainStatus.READY:
-        return "check-circle";
+        return <CheckCircleOutlined className={styles.ready} />;
       case DomainStatus.INITIALIZING:
-        return "sync";
+        return <SyncOutlined className={styles.initializing} />;
       case DomainStatus.DELETING:
-        return "stop";
+        return <CheckCircleOutlined className={styles.deleting} />;
       case DomainStatus.ERROR:
-        return "close-circle";
+        return <CloseCircleOutlined className={styles.error} />;
       default:
-        throw new Error("Unknown domain status: " + status);
-    }
-  }
-
-  private _className(status: DomainStatus): string {
-    switch (status) {
-      case DomainStatus.READY:
-        return styles.ready;
-      case DomainStatus.INITIALIZING:
-        return styles.initializing;
-      case DomainStatus.DELETING:
-        return styles.deleting;
-      case DomainStatus.ERROR:
-        return styles.error;
-      default:
-        throw new Error("Unknown domain status: " + status);
+        throw new Error("Unknown domain status: " + this.props.status);
     }
   }
 }

@@ -10,8 +10,20 @@
  */
 
 import React, {KeyboardEvent, ReactNode} from "react";
-import {Page} from "../../../../components/common/Page/";
-import {Card, Col, Icon, Input, List, Row, Table} from "antd";
+import {Page} from "../../../../components";
+import {
+  EditOutlined,
+  FileAddOutlined,
+  FileTextOutlined,
+  LoginOutlined,
+  LogoutOutlined,
+  MessageOutlined, ReloadOutlined,
+  SearchOutlined, TableOutlined,
+  UserAddOutlined,
+  UserDeleteOutlined,
+} from '@ant-design/icons';
+
+import {Card, Col, Input, List, Row, Table, TablePaginationConfig} from "antd";
 import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
 import {RouteComponentProps} from "react-router";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
@@ -26,7 +38,6 @@ import {PagedData} from "../../../../models/PagedData";
 import queryString from "query-string";
 import {SearchParams} from "../../collections/DomainCollections";
 import {appendToQueryParamString} from "../../../../utils/router-utils";
-import {PaginationConfig} from "antd/lib/pagination";
 import {
   ChatCreatedEvent,
   ChatEvent,
@@ -142,7 +153,7 @@ class ViewChatEventsComponent extends React.Component<InjectedProps, ViewChatSta
   }
 
   public render(): ReactNode {
-    const pagination: PaginationConfig = {
+    const pagination: TablePaginationConfig = {
       pageSize: this.state.searchParams.pageSize,
       current: this.state.searchParams.page,
       total: this.state.chatEvents.totalResults,
@@ -198,22 +209,21 @@ class ViewChatEventsComponent extends React.Component<InjectedProps, ViewChatSta
 
   private _renderOverviewToolbar(): ReactNode {
     return (
-      <CardTitleToolbar title="Chat" icon="message">
-        <ToolbarButton icon="edit" tooltip="Reload Chats" onClick={this._gotoEdit} disabled={!this.state.chatInfo}/>
+      <CardTitleToolbar title="Chat" icon={<MessageOutlined />}>
+        <ToolbarButton icon={<EditOutlined />} tooltip="Reload Chats" onClick={this._gotoEdit} disabled={!this.state.chatInfo}/>
       </CardTitleToolbar>
     )
   }
 
   private _renderToolbar(): ReactNode {
     return (
-      <CardTitleToolbar title="Chat Events" icon="table">
+      <CardTitleToolbar title="Chat Events" icon={<TableOutlined />}>
         <span className={styles.search}>
-          <Input placeholder="Search Messages" addonAfter={<Icon type="search"/>} onKeyUp={this._onFilterChange}/>
+          <Input placeholder="Search Messages" addonAfter={<SearchOutlined />} onKeyUp={this._onFilterChange}/>
         </span>
-        <ToolbarButton icon="reload" tooltip="Reload Events
-        " onClick={this._loadChatEvents}/>
+        <ToolbarButton icon={<ReloadOutlined />} tooltip="Reload Events" onClick={this._loadChatEvents}/>
       </CardTitleToolbar>
-    )
+    );
   }
 
   private _loadChatInfo = () => {
@@ -297,28 +307,28 @@ class ViewChatEventsComponent extends React.Component<InjectedProps, ViewChatSta
   private _renderEventType = (type: string) => {
     switch (type) {
       case "created": {
-        return <span><Icon className={styles.createdType} type="file-add"/> Created</span>;
+        return <span><FileAddOutlined className={styles.createdType} /> Created</span>;
       }
       case "message": {
-        return <span><Icon className={styles.messageType} type="message"/> Message</span>;
+        return <span><MessageOutlined className={styles.messageType} /> Message</span>;
       }
       case "user_joined": {
-        return <span><Icon className={styles.joinedType} type="login"/> User Joined</span>;
+        return <span><LoginOutlined className={styles.joinedType} /> User Joined</span>;
       }
       case "user_left": {
-        return <span><Icon className={styles.leftType} type="logout"/> User Left</span>;
+        return <span><LogoutOutlined className={styles.leftType} /> User Left</span>;
       }
       case "user_added": {
-        return <span><Icon className={styles.joinedType} type="user-add"/> User Added</span>;
+        return <span><UserAddOutlined className={styles.joinedType} /> User Added</span>;
       }
       case "user_removed": {
-        return <span><Icon className={styles.leftType} type="user-delete"/> User Removed</span>;
+        return <span><UserDeleteOutlined className={styles.leftType} /> User Removed</span>;
       }
       case "name_changed": {
-        return <span><Icon className={styles.createdType} type="file-text"/> Name Changed</span>;
+        return <span><FileTextOutlined className={styles.createdType} /> Name Changed</span>;
       }
       case "topic_changed": {
-        return <span><Icon  className={styles.createdType} type="file-text"/> Topic Changed</span>;
+        return <span><FileTextOutlined className={styles.createdType} /> Topic Changed</span>;
       }
     }
   };
