@@ -19,7 +19,6 @@ import {ModelSnapshotPolicy} from "../../../../models/domain/ModelSnapshotPolicy
 import {FormButtonBar} from "../../../common/FormButtonBar";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
 import {DomainConfigService} from "../../../../services/domain/DomainConfigService";
-import {RestError} from "../../../../services/RestError";
 
 export interface ModelSnapshotPolicySettingsProps {
   domainId: DomainId;
@@ -73,7 +72,6 @@ class ModelSnapshotPolicySettingsComponent extends React.Component<InjectedProps
     }
   }
 
-
   private _handleSubmit = (values: any) => {
     const {
       snapshotsEnabled,
@@ -108,14 +106,11 @@ class ModelSnapshotPolicySettingsComponent extends React.Component<InjectedProps
           });
         })
         .catch((err) => {
-          if (err instanceof RestError) {
-            if (err.code === "duplicate") {
-              notification.error({
-                message: 'Settings Not Updated',
-                description: `There was an error applying the settings.`
-              });
-            }
-          }
+          console.error(err);
+          notification.error({
+            message: 'Settings Not Updated',
+            description: `There was an error applying the settings.`
+          });
         });
   }
 

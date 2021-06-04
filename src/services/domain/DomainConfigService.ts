@@ -15,6 +15,7 @@ import {ModelSnapshotPolicyData} from "./common-rest-data";
 import {toModelSnapshotPolicy} from "./incoming-rest-data-converters";
 import {ModelSnapshotPolicy} from "../../models/domain/ModelSnapshotPolicy";
 import {toModelSnapshotPolicyData} from "./outgoing-rest-data-converters";
+import {CollectionConfig} from "../../models/domain/CollectionConfig";
 
 export class DomainConfigService extends AbstractDomainService {
 
@@ -41,6 +42,17 @@ export class DomainConfigService extends AbstractDomainService {
     const url = this._getDomainUrl(domainId,`config/modelSnapshotPolicy`);
     const data = toModelSnapshotPolicyData(policy);
     return this._put<void>(url, data);
+  }
+
+  public getCollectionConfig(domainId: DomainId): Promise<CollectionConfig> {
+    const url = this._getDomainUrl(domainId,`config/collection`);
+    return this._get<{ autoCreate: boolean }>(url).then(c => new CollectionConfig(c.autoCreate));
+  }
+
+  public setCollectionConfig(domainId: DomainId, config: CollectionConfig): Promise<void> {
+    const url = this._getDomainUrl(domainId,`config/collection`);
+    const entity = {autoCreate: config.autoCreate};
+    return this._put<void>(url, entity);
   }
 }
 

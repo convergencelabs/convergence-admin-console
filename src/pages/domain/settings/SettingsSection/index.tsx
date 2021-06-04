@@ -9,10 +9,17 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-.generalSettings {
-  max-width: 600px;
+import React, {ReactElement, ReactNode} from "react";
+import styles from "./styles.module.css";
+
+export interface DomainSettingSectionProps {
+  children: ReactNode[] | ReactNode;
 }
 
-.generalSettings :global(.ant-card) {
-  margin-bottom: 20px;
+export function DomainSettingSection(props: DomainSettingSectionProps): ReactElement {
+    return (
+      <div className={styles.settings}>
+        {props.children}
+      </div>
+    );
 }

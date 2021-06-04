@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 - Convergence Labs, Inc.
+ * Copyright (c) 2021 - Convergence Labs, Inc.
  *
  * This file is part of the Convergence Server, which is released under
  * the terms of the GNU General Public License version 3 (GPLv3). A copy
@@ -9,14 +9,8 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-.warning {
-  color: #843434;
-  font-style: italic;
-}
-
-.domainId {
-  background: #ffc8cf;
-  border: 1px solid #6b4144;
-  padding: 0 5px;
-  border-radius: 4px;
+export class CollectionConfig {
+  constructor(public readonly autoCreate: boolean) {
+    Object.freeze(this);
+  }
 }
