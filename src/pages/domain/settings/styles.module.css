@@ -9,3 +9,6 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
+.domainSettings :global(.ant-collapse-header) {
+    font-weight: bold;
+}

@@ -35,7 +35,7 @@ export class DomainSettings extends React.Component<DomainSettingsProps, {}> {
     const baseUrl = toDomainRoute(this.props.domainId, `settings`);
     return (
       <Page breadcrumbs={this._breadcrumbs}>
-        <Card title={ <span><SettingOutlined /> Settings</span>} className={styles.settingsCard}>
+        <Card title={ <span><SettingOutlined /> Settings</span>} className={styles.domainSettings}>
           <Tabs
             className={styles.tabs}
             type="card"
