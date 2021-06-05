@@ -18,7 +18,7 @@ import {SERVICES} from "../../../../services/ServiceConstants";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {DeleteDomain} from "./DeleteDomain";
 import {ChangeAvailability} from "./ChangeAvailability";
-import {ChangeDomainId} from "./DomainIdSetting";
+import {ChangeDomainId} from "./ChangeDomainId";
 
 export interface DangerousSettingsProps {
   domainId: DomainId;

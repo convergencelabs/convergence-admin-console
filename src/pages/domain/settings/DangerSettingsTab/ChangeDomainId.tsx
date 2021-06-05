@@ -86,7 +86,7 @@ class ChangeDomainIdComponent extends Component<InjectedProps, DomainAvailabilit
           });
           const newDomainId = new DomainId(domainId.namespace, id)
           const url = toDomainRoute(newDomainId, "settings/dangerous");
-          this.props.history.push(url);
+          this.props.history.push(url, {namespace: domainId.namespace, domainId: domainId.id});
           this.props.activeDomainStore.activateDomain(newDomainId).then(() => {});
         })
         .catch((err: any) => {

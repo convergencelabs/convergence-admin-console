@@ -9,9 +9,9 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import React, {Component, createRef, ReactNode} from "react";
+import React, {Component, ReactNode} from "react";
 import {DomainService} from "../../../../services/DomainService";
-import {Button, Collapse, Form, FormInstance, Select} from "antd";
+import {Button, Collapse, Form, Select} from "antd";
 import {DescriptionBox} from "../../../../components/common/DescriptionBox";
 import FormItem from "antd/es/form/FormItem";
 import {FormButtonBar} from "../../../../components/common/FormButtonBar";
@@ -28,22 +28,7 @@ export interface InjectedProps extends ChangeAvailabilityProps {
   activeDomainStore: ActiveDomainStore;
 }
 
-export interface ChangeAvailabilityState {
-  loaded: boolean;
-}
-
-class DomainAvailabilityCard extends Component<InjectedProps, ChangeAvailabilityState> {
-  private _formRef = createRef<FormInstance>();
-
-  constructor(props: InjectedProps) {
-    super(props);
-
-    this._getAvailability();
-
-    this.state = {
-      loaded: false
-    }
-  }
+class DomainAvailabilityCard extends Component<InjectedProps> {
 
   public render(): ReactNode {
     return (
@@ -60,21 +45,19 @@ class DomainAvailabilityCard extends Component<InjectedProps, ChangeAvailability
               </p>
             </DescriptionBox>
             <div>
-              <Form ref={this._formRef}
-                    layout="vertical"
-                    onFinish={this._onFinish}>
-
+              <Form layout="vertical" onFinish={this._onFinish}>
                 <FormItem name="availability"
                           label="Availability"
+                          initialValue={this.props.activeDomainStore.domainDescriptor!.availability}
                           required>
-                  <Select disabled={!this.state.loaded}>
+                  <Select>
                     <Select.Option value="online">Online</Select.Option>
                     <Select.Option value="maintenance">Maintenance</Select.Option>
                     <Select.Option value="offline">Offline</Select.Option>
                   </Select>
                 </FormItem>
                 <FormButtonBar>
-                  <Button htmlType="submit" type="primary" disabled={!this.state.loaded}>Apply</Button>
+                  <Button htmlType="submit" type="primary">Apply</Button>
                 </FormButtonBar>
               </Form>
             </div>
@@ -83,16 +66,10 @@ class DomainAvailabilityCard extends Component<InjectedProps, ChangeAvailability
     );
   }
 
-  private _getAvailability(): void {
-    this.props.domainService.getDomain(this.props.activeDomainStore.domainDescriptor!.domainId).then(d => {
-      this._formRef.current!.setFieldsValue({availability: d.availability})
-      this.setState({loaded: true});
-    })
-  }
-
   private _onFinish = (values: any) => {
     const {availability} = values;
-    this.props.domainService.setDomainAvailability(this.props.activeDomainStore.domainDescriptor!.domainId, availability)
+    this.props.domainService.setDomainAvailability(
+        this.props.activeDomainStore.domainDescriptor!.domainId, availability)
         .then(() =>{
           return this.props.activeDomainStore.refreshDomainDescriptor();
         });

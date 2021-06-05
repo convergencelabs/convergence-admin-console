@@ -64,7 +64,6 @@ interface DomainContainerProps extends RouteComponentProps<DomainRouteParams> {
   configStore: ConfigStore;
 }
 
-
 export class DomainContainerComponent extends React.Component<DomainContainerProps> {
 
   public componentDidMount() {
@@ -76,6 +75,11 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
   public componentWillUnmount() {
     this.props.activeDomainStore.deactivate();
     this.props.breadcrumbsStore.setDomain(null);
+  }
+
+  public componentDidUpdate() {
+    const domainId = this._extractNamespaceAndDomain();
+    this.props.breadcrumbsStore.setDomain(domainId);
   }
 
   public render(): ReactNode {
