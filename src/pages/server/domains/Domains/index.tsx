@@ -43,6 +43,7 @@ import {ConfigStore} from "../../../../stores/ConfigStore";
 import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
 import {toDomainRoute} from "../../../../utils/domain-url";
 import {DomainAvailabilityIcon} from "../../../../components/common/DomainAvailabilityIcon";
+import {DomainAvailability} from "../../../../models/DomainAvailability";
 
 interface InjectedProps extends RouteComponentProps {
   domainService: DomainService;
@@ -70,38 +71,42 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
     this._domainTableColumns = [{
       title: 'Display Name',
       dataIndex: 'displayName',
-      sorter: (a: any, b: any) => (a.displayName as string).localeCompare(b.displayName),
-      render: (text: string, domain: DomainDescriptor) => {
+      sorter: (a: DomainDescriptor, b: DomainDescriptor) => a.displayName.localeCompare(b.displayName),
+      render: (displayName: string, domain: DomainDescriptor) => {
         const disabled = domain.status === DomainStatus.INITIALIZING || domain.status === DomainStatus.DELETING;
         return <DisableableLink to={toDomainRoute(domain.domainId, "")}
-                                disabled={disabled}>{text}</DisableableLink>
+                                disabled={disabled}>{displayName}</DisableableLink>
       }
     }, {
       title: 'Namespace',
-      dataIndex: 'namespace',
-      sorter: (a: any, b: any) => (a.namespace as string).localeCompare(b.namespace)
+      dataIndex: 'domainId',
+      sorter: (a: DomainDescriptor, b: DomainDescriptor) =>
+          a.domainId.namespace.localeCompare(b.domainId.namespace),
+      render: (domainId: DomainId) => domainId.namespace
     }, {
       title: 'Id',
-      dataIndex: 'id',
-      sorter: (a: any, b: any) => (a.id as string).localeCompare(b.id)
+      dataIndex: 'domainId',
+      sorter: (a: DomainDescriptor, b: DomainDescriptor) =>
+          a.domainId.id.localeCompare(b.domainId.id),
+      render: (domainId: DomainId) => domainId.id
     }, {
       title: 'Availability',
       dataIndex: 'availability',
       align: 'left',
-      render: (val: any, domain: DomainDescriptor) => (
+      render: (availability: DomainAvailability) => (
           <span>
-          <DomainAvailabilityIcon availability={domain.availability}/>
-          <span style={{marginLeft: 10}}>{formatDomainAvailability(domain.availability)}</span>
+          <DomainAvailabilityIcon availability={availability}/>
+          <span style={{marginLeft: 10}}>{formatDomainAvailability(availability)}</span>
         </span>
       )
     }, {
       title: 'Status',
       dataIndex: 'status',
       align: 'left',
-      render: (val: any, domain: DomainDescriptor) => (
+      render: (status: DomainStatus) => (
         <span>
-          <DomainStatusIcon status={domain.status}/>
-          <span style={{marginLeft: 10}}>{formatDomainStatus(domain.status)}</span>
+          <DomainStatusIcon status={status}/>
+          <span style={{marginLeft: 10}}>{formatDomainStatus(status)}</span>
         </span>
       )
     }, {
@@ -266,6 +271,7 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
         });
       })
       .catch(err => {
+        console.error(err);
         notification.error({
           message: 'Could Not Delete Domain',
           description: `The domain could not be deleted.`,
@@ -305,6 +311,7 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
         this._reloadInterval = setInterval(this._loadDomains, 5000);
       }
     }).catch(err => {
+      console.error(err);
       this._domainSubscription = null;
       this._favoritesSubscription = null
       this.setState({domains: null});
