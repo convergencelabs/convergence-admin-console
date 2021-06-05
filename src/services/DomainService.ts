@@ -58,6 +58,13 @@ export class DomainService extends AbstractAuthenticatedService {
         .then(DomainService._toDomainDescriptor);
   }
 
+  public setDomainAvailability(domainId: DomainId, availability: DomainAvailability): Promise<void> {
+    const data = {availability};
+    return this
+        ._put<void>(`domains/${domainId.namespace}/${domainId.id}/availability`, data)
+        .then(() => {})
+  }
+
   public deleteDomain(domainId: DomainId): Promise<void> {
     return this._delete<void>(`domains/${domainId.namespace}/${domainId.id}`);
   }
@@ -101,8 +108,7 @@ export class DomainService extends AbstractAuthenticatedService {
         break;
     }
     return new DomainDescriptor(
-        data.namespace,
-        data.domainId,
+        new DomainId(data.namespace, data.domainId),
         data.displayName,
         data.schemaVersion || null,
         availability,

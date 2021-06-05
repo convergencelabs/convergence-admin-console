@@ -63,7 +63,7 @@ export class FavoriteDomainsComponent extends React.Component<RecentDomainInject
           domains.length > 0 ?
             (<Row gutter={16}>
               {(domains).map((d: DomainDescriptor) => (
-                <Col xxl={8} xl={12} lg={24} md={24} sm={24} key={`${d.namespace}/${d.id}`}>
+                <Col xxl={8} xl={12} lg={24} md={24} sm={24} key={`${d.domainId.namespace}/${d.domainId.id}`}>
                   <DomainCard domain={d}/>
                 </Col>
               ))}

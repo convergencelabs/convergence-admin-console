@@ -64,8 +64,8 @@ export class DomainInfoComponent extends React.Component<InjectedProps, DomainIn
       (
         <InfoTable>
           <InfoTableRow label="Display Name">{domain.displayName}</InfoTableRow>
-          <InfoTableRow label="Namespace">{domain.namespace}</InfoTableRow>
-          <InfoTableRow label="Id">{domain.id}</InfoTableRow>
+          <InfoTableRow label="Namespace">{domain.domainId.namespace}</InfoTableRow>
+          <InfoTableRow label="Id">{domain.domainId.id}</InfoTableRow>
           <InfoTableRow label="Schema Version">{domain.schemaVersion}</InfoTableRow>
           <InfoTableRow label="Availability / Status">
             <span style={{marginRight: 10}}>{formatDomainAvailability(domain.availability)}</span>
@@ -85,7 +85,7 @@ export class DomainInfoComponent extends React.Component<InjectedProps, DomainIn
     promise.then(domain => {
       this._domainSubscription = null;
       this.setState({domain});
-    }).catch(err => {
+    }).catch(() => {
       this._domainSubscription = null;
       this.setState({domain: null});
     });

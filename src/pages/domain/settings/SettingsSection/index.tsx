@@ -11,15 +11,16 @@
 
 import React, {ReactElement, ReactNode} from "react";
 import styles from "./styles.module.css";
+import {Space} from "antd";
 
 export interface DomainSettingSectionProps {
   children: ReactNode[] | ReactNode;
 }
 
 export function DomainSettingSection(props: DomainSettingSectionProps): ReactElement {
-    return (
-      <div className={styles.settings}>
+  return (
+      <Space className={styles.settings} direction="vertical">
         {props.children}
-      </div>
-    );
+      </Space>
+  );
 }

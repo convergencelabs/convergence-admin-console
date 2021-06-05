@@ -73,7 +73,7 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
       sorter: (a: any, b: any) => (a.displayName as string).localeCompare(b.displayName),
       render: (text: string, domain: DomainDescriptor) => {
         const disabled = domain.status === DomainStatus.INITIALIZING || domain.status === DomainStatus.DELETING;
-        return <DisableableLink to={toDomainRoute(new DomainId(domain.namespace, domain.id), "")}
+        return <DisableableLink to={toDomainRoute(domain.domainId, "")}
                                 disabled={disabled}>{text}</DisableableLink>
       }
     }, {
@@ -148,7 +148,7 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
         <Card title={this._renderToolbar()}>
           <Table className={styles.userTable}
                  size="middle"
-                 rowKey={record => record.namespace + "/" + record.id}
+                 rowKey={record => record.domainId.namespace + "/" + record.domainId.id}
                  columns={this._domainTableColumns}
                  dataSource={this.state.domains || []}
           />
@@ -198,9 +198,9 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
       <Tooltip placement="topRight" title="You do not have permissions to delete this domain!" mouseEnterDelay={1}>
         {deleteButton}
       </Tooltip> :
-      <Popconfirm title={`Delete domain '${record.namespace}/${record.id}'?`}
+      <Popconfirm title={`Delete domain '${record.domainId.namespace}/${record.domainId.id}'?`}
                   placement="topRight"
-                  onConfirm={() => this._onDeleteDomain(record.namespace, record.id)}
+                  onConfirm={() => this._onDeleteDomain(record.domainId.namespace, record.domainId.id)}
                   okText="Yes"
                   cancelText="No"
                   icon={<QuestionCircleOutlined style={{color: 'red'}} />}
@@ -227,19 +227,19 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
   }
 
   private _isFav(domain: DomainDescriptor): boolean {
-    return this.state.favorites.find(fav => fav.equals(domain.toDomainId())) !== undefined;
+    return this.state.favorites.find(fav => fav.equals(domain.domainId)) !== undefined;
   }
 
   private _onFavClick(domain: DomainDescriptor): void {
     const fav = this._isFav(domain);
     const promise = fav ?
-      this.props.loggedInUserService.removeFavoriteDomain(domain.toDomainId()) :
-      this.props.loggedInUserService.addFavoriteDomain(domain.toDomainId());
+      this.props.loggedInUserService.removeFavoriteDomain(domain.domainId) :
+      this.props.loggedInUserService.addFavoriteDomain(domain.domainId);
 
     promise
       .then(() => this.props.loggedInUserService.getFavoriteDomains())
       .then(favs => {
-        const favorites = favs.map(f => f.toDomainId())
+        const favorites = favs.map(f => f.domainId)
         this.setState({favorites});
       });
   }
@@ -294,7 +294,7 @@ export class DomainsComponent extends React.Component<InjectedProps, DomainsStat
 
     Promise.all([promise, cp.promise]).then(([domains, favs]) => {
       this._domainSubscription = null;
-      const favorites = favs.map(f => f.toDomainId());
+      const favorites = favs.map(f => f.domainId);
       this.setState({domains, favorites});
       if (this._reloadInterval !== null) {
         clearTimeout(this._reloadInterval);

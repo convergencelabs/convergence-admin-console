@@ -29,6 +29,7 @@ export interface SideNavigationMenuItem {
     path: string;
     exact?: boolean;
   }
+  disabled?: boolean;
 }
 
 export interface SideNavigationProps extends RouteComponentProps {
@@ -77,7 +78,7 @@ export class SideNavigationComponent extends React.Component<SideNavigationProps
               className={styles.navMenu}>
           {
             this.props.menus.map(menu => (
-              <Menu.Item key={menu.key}>
+              <Menu.Item disabled={menu.disabled} key={menu.key}>
                 <Link to={{pathname: menu.link}}>
                   {menu.icon}
                   <span>{menu.title}</span>

@@ -14,17 +14,12 @@ import {DomainId} from "./DomainId";
 import {DomainAvailability} from "./DomainAvailability";
 
 export class DomainDescriptor {
-  constructor(public namespace: string,
-              public id: string,
+  constructor(public domainId: DomainId,
               public displayName: string,
               public schemaVersion: string | null,
               public availability: DomainAvailability,
               public status: DomainStatus
   ) {
     Object.freeze(this);
-  }
-
-  public toDomainId(): DomainId {
-    return new DomainId(this.namespace, this.id);
   }
 }

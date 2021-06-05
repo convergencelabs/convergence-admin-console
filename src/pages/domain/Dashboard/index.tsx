@@ -12,14 +12,8 @@
 import React, {ReactNode} from "react";
 import {RouteComponentProps} from "react-router";
 import {Page} from "../../../components/common/Page";
-import {
-  BarChartOutlined,
-  CloudOutlined,
-  CodeOutlined,
-  CopyOutlined,
-  ProfileOutlined,
-} from '@ant-design/icons';
-import { Button, Card, Col, Input, Row, Tabs } from 'antd';
+import {BarChartOutlined, CloudOutlined, CodeOutlined, CopyOutlined, ProfileOutlined,} from '@ant-design/icons';
+import {Button, Card, Col, Input, Row, Tabs} from 'antd';
 import CopyToClipboard from "react-copy-to-clipboard";
 import styles from "./styles.module.css";
 import {ConnectionPasswordSnippet} from "./snippet_connection_password";
@@ -51,7 +45,7 @@ export class DomainDashboard extends React.Component<DomainDashboardProps, {}> {
 
   public render(): ReactNode {
     const {domainId} = this.props;
-    const domainConnectUrl = domainRealtimeUrl(domainId.namespace, domainId.id);
+    const domainConnectUrl = domainRealtimeUrl(domainId);
 
     const copier =
       <CopyToClipboard text={domainConnectUrl}

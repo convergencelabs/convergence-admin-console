@@ -11,8 +11,7 @@
 
 import * as React from 'react';
 import {ReactNode} from 'react';
-import {SideNavigation, SideNavigationMenuItem} from "../../../common/SideNavigation/";
-import {DomainId} from "../../../../models/DomainId";
+import {SideNavigation} from "../../../common/SideNavigation/";
 import {toDomainRoute} from "../../../../utils/domain-url";
 import {
   CloudOutlined,
@@ -25,19 +24,18 @@ import {
   TeamOutlined,
   UserOutlined
 } from "@ant-design/icons";
+import {DomainAvailability} from "../../../../models/DomainAvailability";
+import {DomainDescriptor} from "../../../../models/DomainDescriptor";
 
 export interface DomainSideNavigationProps {
-  domainId: DomainId
+  domainDescriptor: DomainDescriptor;
 }
 
 export class DomainSideNavigation extends React.Component<DomainSideNavigationProps, {}> {
 
-  private readonly _menus: SideNavigationMenuItem[];
+  public render(): ReactNode {
+    const {domainId, availability} = this.props.domainDescriptor;
 
-  constructor(props: DomainSideNavigationProps) {
-    super(props);
-
-    const {domainId} = this.props;
     const dashboard = toDomainRoute( domainId, "");
     const users = toDomainRoute(domainId, "users");
     const groups = toDomainRoute(domainId, "groups/");
@@ -48,20 +46,20 @@ export class DomainSideNavigation extends React.Component<DomainSideNavigationPr
     const settings = toDomainRoute(domainId, "settings/");
     const auth = toDomainRoute(domainId, "authentication/");
 
-    this._menus = [
+    const disabled = availability === DomainAvailability.OFFLINE;
+
+    const menus = [
       {key: "dashboard", icon: <DashboardOutlined />, title: "Dashboard", link: dashboard, routeMatch: {path: dashboard, exact: true}},
-      {key: "users", icon: <UserOutlined />, title: "Users", link: users, routeMatch: {path: users}},
-      {key: "groups", icon: <TeamOutlined />, title: "Groups", link: groups, routeMatch: {path: groups}},
-      {key: "sessions", icon: <CloudOutlined />, title: "Sessions", link: sessions, routeMatch: {path: sessions}},
-      {key: "collections", icon: <FolderOutlined />, title: "Collections", link: collections,routeMatch: {path: collections}},
-      {key: "models", icon: <FileOutlined />, title: "Models", link: models, routeMatch: {path: models}},
-      {key: "chat", icon: <MessageOutlined />, title: "Chat", link: chat, routeMatch: {path: chat}},
+      {key: "users", icon: <UserOutlined />, title: "Users", link: users, routeMatch: {path: users}, disabled},
+      {key: "groups", icon: <TeamOutlined />, title: "Groups", link: groups, routeMatch: {path: groups}, disabled},
+      {key: "sessions", icon: <CloudOutlined />, title: "Sessions", link: sessions, routeMatch: {path: sessions}, disabled},
+      {key: "collections", icon: <FolderOutlined />, title: "Collections", link: collections,routeMatch: {path: collections}, disabled},
+      {key: "models", icon: <FileOutlined />, title: "Models", link: models, routeMatch: {path: models}, disabled},
+      {key: "chat", icon: <MessageOutlined />, title: "Chat", link: chat, routeMatch: {path: chat}, disabled},
       {key: "authentication", icon: <LockOutlined />, title: "Authentication", link: auth, routeMatch: {path: auth}},
       {key: "settings", icon: <SettingOutlined />, title: "Settings", link: settings, routeMatch: {path: settings}}
     ];
-  }
 
-  public render(): ReactNode {
-    return (<SideNavigation menus={this._menus}/>);
+    return (<SideNavigation menus={menus}/>);
   }
 }

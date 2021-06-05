@@ -15,7 +15,7 @@ import {SERVICES} from "../../../../../services/ServiceConstants";
 import {DomainModelService} from "../../../../../services/domain/DomainModelService";
 import {SapphireEditor} from "../../../../../components/ModelEditor/";
 import {STORES} from "../../../../../stores/StoreConstants";
-import {ConvergenceDomainStore} from "../../../../../stores/ConvergenceDomainStore";
+import {ActiveDomainStore} from "../../../../../stores/ActiveDomainStore";
 import {RealTimeModel, VersionChangedEvent} from "@convergence/convergence";
 import { TeamOutlined } from '@ant-design/icons';
 import {Button, Popover} from "antd";
@@ -31,7 +31,7 @@ export interface ModelEditorTabProps {
 
 interface InjectedProps extends ModelEditorTabProps {
   domainModelService: DomainModelService;
-  convergenceDomainStore: ConvergenceDomainStore;
+  activeDomainStore: ActiveDomainStore;
 }
 
 export interface ModelEditorTabState {
@@ -60,7 +60,7 @@ class ModelEditorTabComponent extends React.Component<InjectedProps, ModelEditor
 
   public componentDidMount(): void {
     this._mounted = true;
-    this.props.convergenceDomainStore.domain!
+    this.props.activeDomainStore.domain!
       .models()
       .open(this.props.modelId)
       .then(model => {
@@ -184,5 +184,5 @@ class ModelEditorTabComponent extends React.Component<InjectedProps, ModelEditor
   }
 }
 
-const injections = [SERVICES.DOMAIN_MODEL_SERVICE, STORES.CONVERGENCE_DOMAIN_STORE];
+const injections = [SERVICES.DOMAIN_MODEL_SERVICE, STORES.ACTIVE_DOMAIN_STORE];
 export const ModelEditorTab = injectAs<ModelEditorTabProps>(injections, ModelEditorTabComponent);

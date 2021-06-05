@@ -36,7 +36,7 @@ import {domainConfigService} from "./services/domain/DomainConfigService";
 import {domainMemberService} from "./services/domain/DomainMemberService";
 import {domainSessionService} from "./services/domain/DomainSessionService";
 import {domainChatService} from "./services/domain/DomainChatService";
-import {convergenceDomainStore} from "./stores/ConvergenceDomainStore";
+import {ActiveDomainStore} from "./stores/ActiveDomainStore";
 import {breadcrumbsStore} from "./stores/BreacrumsStore";
 import {message, notification} from "antd";
 import {configure} from "mobx";
@@ -62,6 +62,8 @@ notification.config({
   duration: 3,
 });
 
+const activeDomainStore = new ActiveDomainStore(domainService)
+
 const stores = {
   authStore,
   profileStore: loggedInUserStore,
@@ -69,7 +71,7 @@ const stores = {
   configStore,
   breadcrumbsStore,
 
-  convergenceDomainStore
+  activeDomainStore
 };
 
 const services = {

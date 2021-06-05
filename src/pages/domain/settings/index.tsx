@@ -10,8 +10,8 @@
  */
 
 import React, {ReactNode} from "react";
-import { SettingOutlined } from '@ant-design/icons';
-import { Card, Tabs } from "antd";
+import {SettingOutlined} from '@ant-design/icons';
+import {Card, Tabs} from "antd";
 import styles from "./styles.module.css";
 import {RouteComponentProps} from "react-router";
 import {DomainId} from "../../../models/DomainId";
