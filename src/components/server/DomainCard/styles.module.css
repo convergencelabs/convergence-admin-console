@@ -22,12 +22,9 @@
   cursor: default;
 }
 
-.domainCardDisabled {
+.domainCardDisabled .title,
+.domainCardDisabled .buttons {
   opacity: 0.6;
-  cursor: progress;
-}
-
-.domainCard.domainCardDisabled:hover {
   cursor: not-allowed !important;
 }
 
@@ -69,4 +66,8 @@
 
 .buttons :global .ant-btn {
   margin-left: 5px;
+}
+
+.upgradeButton {
+  margin-top: 20px;
 }

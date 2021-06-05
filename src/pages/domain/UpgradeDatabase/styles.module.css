@@ -9,15 +9,8 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-:global(.anticon).online {
-  color: green;
+.upgradeCard:global(.ant-card) {
+    max-width: 600px;
+    margin: auto;
+    margin-top: 30px;
 }
-
-:global(.anticon).offline {
-  color: #585858;
-}
-
-:global(.anticon).maintenance {
-  color: #1b2195;
-}
-

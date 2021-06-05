@@ -39,6 +39,8 @@ import {
   UserOutlined
 } from "@ant-design/icons";
 import {DomainAvailability} from "../../../models/DomainAvailability";
+import {FormButtonBar} from "../../common/FormButtonBar";
+import {DomainId} from "../../../models/DomainId";
 
 export interface DomainCardProps {
   domain: DomainDescriptor
@@ -54,8 +56,9 @@ export class DomainCardComponent extends Component<InjectedProps, {}> {
     const props = this.props;
     const domain = this.props.domain;
     const url = domainRealtimeUrl(domain.domainId);
-    const disabled = domain.status === DomainStatus.INITIALIZING || domain.status === DomainStatus.DELETING;
+    const disabled = domain.status !== DomainStatus.READY;
     const offline = domain.availability === DomainAvailability.OFFLINE;
+    const upgradeNeed = domain.status === DomainStatus.SCHEMA_UPGRADE_REQUIRED;
 
     const cls: string[] = [];
     cls.push(styles.domainCard);
@@ -86,27 +89,46 @@ export class DomainCardComponent extends Component<InjectedProps, {}> {
               value={url}
               addonAfter={<CopyAddOnButton copyText={url}/>}
           />
-          <div className={styles.buttons}>
-            <DomainCardButton link="" tooltip={"Dashboard"} icon={<DashboardOutlined/>} disabled={disabled} {...props}/>
-            <DomainCardButton link="users" tooltip={"Users"} icon={<UserOutlined/>}
-                              disabled={disabled || offline} {...props}/>
-            <DomainCardButton link="groups" tooltip={"Groups"} icon={<TeamOutlined/>}
-                              disabled={disabled || offline} {...props}/>
-            <DomainCardButton link="sessions" tooltip={"Sessions"} icon={<CloudOutlined/>}
-                              disabled={disabled || offline} {...props}/>
-            <DomainCardButton link="chats" tooltip={"Chat"} icon={<MessageOutlined/>}
-                              disabled={disabled || offline} {...props}/>
-            <DomainCardButton link="collections" tooltip={"Collections"} icon={<FolderOutlined/>}
-                              disabled={disabled || offline} {...props}/>
-            <DomainCardButton link="models" tooltip={"Models"} icon={<FileOutlined/>}
-                              disabled={disabled || offline} {...props}/>
-            <DomainCardButton link="authentication" tooltip={"Authentication"} icon={<LockOutlined/>}
-                              disabled={disabled} {...props}/>
-            <DomainCardButton link="settings" tooltip={"Settings"} icon={<SettingOutlined/>}
-                              disabled={disabled} {...props}/>
-          </div>
+          {upgradeNeed ?
+              this._renderUpgradeSchemaButton(domain.domainId) :
+              this._renderButtons(props, disabled, offline)
+          }
         </Card>
     );
+  }
+
+  private _renderUpgradeSchemaButton(domainId: DomainId) {
+    const link = toDomainRoute(domainId, "upgrade")
+    return (
+        <FormButtonBar>
+          <Button type="primary"
+                  className={styles.upgradeButton}
+                  href={link}
+          >Upgrade Schema</Button>
+        </FormButtonBar>
+    )
+  }
+
+  private _renderButtons(props: InjectedProps, disabled: boolean, offline: boolean) {
+    return <div className={styles.buttons}>
+      <DomainCardButton link="" tooltip={"Dashboard"} icon={<DashboardOutlined/>} disabled={disabled} {...props}/>
+      <DomainCardButton link="users" tooltip={"Users"} icon={<UserOutlined/>}
+                        disabled={disabled || offline} {...props}/>
+      <DomainCardButton link="groups" tooltip={"Groups"} icon={<TeamOutlined/>}
+                        disabled={disabled || offline} {...props}/>
+      <DomainCardButton link="sessions" tooltip={"Sessions"} icon={<CloudOutlined/>}
+                        disabled={disabled || offline} {...props}/>
+      <DomainCardButton link="chats" tooltip={"Chat"} icon={<MessageOutlined/>}
+                        disabled={disabled || offline} {...props}/>
+      <DomainCardButton link="collections" tooltip={"Collections"} icon={<FolderOutlined/>}
+                        disabled={disabled || offline} {...props}/>
+      <DomainCardButton link="models" tooltip={"Models"} icon={<FileOutlined/>}
+                        disabled={disabled || offline} {...props}/>
+      <DomainCardButton link="authentication" tooltip={"Authentication"} icon={<LockOutlined/>}
+                        disabled={disabled} {...props}/>
+      <DomainCardButton link="settings" tooltip={"Settings"} icon={<SettingOutlined/>}
+                        disabled={disabled} {...props}/>
+    </div>;
   }
 }
 

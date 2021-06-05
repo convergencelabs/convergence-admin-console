@@ -18,6 +18,7 @@ export const SERVICES = {
   USER_SERVICE: "userService",
   ROLE_SERVICE: "roleService",
   DOMAIN_SERVICE: "domainService",
+  SCHEMA_SERVICE: "schemaService",
   API_KEY_SERVICE: "apiKeyService",
   LOCAL_STORAGE_SERVICE: "localStorageService",
 

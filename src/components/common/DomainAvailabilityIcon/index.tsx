@@ -12,7 +12,7 @@
 import React, {ReactNode} from "react";
 import styles from "./styles.module.css";
 import {DomainAvailability} from "../../../models/DomainAvailability";
-import {CheckCircleOutlined, DisconnectOutlined, PauseCircleOutlined} from "@ant-design/icons";
+import {CheckCircleOutlined, StopOutlined, ToolOutlined} from "@ant-design/icons";
 
 export interface DomainAvailabilityIconProps {
   availability: DomainAvailability;
@@ -25,9 +25,9 @@ export class DomainAvailabilityIcon extends React.Component<DomainAvailabilityIc
       case DomainAvailability.ONLINE:
         return <CheckCircleOutlined className={styles.online}/>;
       case DomainAvailability.OFFLINE:
-        return <DisconnectOutlined className={styles.offline}/>;
+        return <StopOutlined className={styles.offline}/>;
       case DomainAvailability.MAINTENANCE:
-        return <PauseCircleOutlined className={styles.maintenance}/>;
+        return <ToolOutlined className={styles.maintenance}/>;
       default:
         throw new Error("Unknown domain status: " + this.props.availability);
     }

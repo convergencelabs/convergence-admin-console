@@ -13,6 +13,14 @@
   color: red;
 }
 
+:global(.anticon).upgradeRequired {
+  color: orange;
+}
+
+:global(.anticon).upgrading {
+  color: #011b61;
+}
+
 :global(.anticon).ready {
   color: green;
 }

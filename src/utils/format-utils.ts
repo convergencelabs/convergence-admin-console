@@ -105,6 +105,10 @@ export function formatDomainStatus(status: DomainStatus): string {
       return "Deleting";
     case DomainStatus.READY:
       return "Ready";
+    case DomainStatus.SCHEMA_UPGRADE_REQUIRED:
+      return "Schema Upgrade Required";
+    case DomainStatus.SCHEMA_UPGRADING:
+      return "Schema Upgrading";
     default:
       throw new Error("Unknown domain status: " + status);
   }

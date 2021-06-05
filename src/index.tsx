@@ -23,6 +23,7 @@ import {namespaceService} from "./services/NamespaceService";
 import {userService} from "./services/UserService";
 import {roleService} from "./services/RoleService";
 import {authService} from "./services/AuthService";
+import {schemaService} from "./services/SchemaService";
 import {serverStatusService} from "./services/ServerStatusService";
 import {loggedInUserService} from "./services/LoggedInUserService";
 import {loggedInUserStore} from "./stores/LoggedInUserStore";
@@ -84,6 +85,7 @@ const services = {
   roleService,
   serverStatusService,
   apiKeyService,
+  schemaService,
 
   domainCollectionService,
   domainModelService,

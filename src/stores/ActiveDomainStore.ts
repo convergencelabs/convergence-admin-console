@@ -18,6 +18,7 @@ import {DomainDescriptor} from "../models/DomainDescriptor";
 import {DomainService} from "../services/DomainService";
 import {RestError} from "../services/RestError";
 import {DomainAvailability} from "../models/DomainAvailability";
+import {DomainStatus} from "../models/DomainStatus";
 
 export class ActiveDomainStore {
   private domainService: DomainService;
@@ -58,7 +59,7 @@ export class ActiveDomainStore {
     try {
       const domainDescriptor = await this.domainService.getDomain(domainId);
       this._setDomainDescriptor(domainDescriptor);
-      if (domainDescriptor.availability !== DomainAvailability.OFFLINE) {
+      if (domainDescriptor.status === DomainStatus.READY && domainDescriptor.availability !== DomainAvailability.OFFLINE) {
         const realtimeDomain = await this.connectRealtimeDomain(domainId);
         this._setRealtimeDomain(realtimeDomain)
       }

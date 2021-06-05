@@ -62,7 +62,8 @@ export class DomainService extends AbstractAuthenticatedService {
     const data = {availability};
     return this
         ._put<void>(`domains/${domainId.namespace}/${domainId.id}/availability`, data)
-        .then(() => {})
+        .then(() => {
+        })
   }
 
   public deleteDomain(domainId: DomainId): Promise<void> {
@@ -73,7 +74,8 @@ export class DomainService extends AbstractAuthenticatedService {
     const data = {id};
     return this
         ._put<void>(`domains/${domainId.namespace}/${domainId.id}/id`, data)
-        .then(() => {})
+        .then(() => {
+        })
   }
 
   public static _toDomainStatistics(data: DomainStatisticsData): DomainStatistics {
@@ -100,6 +102,11 @@ export class DomainService extends AbstractAuthenticatedService {
       case DomainStatus.DELETING:
         status = DomainStatus.DELETING;
         break;
+      case DomainStatus.SCHEMA_UPGRADE_REQUIRED:
+        status = DomainStatus.SCHEMA_UPGRADE_REQUIRED;
+        break;
+      case DomainStatus.SCHEMA_UPGRADING:
+        status = DomainStatus.SCHEMA_UPGRADING;
     }
 
     let availability: DomainAvailability = DomainAvailability.ONLINE;

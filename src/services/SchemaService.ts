@@ -9,15 +9,14 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-:global(.anticon).online {
-  color: green;
+import {AbstractAuthenticatedService} from "./AbstractAuthenticatedService";
+import {DomainId} from "../models/DomainId";
+
+export class SchemaService extends AbstractAuthenticatedService {
+  public upgradeDomain(domainId: DomainId): Promise<void> {
+    const url = `schema/domains/${domainId.namespace}/${domainId.id}/upgrade`;
+    return this._post<void>(url, {preRelease: false});
+  }
 }
 
-:global(.anticon).offline {
-  color: #585858;
-}
-
-:global(.anticon).maintenance {
-  color: #1b2195;
-}
-
+export const schemaService = new SchemaService();

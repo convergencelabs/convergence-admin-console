@@ -13,5 +13,7 @@ export enum DomainStatus {
   READY = "ready",
   INITIALIZING = "initializing",
   ERROR = "error",
-  DELETING = "deleting"
+  DELETING = "deleting",
+  SCHEMA_UPGRADE_REQUIRED = "schema-upgrade-required",
+  SCHEMA_UPGRADING = "schema-upgrading",
 }
