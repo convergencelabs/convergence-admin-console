@@ -10,7 +10,6 @@
  */
 
 import React, {Component, createRef, ReactNode} from "react";
-import {DomainId} from "../../../../models/DomainId";
 import {DomainService} from "../../../../services/DomainService";
 import {Button, Collapse, Form, FormInstance, Select} from "antd";
 import {DescriptionBox} from "../../../../components/common/DescriptionBox";
@@ -21,20 +20,19 @@ import {injectAs} from "../../../../utils/mobx-utils";
 import {STORES} from "../../../../stores/StoreConstants";
 import {ActiveDomainStore} from "../../../../stores/ActiveDomainStore";
 
-export interface DomainAvailabilityCardProps {
-  domainId: DomainId;
+export interface ChangeAvailabilityProps {
 }
 
-export interface InjectedProps extends DomainAvailabilityCardProps {
+export interface InjectedProps extends ChangeAvailabilityProps {
   domainService: DomainService;
   activeDomainStore: ActiveDomainStore;
 }
 
-export interface DomainAvailabilitySettingsState {
+export interface ChangeAvailabilityState {
   loaded: boolean;
 }
 
-class DomainAvailabilityCard extends Component<InjectedProps, DomainAvailabilitySettingsState> {
+class DomainAvailabilityCard extends Component<InjectedProps, ChangeAvailabilityState> {
   private _formRef = createRef<FormInstance>();
 
   constructor(props: InjectedProps) {
@@ -86,7 +84,7 @@ class DomainAvailabilityCard extends Component<InjectedProps, DomainAvailability
   }
 
   private _getAvailability(): void {
-    this.props.domainService.getDomain(this.props.domainId).then(d => {
+    this.props.domainService.getDomain(this.props.activeDomainStore.domainDescriptor!.domainId).then(d => {
       this._formRef.current!.setFieldsValue({availability: d.availability})
       this.setState({loaded: true});
     })
@@ -94,7 +92,7 @@ class DomainAvailabilityCard extends Component<InjectedProps, DomainAvailability
 
   private _onFinish = (values: any) => {
     const {availability} = values;
-    this.props.domainService.setDomainAvailability(this.props.domainId, availability)
+    this.props.domainService.setDomainAvailability(this.props.activeDomainStore.domainDescriptor!.domainId, availability)
         .then(() =>{
           return this.props.activeDomainStore.refreshDomainDescriptor();
         });
@@ -102,4 +100,4 @@ class DomainAvailabilityCard extends Component<InjectedProps, DomainAvailability
 }
 
 const injections = [SERVICES.DOMAIN_SERVICE, STORES.ACTIVE_DOMAIN_STORE];
-export const DomainAvailabilitySettings = injectAs<DomainAvailabilityCardProps>(injections, DomainAvailabilityCard);
+export const ChangeAvailability = injectAs<ChangeAvailabilityProps>(injections, DomainAvailabilityCard);

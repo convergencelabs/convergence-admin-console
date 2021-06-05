@@ -69,6 +69,13 @@ export class DomainService extends AbstractAuthenticatedService {
     return this._delete<void>(`domains/${domainId.namespace}/${domainId.id}`);
   }
 
+  public changeDomainId(domainId: DomainId, id: string) {
+    const data = {id};
+    return this
+        ._put<void>(`domains/${domainId.namespace}/${domainId.id}/id`, data)
+        .then(() => {})
+  }
+
   public static _toDomainStatistics(data: DomainStatisticsData): DomainStatistics {
     return new DomainStatistics(
         data.activeSessionCount,
