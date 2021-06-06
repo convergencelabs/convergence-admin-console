@@ -104,7 +104,7 @@ export class DomainCardComponent extends Component<InjectedProps, {}> {
           <Button type="primary"
                   className={styles.upgradeButton}
                   href={link}
-          >Upgrade Schema</Button>
+          >Upgrade Database</Button>
         </FormButtonBar>
     )
   }

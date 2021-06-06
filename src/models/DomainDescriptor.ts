@@ -18,7 +18,8 @@ export class DomainDescriptor {
               public displayName: string,
               public schemaVersion: string | null,
               public availability: DomainAvailability,
-              public status: DomainStatus
+              public status: DomainStatus,
+              public statusMessage: string
   ) {
     Object.freeze(this);
   }

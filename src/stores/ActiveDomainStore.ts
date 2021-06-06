@@ -115,7 +115,7 @@ export class ActiveDomainStore {
       clearTimeout(this._reloadTask);
     }
 
-    if (descriptor.availability === DomainAvailability.OFFLINE) {
+    if (descriptor.status !== DomainStatus.READY || descriptor.availability === DomainAvailability.OFFLINE) {
       if (this.domain !== null) {
         this.domain.dispose();
         this._setRealtimeDomain(null);

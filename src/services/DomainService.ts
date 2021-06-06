@@ -25,6 +25,7 @@ export interface DomainDescriptorData {
   schemaVersion?: string;
   availability: string;
   status: string;
+  statusMessage: string;
 }
 
 export class DomainService extends AbstractAuthenticatedService {
@@ -126,7 +127,8 @@ export class DomainService extends AbstractAuthenticatedService {
         data.displayName,
         data.schemaVersion || null,
         availability,
-        status!);
+        status!,
+        data.statusMessage);
   }
 }
 

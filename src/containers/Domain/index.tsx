@@ -11,7 +11,7 @@
 
 import * as React from 'react';
 import {ReactNode} from 'react';
-import {Route, RouteComponentProps, Switch} from 'react-router';
+import {Redirect, Route, RouteComponentProps, Switch} from 'react-router';
 import {DomainSideNavigation} from "../../components/";
 import {DomainDashboard} from "../../pages/domain/Dashboard/";
 import {DomainService} from "../../services/DomainService";
@@ -22,11 +22,8 @@ import {EditDomainCollection} from "../../pages/domain/collections/EditDomainCol
 import {DomainModels} from "../../pages/domain/models/DomainModels";
 import {CreateDomainModel} from "../../pages/domain/models/CreateDomainModel";
 import {EditDomainModel} from "../../pages/domain/models/EditDomainModel";
-import {injectObserver} from "../../utils/mobx-utils";
 import {ActiveDomainStore} from "../../stores/ActiveDomainStore";
 import {DomainId} from "../../models/DomainId";
-import {SERVICES} from "../../services/ServiceConstants";
-import {STORES} from "../../stores/StoreConstants";
 import {DomainUsers} from "../../pages/domain/users/DomainUsers";
 import {CreateDomainUser} from "../../pages/domain/users/CreateDomainUser";
 import {EditDomainUser} from "../../pages/domain/users/EditDomainUser";
@@ -52,6 +49,9 @@ import {ConfigStore} from "../../stores/ConfigStore";
 import {ViewChat} from "../../pages/domain/chats/ViewChat";
 import {DomainBanner} from "../../components/domain/Banner";
 import {UpgradeDomain} from "../../pages/domain/UpgradeDatabase";
+import {SERVICES} from "../../services/ServiceConstants";
+import {STORES} from "../../stores/StoreConstants";
+import {injectObserver} from "../../utils/mobx-utils";
 
 export interface DomainRouteParams {
   namespace: string;
@@ -95,80 +95,94 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
       return <DomainInitializing/>;
     } else if (domainDescriptor!.status === DomainStatus.DELETING) {
       return (<ErrorPage title="Domain Deleting" message="This domain can not be used because is being deleted."/>);
-    } else if (domainDescriptor!.status === DomainStatus.SCHEMA_UPGRADE_REQUIRED) {
-      return <UpgradeDomain domainId={domainDescriptor.domainId}/>;
+    } else if (domainDescriptor!.status === DomainStatus.SCHEMA_UPGRADE_REQUIRED || domainDescriptor!.status === DomainStatus.SCHEMA_UPGRADING) {
+      const domainId = domainDescriptor.domainId;
+      return (
+          <Switch>
+            <Route exact path={`${match.url}/upgrade`} render={() => <UpgradeDomain domainId={domainId}/>} />
+            <Route>
+              <Redirect to={`${match.url}/upgrade`}/>
+            </Route>
+          </Switch>
+      );
     } else {
       const domainId = domainDescriptor.domainId;
       return (
-          <React.Fragment>
-            <DomainBanner domainDescriptor={domainDescriptor}/>
-            <NavLayout sideNav={<DomainSideNavigation domainDescriptor={domainDescriptor}/>}>
-              <Switch>
-                <Route exact path={`${match.url}/`}
-                       render={(props) => <DomainDashboard {...props} domainId={domainId}/>}/>
-                <Route exact path={`${match.url}/dashboard`}
-                       render={(props) => <DomainDashboard {...props} domainId={domainId}/>}/>
-                <Route exact path={`${match.url}/users`}
-                       render={(props) => <DomainUsers {...props} domainId={domainId}/>}/>
-                <Route exact path={`${match.url}/users/:username`}
-                       render={(props) => <EditDomainUser {...props} domainId={domainId}/>}/>
-                <Route exact path={`${match.url}/users/:username/set-password`}
-                       render={(props) => <SetDomainUserPassword {...props} domainId={domainId}/>}/>
-                <Route exact path={`${match.url}/create-user`}
-                       render={(props) => <CreateDomainUser {...props} domainId={domainId}/>}/>
+          <Switch>
+            <Route exact path={`${match.url}/upgrade`} render={() => <UpgradeDomain domainId={domainId} />}/>
+            <Route>
+              <React.Fragment>
+                <DomainBanner domainDescriptor={domainDescriptor}/>
+                <NavLayout sideNav={<DomainSideNavigation domainDescriptor={domainDescriptor}/>}>
+                  <Switch>
+                    <Route exact path={`${match.url}/`}
+                           render={(props) => <DomainDashboard {...props} domainId={domainId}/>}/>
+                    <Route exact path={`${match.url}/dashboard`}
+                           render={(props) => <DomainDashboard {...props} domainId={domainId}/>}/>
+                    <Route exact path={`${match.url}/users`}
+                           render={(props) => <DomainUsers {...props} domainId={domainId}/>}/>
+                    <Route exact path={`${match.url}/users/:username`}
+                           render={(props) => <EditDomainUser {...props} domainId={domainId}/>}/>
+                    <Route exact path={`${match.url}/users/:username/set-password`}
+                           render={(props) => <SetDomainUserPassword {...props} domainId={domainId}/>}/>
+                    <Route exact path={`${match.url}/create-user`}
+                           render={(props) => <CreateDomainUser {...props} domainId={domainId}/>}/>
 
-                <Route exact path={`${match.url}/groups`}
-                       render={(props) => <DomainUserGroups {...props} domainId={domainId}/>}/>
-                <Route exact path={`${match.url}/groups/:id`}
-                       render={(props) => <EditDomainUserGroup {...props} domainId={domainId}/>}/>
-                <Route exact path={`${match.url}/create-group`}
-                       render={(props) => <CreateDomainUserGroup {...props} domainId={domainId}/>}/>
+                    <Route exact path={`${match.url}/groups`}
+                           render={(props) => <DomainUserGroups {...props} domainId={domainId}/>}/>
+                    <Route exact path={`${match.url}/groups/:id`}
+                           render={(props) => <EditDomainUserGroup {...props} domainId={domainId}/>}/>
+                    <Route exact path={`${match.url}/create-group`}
+                           render={(props) => <CreateDomainUserGroup {...props} domainId={domainId}/>}/>
 
-                <Route exact path={`${match.url}/sessions`}
-                       render={(props) => <DomainSessions {...props} domainId={domainId}/>}/>
+                    <Route exact path={`${match.url}/sessions`}
+                           render={(props) => <DomainSessions {...props} domainId={domainId}/>}/>
 
-                <Route exact path={`${match.url}/collections`}
-                       render={(props) => <DomainCollections {...props} domainId={domainId}/>}/>
-                <Route exact path={`${match.url}/collections/:id`}
-                       render={(props) => <EditDomainCollection {...props} domainId={domainId}/>}/>
-                <Route exact path={`${match.url}/create-collection`}
-                       render={(props) => <CreateDomainCollection {...props} domainId={domainId}/>}/>
+                    <Route exact path={`${match.url}/collections`}
+                           render={(props) => <DomainCollections {...props} domainId={domainId}/>}/>
+                    <Route exact path={`${match.url}/collections/:id`}
+                           render={(props) => <EditDomainCollection {...props} domainId={domainId}/>}/>
+                    <Route exact path={`${match.url}/create-collection`}
+                           render={(props) => <CreateDomainCollection {...props} domainId={domainId}/>}/>
 
-                <Route exact path={`${match.url}/models`}
-                       render={(props) => <DomainModels {...props} domainId={domainId}/>}/>
-                <Route exact path={`${match.url}/models/:id`}
-                       render={(props) => <EditDomainModel {...props} domainId={domainId}/>}/>
-                <Route exact path={`${match.url}/models/:id/:tab`}
-                       render={(props) => <EditDomainModel {...props} domainId={domainId}/>}/>
-                <Route exact path={`${match.url}/create-model`}
-                       render={(props) => <CreateDomainModel {...props} domainId={domainId}/>}/>
+                    <Route exact path={`${match.url}/models`}
+                           render={(props) => <DomainModels {...props} domainId={domainId}/>}/>
+                    <Route exact path={`${match.url}/models/:id`}
+                           render={(props) => <EditDomainModel {...props} domainId={domainId}/>}/>
+                    <Route exact path={`${match.url}/models/:id/:tab`}
+                           render={(props) => <EditDomainModel {...props} domainId={domainId}/>}/>
+                    <Route exact path={`${match.url}/create-model`}
+                           render={(props) => <CreateDomainModel {...props} domainId={domainId}/>}/>
 
-                <Route exact path={`${match.url}/chats`}
-                       render={(props) => <DomainChats {...props} domainId={domainId}/>}/>
-                <Route exact path={`${match.url}/chats/:id`}
-                       render={(props) => <ViewChat {...props} domainId={domainId}/>}/>
-                <Route exact path={`${match.url}/chats/:id/edit`}
-                       render={(props) => <EditDomainChat {...props} domainId={domainId}/>}/>
-                <Route exact path={`${match.url}/create-chat`}
-                       render={(props) => <CreateDomainChat {...props} domainId={domainId}/>}/>
+                    <Route exact path={`${match.url}/chats`}
+                           render={(props) => <DomainChats {...props} domainId={domainId}/>}/>
+                    <Route exact path={`${match.url}/chats/:id`}
+                           render={(props) => <ViewChat {...props} domainId={domainId}/>}/>
+                    <Route exact path={`${match.url}/chats/:id/edit`}
+                           render={(props) => <EditDomainChat {...props} domainId={domainId}/>}/>
+                    <Route exact path={`${match.url}/create-chat`}
+                           render={(props) => <CreateDomainChat {...props} domainId={domainId}/>}/>
 
-                <Route exact path={`${match.url}/authentication/:tab/`}
-                       render={(props) => <DomainAuthentication {...props} domainId={domainId}/>}/>
-                <Route exact path={`${match.url}/authentication/`}
-                       render={(props) => <DomainAuthentication {...props} domainId={domainId}/>}/>
-                <Route exact path={`${match.url}/authentication/jwt/create-jwt-key`}
-                       render={(props) => <CreateDomainJwtKey {...props} domainId={domainId}/>}/>
-                <Route exact path={`${match.url}/authentication/jwt/:id`}
-                       render={(props) => <EditDomainJwtKey {...props} domainId={domainId}/>}/>
+                    <Route exact path={`${match.url}/authentication/:tab/`}
+                           render={(props) => <DomainAuthentication {...props} domainId={domainId}/>}/>
+                    <Route exact path={`${match.url}/authentication/`}
+                           render={(props) => <DomainAuthentication {...props} domainId={domainId}/>}/>
+                    <Route exact path={`${match.url}/authentication/jwt/create-jwt-key`}
+                           render={(props) => <CreateDomainJwtKey {...props} domainId={domainId}/>}/>
+                    <Route exact path={`${match.url}/authentication/jwt/:id`}
+                           render={(props) => <EditDomainJwtKey {...props} domainId={domainId}/>}/>
 
-                <Route exact path={`${match.url}/settings`}
-                       render={(props) => <DomainSettings {...props} domainId={domainId}/>}/>
-                <Route exact path={`${match.url}/settings/:tab`}
-                       render={(props) => <DomainSettings {...props} domainId={domainId}/>}/>
-                <Route component={PageNotFound}/>
-              </Switch>
-            </NavLayout>
-          </React.Fragment>
+                    <Route exact path={`${match.url}/settings`}
+                           render={(props) => <DomainSettings {...props} domainId={domainId}/>}/>
+                    <Route exact path={`${match.url}/settings/:tab`}
+                           render={(props) => <DomainSettings {...props} domainId={domainId}/>}/>
+
+                    <Route component={PageNotFound}/>
+                  </Switch>
+                </NavLayout>
+              </React.Fragment>
+            </Route>
+          </Switch>
       );
     }
   }
