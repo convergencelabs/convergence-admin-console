@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 - Convergence Labs, Inc.
+ * Copyright (c) 2021 - Convergence Labs, Inc.
  *
  * This file is part of the Convergence Server, which is released under
  * the terms of the GNU General Public License version 3 (GPLv3). A copy
@@ -62,7 +62,7 @@ class UpgradeDomainComponent extends React.Component<InjectedProps, UpgradeDomai
 
     let component;
 
-    if (status === DomainStatus.READY) {
+    if (status === DomainStatus.READY && this.state.initiated) {
       component = this._renderDone();
     } else if (status === DomainStatus.SCHEMA_UPGRADE_REQUIRED && !this.state.initiated) {
       component = this._renderConfirmUpgrade();
@@ -71,7 +71,7 @@ class UpgradeDomainComponent extends React.Component<InjectedProps, UpgradeDomai
     } else if (status === DomainStatus.ERROR) {
       component = this._renderError()
     } else {
-      return <Redirect to={toDomainRoute(domainDescriptor.domainId, "/")}/>
+      return <Redirect to={toDomainRoute(domainDescriptor.domainId, "")}/>
     }
 
     return (
