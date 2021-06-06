@@ -86,7 +86,8 @@ class ModelDropdownMenuComponent extends React.Component<InjectedProps, {}> {
     confirm({
       title: 'Delete Model?',
       content: 'Are you sure you want to delete this model?',
-      okType: 'danger',
+      okType: 'primary',
+      okButtonProps: {danger: true},
       onOk: () => {
         this.props.onDeleteConfirm(this.props.id);
       }
