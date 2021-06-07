@@ -16,6 +16,9 @@ import {localStorageService} from "../services/LocalStorageService";
 // We will check for logout 30 seconds before the token expires.
 const SESSION_CHECK_PADDING = 30 * 1000;
 
+// The max time between checks will be 1 hours.
+const MAX_SESSION_CHECK_TIMEOUT = 60 * 60 * 1000
+
 export class AuthStore {
   public authenticated: boolean = false;
   public timedOut: boolean = false;
@@ -70,7 +73,8 @@ export class AuthStore {
           if (remaining <= 0) {
             this.timeOut();
           } else {
-            this._validationTimeout = setTimeout(() => this._logoutCheck(), remaining);
+            const timeoutMillis = Math.min(MAX_SESSION_CHECK_TIMEOUT, remaining);
+            this._validationTimeout = setTimeout(() => this._logoutCheck(), timeoutMillis);
           }
         }
       });
