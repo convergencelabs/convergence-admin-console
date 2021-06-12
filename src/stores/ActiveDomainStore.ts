@@ -19,10 +19,12 @@ import {DomainService} from "../services/DomainService";
 import {RestError} from "../services/RestError";
 import {DomainAvailability} from "../models/DomainAvailability";
 import {DomainStatus} from "../models/DomainStatus";
+import {DomainStatistics} from "../models/domain/DomainStatistics";
 
 export class ActiveDomainStore {
   private domainService: DomainService;
   public domain: ConvergenceDomain | null = null;
+  public domainStats: DomainStatistics | null = null;
   public domainDescriptor: DomainDescriptor | null = null;
   public error: string | null = null;
   private _reloadTask: any;
@@ -36,7 +38,8 @@ export class ActiveDomainStore {
       activateDomain: action,
       deactivate: action,
       _setRealtimeDomain: action,
-      _setDomainDescriptor: action
+      _setDomainDescriptor: action,
+      _setDomainStats: action
     });
   }
 
@@ -45,7 +48,16 @@ export class ActiveDomainStore {
       return Promise.reject("Can not refresh the domain if the domain is not set.")
     }
     return this.domainService.getDomain(this.domainDescriptor.domainId).then(d => {
-      this._setDomainDescriptor(d);
+      return this._setDomainDescriptor(d);
+    });
+  }
+
+  private refreshDomainStats(): Promise<void> {
+    if (this.domainDescriptor === null) {
+      return Promise.reject("Can not refresh the domain stats the domain is not set.")
+    }
+    return this.domainService.getDomainStats(this.domainDescriptor.domainId).then(d => {
+      return this._setDomainStats(d);
     });
   }
 
@@ -58,11 +70,9 @@ export class ActiveDomainStore {
 
     try {
       const domainDescriptor = await this.domainService.getDomain(domainId);
-      this._setDomainDescriptor(domainDescriptor);
-      if (domainDescriptor.status === DomainStatus.READY && domainDescriptor.availability !== DomainAvailability.OFFLINE) {
-        const realtimeDomain = await this.connectRealtimeDomain(domainId);
-        this._setRealtimeDomain(realtimeDomain)
-      }
+      const domainStats = await this.domainService.getDomainStats(domainId);
+      this._setDomainStats(domainStats);
+      return this._setDomainDescriptor(domainDescriptor);
     } catch (err) {
       this.error = "Unknown error loading domain.";
       if (err instanceof RestError) {
@@ -92,6 +102,7 @@ export class ActiveDomainStore {
   }
 
   private connectRealtimeDomain(domainId: DomainId): Promise<ConvergenceDomain> {
+    console.log("connectRealtimeDomain")
     return domainConvergenceJwtService
         .getJwt(domainId)
         .then((jwt) => {
@@ -109,22 +120,35 @@ export class ActiveDomainStore {
     this.domain = domain
   }
 
-  public _setDomainDescriptor(descriptor: DomainDescriptor): void {
+  public _setDomainStats(stats: DomainStatistics): void {
+    this.domainStats  = stats
+  }
+
+  public  _setDomainDescriptor(descriptor: DomainDescriptor): Promise<void> {
     this.domainDescriptor = descriptor;
     if (this._reloadTask !== null) {
       clearTimeout(this._reloadTask);
     }
 
+    this._reloadTask = setTimeout(() => {
+      this.refreshDomainDescriptor();
+      this.refreshDomainStats();
+    }, 5000);
+
     if (descriptor.status !== DomainStatus.READY || descriptor.availability === DomainAvailability.OFFLINE) {
       if (this.domain !== null) {
         this.domain.dispose();
         this._setRealtimeDomain(null);
+        return Promise.resolve();
+      } else {
+        return Promise.resolve()
       }
     } else if (this.domain === null) {
-      this.connectRealtimeDomain(this.domainDescriptor.domainId).then(domain => {
+      return this.connectRealtimeDomain(this.domainDescriptor.domainId).then(domain => {
         this._setRealtimeDomain(domain);
       });
+    }  else {
+      return Promise.resolve()
     }
-    this._reloadTask = setTimeout(() => this.refreshDomainDescriptor(), 5000);
   }
 }
