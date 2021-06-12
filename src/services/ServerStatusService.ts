@@ -15,6 +15,9 @@ import {ServerStatus} from "../models/ServerStatus";
 
 
 export class ServerStatusService extends AbstractAuthenticatedService {
+  public getHealth(): Promise<void> {
+    return this._get<void>("health").then(() => undefined);
+  }
   public getStatus(): Promise<ServerStatus> {
     return this
       ._get<ServerStatusData>("status")

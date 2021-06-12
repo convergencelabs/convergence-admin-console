@@ -35,7 +35,7 @@ export interface InjectedProps extends RouteComponentProps<{}, StaticContext, Lo
   authStore: AuthStore;
   authService: AuthService;
   loggedInUserService: LoggedInUserService;
-  profileStore: LoggedInUserStore;
+  loggedInUserStore: LoggedInUserStore;
 }
 
 export interface LoginFormState {
@@ -61,7 +61,7 @@ class NormalLoginForm extends Component<InjectedProps, LoginFormState> {
           return this.props.loggedInUserService.getLoggedInUser();
         })
         .then((profile) => {
-          this.props.profileStore.setLoggedInUser(profile);
+          this.props.loggedInUserStore.setLoggedInUser(profile);
           this.setState({
             redirectToReferrer: true,
             errorMessage: null

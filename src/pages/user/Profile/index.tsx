@@ -18,7 +18,7 @@ import {ProfileForm} from "./ProfileForm";
 import {ChangePasswordForm} from "./ChangePasswordForm";
 
 interface InjectedProps {
-  profileStore: LoggedInUserStore;
+  loggedInUserStore: LoggedInUserStore;
 }
 
 class ProfilePageComponent extends React.Component<InjectedProps, {}> {
@@ -29,7 +29,7 @@ class ProfilePageComponent extends React.Component<InjectedProps, {}> {
   public render(): ReactNode {
     return (
       <Page breadcrumbs={this._breadcrumbs}>
-        <ProfileForm username={this.props.profileStore.loggedInUser!.username}/>
+        <ProfileForm username={this.props.loggedInUserStore.loggedInUser!.username}/>
         <ChangePasswordForm/>
       </Page>
     );

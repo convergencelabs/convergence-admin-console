@@ -18,7 +18,7 @@ import {ApiKeys} from "./ApiKeys";
 import {RouteComponentProps} from "react-router";
 
 interface InjectedProps extends RouteComponentProps {
-  profileStore: LoggedInUserStore;
+  loggedInUserStore: LoggedInUserStore;
 }
 
 class AccountSettingsComponent extends React.Component<InjectedProps, {}> {

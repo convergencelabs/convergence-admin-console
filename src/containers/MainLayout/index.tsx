@@ -22,10 +22,13 @@ import {injectObserver} from "../../utils/mobx-utils";
 import {ConfigStore} from "../../stores/ConfigStore";
 import {ConfigService} from "../../services/ConfigService";
 import styles from './style.module.css';
+import {ServerStatusStore} from "../../stores/ServerStatusStore";
+import {OfflineOverlay} from "../../components/common/OfflineOverlay";
 
 export interface InjectedProps extends RouteComponentProps {
   configStore: ConfigStore;
   configService: ConfigService;
+  serverStatusStore: ServerStatusStore;
 }
 
 export class MainLayoutComponent extends React.Component<InjectedProps, {}> {
@@ -44,6 +47,7 @@ export class MainLayoutComponent extends React.Component<InjectedProps, {}> {
   public render(): ReactNode {
     return this.props.configStore.configLoaded ? (
       <div className={styles.mainLayout}>
+        <OfflineOverlay online={this.props.serverStatusStore.online} secondsUntilNextTry={this.props.serverStatusStore.secondsUntilNextCheck} />
         <Layout>
           <AppHeader/>
           <AppBreadcrumbs/>
@@ -58,5 +62,5 @@ export class MainLayoutComponent extends React.Component<InjectedProps, {}> {
 }
 
 
-const injections = [STORES.CONFIG_STORE, SERVICES.CONFIG_SERVICE];
+const injections = [STORES.CONFIG_STORE, SERVICES.CONFIG_SERVICE, STORES.SERVER_STATUS_STORE];
 export const MainLayout = injectObserver<RouteComponentProps>(injections, MainLayoutComponent);

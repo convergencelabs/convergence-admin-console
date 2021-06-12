@@ -9,22 +9,22 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-.maintenance, .offline, .error {
-    font-size: 14px;
+.overlay {
+    position: absolute;
+    z-index: 1000;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: rgba(0, 0, 0, .3);
+}
+
+.banner {
+    background: #e58107;
+    font-size: 16px;
     font-weight: bold;
     color: white;
-    padding: 2px;
+    padding: 10px;
     text-align: center;
 }
 
-.maintenance {
-    background: #005c80;
-}
-
-.offline {
-    background: #e58107;
-}
-
-.error {
-    background: #71363a;
-}

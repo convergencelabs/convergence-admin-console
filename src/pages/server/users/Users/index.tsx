@@ -39,7 +39,7 @@ import {Link} from "react-router-dom";
 
 interface InjectedProps extends RouteComponentProps {
   userService: UserService;
-  profileStore: LoggedInUserStore;
+  loggedInUserStore: LoggedInUserStore;
 }
 
 export interface ServerUsersState {
@@ -175,7 +175,7 @@ class ServerUsersComponent extends React.Component<InjectedProps, ServerUsersSta
   }
 
   private _renderActions = (value: ConvergenceUser, record: any) => {
-    const profile = this.props.profileStore.loggedInUser;
+    const profile = this.props.loggedInUserStore.loggedInUser;
     const deleteDisabled = profile!.username === record.username;
     const deleteButton = <Button shape="circle" size="small" htmlType="button" disabled={deleteDisabled}><DeleteOutlined /></Button>;
 

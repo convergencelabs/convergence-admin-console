@@ -89,9 +89,8 @@ export class ActiveDomainStore {
 
   public deactivate(): void {
     if (this.domain !== null) {
-      if (this.domain.session().isConnected()) {
-        this.domain.dispose();
-      }
+        this.domain.dispose()
+            .catch((e: any) => console.error("Error disposing ConvergenceDomain", e));
     }
     this.domain = null;
     this.domainDescriptor = null;
@@ -102,17 +101,11 @@ export class ActiveDomainStore {
   }
 
   private connectRealtimeDomain(domainId: DomainId): Promise<ConvergenceDomain> {
-    console.log("connectRealtimeDomain")
     return domainConvergenceJwtService
         .getJwt(domainId)
         .then((jwt) => {
           const url = domainRealtimeUrl(domainId);
           return Convergence.connectWithJwt(url, jwt);
-        }).then(d => {
-          d.on(ConvergenceDomain.Events.DISCONNECTED, () => {
-            console.log("disconnected");
-          })
-          return d;
         });
   }
 
@@ -131,13 +124,13 @@ export class ActiveDomainStore {
     }
 
     this._reloadTask = setTimeout(() => {
-      this.refreshDomainDescriptor();
-      this.refreshDomainStats();
+      this.refreshDomainDescriptor().catch(e => console.error(e));
+      this.refreshDomainStats().catch(e => console.error(e));
     }, 5000);
 
     if (descriptor.status !== DomainStatus.READY || descriptor.availability === DomainAvailability.OFFLINE) {
       if (this.domain !== null) {
-        this.domain.dispose();
+        this.domain.dispose().catch(e => console.error(e));
         this._setRealtimeDomain(null);
         return Promise.resolve();
       } else {

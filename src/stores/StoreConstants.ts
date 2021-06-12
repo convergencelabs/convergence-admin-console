@@ -11,10 +11,11 @@
 
 export const STORES = {
   AUTH_STORE: "authStore",
-  PROFILE_STORE: "profileStore",
+  PROFILE_STORE: "loggedInUserStore",
   ACTIVE_DOMAIN_STORE: "activeDomainStore",
   CONFIG_STORE: "configStore",
   BREADCRUMBS_STORE: "breadcrumbsStore",
+  SERVER_STATUS_STORE: "serverStatusStore"
 }
 
 Object.freeze(STORES);

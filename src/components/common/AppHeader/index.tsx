@@ -31,7 +31,7 @@ import {Link} from "react-router-dom";
 import md5 from "md5";
 
 interface InjectedProps {
-  profileStore: LoggedInUserStore;
+  loggedInUserStore: LoggedInUserStore;
 }
 
 class AppHeaderComponent extends React.Component<InjectedProps, {}> {
@@ -55,7 +55,7 @@ class AppHeaderComponent extends React.Component<InjectedProps, {}> {
   );
 
   public render(): ReactNode {
-    const {displayName, email} = this.props.profileStore.loggedInUser!;
+    const {displayName, email} = this.props.loggedInUserStore.loggedInUser!;
     const emailHash = md5(email);
     return (
       <Layout.Header className={styles.header}>

@@ -33,7 +33,7 @@ export interface CreateDomainState {
 }
 
 interface InjectedProps extends RouteComponentProps {
-  profileStore: LoggedInUserStore;
+  loggedInUserStore: LoggedInUserStore;
   domainService: DomainService;
   configStore: ConfigStore;
 }
@@ -140,7 +140,7 @@ class CreateDomainComponent extends React.Component<InjectedProps, CreateDomainS
 
     if (this.props.configStore.namespacesEnabled) {
       ns = namespaceType === USER ?
-          "~" + this.props.profileStore.loggedInUser!.username :
+          "~" + this.props.loggedInUserStore.loggedInUser!.username :
           namespace;
     } else {
       ns = this.props.configStore.defaultNamespace;

@@ -39,6 +39,7 @@ import {domainSessionService} from "./services/domain/DomainSessionService";
 import {domainChatService} from "./services/domain/DomainChatService";
 import {ActiveDomainStore} from "./stores/ActiveDomainStore";
 import {breadcrumbsStore} from "./stores/BreacrumsStore";
+import {serverStatusStore} from "./stores/ServerStatusStore";
 import {message, notification} from "antd";
 import {configure} from "mobx";
 
@@ -67,12 +68,12 @@ const activeDomainStore = new ActiveDomainStore(domainService)
 
 const stores = {
   authStore,
-  profileStore: loggedInUserStore,
+  loggedInUserStore,
   domainStore,
   configStore,
   breadcrumbsStore,
-
-  activeDomainStore
+  activeDomainStore,
+  serverStatusStore
 };
 
 const services = {
