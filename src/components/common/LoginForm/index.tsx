@@ -23,6 +23,7 @@ import {STORES} from "../../../stores/StoreConstants";
 import {SERVICES} from "../../../services/ServiceConstants";
 import {LoggedInUserService} from "../../../services/LoggedInUserService";
 import {LoggedInUserStore} from "../../../stores/LoggedInUserStore";
+import {RestError} from "../../../services/RestError";
 
 export interface LoginFormLocation {
   from: {
@@ -68,10 +69,18 @@ class NormalLoginForm extends Component<InjectedProps, LoginFormState> {
           });
         })
         .catch(err => {
-          console.log(err);
-          this.setState({
-            errorMessage: "Invalid credentials"
-          })
+          if (err instanceof RestError) {
+            if (err.code === "unauthorized") {
+              this.setState({
+                errorMessage: "Invalid credentials"
+              });
+            }
+          } else {
+            console.error(err);
+            this.setState({
+              errorMessage: "Error logging in to the server"
+            });
+          }
         });
   }
 
