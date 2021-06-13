@@ -28,7 +28,7 @@ export class SessionTableControls extends React.Component<SessionTableControlsPr
 
   public render(): ReactNode {
     return (
-        <Form layout="vertical">
+        <Form layout="vertical" onFinish={this._onFinish}>
           <div className={styles.toolbar}>
             <Row gutter={16}>
               <Col span={6}>
@@ -75,10 +75,10 @@ export class SessionTableControls extends React.Component<SessionTableControlsPr
               <Col span={2}>
                 <div className={styles.filter}>
                   <Form.Item label="&nbsp;">
-                    <Button htmlType="button"
+                    <Button htmlType="submit"
                             type="primary"
                             className={styles.button}
-                            onClick={this._handleSubmit}>Filter</Button>
+                            >Filter</Button>
                   </Form.Item>
                 </div>
               </Col>
@@ -88,7 +88,7 @@ export class SessionTableControls extends React.Component<SessionTableControlsPr
     );
   }
 
-  private _handleSubmit = (values: any) => {
+  private _onFinish = (values: any) => {
     const {sessionId, username, remoteHost, authMethod} = values;
     this.props.onFilter({sessionId, username, remoteHost, authMethod});
   }

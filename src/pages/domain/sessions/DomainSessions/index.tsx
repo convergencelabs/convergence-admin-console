@@ -187,7 +187,9 @@ class DomainSessionsComponent extends React.Component<InjectedProps, DomainSessi
   }
 
   private _loadSessions = () => {
-    const {promise, subscription} = makeCancelable(this.props.domainSessionService.getSessions(this.props.domainId, this.state.filter));
+    const {promise, subscription} = makeCancelable(
+      this.props.domainSessionService.getSessions(this.props.domainId, this.state.filter)
+    );
     this._sessionsSubscription = subscription;
     promise.then(sessions => {
       this._sessionsSubscription = null;
