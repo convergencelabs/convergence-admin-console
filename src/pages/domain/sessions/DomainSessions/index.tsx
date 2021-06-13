@@ -119,7 +119,7 @@ class DomainSessionsComponent extends React.Component<InjectedProps, DomainSessi
 
   }
 
-  private _expander = (session: DomainSession, index: number, indent: number, expanded: boolean) => {
+  private _expander = (session: DomainSession) => {
     return (
       <div className={styles.expander}>
         <table>

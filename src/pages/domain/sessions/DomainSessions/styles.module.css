@@ -22,13 +22,28 @@
 }
 
 .expander {
-  padding-left: 20px;
+  border: 1px solid lightgray;
+  margin: 0 20px;
 }
 
 .expander tr {
   border-bottom: 1px solid lightgray;
 }
 
-.expander td {
+.expander tr:nth-child(odd) {
+  background: white;
+}
+
+.expander tr td {
   padding: 2px 6px;
+  border-bottom: 1px solid lightgray;
+}
+
+.expander tr:last-child td {
+  border-bottom: none;
+}
+
+.expander tr td:first-child {
+  font-weight: bold;
+  border-right: 1px solid lightgray;
 }
