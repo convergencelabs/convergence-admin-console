@@ -15,14 +15,13 @@ import Tooltip from "antd/es/tooltip";
 import {
   BlockOutlined,
   DeleteOutlined,
-  EditOutlined,
   EyeOutlined,
   PlusCircleOutlined,
   QuestionCircleOutlined,
   ReloadOutlined,
   SearchOutlined,
 } from '@ant-design/icons';
-import {Button, Card, Input, Popconfirm, Table, TablePaginationConfig} from "antd";
+import {Button, Card, Input, notification, Popconfirm, Table, TablePaginationConfig} from "antd";
 import {CardTitleToolbar} from "../../../../components/common/CardTitleToolbar/";
 import {RouteComponentProps} from "react-router";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
@@ -73,12 +72,13 @@ class DomainActivitiesComponent extends React.Component<InjectedProps, DomainAct
       dataIndex: 'activityId',
       sorter: (a: ActivityInfo, b: ActivityInfo) => a.activityId.localeCompare(b.activityId),
       render: (text: string, record: ActivityInfo) =>
-        <Link to={toDomainRoute(this.props.domainId, `activities/${encodeURIComponent(record.activityType)}/${encodeURIComponent(record.activityId)}`)}>{text}</Link>
+        <Link
+          to={toDomainRoute(this.props.domainId, `activities/${encodeURIComponent(record.activityType)}/${encodeURIComponent(record.activityId)}`)}>{text}</Link>
     }, {
       title: 'Type',
       dataIndex: 'activityType',
       sorter: (a: ActivityInfo, b: ActivityInfo) => a.activityType.localeCompare(b.activityType)
-    },  {
+    }, {
       title: 'Ephemeral',
       dataIndex: 'ephemeral',
       render: (ephemeral: boolean) => yesNo(ephemeral)
@@ -144,7 +144,7 @@ class DomainActivitiesComponent extends React.Component<InjectedProps, DomainAct
         <Card title={this._renderToolbar()}>
           <Table className={styles.userTable}
                  size="middle"
-                 rowKey={act => `${act.activityType}/${act.activityId}` }
+                 rowKey={act => `${act.activityType}/${act.activityId}`}
                  columns={this._activityTableColumns}
                  dataSource={this.state.activities.data}
                  pagination={pagination}
@@ -156,12 +156,12 @@ class DomainActivitiesComponent extends React.Component<InjectedProps, DomainAct
 
   private _renderToolbar(): ReactNode {
     return (
-      <CardTitleToolbar title="Activities" icon={<BlockOutlined />}>
+      <CardTitleToolbar title="Activities" icon={<BlockOutlined/>}>
         <span className={styles.search}>
-          <Input placeholder="Search by Id" addonAfter={<SearchOutlined />} onKeyUp={this._onFilterChange}/>
+          <Input placeholder="Search by Id" addonAfter={<SearchOutlined/>} onKeyUp={this._onFilterChange}/>
         </span>
-        <ToolbarButton icon={<PlusCircleOutlined />} tooltip="Create Activity" onClick={this._goToCreate}/>
-        <ToolbarButton icon={<ReloadOutlined />} tooltip="Reload Activities" onClick={this._loadActivities}/>
+        <ToolbarButton icon={<PlusCircleOutlined/>} tooltip="Create Activity" onClick={this._goToCreate}/>
+        <ToolbarButton icon={<ReloadOutlined/>} tooltip="Reload Activities" onClick={this._loadActivities}/>
       </CardTitleToolbar>
     );
   }
@@ -175,24 +175,20 @@ class DomainActivitiesComponent extends React.Component<InjectedProps, DomainAct
     return (
       <span className={styles.actions}>
         <Tooltip placement="topRight" title="View Activity" mouseEnterDelay={1}>
-          <Link to={toDomainRoute(this.props.domainId, `activities/${encodeURIComponent(record.activityType)}/${encodeURIComponent(record.activityId)}}`)}>
-            <Button shape="circle" size="small" htmlType="button" icon={<EyeOutlined />}/>
+          <Link
+            to={toDomainRoute(this.props.domainId, `activities/${encodeURIComponent(record.activityType)}/${encodeURIComponent(record.activityId)}`)}>
+            <Button shape="circle" size="small" htmlType="button" icon={<EyeOutlined/>}/>
           </Link>
         </Tooltip>
-        <Tooltip placement="topRight" title="Edit Activity" mouseEnterDelay={1}>
-          <Link to={toDomainRoute(this.props.domainId, `activities/${encodeURIComponent(record.activityType)}/${encodeURIComponent(record.activityId)}/edit`)}>
-            <Button shape="circle" size="small" htmlType="button" icon={<EditOutlined />}/>
-          </Link>
-        </Tooltip>
-         <Popconfirm title="Are you sure delete this activity?"
-                     placement="topRight"
-                     onConfirm={() => this._onDeleteActivity(record.activityType, record.activityId)}
-                     okText="Yes"
-                     cancelText="No"
-                     icon={<QuestionCircleOutlined style={{color: 'red'}} />}
-         >
-        <Tooltip placement="topRight" title="Delete Chat" mouseEnterDelay={2}>
-          <Button shape="circle" size="small" htmlType="button"><DeleteOutlined /></Button>
+        <Popconfirm title="Are you sure delete this activity?"
+                    placement="topRight"
+                    onConfirm={() => this._onDeleteActivity(record.activityType, record.activityId)}
+                    okText="Yes"
+                    cancelText="No"
+                    icon={<QuestionCircleOutlined style={{color: 'red'}}/>}
+        >
+        <Tooltip placement="topRight" title="Delete Activity" mouseEnterDelay={2}>
+          <Button shape="circle" size="small" htmlType="button"><DeleteOutlined/></Button>
         </Tooltip>
       </Popconfirm>
     </span>
@@ -200,20 +196,20 @@ class DomainActivitiesComponent extends React.Component<InjectedProps, DomainAct
   }
 
   private _onDeleteActivity = (activityType: string, activityId: string) => {
-    // this.props.domainActivityService.deleteChat(this.props.domainId, chatId)
-    //   .then(() => {
-    //     this._loadChats();
-    //     notification.success({
-    //       message: 'Chat Deleted',
-    //       description: `The chat '${chatId}' was deleted.`,
-    //     });
-    //   })
-    //   .catch(() => {
-    //     notification.error({
-    //       message: 'Could Not Delete Chat',
-    //       description: `The chat could not be deleted.`,
-    //     });
-    //   });
+    this.props.domainActivityService.deleteActivity(this.props.domainId, activityType, activityId)
+      .then(() => {
+        this._loadActivities();
+        notification.success({
+          message: 'Activity Deleted',
+          description: `The activity '${activityId}' was deleted.`,
+        });
+      })
+      .catch(() => {
+        notification.error({
+          message: 'Could Not Delete Activity',
+          description: `The activity could not be deleted.`,
+        });
+      });
   }
 
   private _loadActivities = () => {
@@ -222,7 +218,10 @@ class DomainActivitiesComponent extends React.Component<InjectedProps, DomainAct
     const type = this.state.searchParams.type !== "" ? this.state.searchParams.type : undefined;
     const offset = this.state.searchParams.page === undefined ? 0 : ((this.state.searchParams.page - 1) * this.state.searchParams.pageSize);
     const pageSize = this.state.searchParams.pageSize;
-    const {promise, subscription} = makeCancelable(this.props.domainActivityService.getActivities(domainId, type, id, offset, pageSize));
+    const {
+      promise,
+      subscription
+    } = makeCancelable(this.props.domainActivityService.getActivities(domainId, type, id, offset, pageSize));
     this._activitiesSubscription = subscription;
     promise.then(activities => {
       this._activitiesSubscription = null;
