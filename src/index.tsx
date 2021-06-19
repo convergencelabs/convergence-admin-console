@@ -35,6 +35,7 @@ import {domainGroupService} from "./services/domain/DomainGroupService";
 import {domainJwtKeyService} from "./services/domain/DomainJwtKeyService";
 import {domainConfigService} from "./services/domain/DomainConfigService";
 import {domainMemberService} from "./services/domain/DomainMemberService";
+import {domainActivityService} from "./services/domain/DomainActivityService";
 import {domainSessionService} from "./services/domain/DomainSessionService";
 import {domainChatService} from "./services/domain/DomainChatService";
 import {ActiveDomainStore} from "./stores/ActiveDomainStore";
@@ -96,7 +97,8 @@ const services = {
   domainConfigService,
   domainMemberService,
   domainSessionService,
-  domainChatService
+  domainChatService,
+  domainActivityService
 };
 
 const authToken = localStorageService.getAuthToken();

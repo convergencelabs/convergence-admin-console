@@ -31,6 +31,7 @@ export const SERVICES = {
   DOMAIN_MEMBER_SERVICE: "domainMemberService",
   DOMAIN_SESSION_SERVICE: "domainSessionService",
   DOMAIN_CHAT_SERVICE: "domainChatService",
+  DOMAIN_ACTIVITY_SERVICE: "domainActivityService"
 }
 
 Object.freeze(SERVICES);

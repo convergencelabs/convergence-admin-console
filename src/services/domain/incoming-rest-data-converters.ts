@@ -11,6 +11,7 @@
 
 import {Collection} from "../../models/domain/Collection";
 import {
+  ActivityData,
   ChatInfoData,
   CollectionData,
   CollectionPermissionsData,
@@ -56,6 +57,7 @@ import {
 } from "../../models/domain/ChatEvent";
 import {ConvergenceError} from "@convergence/convergence";
 import {CollectionUserPermissions} from "../../models/domain/CollectionUserPermissions";
+import {ActivityInfo} from "../../models/domain/ActivityInfo";
 
 export function toCollection(data: CollectionData): Collection {
   const userPermissions = Object.keys(data.userPermissions).map(username => {
@@ -272,4 +274,13 @@ export function toChatEvent(event: any): ChatEvent {
     default:
       throw new ConvergenceError(`Invalid chat event type: ${event.type}`);
   }
+}
+
+export function toActivityInfo(data: ActivityData): ActivityInfo {
+  return new ActivityInfo(
+    data.activityType,
+    data.activityId,
+    data.ephemeral,
+    new Date(data.created)
+  );
 }

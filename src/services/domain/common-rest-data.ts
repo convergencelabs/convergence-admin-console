@@ -187,3 +187,10 @@ export interface CreateChatData {
 export interface ReconnectConfigData {
   tokenValidity: number;
 }
+
+export interface ActivityData {
+  activityType: string;
+  activityId: string;
+  ephemeral: boolean;
+  created: number;
+}
