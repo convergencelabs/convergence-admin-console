@@ -28,6 +28,7 @@ import {ConfigStore} from "../../../stores/ConfigStore";
 import {RouteComponentProps, withRouter} from "react-router";
 import {DomainAvailabilityIcon} from "../../common/DomainAvailabilityIcon";
 import {
+  BlockOutlined,
   CloudOutlined,
   DashboardOutlined,
   FileOutlined,
@@ -118,11 +119,13 @@ export class DomainCardComponent extends Component<InjectedProps, {}> {
                         disabled={disabled || offline} {...props}/>
       <DomainCardButton link="sessions" tooltip={"Sessions"} icon={<CloudOutlined/>}
                         disabled={disabled || offline} {...props}/>
-      <DomainCardButton link="chats" tooltip={"Chat"} icon={<MessageOutlined/>}
-                        disabled={disabled || offline} {...props}/>
       <DomainCardButton link="collections" tooltip={"Collections"} icon={<FolderOutlined/>}
                         disabled={disabled || offline} {...props}/>
       <DomainCardButton link="models" tooltip={"Models"} icon={<FileOutlined/>}
+                        disabled={disabled || offline} {...props}/>
+      <DomainCardButton link="chats" tooltip={"Chat"} icon={<MessageOutlined/>}
+                        disabled={disabled || offline} {...props}/>
+      <DomainCardButton link="activities" tooltip={"Activities"} icon={<BlockOutlined/>}
                         disabled={disabled || offline} {...props}/>
       <DomainCardButton link="authentication" tooltip={"Authentication"} icon={<LockOutlined/>}
                         disabled={disabled} {...props}/>
