@@ -95,7 +95,7 @@ class DomainActivitiesComponent extends React.Component<InjectedProps, DomainAct
 
     this._activitiesSubscription = null;
 
-    const searchParams = this._parseQueryInput(this.props.location.search);
+    const searchParams = DomainActivitiesComponent._parseQueryInput(this.props.location.search);
 
     this.state = {
       activities: PagedData.EMTPY,
@@ -118,7 +118,7 @@ class DomainActivitiesComponent extends React.Component<InjectedProps, DomainAct
     // First see if the route has changes, If so we set the current state.
     // then later we see if that changed our actual params we care about.
     if (prevProps.location.search !== this.props.location.search) {
-      const searchParams = this._parseQueryInput(this.props.location.search);
+      const searchParams = DomainActivitiesComponent._parseQueryInput(this.props.location.search);
       this.setState({
         searchParams
       });
@@ -249,7 +249,7 @@ class DomainActivitiesComponent extends React.Component<InjectedProps, DomainAct
     this.props.history.push(newUrl);
   }
 
-  private _parseQueryInput(urlQueryParams: string): IActivitySearchParams {
+  private static _parseQueryInput(urlQueryParams: string): IActivitySearchParams {
     let {
       id,
       type,

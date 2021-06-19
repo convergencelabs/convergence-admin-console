@@ -12,12 +12,11 @@
 import React, {ReactNode} from "react";
 import {Page} from "../../../../components";
 
-import {Card, Col, Divider, Row, Table} from "antd";
+import {Card, Col, Row, Table, Tabs} from "antd";
 import {RouteComponentProps} from "react-router";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
 import {injectAs} from "../../../../utils/mobx-utils";
 import {DomainId} from "../../../../models/DomainId";
-import styles from "./styles.module.css";
 import {DomainActivityService} from "../../../../services/domain/DomainActivityService";
 import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
 import {toDomainRoute} from "../../../../utils/domain-url";
@@ -28,6 +27,12 @@ import {InfoTable, InfoTableRow} from "../../../../components/server/InfoTable";
 import {BlockOutlined} from "@ant-design/icons";
 import {Subscription} from "rxjs";
 import {shortDateTime, yesNo} from "../../../../utils/format-utils";
+import {DescriptionBox} from "../../../../components/common/DescriptionBox";
+import {ActivityPermissionsControl} from "../../../../components/domain/activity/ActivityPermissionsControl";
+import {ActivityUserPermissionsTab} from "../../../../components/domain/activity/ActivityUserPermissionsTab";
+import {ActivityUserPermissions} from "../../../../models/domain/ActivityUserPermissions";
+import {ActivityGroupPermissionsTab} from "../../../../components/domain/activity/ActivityGroupPermissionsTab";
+import {ActivityGroupPermissions} from "../../../../models/domain/ActivityGroupPermissions";
 
 export interface IActivitySearchParams {
   filter?: string;
@@ -108,18 +113,45 @@ class ViewActivityEventsComponent extends React.Component<InjectedProps, ViewAct
   public render(): ReactNode {
     return (
       <Page breadcrumbs={this._breadcrumbs}>
-        <Card title={<span><BlockOutlined/> Activity</span>} className={styles.events}>
+        <Card title={<span><BlockOutlined/> Activity</span>}>
           <Row gutter={16}>
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               {this._renderActivityInfo()}
             </Col>
           </Row>
           <Row gutter={16}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              <Divider>Participants</Divider>
+            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+              <Tabs>
+                <Tabs.TabPane key="state" tab="Activity State">
+                  {this._renderSessionTable()}
+                </Tabs.TabPane>
+                <Tabs.TabPane key="world-permissions" tab="World Permissions">
+                  <DescriptionBox>
+                    These permissions apply to all users in the system that do not
+                    have specific permissions set for them or a group they belong
+                    to.
+                  </DescriptionBox>
+                  <ActivityPermissionsControl/>
+                </Tabs.TabPane>
+                <Tabs.TabPane key="user-permissions" tab="User Permissions">
+                  <DescriptionBox>
+                    These permissions apply specific users in the system.
+                  </DescriptionBox>
+                  <ActivityUserPermissionsTab domainId={this.props.domainId}
+                                              onUserPermissionsChanged={this._userPermissionsChanged}
+                                              permissions={[]}/>
 
-                {this._renderSessionTable()}
-
+                </Tabs.TabPane>
+                <Tabs.TabPane key="group-permissions" tab="Group Permissions">
+                  <DescriptionBox>
+                    These permissions apply any user that is a member of the group defined below.
+                  </DescriptionBox>
+                  <ActivityGroupPermissionsTab domainId={this.props.domainId}
+                                               onGroupPermissionsChanged={this._groupPermissionsChanged}
+                                               permissions={[]}
+                  />
+                </Tabs.TabPane>
+              </Tabs>
             </Col>
           </Row>
         </Card>
@@ -182,6 +214,14 @@ class ViewActivityEventsComponent extends React.Component<InjectedProps, ViewAct
     } else {
       return userId.username;
     }
+  };
+
+  private _userPermissionsChanged = (data: ActivityUserPermissions[]) => {
+
+  };
+
+  private _groupPermissionsChanged = (data: ActivityGroupPermissions[]) => {
+
   };
 }
 
