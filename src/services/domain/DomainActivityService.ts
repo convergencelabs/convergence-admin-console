@@ -11,7 +11,7 @@
 
 import {DomainId} from "../../models/DomainId";
 import {AbstractDomainService} from "./AbstractDomainService";
-import {ActivityData, PagedRestData} from "./common-rest-data";
+import {ActivityData, CreateActivityData, PagedRestData} from "./common-rest-data";
 import {toActivityInfo} from "./incoming-rest-data-converters";
 import {PagedData} from "../../models/PagedData";
 import {ActivityInfo} from "../../models/domain/ActivityInfo";
@@ -26,6 +26,16 @@ export class DomainActivityService extends AbstractDomainService {
         const data = result.data.map(toActivityInfo);
         return new PagedData(data, result.startIndex, result.totalResults)
       })
+  }
+
+  public deleteActivity(domain: DomainId, activityType: string, activityId: string): Promise<void> {
+    const url = this._getDomainUrl(domain, `activities/${activityType}/${activityId}`);
+    return this._delete<void>(url);
+  }
+
+  public createActivity(domain: DomainId, data: CreateActivityData): Promise<void> {
+    const url = this._getDomainUrl(domain, "activities");
+    return this._post<void>(url, data);
   }
 }
 

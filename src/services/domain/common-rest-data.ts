@@ -188,6 +188,14 @@ export interface ReconnectConfigData {
   tokenValidity: number;
 }
 
+export interface CreateActivityData {
+  activityType: string;
+  activityId: string;
+  worldPermissions: any;
+  userPermissions: any;
+  groupPermissions: any;
+}
+
 export interface ActivityData {
   activityType: string;
   activityId: string;
