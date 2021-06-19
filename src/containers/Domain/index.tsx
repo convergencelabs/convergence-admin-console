@@ -53,6 +53,7 @@ import {SERVICES} from "../../services/ServiceConstants";
 import {STORES} from "../../stores/StoreConstants";
 import {injectObserver} from "../../utils/mobx-utils";
 import {DomainActivities} from "../../pages/domain/activities/DomainActivities";
+import {ViewActivity} from "../../pages/domain/activities/ViewActivity";
 
 export interface DomainRouteParams {
   namespace: string;
@@ -167,7 +168,7 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
                     <Route exact path={`${match.url}/activities`}
                            render={(props) => <DomainActivities {...props} domainId={domainId} />}/>
                     <Route exact path={`${match.url}/activities/:type/:id`}
-                           render={(props) => <div>View Activity</div>}/>
+                           render={(props) => <ViewActivity {...props} domainId={domainId}/>}/>
                     <Route exact path={`${match.url}/activities/:type/:id/edit`}
                            render={(props) => <div>Edit Activity</div>}/>
                     <Route exact path={`${match.url}/create-activity`}

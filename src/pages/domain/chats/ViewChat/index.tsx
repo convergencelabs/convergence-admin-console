@@ -219,7 +219,7 @@ class ViewChatEventsComponent extends React.Component<InjectedProps, ViewChatSta
     return (
       <CardTitleToolbar title="Chat Events" icon={<TableOutlined />}>
         <span className={styles.search}>
-          <Input placeholder="Search Messages" addonAfter={<SearchOutlined />} onKeyUp={this._onFilterChange}/>
+          <Input placeholder="Search Events" addonAfter={<SearchOutlined />} onKeyUp={this._onFilterChange}/>
         </span>
         <ToolbarButton icon={<ReloadOutlined />} tooltip="Reload Events" onClick={this._loadChatEvents}/>
       </CardTitleToolbar>

@@ -57,8 +57,8 @@ export class DomainSideNavigation extends React.Component<DomainSideNavigationPr
       {key: "sessions", icon: <CloudOutlined />, title: "Sessions", link: sessions, routeMatch: {path: sessions}, disabled},
       {key: "collections", icon: <FolderOutlined />, title: "Collections", link: collections,routeMatch: {path: collections}, disabled},
       {key: "models", icon: <FileOutlined />, title: "Models", link: models, routeMatch: {path: models}, disabled},
-      {key: "chat", icon: <MessageOutlined />, title: "Chat", link: chat, routeMatch: {path: chat}, disabled},
-      {key: "activity", icon: <BlockOutlined />, title: "Activity", link: activity, routeMatch: {path: activity}, disabled},
+      {key: "chat", icon: <MessageOutlined />, title: "Chats", link: chat, routeMatch: {path: chat}, disabled},
+      {key: "activity", icon: <BlockOutlined />, title: "Activities", link: activity, routeMatch: {path: activity}, disabled},
       {key: "authentication", icon: <LockOutlined />, title: "Authentication", link: auth, routeMatch: {path: auth}},
       {key: "settings", icon: <SettingOutlined />, title: "Settings", link: settings, routeMatch: {path: settings}}
     ];

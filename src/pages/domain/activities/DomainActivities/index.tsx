@@ -35,13 +35,12 @@ import {toDomainRoute} from "../../../../utils/domain-url";
 import styles from "./styles.module.css";
 import {PagedData} from "../../../../models/PagedData";
 import queryString from "query-string";
-import {SearchParams} from "../../collections/DomainCollections";
 import {appendToQueryParamString} from "../../../../utils/router-utils";
 import {DomainActivityService} from "../../../../services/domain/DomainActivityService";
 import {ActivityInfo} from "../../../../models/domain/ActivityInfo";
 import {shortDateTime, yesNo} from "../../../../utils/format-utils";
 
-export interface IChatSearchParams {
+export interface IActivitySearchParams {
   type?: string;
   id?: string;
   pageSize: number;
@@ -58,12 +57,13 @@ interface InjectedProps extends DomainActivitiesProps {
 
 export interface DomainActivitiesState {
   activities: PagedData<ActivityInfo>;
-  searchParams: IChatSearchParams;
+  searchParams: IActivitySearchParams;
 }
 
 class DomainActivitiesComponent extends React.Component<InjectedProps, DomainActivitiesState> {
   private readonly _breadcrumbs = [{title: "Activities"}];
   private readonly _activityTableColumns: any[];
+
   private _activitiesSubscription: PromiseSubscription | null;
 
   constructor(props: InjectedProps) {
@@ -158,7 +158,7 @@ class DomainActivitiesComponent extends React.Component<InjectedProps, DomainAct
     return (
       <CardTitleToolbar title="Activities" icon={<BlockOutlined />}>
         <span className={styles.search}>
-          <Input placeholder="Search Activities" addonAfter={<SearchOutlined />} onKeyUp={this._onFilterChange}/>
+          <Input placeholder="Search by Id" addonAfter={<SearchOutlined />} onKeyUp={this._onFilterChange}/>
         </span>
         <ToolbarButton icon={<PlusCircleOutlined />} tooltip="Create Activity" onClick={this._goToCreate}/>
         <ToolbarButton icon={<ReloadOutlined />} tooltip="Reload Activities" onClick={this._loadActivities}/>
@@ -242,23 +242,25 @@ class DomainActivitiesComponent extends React.Component<InjectedProps, DomainAct
 
   private _onFilterChange = (event: KeyboardEvent<HTMLInputElement>) => {
     // todo debounce
-    const filter = (event.target as HTMLInputElement).value;
+    const id = (event.target as HTMLInputElement).value;
     const page = 1;
     const pageSize = this.state.searchParams.pageSize;
 
-    let newUrl = appendToQueryParamString({filter, page, pageSize});
+    let newUrl = appendToQueryParamString({id, page, pageSize});
     this.props.history.push(newUrl);
   }
 
-  private _parseQueryInput(urlQueryParams: string): SearchParams {
+  private _parseQueryInput(urlQueryParams: string): IActivitySearchParams {
     let {
-      filter,
+      id,
+      type,
       pageSize,
       page
     } = queryString.parse(urlQueryParams, {parseNumbers: true});
 
     return {
-      filter: filter ? filter + "" : undefined,
+      type: type ? type + "" : undefined,
+      id: id ? id + "" : undefined,
       pageSize: pageSize as number || 25,
       page: page as number || 1
     };

@@ -15,8 +15,11 @@ import Tooltip from "antd/es/tooltip";
 import {
   DeleteOutlined,
   EditOutlined,
-  EyeOutlined, MessageOutlined, PlusCircleOutlined,
-  QuestionCircleOutlined, ReloadOutlined,
+  EyeOutlined,
+  MessageOutlined,
+  PlusCircleOutlined,
+  QuestionCircleOutlined,
+  ReloadOutlined,
   SearchOutlined,
 } from '@ant-design/icons';
 import {Button, Card, Input, notification, Popconfirm, Table, TablePaginationConfig} from "antd";
@@ -34,7 +37,6 @@ import {DomainChatService} from "../../../../services/domain/DomainChatService";
 import {ChatInfo} from "../../../../models/domain/ChatInfo";
 import {PagedData} from "../../../../models/PagedData";
 import queryString from "query-string";
-import {SearchParams} from "../../collections/DomainCollections";
 import {appendToQueryParamString} from "../../../../utils/router-utils";
 
 export interface IChatSearchParams {
@@ -243,7 +245,7 @@ class DomainChatComponent extends React.Component<InjectedProps, DomainChatState
     this.props.history.push(newUrl);
   }
 
-  private _parseQueryInput(urlQueryParams: string): SearchParams {
+  private _parseQueryInput(urlQueryParams: string): IChatSearchParams {
     let {
       filter,
       pageSize,
