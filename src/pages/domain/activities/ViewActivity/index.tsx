@@ -33,6 +33,7 @@ import {ActivityUserPermissionsTab} from "../../../../components/domain/activity
 import {ActivityUserPermissions} from "../../../../models/domain/ActivityUserPermissions";
 import {ActivityGroupPermissionsTab} from "../../../../components/domain/activity/ActivityGroupPermissionsTab";
 import {ActivityGroupPermissions} from "../../../../models/domain/ActivityGroupPermissions";
+import {ActivityPermissions} from "../../../../models/domain/ActivityPermissions";
 
 export interface IActivitySearchParams {
   filter?: string;
@@ -51,7 +52,10 @@ interface InjectedProps extends ViewActivityProps {
 
 export interface ViewActivityState {
   activity: Activity | null;
-  participants: ActivityParticipant[]
+  participants: ActivityParticipant[];
+  worldPermissions: ActivityPermissions;
+  userPermissions: ActivityUserPermissions[];
+  groupPermissions: ActivityGroupPermissions[];
 }
 
 class ViewActivityEventsComponent extends React.Component<InjectedProps, ViewActivityState> {
@@ -84,7 +88,10 @@ class ViewActivityEventsComponent extends React.Component<InjectedProps, ViewAct
 
     this.state = {
       activity: null,
-      participants: []
+      participants: [],
+      worldPermissions: ActivityPermissions.NONE,
+      userPermissions: [],
+      groupPermissions: []
     };
   }
 
@@ -131,7 +138,8 @@ class ViewActivityEventsComponent extends React.Component<InjectedProps, ViewAct
                     have specific permissions set for them or a group they belong
                     to.
                   </DescriptionBox>
-                  <ActivityPermissionsControl/>
+                  <ActivityPermissionsControl value={this.state.worldPermissions}
+                  onChange={this._worldPermissionsChanged}/>
                 </Tabs.TabPane>
                 <Tabs.TabPane key="user-permissions" tab="User Permissions">
                   <DescriptionBox>
@@ -139,8 +147,7 @@ class ViewActivityEventsComponent extends React.Component<InjectedProps, ViewAct
                   </DescriptionBox>
                   <ActivityUserPermissionsTab domainId={this.props.domainId}
                                               onUserPermissionsChanged={this._userPermissionsChanged}
-                                              permissions={[]}/>
-
+                                              permissions={this.state.userPermissions}/>
                 </Tabs.TabPane>
                 <Tabs.TabPane key="group-permissions" tab="Group Permissions">
                   <DescriptionBox>
@@ -148,7 +155,7 @@ class ViewActivityEventsComponent extends React.Component<InjectedProps, ViewAct
                   </DescriptionBox>
                   <ActivityGroupPermissionsTab domainId={this.props.domainId}
                                                onGroupPermissionsChanged={this._groupPermissionsChanged}
-                                               permissions={[]}
+                                               permissions={this.state.groupPermissions}
                   />
                 </Tabs.TabPane>
               </Tabs>
@@ -199,7 +206,13 @@ class ViewActivityEventsComponent extends React.Component<InjectedProps, ViewAct
       this._participantsSubscription = activity.participantsAsObservable().subscribe(participants => {
         this.setState({participants});
       })
-    }).catch(err => {
+      return activity.permissions().getPermissions()
+    }).then(permissions => {
+      this.setState({
+        worldPermissions: ActivityPermissions.of(permissions.worldPermissions)
+      })
+    })
+      .catch(err => {
       console.error(err);
       this._activitySubscription = null;
       this.setState({activity: null});
@@ -216,12 +229,18 @@ class ViewActivityEventsComponent extends React.Component<InjectedProps, ViewAct
     }
   };
 
-  private _userPermissionsChanged = (data: ActivityUserPermissions[]) => {
-
+  private _worldPermissionsChanged = (worldPermissions: ActivityPermissions) => {
+    this.setState({worldPermissions});
+    this.state.activity?.permissions()
+      .setWorldPermissions(worldPermissions.toPermissions()).catch(e => console.error(e));
   };
 
-  private _groupPermissionsChanged = (data: ActivityGroupPermissions[]) => {
+  private _userPermissionsChanged = (userPermissions: ActivityUserPermissions[]) => {
+    this.setState({userPermissions});
+  };
 
+  private _groupPermissionsChanged = (groupPermissions: ActivityGroupPermissions[]) => {
+    this.setState({groupPermissions});
   };
 }
 

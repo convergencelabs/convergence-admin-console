@@ -44,7 +44,7 @@ export class ActivityUserPermissionsTab extends React.Component<ActivityPermissi
       title: 'Permissions',
       dataIndex: 'permissions',
       align: "center",
-      width: 500,
+      width: 600,
       render: this._renderPermissions
     }, {
       title: '',

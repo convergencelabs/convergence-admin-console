@@ -10,8 +10,27 @@
  */
 
 import {getOrDefault} from "../../utils/copy-utils";
+import {ActivityPermission} from "@convergence/convergence";
+import {TypeChecker} from "../../utils/TypeChecker";
 
 export class ActivityPermissions {
+  public static NONE = new ActivityPermissions(false, false, false, false, false, false);
+
+  public static of(permissions: Set<ActivityPermission> | ActivityPermission[]): ActivityPermissions {
+    if (TypeChecker.isArray(permissions)) {
+      permissions = new Set(permissions);
+    }
+
+    return new ActivityPermissions(
+      permissions.has("join"),
+      permissions.has("lurk"),
+      permissions.has("view_state"),
+      permissions.has("set_state"),
+      permissions.has("remove"),
+      permissions.has("manage")
+    )
+  }
+
   constructor(public readonly join: boolean,
               public readonly lurk: boolean,
               public readonly viewState: boolean,
@@ -20,6 +39,18 @@ export class ActivityPermissions {
               public readonly manage: boolean
   ) {
     Object.freeze(this);
+  }
+
+  public toPermissions(): Set<ActivityPermission> {
+    const result = new Set<ActivityPermission>();
+    if (this.join) result.add("join");
+    if (this.lurk) result.add("lurk");
+    if (this.viewState) result.add("view_state");
+    if (this.setState) result.add("set_state");
+    if (this.remove) result.add("remove");
+    if (this.manage) result.add("manage");
+
+    return result;
   }
 
   public copy(modifications: {
