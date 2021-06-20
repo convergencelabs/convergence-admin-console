@@ -26,7 +26,7 @@ import {SERVICES} from "../../../../../services/ServiceConstants";
 import {injectAs} from "../../../../../utils/mobx-utils";
 import {ModelUserPermissionsEditor} from "../../../../../components/domain/model/ModelUserPermissionsEditor";
 import {ModelUserPermissions} from "../../../../../models/domain/ModelUserPermissions";
-import {DomainUserId} from "../../../../../models/domain/DomainUserId";
+import {DomainUserId} from "@convergence/convergence";
 import {CheckboxChangeEvent} from "antd/lib/checkbox";
 
 export interface ModelPermissionsProps {
@@ -130,7 +130,7 @@ class ModelPermissionsTabComponent extends React.Component<InjectedProps, ModelP
               <div>
                 <Table dataSource={permissions.userPermissions}
                        columns={this._columns}
-                       rowKey={(record: ModelUserPermissions) => record.userId.type + ":" + record.userId.username}
+                       rowKey={(record: ModelUserPermissions) => record.userId.userType + ":" + record.userId.username}
                        pagination={false}
                        size="middle"/>
               </div>

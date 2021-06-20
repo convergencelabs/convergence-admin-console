@@ -48,7 +48,7 @@ import {
   ChatUserRemovedEvent
 } from "../../../../models/domain/ChatEvent";
 import {shortDateTime} from "../../../../utils/format-utils";
-import {DomainUserId, DomainUserType} from "../../../../models/domain/DomainUserId";
+import {DomainUserId, DomainUserType} from "@convergence/convergence";
 import {InfoTable, InfoTableRow} from "../../../../components/server/InfoTable";
 import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
 import {toDomainRoute} from "../../../../utils/domain-url";
@@ -295,9 +295,9 @@ class ViewChatEventsComponent extends React.Component<InjectedProps, ViewChatSta
   };
 
   private _renderUsername = (userId: DomainUserId) => {
-    if (userId.type === DomainUserType.ANONYMOUS) {
+    if (userId.userType === DomainUserType.ANONYMOUS) {
       return `${userId.username} (Anonymous)`;
-    } else if (userId.type === DomainUserType.CONVERGENCE) {
+    } else if (userId.userType === DomainUserType.CONVERGENCE) {
       return `${userId.username} (Convergence)`;
     } else {
       return userId.username;

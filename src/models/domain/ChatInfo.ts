@@ -9,7 +9,7 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import {DomainUserId} from "./DomainUserId";
+import {DomainUserId} from "@convergence/convergence";
 
 export class ChatInfo {
   constructor(public readonly chatId: string,

@@ -15,10 +15,10 @@ import {Button, Popconfirm, Row, Table} from "antd";
 import {ColumnProps} from "antd/lib/table";
 import {ActivityUserPermissionsEditor} from "../ActivityUserPermissionsEditor";
 import {ActivityUserPermissions} from "../../../../models/domain/ActivityUserPermissions";
-import {AddActivityUserPermissionControl} from "../SetActivityUserPermissionControl";
+import {SetActivityUserPermissionControl} from "../SetActivityUserPermissionControl";
 import {DomainId} from "../../../../models/DomainId";
 import {ActivityPermissions} from "../../../../models/domain/ActivityPermissions";
-import {DomainUserId} from "../../../../models/domain/DomainUserId";
+import {DomainUserId} from "@convergence/convergence";
 import styles from "./styles.module.css";
 
 export interface ActivityPermissionsProps {
@@ -64,7 +64,7 @@ export class ActivityUserPermissionsTab extends React.Component<ActivityPermissi
     return (
         <div>
           <Row>
-            <AddActivityUserPermissionControl
+            <SetActivityUserPermissionControl
                 domainId={this.props.domainId}
                 onSetPermissions={this._onSetUserActivityPermissions}
             />
@@ -73,7 +73,7 @@ export class ActivityUserPermissionsTab extends React.Component<ActivityPermissi
             <Table className={styles.table}
                    dataSource={permissions}
                    columns={this._columns}
-                   rowKey={(record: ActivityUserPermissions) => record.userId.type + ":" + record.userId.username}
+                   rowKey={(record: ActivityUserPermissions) => record.userId.userType + ":" + record.userId.username}
                    pagination={false}
                    size="middle"/>
           </Row>

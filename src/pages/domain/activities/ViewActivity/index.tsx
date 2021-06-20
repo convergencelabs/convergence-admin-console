@@ -20,7 +20,14 @@ import {DomainId} from "../../../../models/DomainId";
 import {DomainActivityService} from "../../../../services/domain/DomainActivityService";
 import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
 import {toDomainRoute} from "../../../../utils/domain-url";
-import {Activity, ActivityParticipant, DomainUser, DomainUserId, DomainUserType} from "@convergence/convergence";
+import {
+  Activity,
+  ActivityParticipant,
+  ActivityPermission,
+  DomainUser,
+  DomainUserId, DomainUserIdMap,
+  DomainUserType
+} from "@convergence/convergence";
 import {ActiveDomainStore} from "../../../../stores/ActiveDomainStore";
 import {STORES} from "../../../../stores/StoreConstants";
 import {InfoTable, InfoTableRow} from "../../../../components/server/InfoTable";
@@ -208,9 +215,12 @@ class ViewActivityEventsComponent extends React.Component<InjectedProps, ViewAct
       })
       return activity.permissions().getPermissions()
     }).then(permissions => {
-      this.setState({
-        worldPermissions: ActivityPermissions.of(permissions.worldPermissions)
-      })
+      const worldPermissions = ActivityPermissions.of(permissions.worldPermissions);
+      const groupPermissions = Array.from(permissions.groupPermissions.entries())
+        .map(e => new ActivityGroupPermissions(e[0], ActivityPermissions.of(e[1])));
+      const userPermissions = permissions.userPermissions.entries()
+        .map(e => new ActivityUserPermissions(e[0], ActivityPermissions.of(e[1])));
+      this.setState({worldPermissions, userPermissions, groupPermissions});
     })
       .catch(err => {
       console.error(err);
@@ -237,10 +247,20 @@ class ViewActivityEventsComponent extends React.Component<InjectedProps, ViewAct
 
   private _userPermissionsChanged = (userPermissions: ActivityUserPermissions[]) => {
     this.setState({userPermissions});
+    const up = new DomainUserIdMap<Set<ActivityPermission>>();
+    userPermissions.forEach(p => {
+      up.set(p.userId, p.permissions.toPermissions());
+    });
+    this.state.activity?.permissions().setUserPermissions(up).catch(e => console.error(e));
   };
 
   private _groupPermissionsChanged = (groupPermissions: ActivityGroupPermissions[]) => {
     this.setState({groupPermissions});
+    const gp = new Map<string, Set<ActivityPermission>>();
+    groupPermissions.forEach(p => {
+      gp.set(p.groupId, p.permissions.toPermissions());
+    });
+    this.state.activity?.permissions().setGroupPermissions(gp).catch(e => console.error(e));
   };
 }
 

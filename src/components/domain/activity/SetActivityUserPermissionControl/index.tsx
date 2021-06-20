@@ -12,12 +12,12 @@
 import React, {ReactNode} from 'react';
 import {Button} from "antd";
 import {DomainId} from "../../../../models/DomainId";
-import {DomainUserId, DomainUserType} from "../../../../models/domain/DomainUserId";
 import {ActivityPermissions} from "../../../../models/domain/ActivityPermissions";
 import {ActivityUserPermissions} from "../../../../models/domain/ActivityUserPermissions";
 import {ActivityPermissionsControl} from "../ActivityPermissionsControl";
 import {DomainUsernameAutoComplete} from "../../user/DomainUsernameAutoComplete";
 import styles from "./styles.module.css";
+import {DomainUserType, DomainUserId} from "@convergence/convergence";
 
 export interface SetActivityUserPermissionControlProps {
   domainId: DomainId;
@@ -30,7 +30,7 @@ export interface AddActivityUserPermissionControlState {
   permissions: ActivityPermissions;
 }
 
-export class AddActivityUserPermissionControl extends React.Component<SetActivityUserPermissionControlProps, AddActivityUserPermissionControlState> {
+export class SetActivityUserPermissionControl extends React.Component<SetActivityUserPermissionControlProps, AddActivityUserPermissionControlState> {
   private readonly _defaultPermissions: ActivityPermissions;
 
   constructor(props: SetActivityUserPermissionControlProps) {

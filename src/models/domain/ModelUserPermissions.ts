@@ -10,7 +10,7 @@
  */
 
 import {ModelPermissions} from "./ModelPermissions";
-import {DomainUserId} from "./DomainUserId";
+import {DomainUserId} from "@convergence/convergence";
 import {getOrDefault} from "../../utils/copy-utils";
 
 export class ModelUserPermissions {

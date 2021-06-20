@@ -18,7 +18,7 @@ import {CollectionUserPermissions} from "../../../../models/domain/CollectionUse
 import {AddCollectionUserPermissionControl} from "../AddCollectionUserPermissionControl";
 import {DomainId} from "../../../../models/DomainId";
 import {CollectionPermissions} from "../../../../models/domain/CollectionPermissions";
-import {DomainUserId} from "../../../../models/domain/DomainUserId";
+import {DomainUserId} from "@convergence/convergence";
 import styles from "./styles.module.css";
 
 export interface CollectionPermissionsProps {
@@ -73,7 +73,7 @@ export class CollectionPermissionsTab extends React.Component<CollectionPermissi
             <Table className={styles.table}
                    dataSource={permissions}
                    columns={this._columns}
-                   rowKey={(record: CollectionUserPermissions) => record.userId.type + ":" + record.userId.username}
+                   rowKey={(record: CollectionUserPermissions) => record.userId.userType + ":" + record.userId.username}
                    pagination={false}
                    size="middle"/>
           </Row>

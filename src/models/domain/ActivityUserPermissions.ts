@@ -9,9 +9,9 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import {DomainUserId} from "./DomainUserId";
 import {getOrDefault} from "../../utils/copy-utils";
 import {ActivityPermissions} from "./ActivityPermissions";
+import {DomainUserId} from "@convergence/convergence";
 
 export class ActivityUserPermissions {
   constructor(

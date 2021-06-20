@@ -12,7 +12,7 @@
 import React, {ReactNode} from 'react';
 import {Button} from "antd";
 import {DomainId} from "../../../../models/DomainId";
-import {DomainUserId, DomainUserType} from "../../../../models/domain/DomainUserId";
+import {DomainUserId, DomainUserType} from "@convergence/convergence";
 import {ModelPermissions} from "../../../../models/domain/ModelPermissions";
 import {ModelUserPermissions} from "../../../../models/domain/ModelUserPermissions";
 import {ModelPermissionsControl} from "../ModelPermissionsControl";

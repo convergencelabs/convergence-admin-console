@@ -10,7 +10,7 @@
  */
 
 import moment from "moment";
-import {DomainUserId, DomainUserType} from "../models/domain/DomainUserId";
+import {DomainUserId, DomainUserType} from "@convergence/convergence";
 import {DomainStatus} from "../models/DomainStatus";
 import {DomainAvailability} from "../models/DomainAvailability";
 
@@ -68,7 +68,7 @@ export function truncate(str: string, maxLen: number): string {
 }
 
 export function formatDomainUserId(userId: DomainUserId): string {
-  switch (userId.type) {
+  switch (userId.userType) {
     case DomainUserType.NORMAL:
     return userId.username;
     case DomainUserType.ANONYMOUS:

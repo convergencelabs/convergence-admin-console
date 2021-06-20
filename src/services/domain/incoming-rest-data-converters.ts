@@ -36,7 +36,7 @@ import {Model} from "../../models/domain/Model";
 import {ModelPermissionSummary} from "../../models/domain/ModelPermissionsSummary";
 import {ModelPermissions} from "../../models/domain/ModelPermissions";
 import {ModelUserPermissions} from "../../models/domain/ModelUserPermissions";
-import {DomainUserId, DomainUserType} from "../../models/domain/DomainUserId";
+import {DomainUserId, DomainUserType} from "@convergence/convergence";
 import {DomainUser} from "../../models/domain/DomainUser";
 import {DomainUserGroup} from "../../models/domain/DomainUserGroup";
 import {DomainUserGroupInfo} from "../../models/domain/DomainUserGroupInfo";

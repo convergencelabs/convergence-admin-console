@@ -18,7 +18,7 @@ import {DomainSession} from "../../../../models/domain/DomainSession";
 import {DomainSessionFilter, DomainSessionService} from "../../../../services/domain/DomainSessionService";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
 import {DomainId} from "../../../../models/DomainId";
-import {DomainUserId} from "../../../../models/domain/DomainUserId";
+import {DomainUserId} from "@convergence/convergence";
 import {SessionTableControls, SessionTableFilters} from "../../../../components/domain/session/SessionTableControls";
 import {SERVICES} from "../../../../services/ServiceConstants";
 import {injectAs} from "../../../../utils/mobx-utils";
@@ -134,7 +134,7 @@ class DomainSessionsComponent extends React.Component<InjectedProps, DomainSessi
           </tr>
           <tr>
             <td>User Type:</td>
-            <td>{session.userId.type}</td>
+            <td>{session.userId.userType}</td>
           </tr>
           <tr>
             <td>Auth Method:</td>
