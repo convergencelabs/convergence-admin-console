@@ -10,8 +10,16 @@
  */
 
 import React, {ReactNode} from 'react';
-import {Col, Divider, Row, Table} from "antd";
-import {Activity, ActivityParticipant, DomainUser, DomainUserId, DomainUserType} from "@convergence/convergence";
+import {Card, Col, Row, Table} from "antd";
+import {
+  Activity,
+  ActivityParticipant,
+  ActivityStateClearedEvent,
+  ActivityStateRemovedEvent,
+  ActivityStateSetEvent,
+  DomainUser,
+  DomainUserType
+} from "@convergence/convergence";
 import {Subscription} from "rxjs";
 
 export interface ActivityStateProps {
@@ -27,6 +35,7 @@ export interface ActivityStateState {
 
 export class ActivityStateTab extends React.Component<ActivityStateProps, ActivityStateState> {
   private _participantsSubscription: Subscription | null;
+  private _eventsSubscription: Subscription | null;
   private readonly _sessionTableColumns: any;
   private readonly _stateTableColumns: any;
 
@@ -34,6 +43,7 @@ export class ActivityStateTab extends React.Component<ActivityStateProps, Activi
     super(props);
 
     this._participantsSubscription = null;
+    this._eventsSubscription = null;
 
     this.state = {
       participants: [],
@@ -45,7 +55,7 @@ export class ActivityStateTab extends React.Component<ActivityStateProps, Activi
       title: 'User',
       dataIndex: 'user',
       sorter: (a: DomainUser, b: DomainUser) => a.username.localeCompare(b.username),
-      render: (user: DomainUser) => this._renderUsername(user.userId)
+      render: (user: DomainUser) => this._renderUsername(user)
     }, {
       title: 'Session Id',
       dataIndex: 'sessionId',
@@ -55,23 +65,22 @@ export class ActivityStateTab extends React.Component<ActivityStateProps, Activi
     this._stateTableColumns = [{
       title: 'Key',
       dataIndex: 'key',
-      sorter: (a: string, b: string) => a.localeCompare(b),
     }, {
       title: 'Value',
       dataIndex: 'value',
+      render: (val: any) => JSON.stringify(val)
     }];
   }
 
   public componentDidMount(): void {
     if (this.props.activity) {
+      this._subscribe(this.props.activity);
     }
   }
 
   public componentDidUpdate(prevProps: Readonly<ActivityStateProps>) {
     if (prevProps.activity !== this.props.activity) {
-      if (this._participantsSubscription !== null) {
-        this._participantsSubscription.unsubscribe();
-      }
+      this._unsubscribe();
 
       if (this.props.activity) {
         this._subscribe(this.props.activity);
@@ -79,27 +88,16 @@ export class ActivityStateTab extends React.Component<ActivityStateProps, Activi
     }
   }
 
-  private _subscribe(activity: Activity): void {
-    this._participantsSubscription = activity
-        .participantsAsObservable()
-        .subscribe(participants => this.setState({participants}));
-  }
-
   public componentWillUnmount(): void {
-    if (this._participantsSubscription) {
-      this._participantsSubscription.unsubscribe();
-      this._participantsSubscription = null;
-    }
+   this._unsubscribe();
   }
 
   public render(): ReactNode {
-
     const participantState = Array
         .from(this.state.currentState?.entries() || [])
         .map(e => {
           return {key: e[0], value: e[1]};
         });
-
 
     const rowSelection = {
       selectedRowKeys: this.state.selectedRowKeys,
@@ -109,25 +107,58 @@ export class ActivityStateTab extends React.Component<ActivityStateProps, Activi
 
     return <Row gutter={16}>
       <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-        <Divider>Participants</Divider>
-        <Table size="middle"
-               columns={this._sessionTableColumns}
-               dataSource={this.state.participants}
-               rowKey="sessionId"
-               pagination={false}
-               rowSelection={rowSelection}
-        />
+        <Card type="inner" title="Participants">
+          <Table size="middle"
+                 columns={this._sessionTableColumns}
+                 dataSource={this.state.participants}
+                 rowKey="sessionId"
+                 pagination={false}
+                 rowSelection={rowSelection}
+          />
+        </Card>
       </Col>
       <Col xs={24} sm={24} md={16} lg={16} xl={16}>
-        <Divider>Selected Participant State</Divider>
-        <Table size="middle"
-               columns={this._stateTableColumns}
-               dataSource={participantState}
-               rowKey="key"
-               pagination={false}
-        />
+        <Card type="inner" title="Selected Participant State">
+          <Table size="middle"
+                 columns={this._stateTableColumns}
+                 dataSource={participantState}
+                 rowKey="key"
+                 pagination={false}
+          />
+        </Card>
       </Col>
     </Row>
+  }
+
+  private _subscribe(activity: Activity): void {
+    this._participantsSubscription = activity
+        .participantsAsObservable()
+        .subscribe(participants => this.setState({participants}));
+
+    this._eventsSubscription = activity
+        .events()
+        .subscribe(e => {
+          if (e instanceof ActivityStateSetEvent || e instanceof ActivityStateRemovedEvent || e instanceof ActivityStateClearedEvent) {
+            if (this.state.selectedRowKeys.length === 1) {
+              const selectedSession = this.state.selectedRowKeys[0];
+              if (selectedSession === e.sessionId) {
+                const participant = e.activity.participant(selectedSession);
+                this.setState({currentState: participant.state});
+              }
+            }
+          }
+        });
+  }
+  private _unsubscribe(): void {
+    if (this._participantsSubscription) {
+      this._participantsSubscription.unsubscribe();
+      this._participantsSubscription = null;
+    }
+
+    if (this._eventsSubscription) {
+      this._eventsSubscription.unsubscribe();
+      this._participantsSubscription = null;
+    }
   }
 
   private _selectionChanged = (selectedRowKeys: any[]) => {
@@ -140,9 +171,11 @@ export class ActivityStateTab extends React.Component<ActivityStateProps, Activi
     }
   }
 
-  private _renderUsername = (userId: DomainUserId) => {
+  private _renderUsername = (user: DomainUser) => {
+    const userId = user.userId;
+
     if (userId.userType === DomainUserType.ANONYMOUS) {
-      return `${userId.username} (Anonymous)`;
+      return `${user.displayName || user.username} (Anonymous)`;
     } else if (userId.userType === DomainUserType.CONVERGENCE) {
       return `${userId.username} (Convergence)`;
     } else {
