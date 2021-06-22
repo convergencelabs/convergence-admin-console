@@ -9,9 +9,9 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import {getOrDefault} from "../../utils/copy-utils";
+import {getOrDefault} from "../../../utils/copy-utils";
 import {ActivityPermission} from "@convergence/convergence";
-import {TypeChecker} from "../../utils/TypeChecker";
+import {TypeChecker} from "../../../utils/TypeChecker";
 
 export class ActivityPermissions {
   public static NONE = new ActivityPermissions(false, false, false, false, false, false);

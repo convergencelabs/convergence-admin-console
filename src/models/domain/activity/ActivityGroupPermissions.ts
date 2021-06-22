@@ -9,20 +9,19 @@
  * full text of the GPLv3 license, if it was not provided.
  */
 
-import {getOrDefault} from "../../utils/copy-utils";
+import {getOrDefault} from "../../../utils/copy-utils";
 import {ActivityPermissions} from "./ActivityPermissions";
-import {DomainUserId} from "@convergence/convergence";
 
-export class ActivityUserPermissions {
+export class ActivityGroupPermissions {
   constructor(
-    public readonly userId: DomainUserId,
+    public readonly groupId: string,
     public readonly permissions: ActivityPermissions) {
     Object.freeze(this);
   }
 
-  public copy(modifications: {userId?: DomainUserId, permissions?: ActivityPermissions} = {}): ActivityUserPermissions {
-    return new ActivityUserPermissions(
-      getOrDefault(modifications.userId, this.userId),
+  public copy(modifications: {groupId?: string, permissions?: ActivityPermissions} = {}): ActivityGroupPermissions {
+    return new ActivityGroupPermissions(
+      getOrDefault(modifications.groupId, this.groupId),
       getOrDefault(modifications.permissions, this.permissions));
   }
 }

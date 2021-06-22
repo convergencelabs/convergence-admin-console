@@ -79,7 +79,7 @@ class CreateDomainActivityComponent extends React.Component<InjectedProps, {}> {
     const createActivityData: CreateActivityData = {
       activityType,
       activityId,
-      worldPermissions: {join: true, manage: false, viewState: true, setState: true},
+      worldPermissions: ["join", "set_state", "view_state"],
       userPermissions: {},
       groupPermissions: {}
     }

@@ -12,11 +12,11 @@
 import React, {ReactNode} from 'react';
 import {Button} from "antd";
 import {DomainId} from "../../../../models/DomainId";
-import {ActivityPermissions} from "../../../../models/domain/ActivityPermissions";
+import {ActivityPermissions} from "../../../../models/domain/activity/ActivityPermissions";
 import {ActivityPermissionsControl} from "../ActivityPermissionsControl";
 import styles from "./styles.module.css";
 import {DomainGroupAutoComplete} from "../../group/DomainUserGroupAutoComplete";
-import {ActivityGroupPermissions} from "../../../../models/domain/ActivityGroupPermissions";
+import {ActivityGroupPermissions} from "../../../../models/domain/activity/ActivityGroupPermissions";
 
 export interface SetActivityGroupPermissionControlProps {
   domainId: DomainId;

@@ -18,3 +18,14 @@ export function objectToMap(obj: {[key: string]: any}): Map<string, any> {
 
   return map;
 }
+
+export function mapObject<I, O>(obj: {[key: string]: I}, func: (v: I, k: string) => O): {[key: string]: O} {
+  const result: {[key: string]: O} = {};
+
+  Object.keys(obj).forEach(key => {
+    const value = obj[key];
+    result[key] = func(value, key);
+  });
+
+  return result;
+}

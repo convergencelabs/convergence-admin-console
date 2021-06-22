@@ -19,7 +19,7 @@ export interface CollectionData {
   id: string;
   description: string;
   worldPermissions: CollectionPermissionsData;
-  userPermissions: {[key: string]: CollectionPermissionsData};
+  userPermissions: { [key: string]: CollectionPermissionsData };
   overrideSnapshotPolicy: boolean;
   snapshotPolicy: ModelSnapshotPolicyData;
 }
@@ -27,7 +27,7 @@ export interface CollectionData {
 export interface CollectionUpdateData {
   description: string;
   worldPermissions: CollectionPermissionsData;
-  userPermissions: {[key: string]: CollectionPermissionsData};
+  userPermissions: { [key: string]: CollectionPermissionsData };
   overrideSnapshotPolicy: boolean;
   snapshotPolicy?: ModelSnapshotPolicyData;
 }
@@ -64,7 +64,7 @@ export interface ModelData {
   version: number
   createdTime: number,
   modifiedTime: number
-  data?: {[key: string]: any}
+  data?: { [key: string]: any }
 }
 
 export interface ModelPermissionSummaryData {
@@ -201,4 +201,26 @@ export interface ActivityData {
   activityId: string;
   ephemeral: boolean;
   created: number;
+}
+
+export interface SetPermissionsData {
+  worldPermissions?: {
+    permissions: string[];
+  };
+
+  userPermissions?: {
+    permissions: { [key: string]: string[] };
+    replace: boolean;
+  }
+
+  groupPermissions?: {
+    permissions: { [key: string]: string[] };
+    replace: boolean;
+  };
+}
+
+export interface GetPermissionsData {
+  worldPermissions: string[];
+  userPermissions: { [key: string]: string[] };
+  groupPermissions: { [key: string]: string[] };
 }

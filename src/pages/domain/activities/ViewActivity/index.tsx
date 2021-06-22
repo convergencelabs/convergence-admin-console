@@ -12,7 +12,7 @@
 import React, {ReactNode} from "react";
 import {Page} from "../../../../components";
 
-import {Card, Col, Row, Table, Tabs} from "antd";
+import {Card, Col, Row, Tabs} from "antd";
 import {RouteComponentProps} from "react-router";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
 import {injectAs} from "../../../../utils/mobx-utils";
@@ -20,14 +20,7 @@ import {DomainId} from "../../../../models/DomainId";
 import {DomainActivityService} from "../../../../services/domain/DomainActivityService";
 import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
 import {toDomainRoute} from "../../../../utils/domain-url";
-import {
-  Activity,
-  ActivityParticipant,
-  ActivityPermission,
-  DomainUser,
-  DomainUserId, DomainUserIdMap,
-  DomainUserType
-} from "@convergence/convergence";
+import {Activity, ActivityParticipant, ActivityPermission, DomainUserIdMap} from "@convergence/convergence";
 import {ActiveDomainStore} from "../../../../stores/ActiveDomainStore";
 import {STORES} from "../../../../stores/StoreConstants";
 import {InfoTable, InfoTableRow} from "../../../../components/server/InfoTable";
@@ -37,10 +30,14 @@ import {shortDateTime, yesNo} from "../../../../utils/format-utils";
 import {DescriptionBox} from "../../../../components/common/DescriptionBox";
 import {ActivityPermissionsControl} from "../../../../components/domain/activity/ActivityPermissionsControl";
 import {ActivityUserPermissionsTab} from "../../../../components/domain/activity/ActivityUserPermissionsTab";
-import {ActivityUserPermissions} from "../../../../models/domain/ActivityUserPermissions";
+import {ActivityUserPermissions} from "../../../../models/domain/activity/ActivityUserPermissions";
 import {ActivityGroupPermissionsTab} from "../../../../components/domain/activity/ActivityGroupPermissionsTab";
-import {ActivityGroupPermissions} from "../../../../models/domain/ActivityGroupPermissions";
-import {ActivityPermissions} from "../../../../models/domain/ActivityPermissions";
+import {ActivityGroupPermissions} from "../../../../models/domain/activity/ActivityGroupPermissions";
+import {ActivityPermissions} from "../../../../models/domain/activity/ActivityPermissions";
+import {SERVICES} from "../../../../services/ServiceConstants";
+import {SetPermissions} from "../../../../models/domain/permissions/SetPermissions";
+import {ActivityInfo} from "../../../../models/domain/activity/ActivityInfo";
+import {ActivityStateTab} from "../../../../components/domain/activity/ActivityStateTab";
 
 export interface IActivitySearchParams {
   filter?: string;
@@ -59,6 +56,7 @@ interface InjectedProps extends ViewActivityProps {
 
 export interface ViewActivityState {
   activity: Activity | null;
+  activityInfo: ActivityInfo | null;
   participants: ActivityParticipant[];
   worldPermissions: ActivityPermissions;
   userPermissions: ActivityUserPermissions[];
@@ -74,7 +72,6 @@ class ViewActivityEventsComponent extends React.Component<InjectedProps, ViewAct
 
   private _activitySubscription: PromiseSubscription | null;
   private _participantsSubscription: Subscription | null;
-  private readonly _sessionTableColumns: any;
 
   constructor(props: InjectedProps) {
     super(props);
@@ -82,19 +79,9 @@ class ViewActivityEventsComponent extends React.Component<InjectedProps, ViewAct
     this._activitySubscription = null;
     this._participantsSubscription = null;
 
-    this._sessionTableColumns = [{
-      title: 'User',
-      dataIndex: 'user',
-      sorter: (a: DomainUser, b: DomainUser) => a.username.localeCompare(b.username),
-      render: (user: DomainUser) => this._renderUsername(user.userId)
-    }, {
-      title: 'Session Id',
-      dataIndex: 'sessionId',
-      sorter: (a: string, b: string) => a.localeCompare(b)
-    }];
-
     this.state = {
       activity: null,
+      activityInfo: null,
       participants: [],
       worldPermissions: ActivityPermissions.NONE,
       userPermissions: [],
@@ -106,6 +93,9 @@ class ViewActivityEventsComponent extends React.Component<InjectedProps, ViewAct
     if (this.props.activeDomainStore.domain) {
       this._joinActivity();
     }
+
+    this._loadPermissions();
+    this._loadActivity();
   }
 
   public componentWillUnmount(): void {
@@ -126,77 +116,64 @@ class ViewActivityEventsComponent extends React.Component<InjectedProps, ViewAct
 
   public render(): ReactNode {
     return (
-      <Page breadcrumbs={this._breadcrumbs}>
-        <Card title={<span><BlockOutlined/> Activity</span>}>
-          <Row gutter={16}>
-            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              {this._renderActivityInfo()}
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-              <Tabs>
-                <Tabs.TabPane key="state" tab="Activity State">
-                  {this._renderSessionTable()}
-                </Tabs.TabPane>
-                <Tabs.TabPane key="world-permissions" tab="World Permissions">
-                  <DescriptionBox>
-                    These permissions apply to all users in the system that do not
-                    have specific permissions set for them or a group they belong
-                    to.
-                  </DescriptionBox>
-                  <ActivityPermissionsControl value={this.state.worldPermissions}
-                  onChange={this._worldPermissionsChanged}/>
-                </Tabs.TabPane>
-                <Tabs.TabPane key="user-permissions" tab="User Permissions">
-                  <DescriptionBox>
-                    These permissions apply specific users in the system.
-                  </DescriptionBox>
-                  <ActivityUserPermissionsTab domainId={this.props.domainId}
-                                              onUserPermissionsChanged={this._userPermissionsChanged}
-                                              permissions={this.state.userPermissions}/>
-                </Tabs.TabPane>
-                <Tabs.TabPane key="group-permissions" tab="Group Permissions">
-                  <DescriptionBox>
-                    These permissions apply any user that is a member of the group defined below.
-                  </DescriptionBox>
-                  <ActivityGroupPermissionsTab domainId={this.props.domainId}
-                                               onGroupPermissionsChanged={this._groupPermissionsChanged}
-                                               permissions={this.state.groupPermissions}
-                  />
-                </Tabs.TabPane>
-              </Tabs>
-            </Col>
-          </Row>
-        </Card>
-      </Page>
+        <Page breadcrumbs={this._breadcrumbs}>
+          <Card title={<span><BlockOutlined/> Activity</span>}>
+            <Row gutter={16}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                {this._renderActivityInfo()}
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                <Tabs>
+                  <Tabs.TabPane key="state" tab="Activity State">
+                    <ActivityStateTab activity={this.state.activity} />
+                  </Tabs.TabPane>
+                  <Tabs.TabPane key="world-permissions" tab="World Permissions">
+                    <DescriptionBox>
+                      These permissions apply to all users in the system that do not
+                      have specific permissions set for them or a group they belong
+                      to.
+                    </DescriptionBox>
+                    <ActivityPermissionsControl value={this.state.worldPermissions}
+                                                onChange={this._worldPermissionsChanged}/>
+                  </Tabs.TabPane>
+                  <Tabs.TabPane key="user-permissions" tab="User Permissions">
+                    <DescriptionBox>
+                      These permissions apply specific users in the system.
+                    </DescriptionBox>
+                    <ActivityUserPermissionsTab domainId={this.props.domainId}
+                                                onUserPermissionsChanged={this._userPermissionsChanged}
+                                                permissions={this.state.userPermissions}/>
+                  </Tabs.TabPane>
+                  <Tabs.TabPane key="group-permissions" tab="Group Permissions">
+                    <DescriptionBox>
+                      These permissions apply any user that is a member of the group defined below.
+                    </DescriptionBox>
+                    <ActivityGroupPermissionsTab domainId={this.props.domainId}
+                                                 onGroupPermissionsChanged={this._groupPermissionsChanged}
+                                                 permissions={this.state.groupPermissions}
+                    />
+                  </Tabs.TabPane>
+                </Tabs>
+              </Col>
+            </Row>
+          </Card>
+        </Page>
     );
   }
 
   private _renderActivityInfo(): ReactNode {
-    if (this.state.activity) {
+    if (this.state.activityInfo) {
       return (
-        <InfoTable>
-          <InfoTableRow label="Id">{this.state.activity.id()}</InfoTableRow>
-          <InfoTableRow label="Type">{this.state.activity.type()}</InfoTableRow>
-          <InfoTableRow label="Ephemeral">{yesNo(this.state.activity.isEphemeral())}</InfoTableRow>
-          <InfoTableRow label="Created At">{shortDateTime(this.state.activity.createdTime())}</InfoTableRow>
-          <InfoTableRow label="Current Participants">{this.state.participants.length}</InfoTableRow>
-        </InfoTable>
+          <InfoTable>
+            <InfoTableRow label="Id">{this.state.activityInfo.activityId}</InfoTableRow>
+            <InfoTableRow label="Type">{this.state.activityInfo.activityType}</InfoTableRow>
+            <InfoTableRow label="Ephemeral">{yesNo(this.state.activityInfo.ephemeral)}</InfoTableRow>
+            <InfoTableRow label="Created At">{shortDateTime(this.state.activityInfo.created)}</InfoTableRow>
+            <InfoTableRow label="Current Participants">{this.state.participants.length}</InfoTableRow>
+          </InfoTable>
       )
-    } else {
-      return null;
-    }
-  }
-
-  private _renderSessionTable(): ReactNode {
-    if (this.state.activity) {
-      return <Table size="middle"
-                    columns={this._sessionTableColumns}
-                    dataSource={this.state.participants}
-                    rowKey="sessionId"
-                    pagination={false}
-      />
     } else {
       return null;
     }
@@ -205,7 +182,7 @@ class ViewActivityEventsComponent extends React.Component<InjectedProps, ViewAct
   private _joinActivity = () => {
     const {type, id} = this.props.match.params;
     const {promise, subscription} = makeCancelable(
-      this.props.activeDomainStore.domain!.activities().join(type, id, {lurk: true}));
+        this.props.activeDomainStore.domain!.activities().join(type, id, {lurk: true}));
     this._activitySubscription = subscription;
     promise.then(activity => {
       this._activitySubscription = null;
@@ -213,57 +190,63 @@ class ViewActivityEventsComponent extends React.Component<InjectedProps, ViewAct
       this._participantsSubscription = activity.participantsAsObservable().subscribe(participants => {
         this.setState({participants});
       })
-      return activity.permissions().getPermissions()
-    }).then(permissions => {
-      const worldPermissions = ActivityPermissions.of(permissions.worldPermissions);
-      const groupPermissions = Array.from(permissions.groupPermissions.entries())
-        .map(e => new ActivityGroupPermissions(e[0], ActivityPermissions.of(e[1])));
-      const userPermissions = permissions.userPermissions.entries()
-        .map(e => new ActivityUserPermissions(e[0], ActivityPermissions.of(e[1])));
-      this.setState({worldPermissions, userPermissions, groupPermissions});
-    })
-      .catch(err => {
+    }).catch(err => {
       console.error(err);
       this._activitySubscription = null;
       this.setState({activity: null});
     });
   }
 
-  private _renderUsername = (userId: DomainUserId) => {
-    if (userId.userType === DomainUserType.ANONYMOUS) {
-      return `${userId.username} (Anonymous)`;
-    } else if (userId.userType === DomainUserType.CONVERGENCE) {
-      return `${userId.username} (Convergence)`;
-    } else {
-      return userId.username;
-    }
-  };
+  private _loadPermissions(): void {
+    const {type, id} = this.props.match.params;
+    this.props.domainActivityService.getActivityPermissions(this.props.domainId, type, id).then(permissions => {
+      const worldPermissions = ActivityPermissions.of(permissions.worldPermissions as Set<ActivityPermission>);
+      const groupPermissions = Array.from(permissions.groupPermissions.entries())
+          .map(e => new ActivityGroupPermissions(e[0], ActivityPermissions.of(e[1] as Set<ActivityPermission>)));
+      const userPermissions = permissions.userPermissions.entries()
+          .map(e => new ActivityUserPermissions(e[0], ActivityPermissions.of(e[1] as Set<ActivityPermission>)));
+      this.setState({worldPermissions, userPermissions, groupPermissions});
+    }).catch(e => console.error(e));
+  }
+
+  private _loadActivity(): void {
+    const {type, id} = this.props.match.params;
+    this.props.domainActivityService.getActivity(this.props.domainId, type, id).then(activityInfo => {
+      this.setState({activityInfo});
+    }).catch(e => console.error(e));
+  }
 
   private _worldPermissionsChanged = (worldPermissions: ActivityPermissions) => {
-    this.setState({worldPermissions});
-    this.state.activity?.permissions()
-      .setWorldPermissions(worldPermissions.toPermissions()).catch(e => console.error(e));
+    const permissions = {worldPermissions: worldPermissions.toPermissions()};
+    this._setAndReloadPermissions(permissions);
   };
 
-  private _userPermissionsChanged = (userPermissions: ActivityUserPermissions[]) => {
+  private _userPermissionsChanged = (userPermissions: ActivityUserPermissions[], updated: ActivityUserPermissions) => {
     this.setState({userPermissions});
     const up = new DomainUserIdMap<Set<ActivityPermission>>();
-    userPermissions.forEach(p => {
-      up.set(p.userId, p.permissions.toPermissions());
-    });
-    this.state.activity?.permissions().setUserPermissions(up).catch(e => console.error(e));
+    up.set(updated.userId, updated.permissions.toPermissions());
+    const permissions = {userPermissions: up};
+    this._setAndReloadPermissions(permissions);
   };
 
-  private _groupPermissionsChanged = (groupPermissions: ActivityGroupPermissions[]) => {
+  private _groupPermissionsChanged = (groupPermissions: ActivityGroupPermissions[], updated: ActivityGroupPermissions) => {
     this.setState({groupPermissions});
     const gp = new Map<string, Set<ActivityPermission>>();
-    groupPermissions.forEach(p => {
-      gp.set(p.groupId, p.permissions.toPermissions());
-    });
-    this.state.activity?.permissions().setGroupPermissions(gp).catch(e => console.error(e));
+    gp.set(updated.groupId, updated.permissions.toPermissions());
+    const permissions = {groupPermissions: gp};
+    this._setAndReloadPermissions(permissions);
   };
+
+  private _setAndReloadPermissions(setPermissions: SetPermissions): void {
+    const {type, id} = this.props.match.params;
+    this.props.domainActivityService
+        .setActivityPermissions(this.props.domainId, type, id, setPermissions)
+        .then(() => {
+          this._loadPermissions();
+        });
+  }
 }
 
-const injections = [STORES.ACTIVE_DOMAIN_STORE];
+const injections = [STORES.ACTIVE_DOMAIN_STORE, SERVICES.DOMAIN_ACTIVITY_SERVICE];
 export const ViewActivity = injectAs<ViewActivityProps>(injections, ViewActivityEventsComponent);
 

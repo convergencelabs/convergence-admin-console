@@ -14,8 +14,8 @@ import {DeleteOutlined} from '@ant-design/icons';
 import {Button, Popconfirm, Row, Table} from "antd";
 import {ColumnProps} from "antd/lib/table";
 import {DomainId} from "../../../../models/DomainId";
-import {ActivityPermissions} from "../../../../models/domain/ActivityPermissions";
-import {ActivityGroupPermissions} from "../../../../models/domain/ActivityGroupPermissions";
+import {ActivityPermissions} from "../../../../models/domain/activity/ActivityPermissions";
+import {ActivityGroupPermissions} from "../../../../models/domain/activity/ActivityGroupPermissions";
 
 import styles from "./styles.module.css";
 import {SetActivityUserPermissionControl} from "../SetActivityGroupPermissionControl";
@@ -26,7 +26,7 @@ export interface ActivityPermissionsProps {
   domainId: DomainId;
   permissions: ActivityGroupPermissions[];
 
-  onGroupPermissionsChanged(permissions: ActivityGroupPermissions[]): void;
+  onGroupPermissionsChanged(allPermissions: ActivityGroupPermissions[], updated: ActivityGroupPermissions): void;
 }
 
 export class ActivityGroupPermissionsTab extends React.Component<ActivityPermissionsProps> {
@@ -90,11 +90,15 @@ export class ActivityGroupPermissionsTab extends React.Component<ActivityPermiss
   private _onSetGroupActivityPermissions = (groupPermissions: ActivityGroupPermissions) => {
     const p = this.props.permissions.filter(p => p.groupId !== groupPermissions.groupId);
     p.push(groupPermissions);
-    this.props.onGroupPermissionsChanged(p);
+    if (this.props.onGroupPermissionsChanged) {
+      this.props.onGroupPermissionsChanged(p, groupPermissions);
+    }
   }
 
   private _deleteGroupPermission = (groupId: string) => {
     const p = this.props.permissions.filter(p => p.groupId !== groupId);
-    this.props.onGroupPermissionsChanged(p);
+    if (this.props.onGroupPermissionsChanged) {
+      this.props.onGroupPermissionsChanged(p, new ActivityGroupPermissions(groupId, ActivityPermissions.NONE));
+    }
   }
 }

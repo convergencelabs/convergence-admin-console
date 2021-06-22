@@ -11,8 +11,8 @@
 
 import React, {ReactNode} from 'react';
 import {ActivityPermissionsControl} from "../ActivityPermissionsControl";
-import {ActivityUserPermissions} from "../../../../models/domain/ActivityUserPermissions";
-import {ActivityPermissions} from "../../../../models/domain/ActivityPermissions";
+import {ActivityUserPermissions} from "../../../../models/domain/activity/ActivityUserPermissions";
+import {ActivityPermissions} from "../../../../models/domain/activity/ActivityPermissions";
 
 interface ActivityUserPermissionsEditorProps {
   value: ActivityUserPermissions;

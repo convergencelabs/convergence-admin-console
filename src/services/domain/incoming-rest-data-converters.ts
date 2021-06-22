@@ -57,7 +57,7 @@ import {
 } from "../../models/domain/ChatEvent";
 import {ConvergenceError} from "@convergence/convergence";
 import {CollectionUserPermissions} from "../../models/domain/CollectionUserPermissions";
-import {ActivityInfo} from "../../models/domain/ActivityInfo";
+import {ActivityInfo} from "../../models/domain/activity/ActivityInfo";
 
 export function toCollection(data: CollectionData): Collection {
   const userPermissions = Object.keys(data.userPermissions).map(username => {

@@ -14,10 +14,10 @@ import { DeleteOutlined } from '@ant-design/icons';
 import {Button, Popconfirm, Row, Table} from "antd";
 import {ColumnProps} from "antd/lib/table";
 import {ActivityUserPermissionsEditor} from "../ActivityUserPermissionsEditor";
-import {ActivityUserPermissions} from "../../../../models/domain/ActivityUserPermissions";
+import {ActivityUserPermissions} from "../../../../models/domain/activity/ActivityUserPermissions";
 import {SetActivityUserPermissionControl} from "../SetActivityUserPermissionControl";
 import {DomainId} from "../../../../models/DomainId";
-import {ActivityPermissions} from "../../../../models/domain/ActivityPermissions";
+import {ActivityPermissions} from "../../../../models/domain/activity/ActivityPermissions";
 import {DomainUserId} from "@convergence/convergence";
 import styles from "./styles.module.css";
 
@@ -25,7 +25,7 @@ export interface ActivityPermissionsProps {
   domainId: DomainId;
   permissions: ActivityUserPermissions[];
 
-  onUserPermissionsChanged(permissions: ActivityUserPermissions[]): void;
+  onUserPermissionsChanged(allPermissions: ActivityUserPermissions[], updated: ActivityUserPermissions): void;
 }
 
 export class ActivityUserPermissionsTab extends React.Component<ActivityPermissionsProps> {
@@ -61,6 +61,7 @@ export class ActivityUserPermissionsTab extends React.Component<ActivityPermissi
 
   public render(): ReactNode {
     const {permissions} = this.props;
+    const p = permissions.slice().sort((a, b) => a.userId.username.localeCompare(b.userId.username))
     return (
         <div>
           <Row>
@@ -71,7 +72,7 @@ export class ActivityUserPermissionsTab extends React.Component<ActivityPermissi
           </Row>
           <Row>
             <Table className={styles.table}
-                   dataSource={permissions}
+                   dataSource={p}
                    columns={this._columns}
                    rowKey={(record: ActivityUserPermissions) => record.userId.userType + ":" + record.userId.username}
                    pagination={false}
@@ -90,9 +91,10 @@ export class ActivityUserPermissionsTab extends React.Component<ActivityPermissi
   private _onSetUserActivityPermissions = (userPermissions: ActivityUserPermissions) => {
     const p = this.props.permissions.filter(p => !p.userId.equals(userPermissions.userId));
     p.push(userPermissions);
-    this.props.onUserPermissionsChanged(p);
+    if (this.props.onUserPermissionsChanged) {
+      this.props.onUserPermissionsChanged(p, userPermissions);
+    }
   }
-
 
   private _renderUserId = (userId: DomainUserId, _: ActivityUserPermissions) => {
     return (<div>{userId.username}</div>);
@@ -100,6 +102,8 @@ export class ActivityUserPermissionsTab extends React.Component<ActivityPermissi
 
   private _deleteUserPermission = (userId: DomainUserId) => {
     const p = this.props.permissions.filter(p => !p.userId.equals(userId));
-    this.props.onUserPermissionsChanged(p);
+    if (this.props.onUserPermissionsChanged) {
+      this.props.onUserPermissionsChanged(p, new ActivityUserPermissions(userId, ActivityPermissions.NONE));
+    }
   }
 }

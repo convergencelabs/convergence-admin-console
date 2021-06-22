@@ -12,8 +12,8 @@
 import React, {ReactNode} from 'react';
 import {Button} from "antd";
 import {DomainId} from "../../../../models/DomainId";
-import {ActivityPermissions} from "../../../../models/domain/ActivityPermissions";
-import {ActivityUserPermissions} from "../../../../models/domain/ActivityUserPermissions";
+import {ActivityPermissions} from "../../../../models/domain/activity/ActivityPermissions";
+import {ActivityUserPermissions} from "../../../../models/domain/activity/ActivityUserPermissions";
 import {ActivityPermissionsControl} from "../ActivityPermissionsControl";
 import {DomainUsernameAutoComplete} from "../../user/DomainUsernameAutoComplete";
 import styles from "./styles.module.css";

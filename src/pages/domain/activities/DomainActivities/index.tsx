@@ -36,7 +36,7 @@ import {PagedData} from "../../../../models/PagedData";
 import queryString from "query-string";
 import {appendToQueryParamString} from "../../../../utils/router-utils";
 import {DomainActivityService} from "../../../../services/domain/DomainActivityService";
-import {ActivityInfo} from "../../../../models/domain/ActivityInfo";
+import {ActivityInfo} from "../../../../models/domain/activity/ActivityInfo";
 import {shortDateTime, yesNo} from "../../../../utils/format-utils";
 
 export interface IActivitySearchParams {

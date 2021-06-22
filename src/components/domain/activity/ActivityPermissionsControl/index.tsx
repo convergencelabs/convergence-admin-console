@@ -12,7 +12,7 @@
 import React, {ReactNode} from 'react';
 import {Checkbox,} from "antd";
 import {CheckboxChangeEvent} from "antd/lib/checkbox";
-import {ActivityPermissions} from "../../../../models/domain/ActivityPermissions";
+import {ActivityPermissions} from "../../../../models/domain/activity/ActivityPermissions";
 import {TypeChecker} from "../../../../utils/TypeChecker";
 
 interface ActivityPermissionsControlProps {
