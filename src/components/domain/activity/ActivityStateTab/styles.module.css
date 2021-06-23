@@ -12,3 +12,23 @@
   margin-top: 15px;
   flex: 1;
 }
+
+.sessionTitle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.username, .session {
+  margin-left: 50px;
+}
+
+.value {
+  background: white;
+  border: 1px solid lightgray;
+  font-weight: normal;
+  padding: 2px 5px;
+  margin-left: 10px;
+  min-width: 100px;
+  display: inline-block;
+}

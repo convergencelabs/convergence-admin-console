@@ -51,6 +51,11 @@ import "ace-builds/src-noconflict/theme-solarized_dark";
 import './index.css';
 
 import 'mobx-react-lite/batchingForReactDom';
+import {Convergence} from "@convergence/convergence";
+
+Convergence.configureLogging({
+  loggers: {}
+});
 
 configure({enforceActions: "always"});
 

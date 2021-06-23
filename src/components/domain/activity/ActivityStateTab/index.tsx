@@ -21,6 +21,8 @@ import {
   DomainUserType
 } from "@convergence/convergence";
 import {Subscription} from "rxjs";
+import {CloudOutlined, UserOutlined} from "@ant-design/icons";
+import styles from "./styles.module.css";
 
 export interface ActivityStateProps {
   activity: Activity | null;
@@ -30,6 +32,7 @@ export interface ActivityStateState {
   participants: ActivityParticipant[];
   selectedRowKeys: any[];
   currentState: Map<string, any> | null;
+  selectedParticipant: ActivityParticipant | null;
 }
 
 
@@ -48,7 +51,8 @@ export class ActivityStateTab extends React.Component<ActivityStateProps, Activi
     this.state = {
       participants: [],
       selectedRowKeys: [],
-      currentState: null
+      currentState: null,
+      selectedParticipant: null
     }
 
     this._sessionTableColumns = [{
@@ -89,16 +93,10 @@ export class ActivityStateTab extends React.Component<ActivityStateProps, Activi
   }
 
   public componentWillUnmount(): void {
-   this._unsubscribe();
+    this._unsubscribe();
   }
 
   public render(): ReactNode {
-    const participantState = Array
-        .from(this.state.currentState?.entries() || [])
-        .map(e => {
-          return {key: e[0], value: e[1]};
-        });
-
     const rowSelection = {
       selectedRowKeys: this.state.selectedRowKeys,
       onChange: this._selectionChanged,
@@ -107,27 +105,49 @@ export class ActivityStateTab extends React.Component<ActivityStateProps, Activi
 
     return <Row gutter={16}>
       <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-        <Card type="inner" title="Participants">
-          <Table size="middle"
-                 columns={this._sessionTableColumns}
-                 dataSource={this.state.participants}
-                 rowKey="sessionId"
-                 pagination={false}
-                 rowSelection={rowSelection}
-          />
-        </Card>
+        <Table size="middle"
+               bordered={true}
+               columns={this._sessionTableColumns}
+               dataSource={this.state.participants}
+               rowKey="sessionId"
+               pagination={false}
+               rowSelection={rowSelection}
+        />
       </Col>
       <Col xs={24} sm={24} md={16} lg={16} xl={16}>
-        <Card type="inner" title="Selected Participant State">
-          <Table size="middle"
-                 columns={this._stateTableColumns}
-                 dataSource={participantState}
-                 rowKey="key"
-                 pagination={false}
-          />
-        </Card>
+        {this._renderSelectedState()}
       </Col>
     </Row>
+  }
+
+  private _renderSelectedState(): ReactNode {
+    if (this.state.selectedParticipant) {
+      const participantState = Array
+          .from(this.state.currentState?.entries() || [])
+          .map(e => {
+            return {key: e[0], value: e[1]};
+          });
+      const {user, sessionId} = this.state.selectedParticipant
+      return (
+          <Card type="inner" title={
+            <div className={styles.sessionTitle}>
+              <span>Activity State For: </span>
+              <span className={styles.username}><UserOutlined/> User <span
+                  className={styles.value}>{this._renderUsername(user)}</span></span>
+              <span className={styles.session}><CloudOutlined/> Session <span
+                  className={styles.value}>{sessionId}</span></span>
+            </div>
+          }>
+            <Table size="middle"
+                   columns={this._stateTableColumns}
+                   dataSource={participantState}
+                   rowKey="key"
+                   pagination={false}
+            />
+          </Card>)
+    } else {
+      return null;
+    }
   }
 
   private _subscribe(activity: Activity): void {
@@ -149,6 +169,7 @@ export class ActivityStateTab extends React.Component<ActivityStateProps, Activi
           }
         });
   }
+
   private _unsubscribe(): void {
     if (this._participantsSubscription) {
       this._participantsSubscription.unsubscribe();
@@ -164,10 +185,11 @@ export class ActivityStateTab extends React.Component<ActivityStateProps, Activi
   private _selectionChanged = (selectedRowKeys: any[]) => {
     this.setState({selectedRowKeys});
     if (selectedRowKeys.length > 0) {
-      const state = this.props.activity?.participant(selectedRowKeys[0]).state
-      this.setState({currentState: state || null});
+      const selectedParticipant = this.props.activity?.participant(selectedRowKeys[0]) || null;
+      const currentState = selectedParticipant?.state || null;
+      this.setState({currentState, selectedParticipant});
     } else {
-      this.setState({currentState: null});
+      this.setState({currentState: null, selectedParticipant: null});
     }
   }
 

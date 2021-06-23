@@ -15,7 +15,7 @@ import {Page} from "../../../../components";
 import {Card, Col, Row, Tabs} from "antd";
 import {RouteComponentProps} from "react-router";
 import {makeCancelable, PromiseSubscription} from "../../../../utils/make-cancelable";
-import {injectAs} from "../../../../utils/mobx-utils";
+import {injectObserver} from "../../../../utils/mobx-utils";
 import {DomainId} from "../../../../models/DomainId";
 import {DomainActivityService} from "../../../../services/domain/DomainActivityService";
 import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
@@ -38,6 +38,8 @@ import {SERVICES} from "../../../../services/ServiceConstants";
 import {SetPermissions} from "../../../../models/domain/permissions/SetPermissions";
 import {ActivityInfo} from "../../../../models/domain/activity/ActivityInfo";
 import {ActivityStateTab} from "../../../../components/domain/activity/ActivityStateTab";
+
+import styles from "./styles.module.css";
 
 export interface IActivitySearchParams {
   filter?: string;
@@ -63,7 +65,7 @@ export interface ViewActivityState {
   groupPermissions: ActivityGroupPermissions[];
 }
 
-class ViewActivityEventsComponent extends React.Component<InjectedProps, ViewActivityState> {
+class ViewActivityComponent extends React.Component<InjectedProps, ViewActivityState> {
   private readonly _breadcrumbs: IBreadcrumbSegment[] = [
     {title: "Activities", link: toDomainRoute(this.props.domainId, "activities/")},
     {title: decodeURIComponent(this.props.match.params.type)},
@@ -90,17 +92,20 @@ class ViewActivityEventsComponent extends React.Component<InjectedProps, ViewAct
   }
 
   public componentDidMount(): void {
-    if (this.props.activeDomainStore.domain) {
-      this._joinActivity();
-    }
-
+    this._joinActivity();
     this._loadPermissions();
     this._loadActivity();
   }
 
+  public componentDidUpdate(prevProps: Readonly<InjectedProps>) {
+    if (this.state.activity === null && this.props.activeDomainStore.domain) {
+      this._joinActivity();
+    }
+  }
+
   public componentWillUnmount(): void {
     if (this.state.activity && this.state.activity.isJoined()) {
-      this.state.activity.leave();
+      this.state.activity.leave().catch(e => console.error(e));
     }
 
     if (this._participantsSubscription) {
@@ -115,6 +120,9 @@ class ViewActivityEventsComponent extends React.Component<InjectedProps, ViewAct
   }
 
   public render(): ReactNode {
+    // This has to be done this way, since we need to dereference the domain
+    // property in order to react to the domain being set.
+    const stateTab = this.props.activeDomainStore.domain && this.state.activity  ? <ActivityStateTab activity={this.state.activity}/> : null;
     return (
         <Page breadcrumbs={this._breadcrumbs}>
           <Card title={<span><BlockOutlined/> Activity</span>}>
@@ -125,9 +133,13 @@ class ViewActivityEventsComponent extends React.Component<InjectedProps, ViewAct
             </Row>
             <Row gutter={16}>
               <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                <Tabs>
-                  <Tabs.TabPane key="state" tab="Activity State">
-                    <ActivityStateTab activity={this.state.activity} />
+                <Tabs className={styles.tabs}>
+                  <Tabs.TabPane key="state" tab="Active Participants">
+                    <DescriptionBox>
+                      If users are currently joined to this activity they will be shown here. You can view the
+                      current state of each participant.
+                    </DescriptionBox>
+                    {stateTab}
                   </Tabs.TabPane>
                   <Tabs.TabPane key="world-permissions" tab="World Permissions">
                     <DescriptionBox>
@@ -180,21 +192,25 @@ class ViewActivityEventsComponent extends React.Component<InjectedProps, ViewAct
   }
 
   private _joinActivity = () => {
+    const {domain} = this.props.activeDomainStore;
     const {type, id} = this.props.match.params;
-    const {promise, subscription} = makeCancelable(
-        this.props.activeDomainStore.domain!.activities().join(type, id, {lurk: true}));
-    this._activitySubscription = subscription;
-    promise.then(activity => {
-      this._activitySubscription = null;
-      this.setState({activity: activity});
-      this._participantsSubscription = activity.participantsAsObservable().subscribe(participants => {
-        this.setState({participants});
-      })
-    }).catch(err => {
-      console.error(err);
-      this._activitySubscription = null;
-      this.setState({activity: null});
-    });
+
+    if (domain && !domain.activities().isJoined(type, id)) {
+      const {promise, subscription} = makeCancelable(
+          this.props.activeDomainStore.domain!.activities().join(type, id, {lurk: true}));
+      this._activitySubscription = subscription;
+      promise.then(activity => {
+        this._activitySubscription = null;
+        this.setState({activity: activity});
+        this._participantsSubscription = activity.participantsAsObservable().subscribe(participants => {
+          this.setState({participants});
+        })
+      }).catch(err => {
+        console.error(err);
+        this._activitySubscription = null;
+        this.setState({activity: null});
+      });
+    }
   }
 
   private _loadPermissions(): void {
@@ -248,5 +264,5 @@ class ViewActivityEventsComponent extends React.Component<InjectedProps, ViewAct
 }
 
 const injections = [STORES.ACTIVE_DOMAIN_STORE, SERVICES.DOMAIN_ACTIVITY_SERVICE];
-export const ViewActivity = injectAs<ViewActivityProps>(injections, ViewActivityEventsComponent);
+export const ViewActivity = injectObserver<ViewActivityProps>(injections, ViewActivityComponent);
 
