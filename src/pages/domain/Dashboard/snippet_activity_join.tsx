@@ -14,9 +14,10 @@ import {CodeSnippet} from "../../../components/domain/common/CodeSnippet";
 
 const DESCRIPTION = "This snippet demonstrates joining an existing activity.";
 const CODE = `
+const activityType = "activity-type";
 const activityId = "myActivity";
 domain.activities()
-  .join(activityId)
+  .join(activityType, activityId)
   .then((activity) => {
     console.log("activity joined");
     // use the activity
