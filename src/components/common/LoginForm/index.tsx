@@ -109,7 +109,9 @@ class NormalLoginForm extends Component<InjectedProps, LoginFormState> {
             <Form.Item name="username"
                        rules={[{required: true, message: 'Please input your username!'}]}>
               <Input prefix={<UserOutlined style={{color: 'rgba(0,0,0,.25)'}}/>}
-                     placeholder="Username"/>
+                     placeholder="Username"
+                     autoFocus={true}
+              />
             </Form.Item>
             <Form.Item name="password"
                        rules={[{required: true, message: 'Please input your Password!'}]}>
