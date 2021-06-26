@@ -18,13 +18,14 @@ import {
   PagedRestData,
   SetPermissionsData
 } from "./common-rest-data";
-import {toActivityInfo} from "./incoming-rest-data-converters";
+import {decodeDomainUserId, toActivityInfo} from "./incoming-rest-data-converters";
 import {PagedData} from "../../models/PagedData";
 import {ActivityInfo} from "../../models/domain/activity/ActivityInfo";
 import {AllPermissions} from "../../models/domain/permissions/AllPermissions";
 import {mapObject, objectToMap} from "../../utils/map-utils";
 import {DomainUserIdMap} from "@convergence/convergence";
 import {SetPermissions} from "../../models/domain/permissions/SetPermissions";
+import {encodeDomainUserId} from "./outgoing-rest-data-converters";
 
 export class DomainActivityService extends AbstractDomainService {
 
@@ -64,7 +65,10 @@ export class DomainActivityService extends AbstractDomainService {
     const url = this._getDomainUrl(domain, relPath);
     return this._get<GetPermissionsData>(url).then(p => {
       const userPermissions = new DomainUserIdMap<Set<string>>()
-      objectToMap(p.userPermissions || {}).forEach((v, username) => userPermissions.set(username, new Set(v)));
+      objectToMap(p.userPermissions || {}).forEach((v, username) => {
+        const userId = decodeDomainUserId(username);
+        userPermissions.set(userId, new Set(v))
+      });
       const groupPermissions: { [key: string]: Set<string> } =
           mapObject((p.groupPermissions || {}), (permissions) => new Set(permissions));
       return new AllPermissions(new Set(p.worldPermissions), userPermissions, objectToMap(groupPermissions));
@@ -83,7 +87,7 @@ export class DomainActivityService extends AbstractDomainService {
     if (permissions.userPermissions) {
       const up: {[key: string]: string[]} = {};
       permissions.userPermissions.forEach((permissions, user) => {
-        up[user.username] = Array.from(permissions);
+        up[encodeDomainUserId(user)] = Array.from(permissions);
       })
       data.userPermissions = {
         permissions: up,

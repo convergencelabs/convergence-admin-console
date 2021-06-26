@@ -284,3 +284,14 @@ export function toActivityInfo(data: ActivityData): ActivityInfo {
     new Date(data.created)
   );
 }
+
+export function decodeDomainUserId(userId: string): DomainUserId {
+  if (!userId.includes(":")) {
+    return DomainUserId.normal(decodeURIComponent(userId));
+  } else {
+    const parts = userId.split(":");
+    const userType = DomainUserId.toDomainUserType(parts[0]);
+    const username = decodeURIComponent(parts[1]);
+    return new DomainUserId(userType, username);
+  }
+}

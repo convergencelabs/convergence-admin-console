@@ -19,6 +19,7 @@ import {
 import {CollectionPermissions} from "../../models/domain/CollectionPermissions";
 import {ModelSnapshotPolicy} from "../../models/domain/ModelSnapshotPolicy";
 import {CollectionUserPermissions} from "../../models/domain/CollectionUserPermissions";
+import {DomainUserId, DomainUserType} from "@convergence/convergence";
 
 export function toCollectionData(collection: Collection): CollectionData {
 
@@ -71,4 +72,16 @@ export function toModelSnapshotPolicyData(policy: ModelSnapshotPolicy): ModelSna
     limitByTime: policy.limitByTime,
     minimumTimeInterval: policy.minimumTimeInterval
   };
+}
+
+export function encodeDomainUserId(userId: DomainUserId): string {
+  if (userId.userType === DomainUserType.NORMAL) {
+    if (userId.username.includes(":")) {
+      return encodeURIComponent(userId.username)
+    } else {
+      return userId.username;
+    }
+  } else {
+    return `${userId.userType}:${encodeURIComponent(userId.username)}`
+  }
 }
