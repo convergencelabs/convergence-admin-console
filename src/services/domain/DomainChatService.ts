@@ -51,7 +51,7 @@ export class DomainChatService extends AbstractDomainService {
 
   public createChat(domain: DomainId, data: CreateChatData): Promise<void> {
     const url = this._getDomainUrl(domain, "chats");
-    return this._post<void>(url, data);
+    return this._post<void>(url, data).then(() => undefined);
   }
 
   public getChatEvents(domain: DomainId, chatId: string, offset?: number, limit?: number, messageFilter?: string): Promise<PagedData<ChatEvent>> {
