@@ -39,7 +39,7 @@ export class DomainStatusIcon extends React.Component<DomainStatusIconProps, {}>
       case DomainStatus.SCHEMA_UPGRADE_REQUIRED:
         return <DatabaseFilled className={styles.upgradeRequired} />;
       case DomainStatus.SCHEMA_UPGRADING:
-        return <SyncOutlined spin className={styles.upgrading} />;
+        return <SyncOutlined className={styles.upgrading} />;
       default:
         throw new Error("Unknown domain status: " + this.props.status);
     }

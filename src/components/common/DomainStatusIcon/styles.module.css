@@ -11,94 +11,69 @@
 
 :global(.anticon).error {
   color: red;
+  border-radius: 50%;
 }
 
 :global(.anticon).upgradeRequired {
   color: orange;
+  border-radius: 50%;
 }
 
 :global(.anticon).upgrading {
   color: #011b61;
+  border-radius: 50%;
+  animation: pulsing 2s infinite, spin 2s linear infinite;
 }
 
 :global(.anticon).ready {
   color: green;
+  border-radius: 50%;
 }
 
 :global(.anticon).initializing {
   color: darkgrey;
   border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 0 0 0 rgba(200, 200, 200, 0.4);
-  animation: initializing 2s infinite;
-}
-
-@-webkit-keyframes initializing {
-  0% {
-    -webkit-box-shadow: 0 0 0 0 rgba(200, 200, 200, 0.4);
-  }
-  70% {
-    -webkit-box-shadow: 0 0 0 10px rgba(200, 200, 200, 0);
-  }
-  100% {
-    -webkit-box-shadow: 0 0 0 0 rgba(200, 200, 200, 0);
-  }
-}
-
-@keyframes initializing {
-  0% {
-    -moz-box-shadow: 0 0 0 0 rgba(200, 200, 200, 0.4);
-    box-shadow: 0 0 0 0 rgba(200, 200, 200, 0.4);
-  }
-  70% {
-    -moz-box-shadow: 0 0 0 10px rgba(200, 200, 200, 0);
-    box-shadow: 0 0 0 10px rgba(200, 200, 200, 0);
-  }
-  100% {
-    -moz-box-shadow: 0 0 0 0 rgba(200, 200, 200, 0);
-    box-shadow: 0 0 0 0 rgba(200, 200, 200, 0);
-  }
+  animation: pulsing 2s infinite, spin 2s linear infinite;
 }
 
 :global(.anticon).offline {
   color: darkgrey;
+  border-radius: 50%;
 }
 
 :global(.anticon).maintenance {
   color: darkgrey;
+  border-radius: 50%;
 }
 
 :global(.anticon).deleting {
   color: orange;
   border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 0 0 0 rgba(204, 169, 44, 0.4);
-  animation: deleting 2s infinite;
+  animation: pulsing 2s infinite;
 }
 
-@-webkit-keyframes deleting {
+@keyframes spin {
   0% {
-    -webkit-box-shadow: 0 0 0 0 rgba(204, 169, 44, 0.4);
+    transform: rotate(0deg);
   }
-  70% {
-    -webkit-box-shadow: 0 0 0 10px rgba(204, 169, 44, 0);
+
+  50% {
+    transform: rotate(180deg);
   }
+
   100% {
-    -webkit-box-shadow: 0 0 0 0 rgba(204, 169, 44, 0);
+    transform: rotate(360deg);
   }
 }
 
-@keyframes deleting {
+@keyframes pulsing {
   0% {
-    -moz-box-shadow: 0 0 0 0 rgba(204, 169, 44, 0.4);
     box-shadow: 0 0 0 0 rgba(204, 169, 44, 0.4);
   }
   70% {
-    -moz-box-shadow: 0 0 0 10px rgba(204, 169, 44, 0);
     box-shadow: 0 0 0 10px rgba(204, 169, 44, 0);
   }
   100% {
-    -moz-box-shadow: 0 0 0 0 rgba(204, 169, 44, 0);
     box-shadow: 0 0 0 0 rgba(204, 169, 44, 0);
   }
 }
