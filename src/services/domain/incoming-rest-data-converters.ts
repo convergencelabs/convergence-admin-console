@@ -62,8 +62,8 @@ import {ActivityInfo} from "../../models/domain/activity/ActivityInfo";
 export function toCollection(data: CollectionData): Collection {
   const userPermissions = Object.keys(data.userPermissions).map(username => {
     return new CollectionUserPermissions(
-        new DomainUserId(DomainUserType.NORMAL, username),
-        toCollectionPermissions(data.userPermissions[username])
+      new DomainUserId(DomainUserType.NORMAL, username),
+      toCollectionPermissions(data.userPermissions[username])
     );
   })
   return new Collection(
@@ -205,7 +205,7 @@ export function toChatInfo(data: ChatInfoData): ChatInfo {
     data.membership,
     data.name,
     data.topic,
-    (data.members || []).map((m: DomainUserIdData) => toDomainUserId(m)),
+    (data.members || []).map((m: string) => decodeDomainUserId(m)),
     new Date(data.created),
     data.lastEventNumber,
     new Date(data.lastEventTimestamp)
@@ -219,7 +219,7 @@ export function toChatEvent(event: any): ChatEvent {
       return new ChatCreatedEvent(
         event.eventNumber,
         event.id,
-        toDomainUserId(event.user),
+        decodeDomainUserId(event.user),
         new Date(event.timestamp),
         event.name,
         event.topic,
@@ -228,47 +228,47 @@ export function toChatEvent(event: any): ChatEvent {
       return new ChatMessageEvent(
         event.eventNumber,
         event.id,
-        toDomainUserId(event.user),
+        decodeDomainUserId(event.user),
         new Date(event.timestamp),
         event.message);
     case "user_joined":
       return new ChatUserJoinedEvent(
         event.eventNumber,
         event.id,
-        toDomainUserId(event.user),
+        decodeDomainUserId(event.user),
         new Date(event.timestamp));
     case "user_left":
       return new ChatUserLeftEvent(
         event.eventNumber,
         event.id,
-        toDomainUserId(event.user),
+        decodeDomainUserId(event.user),
         new Date(event.timestamp));
     case "user_added":
       return new ChatUserAddedEvent(
         event.eventNumber,
         event.id,
-        toDomainUserId(event.user),
+        decodeDomainUserId(event.user),
         new Date(event.timestamp),
-        toDomainUserId(event.userAdded));
+        decodeDomainUserId(event.userAdded));
     case "user_removed":
       return new ChatUserRemovedEvent(
         event.eventNumber,
         event.id,
-        toDomainUserId(event.user),
+        decodeDomainUserId(event.user),
         new Date(event.timestamp),
-        toDomainUserId(event.userRemoved));
+        decodeDomainUserId(event.userRemoved));
     case "name_changed":
       return new ChatNameChangedEvent(
         event.eventNumber,
         event.id,
-        toDomainUserId(event.user),
+        decodeDomainUserId(event.user),
         new Date(event.timestamp),
         event.name);
     case "topic_changed":
       return new ChatTopicChangedEvent(
         event.eventNumber,
         event.id,
-        toDomainUserId(event.user),
+        decodeDomainUserId(event.user),
         new Date(event.timestamp),
         event.topic);
     default:

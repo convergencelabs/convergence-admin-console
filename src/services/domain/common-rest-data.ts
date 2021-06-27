@@ -169,7 +169,7 @@ export interface ChatInfoData {
   membership: string;
   name: string;
   topic: string;
-  members: DomainUserIdData[];
+  members: string[];
   created: number;
   lastEventNumber: number;
   lastEventTimestamp: number;
