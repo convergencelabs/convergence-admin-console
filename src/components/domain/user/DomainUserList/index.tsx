@@ -33,7 +33,7 @@ export class DomainUserList extends React.Component<DomainUserListProps, DomainU
   };
 
   public render(): ReactNode {
-    const disabled = this.state.username === "";
+    const disabled = this.state.username === null || this.state.username === "";
     return (
       <div>
         <div className={styles.addControl}>
