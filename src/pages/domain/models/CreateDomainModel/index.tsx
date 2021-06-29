@@ -141,14 +141,16 @@ class CreateDomainModelComponent extends React.Component<InjectedProps, CreateDo
         });
         this.props.history.push(toDomainRoute(domainId, `models/${modelId}`));
       }).catch((err) => {
+        let description = "Unknown error creating model. Check the console."
         if (err instanceof RestError) {
           if (err.code === "duplicate") {
-            notification.error({
-              message: 'Could Not Create Model',
-              description: `A model with the specified ${err.details["field"]} already exists.`
-            });
+           description = `A model with the specified ${err.details["field"]} already exists.`
+          } else if (err.message) {
+            description = err.message;
           }
         }
+
+        notification.error({message: 'Could Not Create Model', description});
       });
     } catch (parseErr) {
       console.error(parseErr)
