@@ -49,9 +49,10 @@ export class DomainActivityService extends AbstractDomainService {
         })
   }
 
-  public createActivity(domain: DomainId, data: CreateActivityData): Promise<void> {
-    const url = this._getDomainUrl(domain, "activities");
-    return this._post<void>(url, data);
+  public createActivity(domain: DomainId, activityType: string, activityId: string, data: CreateActivityData): Promise<void> {
+    const relPath = `activities/${activityType}/${activityId}`;
+    const url = this._getDomainUrl(domain, relPath);
+    return this._put<void>(url, data);
   }
 
   public deleteActivity(domain: DomainId, activityType: string, activityId: string): Promise<void> {

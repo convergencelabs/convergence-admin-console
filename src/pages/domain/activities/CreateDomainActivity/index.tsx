@@ -77,28 +77,26 @@ class CreateDomainActivityComponent extends React.Component<InjectedProps, {}> {
   private _onFinish = (values: any) => {
     const {activityType, activityId} = values;
     const createActivityData: CreateActivityData = {
-      activityType,
-      activityId,
       worldPermissions: ["join", "set_state", "view_state"],
       userPermissions: {},
       groupPermissions: {}
     }
 
-    this.props.domainActivityService.createActivity(this.props.domainId, createActivityData)
+    this.props.domainActivityService.createActivity(this.props.domainId, activityType, activityId, createActivityData)
       .then(() => {
         notification.success({
           message: 'Activity Created',
-          description: `Activity '${activityId}' successfully created`,
+          description: `Activity '${activityType}/${activityId}' successfully created`,
           placement: "bottomRight",
           duration: 3
         });
-        this.props.history.push(toDomainRoute(this.props.domainId, "activities"));
+        this.props.history.push(toDomainRoute(this.props.domainId, `activities/${activityType}/${activityId}`));
       })
       .catch((err) => {
         let description;
         if (err instanceof RestError) {
-          if (err.code === "duplicate") {
-            description = `A chat with the specified ${err.details["field"]} already exists.`;
+          if (err.code === "conflicts") {
+            description = `An activity with the specified type and id already exists.`;
           } else {
             description = `An error was return by the server: '${err.code}'`
             console.error(err);
@@ -108,11 +106,7 @@ class CreateDomainActivityComponent extends React.Component<InjectedProps, {}> {
           console.error(err);
         }
 
-        notification["error"]({
-          message: 'Could Not Create Activity',
-          description,
-          placement: "bottomRight"
-        });
+        notification.error({message: 'Could Not Create Activity', description});
       });
   }
 }

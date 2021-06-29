@@ -189,8 +189,6 @@ export interface ReconnectConfigData {
 }
 
 export interface CreateActivityData {
-  activityType: string;
-  activityId: string;
   worldPermissions: any;
   userPermissions: any;
   groupPermissions: any;
