@@ -28,6 +28,7 @@ import {ModelUserPermissionsEditor} from "../../../../../components/domain/model
 import {ModelUserPermissions} from "../../../../../models/domain/ModelUserPermissions";
 import {DomainUserId} from "@convergence/convergence";
 import {CheckboxChangeEvent} from "antd/lib/checkbox";
+import {formatDomainUserId} from "../../../../../utils/format-utils";
 
 export interface ModelPermissionsProps {
   domainId: DomainId;
@@ -208,8 +209,8 @@ class ModelPermissionsTabComponent extends React.Component<InjectedProps, ModelP
 
   private _renderUserId = (userId: DomainUserId, record: ModelUserPermissions) => {
     return (
-      <div>{userId.username}</div>
-    )
+      <div>{formatDomainUserId(userId)}</div>
+    );
   }
 
   private _deleteUserPermission = (userId: DomainUserId) => {

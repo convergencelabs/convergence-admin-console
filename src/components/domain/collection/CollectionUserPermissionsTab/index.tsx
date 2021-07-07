@@ -20,6 +20,7 @@ import {DomainId} from "../../../../models/DomainId";
 import {CollectionPermissions} from "../../../../models/domain/CollectionPermissions";
 import {DomainUserId} from "@convergence/convergence";
 import styles from "./styles.module.css";
+import {formatDomainUserId} from "../../../../utils/format-utils";
 
 export interface CollectionPermissionsProps {
   domainId: DomainId;
@@ -93,9 +94,8 @@ export class CollectionPermissionsTab extends React.Component<CollectionPermissi
     this.props.onUserPermissionsChanged(p);
   }
 
-
   private _renderUserId = (userId: DomainUserId, _: CollectionUserPermissions) => {
-    return (<div>{userId.username}</div>);
+    return (<div>{formatDomainUserId(userId)}</div>);
   }
 
   private _deleteUserPermission = (userId: DomainUserId) => {

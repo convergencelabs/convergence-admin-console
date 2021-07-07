@@ -47,7 +47,7 @@ import {
   ChatUserAddedEvent,
   ChatUserRemovedEvent
 } from "../../../../models/domain/ChatEvent";
-import {shortDateTime} from "../../../../utils/format-utils";
+import {formatDomainUserId, shortDateTime} from "../../../../utils/format-utils";
 import {DomainUserId, DomainUserType} from "@convergence/convergence";
 import {InfoTable, InfoTableRow} from "../../../../components/server/InfoTable";
 import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
@@ -100,7 +100,7 @@ class ViewChatEventsComponent extends React.Component<InjectedProps, ViewChatSta
     }, {
       title: 'User',
       dataIndex: 'userId',
-      render: this._renderUsername
+      render: formatDomainUserId
 
     }, {
       title: 'Data',
@@ -183,7 +183,7 @@ class ViewChatEventsComponent extends React.Component<InjectedProps, ViewChatSta
               bordered
               header={<span className={styles.membersHeader}>Members ({this.state.chatInfo?.members.length})</span>}
               dataSource={this.state.chatInfo?.members}
-              renderItem={member => <List.Item>{this._renderUsername(member)}</List.Item>}
+              renderItem={member => <List.Item>{formatDomainUserId(member)}</List.Item>}
             />
           </Col>
         </Row>;
@@ -294,16 +294,6 @@ class ViewChatEventsComponent extends React.Component<InjectedProps, ViewChatSta
     this.props.history.push(`${encodeURIComponent(this.state.chatInfo!.chatId)}/edit`);
   };
 
-  private _renderUsername = (userId: DomainUserId) => {
-    if (userId.userType === DomainUserType.ANONYMOUS) {
-      return `${userId.username} (Anonymous)`;
-    } else if (userId.userType === DomainUserType.CONVERGENCE) {
-      return `${userId.username} (Convergence)`;
-    } else {
-      return userId.username;
-    }
-  };
-
   private _renderEventType = (type: string) => {
     switch (type) {
       case "created": {
@@ -360,11 +350,11 @@ class ViewChatEventsComponent extends React.Component<InjectedProps, ViewChatSta
       }
       case "user_added": {
         const addedEvent = event as ChatUserAddedEvent;
-        return this._renderUsername(addedEvent.addedUserId);
+        return formatDomainUserId(addedEvent.addedUserId);
       }
       case "user_removed": {
         const removedEvent = event as ChatUserRemovedEvent;
-        return this._renderUsername(removedEvent.removedUserId);
+        return formatDomainUserId(removedEvent.removedUserId);
       }
       case "name_changed": {
         const nameEvent = event as ChatNameChangedEvent;

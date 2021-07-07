@@ -17,12 +17,12 @@ import {
   ActivityStateClearedEvent,
   ActivityStateRemovedEvent,
   ActivityStateSetEvent,
-  DomainUser,
-  DomainUserType
+  DomainUser
 } from "@convergence/convergence";
 import {Subscription} from "rxjs";
 import {CloudOutlined, UserOutlined} from "@ant-design/icons";
 import styles from "./styles.module.css";
+import {formatDomainUserId} from "../../../../utils/format-utils";
 
 export interface ActivityStateProps {
   activity: Activity | null;
@@ -59,7 +59,7 @@ export class ActivityStateTab extends React.Component<ActivityStateProps, Activi
       title: 'User',
       dataIndex: 'user',
       sorter: (a: DomainUser, b: DomainUser) => a.username.localeCompare(b.username),
-      render: (user: DomainUser) => this._renderUsername(user)
+      render: (user: DomainUser) => formatDomainUserId(user.userId)
     }, {
       title: 'Session Id',
       dataIndex: 'sessionId',
@@ -133,7 +133,7 @@ export class ActivityStateTab extends React.Component<ActivityStateProps, Activi
             <div className={styles.sessionTitle}>
               <span>Activity State For: </span>
               <span className={styles.username}><UserOutlined/> User <span
-                  className={styles.value}>{this._renderUsername(user)}</span></span>
+                  className={styles.value}>{formatDomainUserId(user.userId)}</span></span>
               <span className={styles.session}><CloudOutlined/> Session <span
                   className={styles.value}>{sessionId}</span></span>
             </div>
@@ -192,16 +192,4 @@ export class ActivityStateTab extends React.Component<ActivityStateProps, Activi
       this.setState({currentState: null, selectedParticipant: null});
     }
   }
-
-  private _renderUsername = (user: DomainUser) => {
-    const userId = user.userId;
-
-    if (userId.userType === DomainUserType.ANONYMOUS) {
-      return `${user.displayName || user.username} (Anonymous)`;
-    } else if (userId.userType === DomainUserType.CONVERGENCE) {
-      return `${userId.username} (Convergence)`;
-    } else {
-      return userId.username;
-    }
-  };
 }

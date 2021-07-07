@@ -21,7 +21,7 @@ import { TeamOutlined } from '@ant-design/icons';
 import {Button, Popover} from "antd";
 import styles from "./styles.module.css";
 import {filter} from "rxjs/operators";
-import {longDateTime} from "../../../../../utils/format-utils";
+import {formatDomainUserId, longDateTime} from "../../../../../utils/format-utils";
 import confirm from "antd/lib/modal/confirm";
 import {Subscription} from "rxjs";
 
@@ -152,9 +152,7 @@ class ModelEditorTabComponent extends React.Component<InjectedProps, ModelEditor
 
   private _buildConnectedUsers(model: RealTimeModel): string[] {
     const collaborators: string[] = model.collaborators().map(collaborator => {
-      return collaborator.user.convergence ?
-        `${collaborator.user.displayName || collaborator.user.username} (Convergence User)` :
-        collaborator.user.displayName || collaborator.user.username;
+      return formatDomainUserId(collaborator.user.userId)
     }).filter(x => x !== undefined);
 
     return Array.from(new Set(collaborators));

@@ -20,6 +20,7 @@ import {DomainId} from "../../../../models/DomainId";
 import {ActivityPermissions} from "../../../../models/domain/activity/ActivityPermissions";
 import {DomainUserId} from "@convergence/convergence";
 import styles from "./styles.module.css";
+import {formatDomainUserId} from "../../../../utils/format-utils";
 
 export interface ActivityPermissionsProps {
   domainId: DomainId;
@@ -97,7 +98,7 @@ export class ActivityUserPermissionsTab extends React.Component<ActivityPermissi
   }
 
   private _renderUserId = (userId: DomainUserId, _: ActivityUserPermissions) => {
-    return (<div>{userId.username}</div>);
+    return (<div>{formatDomainUserId(userId)}</div>);
   }
 
   private _deleteUserPermission = (userId: DomainUserId) => {
