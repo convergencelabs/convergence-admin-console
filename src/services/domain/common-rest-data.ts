@@ -81,7 +81,7 @@ export interface ModelPermissionsData {
 }
 
 export interface ModelUserPermissionsData {
-  userId: DomainUserIdData;
+  userId: string;
   permissions: ModelPermissionsData;
 }
 
@@ -110,11 +110,6 @@ export interface UpdateDomainUserData {
   lastName: string;
   email: string;
   disabled: boolean;
-}
-
-export interface DomainUserIdData {
-  userType: string;
-  username: string;
 }
 
 export interface DomainUserGroupData {

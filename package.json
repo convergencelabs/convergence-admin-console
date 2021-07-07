@@ -1,7 +1,7 @@
 {
   "name": "@convergence/admin-console",
   "description": "The Convergence Admin Console",
-  "version": "1.0.0-rc.9",
+  "version": "1.0.0.SNAPSHOT",
   "author": {
     "name": "Convergence Labs, Inc.",
     "email": "info@convergencelabs.com",

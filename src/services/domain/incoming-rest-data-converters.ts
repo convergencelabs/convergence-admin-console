@@ -22,7 +22,6 @@ import {
   DomainUserGroupData,
   DomainUserGroupInfoData,
   DomainUserGroupSummaryData,
-  DomainUserIdData,
   ModelData,
   ModelPermissionsData,
   ModelPermissionSummaryData,
@@ -134,7 +133,7 @@ export function toModelPermissions(data: ModelPermissionsData): ModelPermissions
 
 export function toModelUserPermissions(data: ModelUserPermissionsData): ModelUserPermissions {
   return new ModelUserPermissions(
-    toDomainUserId(data.userId),
+    decodeDomainUserId(data.userId),
     toModelPermissions(data.permissions)
   );
 }
@@ -148,10 +147,6 @@ export function toDomainUser(data: DomainUserData): DomainUser {
     data.email,
     data.lastLogin ? new Date(data.lastLogin) : undefined,
     data.disabled);
-}
-
-export function toDomainUserId(data: DomainUserIdData): DomainUserId {
-  return new DomainUserId(data.userType as DomainUserType, data.username);
 }
 
 export function toDomainUserGroup(data: DomainUserGroupData): DomainUserGroup {
@@ -223,7 +218,7 @@ export function toChatEvent(event: any): ChatEvent {
         new Date(event.timestamp),
         event.name,
         event.topic,
-        members.map((m: DomainUserIdData) => toDomainUserId(m)));
+        members.map((m: string) => decodeDomainUserId(m)));
     case "message":
       return new ChatMessageEvent(
         event.eventNumber,
