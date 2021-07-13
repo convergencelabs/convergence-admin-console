@@ -48,7 +48,6 @@ import {
   ChatUserRemovedEvent
 } from "../../../../models/domain/ChatEvent";
 import {formatDomainUserId, shortDateTime} from "../../../../utils/format-utils";
-import {DomainUserId, DomainUserType} from "@convergence/convergence";
 import {InfoTable, InfoTableRow} from "../../../../components/server/InfoTable";
 import {IBreadcrumbSegment} from "../../../../stores/BreacrumsStore";
 import {toDomainRoute} from "../../../../utils/domain-url";
