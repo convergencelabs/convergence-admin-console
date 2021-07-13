@@ -61,7 +61,7 @@ import {ActivityInfo} from "../../models/domain/activity/ActivityInfo";
 export function toCollection(data: CollectionData): Collection {
   const userPermissions = Object.keys(data.userPermissions).map(username => {
     return new CollectionUserPermissions(
-      new DomainUserId(DomainUserType.NORMAL, username),
+      decodeDomainUserId(username),
       toCollectionPermissions(data.userPermissions[username])
     );
   })

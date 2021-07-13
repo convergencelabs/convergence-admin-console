@@ -46,7 +46,7 @@ export function toCollectionUpdateData(collection: Collection): CollectionUpdate
 function toUserPermissionsData(userPermissions: CollectionUserPermissions[]): {[key: string]: CollectionPermissionsData} {
   const userPermissionsData: {[key: string]: CollectionPermissionsData} = {};
   userPermissions.forEach(cup => {
-    userPermissionsData[cup.userId.username] = toCollectionPermissionsData(cup.permissions);
+    userPermissionsData[encodeDomainUserId(cup.userId)] = toCollectionPermissionsData(cup.permissions);
   });
   return userPermissionsData;
 }
