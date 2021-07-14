@@ -42,6 +42,7 @@ import {
 import {DomainAvailability} from "../../../models/DomainAvailability";
 import {FormButtonBar} from "../../common/FormButtonBar";
 import {DomainId} from "../../../models/DomainId";
+import {Link} from "react-router-dom";
 
 export interface DomainCardProps {
   domain: DomainDescriptor
@@ -102,10 +103,9 @@ export class DomainCardComponent extends Component<InjectedProps, {}> {
     const link = toDomainRoute(domainId, "upgrade")
     return (
         <FormButtonBar>
-          <Button type="primary"
-                  className={styles.upgradeButton}
-                  href={link}
-          >Upgrade Database</Button>
+          <Link to={link}>
+            <Button type="primary" className={styles.upgradeButton}>Upgrade Database</Button>
+          </Link>
         </FormButtonBar>
     )
   }
