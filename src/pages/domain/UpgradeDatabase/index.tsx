@@ -26,7 +26,7 @@ import {STORES} from "../../../stores/StoreConstants";
 import {ActiveDomainStore} from "../../../stores/ActiveDomainStore";
 import {DomainStatus} from "../../../models/DomainStatus";
 import {Redirect} from "react-router";
-
+import {Link} from "react-router-dom";
 
 export interface UpgradeDomainProps {
   domainId: DomainId;
@@ -89,8 +89,9 @@ class UpgradeDomainComponent extends React.Component<InjectedProps, UpgradeDomai
             status="success"
             title="Domain Database is Ready"
             extra={[
-              <Button type="primary" key="console" href={toDomainRoute(this.props.domainId, "")}>Go To Domain
-                Dashboard</Button>
+              <Link to={toDomainRoute(this.props.domainId, "")}>
+                <Button type="primary" key="console">Go To Domain Dashboard</Button>
+              </Link>
             ]}
         />
     );
@@ -144,7 +145,7 @@ class UpgradeDomainComponent extends React.Component<InjectedProps, UpgradeDomai
         .then(() => {
           notification.success({
             message: 'Domain Upgrade Started',
-            description: 'The domain upgrade was successful started.',
+            description: 'The domain upgrade was successfully started.',
           });
         })
         .then(() => {
@@ -154,8 +155,8 @@ class UpgradeDomainComponent extends React.Component<InjectedProps, UpgradeDomai
         .catch(err => {
           console.error(err);
           notification.error({
-            message: 'Could Not Delete User',
-            description: `The user could not be deleted.`,
+            message: 'Could Not Start Upgrade',
+            description: `The upgrade could not be started, check the console log.`,
           });
         });
   }
