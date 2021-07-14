@@ -101,7 +101,7 @@ export class DomainModelsTable extends React.Component<DomainModelsTableProps, {
     dataCols.forEach((type, column) => {
       columns.push({
         title: column,
-        dataIndex: `data.${column}`,
+        dataIndex: ["data", column],
         render: this._renderDataValue
       });
     });
