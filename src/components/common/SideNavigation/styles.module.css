@@ -17,7 +17,6 @@
 .sideNavigation :global .ant-menu {
   margin-top: 10px;
   padding: 0 10px;
-  background: #1D2939;
 }
 
 .sideNavigation :global .ant-menu.ant-menu-dark .ant-menu-item {
@@ -42,6 +41,5 @@
 }
 
 .sideNavigation :global .ant-menu-dark .ant-menu-inline.ant-menu-sub {
-  background: #1D2939;
   border: none;
 }
