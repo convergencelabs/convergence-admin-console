@@ -28,3 +28,8 @@
 .error {
     background: #71363a;
 }
+
+.settingsLink {
+    color: white;
+    text-decoration: underline;
+}
