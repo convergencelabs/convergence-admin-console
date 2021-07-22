@@ -57,8 +57,8 @@ export class ServerInfoComponent extends Component<InjectedProps, ServerInfoStat
     const contents = serverStatus !== null ?
       (
         <InfoTable>
-          <InfoTableRow label="Version">{serverStatus.version}</InfoTableRow>
-          <InfoTableRow label="Schema Version">{serverStatus.schemaVersion}</InfoTableRow>
+          <InfoTableRow label="Convergence Version">{serverStatus.version}</InfoTableRow>
+          <InfoTableRow label="Convergence Schema Version">{serverStatus.schemaVersion}</InfoTableRow>
           <InfoTableRow label="Namespaces">{serverStatus.namespaces}</InfoTableRow>
           <InfoTableRow label="Domains">{serverStatus.domains}</InfoTableRow>
           <InfoTableRow label="Status">Healthy <CheckCircleOutlined style={{color: "green"}} /></InfoTableRow>
