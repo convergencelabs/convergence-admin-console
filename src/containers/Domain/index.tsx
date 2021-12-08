@@ -88,7 +88,7 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
 
   public render(): ReactNode {
     const {match} = this.props;
-    const {domainDescriptor, error} = this.props.activeDomainStore;
+    const {domainDescriptor, domain, error} = this.props.activeDomainStore;
 
     if (error !== null) {
       return (<ErrorPage title="Error Loading Domain" message={error}/>);
@@ -98,6 +98,8 @@ export class DomainContainerComponent extends React.Component<DomainContainerPro
       return <DomainInitializing/>;
     } else if (domainDescriptor!.status === DomainStatus.DELETING) {
       return (<ErrorPage title="Domain Deleting" message="This domain can not be used because is being deleted."/>);
+    } else if (domain === null) {
+      return <DomainLoading/>;
     } else if (domainDescriptor!.status === DomainStatus.SCHEMA_UPGRADE_REQUIRED || domainDescriptor!.status === DomainStatus.SCHEMA_UPGRADING) {
       const domainId = domainDescriptor.domainId;
       return (
