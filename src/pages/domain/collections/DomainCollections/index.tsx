@@ -173,7 +173,7 @@ class DomainCollectionsComponent extends React.Component<InjectedProps, DomainCo
             <Button shape="circle" size="small" htmlType="button" icon={<EditOutlined />}/>
           </Link>
         </Tooltip>
-         <Popconfirm title="Are you sure delete this collection?"
+         <Popconfirm title="Are you sure you want to delete this collection?"
                      placement="topRight"
                      onConfirm={() => this._onDeleteCollection(record.id)}
                      okText="Yes"

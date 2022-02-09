@@ -145,7 +145,7 @@ class DomainUserGroupsComponent extends React.Component<InjectedProps, DomainGro
             <Button shape="circle" size="small" htmlType="button" icon={<EditOutlined />}/>
           </Link>
         </Tooltip>
-        <Popconfirm title="Are you sure delete this group?"
+        <Popconfirm title="Are you sure you want to delete this group?"
                     placement="topRight"
                     onConfirm={() => this._onDeleteGroup(record.id)}
                     okText="Yes"

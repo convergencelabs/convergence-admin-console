@@ -162,7 +162,7 @@ export class DomainUsersComponent extends React.Component<InjectedProps, DomainU
             <Button shape="circle" size="small" htmlType="button" icon={<LockOutlined />}/>
           </Link>
         </Tooltip>
-        <Popconfirm title="Are you sure delete this user?"
+        <Popconfirm title="Are you sure you want to delete this user?"
                     placement="topRight"
                     onConfirm={() => this._onDeleteUser(record.username)}
                     okText="Yes"

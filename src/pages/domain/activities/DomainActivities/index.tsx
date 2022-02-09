@@ -180,7 +180,7 @@ class DomainActivitiesComponent extends React.Component<InjectedProps, DomainAct
             <Button shape="circle" size="small" htmlType="button" icon={<EyeOutlined/>}/>
           </Link>
         </Tooltip>
-        <Popconfirm title="Are you sure delete this activity?"
+        <Popconfirm title="Are you sure you want to delete this activity?"
                     placement="topRight"
                     onConfirm={() => this._onDeleteActivity(record.activityType, record.activityId)}
                     okText="Yes"

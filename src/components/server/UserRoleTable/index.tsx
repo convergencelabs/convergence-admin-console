@@ -74,7 +74,7 @@ export class UserRoleTable extends Component<UserRoleTableProps,{}> {
     const {username} = record;
     return (
       <span className={styles.actions}>
-        <Popconfirm title="Are you sure delete this user?"
+        <Popconfirm title="Are you sure you want to delete this user?"
                     placement="topRight"
                     onConfirm={() => {this.props.onRemoveUser(username)}}
                     okText="Yes"

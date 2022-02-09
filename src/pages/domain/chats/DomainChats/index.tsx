@@ -180,7 +180,7 @@ class DomainChatComponent extends React.Component<InjectedProps, DomainChatState
             <Button shape="circle" size="small" htmlType="button" icon={<EditOutlined />}/>
           </Link>
         </Tooltip>
-         <Popconfirm title="Are you sure delete this chat?"
+         <Popconfirm title="Are you sure you want to delete this chat?"
                      placement="topRight"
                      onConfirm={() => this._onDeleteChat(record.chatId)}
                      okText="Yes"

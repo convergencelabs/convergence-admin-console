@@ -143,7 +143,7 @@ class NamespacesComponent extends React.Component<InjectedProps, NamespacesState
       <Tooltip placement="topRight" title="Can not delete a namespace with domains!" mouseEnterDelay={1}>
         {deleteButton}
       </Tooltip> :
-      <Popconfirm title={`Are you sure delete namespace '${record.id}'?`}
+      <Popconfirm title={`Are you sure you want to delete namespace '${record.id}'?`}
                   placement="topRight"
                   onConfirm={() => this._onDeleteNamespace(record.id)}
                   okText="Yes"

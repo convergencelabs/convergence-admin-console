@@ -158,7 +158,7 @@ export class ApiKeysComponent extends React.Component<InjectedProps, ApiKeysStat
             <Button shape="circle" size="small" htmlType="button" icon={<EditOutlined />}/>
           </Link>
         </Tooltip>
-        <Popconfirm title="Are you sure delete this API Key?"
+        <Popconfirm title="Are you sure you want to delete this API Key?"
                     placement="topRight"
                     onConfirm={() => this._onDeleteApiKey(record.key, record.name)}
                     okText="Yes"

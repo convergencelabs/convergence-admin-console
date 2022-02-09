@@ -183,7 +183,7 @@ class ServerUsersComponent extends React.Component<InjectedProps, ServerUsersSta
       <Tooltip placement="topRight" title="You can not delete yourself!" mouseEnterDelay={1}>
         {deleteButton}
       </Tooltip> :
-      <Popconfirm title="Are you sure delete this user?"
+      <Popconfirm title="Are you sure you want to delete this user?"
                   placement="topRight"
                   onConfirm={() => this._onDeleteUser(record.username)}
                   okText="Yes"
