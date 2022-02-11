@@ -64,7 +64,7 @@
     "mobx": "6.3.2",
     "mobx-react": "7.2.0",
     "moment": "2.29.1",
-    "node-sass": "^6.0.0",
+    "node-sass": "^7.0.0",
     "query-string": "6.13.1",
     "react": "16.14.0",
     "react-ace": "9.4.0",
