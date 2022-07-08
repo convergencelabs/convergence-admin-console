@@ -63,7 +63,7 @@
     "md5": "2.3.0",
     "mobx": "6.3.2",
     "mobx-react": "7.2.0",
-    "moment": "2.29.1",
+    "moment": "2.29.4",
     "node-sass": "^6.0.0",
     "query-string": "6.13.1",
     "react": "16.14.0",
